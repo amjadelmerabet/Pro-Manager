@@ -1,0 +1,42 @@
+.hero-section {
+  margin-block: 30px;
+  height: 80vh;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.overview {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.overview p {
+  margin-block: 20px;
+}
+
+.overview button {
+  width: fit-content;
+  border: none;
+  background-color: #0077B6;
+  padding: 10px 45px;
+  border-radius: 8px;
+  color: white;
+}
+
+.video-container {
+  grid-column: 2 / -1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.video {
+  width: 80%;
+  height: 450px;
+  background-color: #BBBBBB;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 16px;
+}

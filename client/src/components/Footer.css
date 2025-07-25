@@ -1,0 +1,17 @@
+footer {
+  background-color: #0077B6;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 80px 200px;
+  color: white;
+  margin-top: 50px;
+}
+
+footer ul {
+  list-style: none;
+  padding: 25px 15px;
+}
+
+footer ul li {
+  margin-block: 8px;
+}

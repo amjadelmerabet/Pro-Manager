@@ -1,0 +1,116 @@
+.deep-dive-section {
+  display: grid;
+}
+
+.deep-dive-section .section-title {
+  color: #0077B6;
+  margin-block: 48px;
+  text-align: center;
+}
+
+.deep-dive-section .deep-dive-feature {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  margin: 40px 25px;
+  position: relative;
+}
+
+.deep-dive-feature > div {
+  padding: 10px;
+  position: relative;
+}
+
+.deep-dive-section .deep-dive-feature::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 5px;
+  height: 120%;
+  transform: translateX(-2.5px);
+  align-self: center;
+  background-color: #CAF0F8;
+  border-radius: 5px;
+}
+
+.deep-dive-section .deep-dive-feature::after {
+  content: attr(data-feature-index);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 65px;
+  aspect-ratio: 1 / 1;
+  background-color: #CAF0F8;
+  transform: translateY(-50%) translateX(-32.5px);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 36px;
+  font-weight: 600;
+}
+
+.deep-dive-feature > div > div {
+  padding: 10px;
+}
+
+.deep-dive-feature:nth-child(even) > div:nth-child(2)  {
+  order: -1;
+}
+
+.deep-dive-feature .attachment {
+  width: 500px;
+  height: 300px;
+  background-color: #BBBBBB;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  margin-inline: auto;
+}
+
+.deep-dive-feature .feature-explained {
+  width: 500px;
+  margin-inline: auto;
+  height: 100%;
+  position: relative;
+}
+
+.feature-explained .short-description {
+  color: #0077B6;
+}
+
+.feature-explained .key-points {
+  margin-left: 32px;
+  margin-bottom: 10px;
+}
+
+.feature-explained .key-point {
+  font-size: 14px;
+  margin-block: 5px;
+}
+
+.feature-explained .link {
+  display: flex;
+  position: absolute;
+  bottom: 20px;
+  font-size: 13px;
+  margin-left: 20px;
+  align-items: center;
+  gap: 5px;
+}
+
+.feature-explained .link a {
+  color: blue;
+}
+
+.see-more-features {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-block: 45px;
+}
+
+.see-more-features a {
+  color: blue;
+}

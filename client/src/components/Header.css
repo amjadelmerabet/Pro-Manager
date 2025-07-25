@@ -1,0 +1,36 @@
+header {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  align-items: center;
+  padding-block: 10px;
+}
+
+ul.menu {
+  list-style: none;
+  display: flex;
+  justify-content: space-around;
+  grid-column: 2 / 5;
+  margin-inline: 25px;
+}
+
+ul.menu li a {
+  text-decoration: none;
+  color: black;
+}
+
+.auth-section {
+  display: flex;
+  justify-content: center;
+
+}
+
+.auth-section button {
+  margin-inline: 20px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.auth-section .signin-button {
+  color: #0077B6;
+}
