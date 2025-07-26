@@ -25,7 +25,7 @@ function App() {
         <Route path="/pricing" element={<PricingRoute />} />
         <Route path="/about" element={<AboutRoute />} />
         <Route path="/contact" element={<ContactRoute />} />
-        <Route path="/login" element={<LoginRoute />} />
+        <Route path="/signin" element={<LoginRoute />} />
         <Route path="/auth">
           <Route path="dashboard" element={<DashboardRoute />} />
           <Route path="profile" element={<ProfileRoute />} />

@@ -26,8 +26,8 @@ export default function Header() {
           </li>
         </ul>
       <div className="auth-section">
-        <button className="signin-button poppins-semibold">Sign in</button>
-        <button className="signup-button poppins-semibold">Sign up</button>
+        <Link to="/signin" className="signin-button poppins-semibold">Sign in</Link>
+        <Link to="/signup" className="signup-button poppins-semibold">Sign up</Link>
       </div>
     </header>
   );

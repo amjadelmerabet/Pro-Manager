@@ -24,13 +24,15 @@ ul.menu li a {
 
 }
 
-.auth-section button {
+.auth-section a {
   margin-inline: 20px;
-  border: none;
-  background: transparent;
-  cursor: pointer;
+  text-decoration: none;
 }
 
 .auth-section .signin-button {
   color: #0077B6;
+}
+
+.auth-section .signup-button {
+  color: black;
 }
