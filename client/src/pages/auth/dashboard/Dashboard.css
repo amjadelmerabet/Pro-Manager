@@ -1,0 +1,160 @@
+.auth-header-container {
+  background-color: var(--accent-color);
+}
+
+.dashboard-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.dashboard-container main {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-column: 2 / -1;
+  height: 88vh;
+}
+
+.dashboard-container main > .column-1 {
+  grid-column: 1 / 5;
+}
+
+.dashboard-container main > .column-2 {
+  grid-column: 5 / 7;
+}
+
+.dashboard-container main .recent-pages {
+  margin: 16px 24px;
+  background-color: var(--accent-color);
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.dashboard-container main .recent-pages > .section-title {
+  color: var(--primary-color);
+}
+
+.dashboard-container main .reports {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: fit-content;
+  margin-inline: auto;
+  gap: 24px;
+  margin-block: 32px;
+}
+
+.dashboard-container main .column-2 > .selected {
+  margin: 16px 20px;
+  background-color: var(--primary-color);
+  padding: 16px 24px;
+  color: white;
+  border-radius: 12px;
+}
+
+.dashboard-container .recent-pages > .pages {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-top: 8px;
+}
+
+.dashboard-container .recent-pages .page {
+  background-color: white;
+  padding: 6px;
+  border-radius: 8px;
+}
+
+.dashboard-container .recent-pages .selected-recent-page {
+  border: 1px solid var(--primary-color);
+}
+
+.dashboard-container .recent-pages .page > .page-header {
+  display: flex;
+  align-items: center;
+  padding: 4px;
+}
+
+.dashboard-container .recent-pages .page .title {
+  font-size: 14px;
+  margin-left: 8px;
+}
+
+.dashboard-container .recent-pages .page .details {
+  font-size: 12px;
+  margin-block: 8px;
+  padding-inline: 16px;
+}
+
+.dashboard-container .recent-pages .page .details > tr > .value {
+  padding-left: 16px;
+}
+
+.dashboard-container .recent-pages .page .links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-block: 8px;
+}
+
+.dashboard-container .recent-pages .page .open-link {
+  font-size: 12px;
+  color: blue;
+}
+
+.dashboard-container .reports > .report {
+  width: 275px;
+  height: 165px;
+  background-color: var(--primary-color);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  color: white;
+}
+
+.dashboard-container .reports > .report > .report-value {
+  font-size: 32px;
+}
+
+.dashboard-container .reports > .report > .report-link > a {
+  color: white;
+  font-size: 12px;
+}
+
+.dashboard-container .quick-actions {
+  margin: 24px 48px;
+}
+
+.dashboard-container .quick-actions .actions {
+  list-style: none;
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--secondary-color);
+  padding: 8px 20px;
+  margin-block: 4px;
+  border-radius: 8px;
+}
+
+.dashboard-container .quick-actions .actions > .action {
+  margin-inline: 8px;
+  font-size: 13px;
+}
+
+.dashboard-container .quick-actions .actions > .action > a {
+  color: black;
+}
+
+.dashboard-container .selected .selected-page-header {
+  display: flex;
+  align-items: center;
+  margin-block: 8px;
+}
+
+.dashboard-container .selected .selected-page-title {
+  font-size: 20px;
+  margin-left: 8px;
+}
+
+.dashboard-container .selected .selected-page-details tr > td {
+  padding-block: 8px;
+}

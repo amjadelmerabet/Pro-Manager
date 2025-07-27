@@ -1,0 +1,63 @@
+.auth-header {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  align-items: center;
+  position: relative;
+  padding-block: 1vh;
+  height: 12vh;
+}
+
+.auth-header .auth-menu {
+  list-style: none;
+  display: flex;
+  justify-content: space-around;
+  grid-column: 2 / 5;
+  width: 80%;
+  margin-inline: auto;
+}
+
+.auth-header .auth-menu-item a {
+  color: black;
+  text-decoration: none;
+}
+
+.auth-header .search {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.auth-header .search .search-icon {
+  position: absolute;
+  left: 12%;
+  transition: color 250ms ease-in-out;
+}
+
+.auth-header .global-search:focus + .search-icon {
+  color: transparent !important;
+}
+
+.auth-header .global-search {
+  width: 80%;
+  margin-inline: auto;
+  padding: 12px 40px;
+  border: none;
+  border-radius: 25px;
+  color: var(--primary-color);
+  transition: padding-inline 250ms ease-in-out;
+}
+
+.auth-header .global-search:focus {
+  padding-inline: 24px;
+}
+
+.auth-header .global-search::placeholder {
+  color: var(--primary-color);
+}
+
+.auth-header .profile-picture {
+  height: 64px;
+  border-radius: 50%;
+  right: 0;
+  margin-inline: auto;
+}
