@@ -1,0 +1,32 @@
+.profile-menu {
+  height: 88vh;
+  background-color: var(--secondary-color);
+  padding: 24px 32px;
+}
+
+.profile-menu .profile-menu-section {
+  margin-bottom: 18px;
+  background-color: var(--primary-color);
+  color: white;
+  padding: 8px 20px;
+  border-radius: 10px;
+}
+
+.profile-menu-section .profile-menu-title {
+  font-size: 105%;
+}
+
+.profile-menu-section > .modules {
+  list-style: none;
+  margin: 8px 16px;
+}
+
+.profile-menu-section .modules > .module {
+  margin-block: 4px;
+  padding: 4px 8px;
+}
+
+.profile-menu-section .modules > .selected-module {
+  border: 1px solid white;
+  border-radius: 4px;
+}

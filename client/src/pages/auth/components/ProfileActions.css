@@ -1,0 +1,42 @@
+.profile-actions {
+  position: absolute;
+  top: 11vh;
+  right: 280px;
+  background-color: var(--primary-color);
+  z-index: 10;
+  border-radius: 12px;
+}
+
+.profile-actions .arrow {
+  position: absolute;
+  top: -12px;
+  right: 10%;
+}
+
+.profile-actions .actions {
+  padding: 6px 16px;
+  list-style: none;
+  width: 320px;
+}
+
+.profile-actions .actions .action {
+  padding: 6px 12px;
+  background-color: var(--accent-color);
+  margin-block: 10px;
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+  position: relative;
+}
+
+.profile-actions .actions .notification::before {
+  content: "3";
+  color: rgb(255, 0, 45);
+  position: absolute;
+  right: 5%;
+}
+
+.profile-actions .action > span {
+  margin-left: 12px;
+  font-size: 14px;
+}

@@ -27,9 +27,9 @@ function App() {
         <Route path="/contact" element={<ContactRoute />} />
         <Route path="/signin" element={<LoginRoute />} />
         <Route path="/auth">
-          <Route path="dashboard" element={<DashboardRoute />} />
-          <Route path="profile" element={<ProfileRoute />} />
           <Route path=":userId">
+            <Route path="profile" element={<ProfileRoute />} />
+            <Route path="dashboard" element={<DashboardRoute />} />
             <Route path="projects" element={<ProjectsRoute />} />
             <Route path="tasks" element={<TasksRoute />} />
           </Route>

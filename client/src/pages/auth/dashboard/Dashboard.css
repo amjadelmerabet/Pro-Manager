@@ -1,7 +1,3 @@
-.auth-header-container {
-  background-color: var(--accent-color);
-}
-
 .dashboard-container {
   display: grid;
   grid-template-columns: repeat(5, 1fr);

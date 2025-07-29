@@ -11,12 +11,18 @@ export default function AuthHeader() {
       <header className="auth-header">
         <h1 className="application-name poppins-bold">Pro Manager</h1>
         <ul className="auth-menu">
-          <li className="auth-menu-item poppins-semibold">Dashboard</li>
           <li className="auth-menu-item poppins-semibold">
-            <Link to="/auth/projects">Projects</Link>
+            <Link to="/auth/user/dashboard">Dashboard</Link>
           </li>
-          <li className="auth-menu-item poppins-semibold">Tasks</li>
-          <li className="auth-menu-item poppins-semibold">Insights</li>
+          <li className="auth-menu-item poppins-semibold">
+            <Link to="/auth/user/projects">Projects</Link>
+          </li>
+          <li className="auth-menu-item poppins-semibold">
+            <Link to="/auth/user/tasks">Tasks</Link>
+          </li>
+          <li className="auth-menu-item poppins-semibold">
+            <Link to="/auth/user/insights">Insights</Link>
+          </li>
         </ul>
         <div className="search">
           <input
@@ -27,16 +33,20 @@ export default function AuthHeader() {
             placeholder="Search ..."
           />
           <IconContext.Provider
-            value={{ style: { color: "var(--primary-color)", fontSize: "28px" } }}
+            value={{
+              style: { color: "var(--primary-color)", fontSize: "28px" },
+            }}
           >
             <IoIosSearch className="search-icon" />
           </IconContext.Provider>
         </div>
-        <img
-          src={ProfilePicture}
-          alt="Profile picture"
-          className="profile-picture"
-        />
+        <div className="profile-section poppins-regular">
+          <img
+            src={ProfilePicture}
+            alt="Profile picture"
+            className="profile-picture"
+          />
+        </div>
       </header>
     </div>
   );

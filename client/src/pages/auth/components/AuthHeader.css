@@ -1,3 +1,7 @@
+.auth-header-container {
+  background-color: var(--accent-color);
+}
+
 .auth-header {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -53,6 +57,30 @@
 
 .auth-header .global-search::placeholder {
   color: var(--primary-color);
+}
+
+.auth-header .profile-section {
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+.auth-header .profile-section::before {
+  content: "3";
+  position: absolute;
+  top: 0;
+  right: calc(50% - 32px);
+  background-color: rgb(255, 0, 45);
+  width: 20px;
+  aspect-ratio: 1 / 1;
+  color: white;
+  border-radius: 50%;
+  font-size: 13px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  line-height: 1;
 }
 
 .auth-header .profile-picture {
