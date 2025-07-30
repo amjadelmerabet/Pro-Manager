@@ -1,0 +1,102 @@
+.projects-page .header {
+  display: flex;
+  justify-content: space-between;
+  margin-block: 40px;
+}
+
+.projects-page .header .page-buttons {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 120px;
+}
+
+.projects-page .header .page-buttons > .select-view {
+  display: flex;
+  align-items: center;
+}
+
+.projects-page .header .pages-buttons .select-view > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.projects-page .header .page-buttons .select-view > div > svg {
+  display: flex;
+}
+
+.projects-page .header .page-buttons .grid-view {
+  margin-left: 8px;
+}
+
+.projects-page .header .page-buttons .select-view > .selected {
+  background-color: var(--accent-color);
+  border-radius: 4px;
+}
+
+.projects-page .page-buttons > .filter-button {
+  position: relative;
+}
+
+.projects-page .page-buttons > .filter-button::before {
+  content: "1";
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  font-size: 11px;
+  background-color: var(--primary-color);
+  color: white;
+  width: 14px;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 1;
+}
+
+.projects-page .page-buttons > .filter-button svg {
+  transform: rotateY(180deg);
+  display: flex;
+}
+
+.projects-page .projects {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+}
+
+.projects-page .projects > .project {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 2px solid var(--primary-color);
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, .25);
+  height: 180px;
+}
+
+.projects-page .project > .project-header {
+  display: flex;
+  align-items: center;
+}
+
+.projects-page .project > .project-header > .project-name {
+  margin-left: 8px;
+}
+
+.projects-page .project > .project-body {
+  font-size: 14px;
+}
+
+.projects-page .project > .project-body td:nth-child(2) {
+  width: 60%;
+}
+
+.projects-page .project > .updated {
+  font-size: 12px;
+  align-self: flex-end;  
+}
