@@ -1,8 +1,6 @@
 import AuthHeader from "../components/AuthHeader";
 
-import { PiListBold } from "react-icons/pi";
-import { FiFilter } from "react-icons/fi";
-import { HiViewGrid } from "react-icons/hi";
+import SectionHeader from "../components/SectionHeader";
 import { IconContext } from "react-icons/lib";
 import { FaRegFolder } from "react-icons/fa";
 
@@ -15,28 +13,7 @@ export default function ProjectsPage() {
         <AuthHeader />
       </div>
       <div className="container">
-        <div className="header">
-          <h2 className="title poppins-bold">Your Projects</h2>
-          <div className="page-buttons">
-            <div className="select-view">
-              <div className="list-view">
-                <IconContext.Provider value={{ style: { fontSize: "28px" } }}>
-                  <PiListBold />
-                </IconContext.Provider>
-              </div>
-              <div className="grid-view selected">
-                <IconContext.Provider value={{ style: { fontSize: "28px" } }}>
-                  <HiViewGrid />
-                </IconContext.Provider>
-              </div>
-            </div>
-            <div className="filter-button poppins-regular">
-              <IconContext.Provider value={{ style: { fontSize: "28px" } }}>
-                <FiFilter />
-              </IconContext.Provider>
-            </div>
-          </div>
-        </div>
+        <SectionHeader title="Your projects" selectedView="grid" />
         <div className="projects">
           <div className="project">
             <div className="project-header">

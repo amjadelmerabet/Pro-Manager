@@ -1,0 +1,63 @@
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  margin-block: 40px;
+}
+
+.section-header .page-buttons {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 120px;
+}
+
+.section-header .page-buttons > .select-view {
+  display: flex;
+  align-items: center;
+}
+
+.section-header .pages-buttons .select-view > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.section-header .page-buttons .select-view > div > svg {
+  display: flex;
+}
+
+.section-header .page-buttons .grid-view {
+  margin-left: 8px;
+}
+
+.section-header .page-buttons .select-view > .selected {
+  background-color: var(--accent-color);
+  border-radius: 4px;
+}
+
+.page-buttons > .filter-button {
+  position: relative;
+}
+
+.page-buttons > .filter-button::before {
+  content: "1";
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  font-size: 11px;
+  background-color: var(--primary-color);
+  color: white;
+  width: 14px;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 1;
+}
+
+.page-buttons > .filter-button svg {
+  transform: rotateY(180deg);
+  display: flex;
+}

@@ -1,0 +1,44 @@
+.tasks-page .tasks > .task {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid black;
+  padding: 16px 24px;
+  border-radius: 10px;
+  margin-block: 16px
+}
+
+.tasks-page .tasks > .task:nth-child(odd) {
+  background-color: var(--accent-color);
+}
+
+.tasks-page .tasks > .task:nth-child(even) {
+  background-color: var(--secondary-color);
+}
+
+.tasks-page .tasks > .task .properties {
+  display: flex;
+}
+
+.tasks-page .tasks > .task .properties > div {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.tasks-page .tasks > .task .properties > .assignee {
+  width: 180px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.tasks-page .tasks > .task .properties > .assignee > div:nth-child(1) {
+  grid-column: 1 / 3;
+}
+
+.tasks-page .tasks > .task .properties > .status {
+  margin-left: 8px;
+  width: 120px;
+}
+
+
+.tasks-page .tasks > .task .properties > div > div:nth-child(2) {
+  margin-left: 8px;
+}
