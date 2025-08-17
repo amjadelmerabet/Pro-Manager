@@ -1,0 +1,92 @@
+.project-page .project-header {
+  display: flex;
+  align-items: center;
+  margin-block: 24px;
+  justify-content: space-between;
+}
+
+.project-page .project .project-header > div {
+  display: flex;
+  align-items: center;
+}
+
+.project-page .project-header .project-state {
+  margin-left: 24px;
+  color: white;
+  padding: 2px 24px;
+  border-radius: 16px;
+}
+
+.project-page .project-header .not-started {
+  background-color: rgb(245, 0, 45);
+}
+
+.project-page .project-header .in-progress {
+  background-color: rgb(245, 120, 45);
+}
+
+.project-page .project-header .completed {
+  background-color: rgb(0, 200, 120);
+}
+
+.project-page .loading-project,
+.project-page .project-not-found {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 88vh;
+  font-size: 16px;
+}
+
+.project-page .project > .project-header > .right .project-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 8px;
+}
+
+.project-page .project > .project-header > .right button {
+  border: 1px solid var(--primary-color);
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 24px;
+  border-radius: 24px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, .25);
+  cursor: pointer;
+  transition: background 250ms ease-in-out, transform 250ms ease-in-out;
+}
+
+.project-page .project > .project-header > .right button:hover {
+  background-color: rgb(235, 235, 235);
+  transform: scale(0.98);
+}
+
+.project-page .project > .project-header > .right button > span {
+  margin-left: 8px;
+}
+
+.project-page .project .project-description {
+  margin-block: 16px;
+  background-color: var(--accent-color);
+  padding: 8px 16px;
+}
+
+.project-page .project .links a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  width: fit-content;
+  color: var(--primary-color);
+  transition: transform 250ms ease-in-out;
+  margin-left: 8px;
+}
+
+.project-page .project .links a:hover {
+  transform: translateX(-8px);
+}
+
+.project-page .project .links a > span {
+  margin-left: 8px;
+}

@@ -1,0 +1,84 @@
+.task-page .task > .task-header {
+  display: flex;
+  align-items: center;
+  margin-block: 24px;
+  justify-content: space-between;
+}
+
+.task-page .task > .task-header > div {
+  display: flex;
+  align-items: center;
+}
+
+.task-page .task > .task-header .task-state {
+  margin-left: 16px;
+  border-radius: 24px;
+  padding: 2px 16px;
+  color: white;
+}
+
+.task-page .task > .task-header .to-do {
+  background-color: rgb(245, 0, 45);
+}
+
+.task-page .task > .task-header .doing {
+  background-color: rgb(245, 120, 45);
+}
+
+.task-page .task > .task-header .done {
+  background-color: rgb(0, 200, 120);
+}
+
+.task-page .task-body .task-short-description {
+  margin-block: 16px;
+  padding: 8px 16px;
+  background-color: var(--accent-color);
+}
+
+.task-page .task > .task-header .task-actions > button {
+  border: 1px solid var(--primary-color);
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4px 24px;
+  border-radius: 24px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, .25);
+  cursor: pointer;
+  transition: background 250ms ease-in-out, transform 250ms ease-in-out;
+}
+
+.task-page .task > .task-header .task-actions > button:hover {
+  background-color: rgb(235, 235, 235);
+  transform: scale(0.98);
+}
+
+.task-page .task > .task-header .task-actions button > span {
+  margin-left: 8px;
+}
+
+.task-page .task > .task-header .task-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.task-page .task .links a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  width: fit-content;
+  color: var(--primary-color);
+  transition: transform 250ms ease-in-out;
+  margin-left: 8px;
+}
+
+.task-page .task .links a:hover {
+  transform: translateX(-8px);
+  padding-right: 8px;
+}
+
+.task-page .task .links a > span {
+  margin-left: 8px;
+}

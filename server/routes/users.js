@@ -31,7 +31,11 @@ export async function usersRoute(req, res) {
       res.end(JSON.stringify({ result: user }));
     } else {
       res.writeHead(404, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ message: "The endpoint that you are trying to reach doesn't exist" }));
+      res.end(
+        JSON.stringify({
+          message: "The endpoint that you are trying to reach doesn't exist",
+        })
+      );
     }
   } else if (method === "POST") {
     if (url === "/users/auth") {
@@ -92,15 +96,25 @@ export async function usersRoute(req, res) {
             JSON.stringify({ message: "Necessary user data is missing" })
           );
         } else {
-          const { first_name, last_name, name, username, email, password } =
-            bodyObject;
+          const {
+            first_name,
+            last_name,
+            name,
+            username,
+            email,
+            password,
+            updated_by,
+            created_by,
+          } = bodyObject;
           const newUser = await createUser(
             first_name,
             last_name,
             name,
             username,
             email,
-            password
+            password,
+            updated_by,
+            created_by
           );
           if (newUser.error) {
             res.writeHead(500, { "Content-Type": "application/json" });
@@ -137,11 +151,11 @@ export async function usersRoute(req, res) {
   } else if (method === "PATCH") {
     if (url.match(/^\/users\/update\/.+/)) {
       let body = "";
-      req.on("data", chunk => {
+      req.on("data", (chunk) => {
         body += chunk;
       });
       req.on("end", async () => {
-        const username = url.replace("/users/update/", "")
+        const username = url.replace("/users/update/", "");
         if (body === "") {
           res.writeHead(400, { "Content-Type": "application/json" });
           res.end(JSON.stringify({ message: "No updates" }));
@@ -165,15 +179,23 @@ export async function usersRoute(req, res) {
                 res.end(JSON.stringify({ message: updatedUser.message }));
               } else {
                 res.writeHead(500, { "Content-Type": "application/json" });
-                res.end(JSON.stringify({ message: "There was an error while updating the user" }));
+                res.end(
+                  JSON.stringify({
+                    message: "There was an error while updating the user",
+                  })
+                );
               }
             }
           }
         }
-      })
+      });
     } else {
       res.writeHead(404, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ message: "The endpoint that you are trying to reach doesn't exist" }));
+      res.end(
+        JSON.stringify({
+          message: "The endpoint that you are trying to reach doesn't exist",
+        })
+      );
     }
   } else if (method === "DELETE") {
     if (url.match(/^\/users\/delete\/.+/)) {
@@ -184,7 +206,11 @@ export async function usersRoute(req, res) {
       res.end(JSON.stringify({ message: "User deleted successfully" }));
     } else {
       res.writeHead(404, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ message: "The endpoint that you are trying to reach doesn't exist" }));
+      res.end(
+        JSON.stringify({
+          message: "The endpoint that you are trying to reach doesn't exist",
+        })
+      );
     }
   } else if (method === "OPTIONS") {
     res.writeHead(204);

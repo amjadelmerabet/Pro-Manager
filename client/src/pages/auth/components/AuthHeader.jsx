@@ -5,23 +5,23 @@ import ProfilePicture from "../../../assets/profile-picture.jpg";
 import "./AuthHeader.css";
 import { IconContext } from "react-icons/lib";
 
-export default function AuthHeader() {
+export default function AuthHeader({ user }) {
   return (
     <div className="container">
       <header className="auth-header">
         <h1 className="application-name poppins-bold">Pro Manager</h1>
         <ul className="auth-menu">
           <li className="auth-menu-item poppins-semibold">
-            <Link to="/auth/user/dashboard">Dashboard</Link>
+            <Link to={"/auth/" + user + "/dashboard"}>Dashboard</Link>
           </li>
           <li className="auth-menu-item poppins-semibold">
-            <Link to="/auth/user/projects">Projects</Link>
+            <Link to={"/auth/" + user + "/projects"}>Projects</Link>
           </li>
           <li className="auth-menu-item poppins-semibold">
-            <Link to="/auth/user/tasks">Tasks</Link>
+            <Link to={"/auth/" + user + "/tasks"}>Tasks</Link>
           </li>
           <li className="auth-menu-item poppins-semibold">
-            <Link to="/auth/user/insights">Insights</Link>
+            <Link to={"/auth/" + user + "/insights"}>Insights</Link>
           </li>
         </ul>
         <div className="search">
@@ -30,7 +30,7 @@ export default function AuthHeader() {
             name="global-search"
             id="global-search"
             className="global-search poppins-regular"
-            placeholder="Search ..."
+            placeholder="Global search ..."
           />
           <IconContext.Provider
             value={{

@@ -39,17 +39,17 @@ export async function tasksRoute(req, res) {
           res.writeHead(400, { "Content-Type": "application/json" });
           res.end(JSON.stringify({ message: "No data" }));
         } else {
-          const bodyObject = JSON.parse(body);
-          if (Object.keys(bodyObject).length === 0) {
+          const newTaskFields = JSON.parse(body);
+          if (Object.keys(newTaskFields).length === 0) {
             res.writeHead(400, { "Content-Type": "application/json" });
             res.end(JSON.stringify({ message: "No data" }));
           } else {
-            const { name, short_description, description, state, priority, assigned_to } = bodyObject;
+            const { name, short_description, assigned_to } = newTaskFields;
             if (!name || !short_description || !assigned_to) {
               res.writeHead(400, { "Content-Type": "application/json" });
               res.end(JSON.stringify({ message: "Necessary data is missing" }));
             } else {
-              const newTask = await createTask(name, short_description, description, state, priority, assigned_to);
+              const newTask = await createTask(newTaskFields);
               if (newTask.error) {
                 res.writeHead(400, { "Content-Type": "application/json" });
                 res.end(JSON.stringify({ message: "There was an error while creating a new task" }));

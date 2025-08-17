@@ -24,7 +24,7 @@ export default function DashboardRoute({ isAuthenticated }) {
   
   if (isAuthenticated || userAuthenticated) {
     if (user === userAuthenticated.user) {
-      return <DashboardPage />
+      return <DashboardPage user={userAuthenticated.user} />
     } else {
       return <WrongRoute />
     }

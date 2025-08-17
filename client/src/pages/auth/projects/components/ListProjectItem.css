@@ -1,0 +1,13 @@
+.projects-page .projects.list .project > div:not(.open-project) {
+  display: flex;
+  align-items: center;
+}
+
+.projects-page .projects.list .project > .left .project-name {
+  margin-left: 8px;
+}
+
+.projects-page .projects.list .project .project-properties {
+  display: flex;
+  gap: 8px; 
+}

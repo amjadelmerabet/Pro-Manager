@@ -7,21 +7,19 @@ export default function LoginPage({ isAuthenticated, setAuthentication }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [login, setLogin] = useState("");
+  const [incorrectCredentials, setIncorrectCredentials] = useState(false);
 
   const [searchParams] = useSearchParams();
-  // if (searchParams.match(/^redirect=*./));
   const redirectURL = searchParams.get("redirect");
-  
+
   let navigate = useNavigate();
 
   const userAuthenticated = sessionStorage.getItem("authUser");
-  
+
   useEffect(() => {
     if (isAuthenticated || userAuthenticated) {
       if (redirectURL) {
-        console.log("Redirect URL");
         if (userAuthenticated) {
-          console.log("User Authenticated");
           const authUser = JSON.parse(userAuthenticated).user;
           const userRedirectURL = redirectURL.replace("user", authUser);
           navigate(userRedirectURL);
@@ -29,12 +27,12 @@ export default function LoginPage({ isAuthenticated, setAuthentication }) {
           navigate("/signin");
         }
       } else {
-        console.log("No Redirect URL");
-        if (userAuthenticated && !username) {
+        if (userAuthenticated) {
           const authUser = JSON.parse(userAuthenticated).user;
           navigate("/auth/" + authUser + "/dashboard");
+        } else if (username) {
+          navigate("/auth/" + username + "/dashboard");
         } else {
-          console.log("Other");
           navigate("/auth/user/dashboard");
         }
       }
@@ -53,10 +51,16 @@ export default function LoginPage({ isAuthenticated, setAuthentication }) {
         const auth = await response.json();
         setLogin("LoginEnded");
         if (auth.authenticated) {
-          sessionStorage.setItem("authUser", JSON.stringify({ user: username, authenticated: true }));
+          sessionStorage.setItem(
+            "authUser",
+            JSON.stringify({ user: username, authenticated: true })
+          );
+          setAuthentication(auth.authenticated);
+          setIncorrectCredentials(false);
+        } else {
+          setIncorrectCredentials(true);
         }
-        setAuthentication(auth.authenticated);
-      }
+      };
       authUser();
     }
   }, [login]);
@@ -71,6 +75,7 @@ export default function LoginPage({ isAuthenticated, setAuthentication }) {
       <div className="login-section">
         <h2 className="signin-title poppins-bold">Sign in</h2>
         <form className="login-form poppins-regular">
+          {incorrectCredentials ? <div className="incorrect-credentials">Incorrect Credentials</div> : ""}
           <div className="username-section">
             <label htmlFor="username" className="username-label">
               Username
@@ -101,9 +106,9 @@ export default function LoginPage({ isAuthenticated, setAuthentication }) {
             </a>
             <div className="sign-up">
               <p>Don't have an account yet. </p>
-              <a href="#" className="signup-link">
+              <Link to="/signup" className="signup-link">
                 Sign up
-              </a>
+              </Link>
             </div>
           </div>
           <input

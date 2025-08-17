@@ -33,22 +33,16 @@ export async function projectsRoute(req, res) {
         body += chunk;
       });
       req.on("end", async () => {
-        const bodyObject = JSON.parse(body);
-        if (!bodyObject.name || !bodyObject.owner) {
+        const newProjectFields = JSON.parse(body);
+        const { name, owner } = newProjectFields;
+        if (!name || !owner) {
           res.writeHead(400, { "Content-Type": "application/json" });
           res.end(
             JSON.stringify({ message: "Necessary project data is missing" })
           );
         } else {
-          const { name, description, state, owner, deadline } = bodyObject;
           res.writeHead(201, { "Content-Type": "application/json" });
-          const newProject = await createProject(
-            name,
-            description,
-            state,
-            deadline,
-            owner
-          );
+          const newProject = await createProject(newProjectFields);
           res.end(JSON.stringify({ message: "Project created successfully" }));
         }
       });

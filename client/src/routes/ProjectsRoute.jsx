@@ -1,8 +1,8 @@
 import ProjectsPage from "../pages/auth/projects/Projects";
+import WrongRoute from "./WrongRoute";
 
 import { useLocation, useNavigate } from "react-router";
 import { useEffect } from "react";
-import WrongRoute from "./WrongRoute";
 
 export default function ProjectsRoute({ isAuthenticated }) {
   let navigate = useNavigate();
@@ -24,7 +24,7 @@ export default function ProjectsRoute({ isAuthenticated }) {
   
   if (isAuthenticated || userAuthenticated) {
     if (user === userAuthenticated.user) {
-      return <ProjectsPage />
+      return <ProjectsPage user={userAuthenticated.user} />
     } else {
       return <WrongRoute />
     }

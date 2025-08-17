@@ -1,0 +1,14 @@
+.tasks-page .tasks.grid .task > .left {
+  display: flex;
+  align-items: center;
+}
+
+.tasks-page .tasks.grid .task > .left > .task-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tasks-page .tasks.grid .task > .left > .task-name {
+  margin-left: 8px;
+}

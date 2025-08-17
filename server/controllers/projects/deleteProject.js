@@ -6,7 +6,6 @@ export default async function deleteProject(id) {
   if (project) {
     try {
       const deletedProject = await pool.query("DELETE FROM projects WHERE project_id = $1", [id]);
-      console.log(deletedProject);
       return { status: "success", message: "Project deleted successfully" };
     } catch (error) {
       console.log("Query error: " + error);

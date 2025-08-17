@@ -1,33 +1,24 @@
 import pool from "../../db/connection.js";
 
-export default async function createTask(name, short_description, description, state, priority, assigned_to) {
+export default async function createTask(fields) {
   try {
-    let query = "INSERT INTO tasks (name, short_description, ";
-    let values = "VALUES ($1, $2, ";
-    let propertiesToInsert = [name, short_description];
-    let count = 2;
-    if (description) {
-      query += "description, ";
-      values += `$${count + 1}, `;
-      count++;
-      propertiesToInsert.push(description);
-    }
-    if (state) {
-      query += "state, ";
-      values += `$${count + 1}, `;
-      count++;
-      propertiesToInsert.push(state);
-    }
-    if (priority) {
-      query += "priority, ";
-      values += `$${count + 1}, `;
-      count++;
-      propertiesToInsert.push(priority);
-    }
-    query += "assigned_to) ";
-    values += `$${count + 1})`;
-    query += values;
-    propertiesToInsert.push(assigned_to);
+    let query = "INSERT INTO tasks (";
+    let values = "VALUES (";
+    let propertiesToInsert = [];
+    let count = 1;
+    Object.entries(fields).forEach((field, index) => {
+      query += field[0];
+      values += `$${count++}`;
+      if (index < Object.keys(fields).length - 1) {
+        query += ", ";
+        values += ", ";
+      } else {
+        query += ") ";
+        values += ")";
+        query += values;
+      }
+      propertiesToInsert.push(field[1]);
+    })
     const newTask = await pool.query(query, propertiesToInsert);
     return newTask;
   } catch (error) {

@@ -2,7 +2,7 @@ import pool from "../../db/connection.js";
 
 export default async function getProjects() {
   try {
-    const result = await pool.query("SELECT * FROM projects");
+    const result = await pool.query("SELECT * FROM projects ORDER BY created_on");
     const projects = result.rows;
     return projects;
   } catch (error) {

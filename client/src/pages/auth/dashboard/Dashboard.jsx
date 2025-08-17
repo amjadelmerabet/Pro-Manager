@@ -5,11 +5,11 @@ import AuthHeader from "../components/AuthHeader";
 import "./Dashboard.css";
 import { IconContext } from "react-icons/lib";
 
-export default function DashboardPage() {
+export default function DashboardPage({ user }) {
   return (
     <div className="dashboard-page">
       <div className="auth-header-container">
-        <AuthHeader />
+        <AuthHeader user={user} />
       </div>
       <div className="dashboard-container">
         <AllMenu />

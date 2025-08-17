@@ -1,31 +1,31 @@
 import { useLocation, useNavigate } from "react-router";
-import TasksPage from "../pages/auth/tasks/Tasks";
+import Project from "../pages/auth/project/Project";
 import { useEffect } from "react";
 import WrongRoute from "./WrongRoute";
 
-export default function TasksRoute({ isAuthenticated }) {
+export default function SingleProjectRoute({ isAuthenticated }) {
   let navigate = useNavigate();
   let userAuthenticated = JSON.parse(sessionStorage.getItem("authUser"));
 
   const location = useLocation();
   const pathname = location.pathname;
   const slicedPathname = pathname.replace("/auth/", "");
-  
-  const index = slicedPathname.indexOf("/")
+
+  const index = slicedPathname.indexOf("/");
 
   const user = slicedPathname.slice(0, index);
 
   useEffect(() => {
     if (!isAuthenticated && !userAuthenticated) {
-      navigate("/signin?redirect=/auth/user/tasks");
+      navigate("/signin?redirect=/auth/user/projects");
     }
-  })
+  }, []);
 
   if (isAuthenticated || userAuthenticated) {
     if (user === userAuthenticated.user) {
-      return <TasksPage user={userAuthenticated.user} />
+      return <Project user={userAuthenticated.user} />
     } else {
-      return <WrongRoute />
+      <WrongRoute />
     }
   }
 }

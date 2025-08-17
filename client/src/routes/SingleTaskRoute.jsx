@@ -1,17 +1,17 @@
 import { useLocation, useNavigate } from "react-router";
-import TasksPage from "../pages/auth/tasks/Tasks";
+import Task from "../pages/auth/task/Task";
 import { useEffect } from "react";
 import WrongRoute from "./WrongRoute";
 
-export default function TasksRoute({ isAuthenticated }) {
+export default function SingleTaskRoute({ isAuthenticated }) {
   let navigate = useNavigate();
   let userAuthenticated = JSON.parse(sessionStorage.getItem("authUser"));
 
   const location = useLocation();
   const pathname = location.pathname;
   const slicedPathname = pathname.replace("/auth/", "");
-  
-  const index = slicedPathname.indexOf("/")
+
+  const index = slicedPathname.indexOf("/");
 
   const user = slicedPathname.slice(0, index);
 
@@ -19,11 +19,11 @@ export default function TasksRoute({ isAuthenticated }) {
     if (!isAuthenticated && !userAuthenticated) {
       navigate("/signin?redirect=/auth/user/tasks");
     }
-  })
+  }, []);
 
   if (isAuthenticated || userAuthenticated) {
     if (user === userAuthenticated.user) {
-      return <TasksPage user={userAuthenticated.user} />
+      return <Task user={userAuthenticated.user} />
     } else {
       return <WrongRoute />
     }

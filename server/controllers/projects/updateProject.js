@@ -31,6 +31,10 @@ export default async function updateProject(id, updates) {
         count++;
         query += `owner = $${count}`;
         propertiesToUpdate.push(update[1]);
+      } else if (update[0] === "updated_by") {
+        count++;
+        query += `updated_by = $${count}`;
+        propertiesToUpdate.push(update[1]);
       } else {
         return { status: "fail", message: "There is no column with the name " + update[0] };
       }

@@ -9,6 +9,10 @@ import BlogRoute from "./BlogRoute";
 import PricingRoute from "./PricingRoute";
 import ContactRoute from "./ContactRoute";
 import TasksRoute from "./TasksRoute";
+import SignUpRoute from "./SignupRoute";
+import SingleProjectRoute from "./SingleProjectRoute";
+import SingleTaskRoute from "./SingleTaskRoute";
+import WrongRoute from "./WrongRoute";
 
 export {
   HomeRoute,
@@ -21,5 +25,9 @@ export {
   BlogRoute,
   PricingRoute,
   ContactRoute,
-  TasksRoute
+  TasksRoute,
+  SignUpRoute,
+  SingleProjectRoute,
+  SingleTaskRoute,
+  WrongRoute
 };
