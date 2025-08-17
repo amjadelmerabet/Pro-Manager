@@ -1,0 +1,83 @@
+.signup-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.signup-page .title {
+  font-size: 44px;
+  margin-block: 40px;
+}
+
+.signup-page .signup-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--accent-color);
+  border-radius: 20px;
+  width: 1000px;
+  /* height: 600px; */
+  padding-block: 24px;
+}
+
+.signup-page .signup-section > .signup-title {
+  font-size: 32px;
+}
+
+.signup-page .signup-section form {
+  margin-top: 40px;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.signup-page .signup-section form > div:not(.links) {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.signup-page .signup-section form > div > div {
+  display: grid;
+  margin-block: 8px;
+}
+
+.signup-section form div > input {
+  padding: 12px 16px;
+  border: none;
+  border-radius: 4px;
+  font-family: "Poppins";
+  margin-top: 4px;
+}
+
+.signup-section form .signup-button {
+  width: 24%;
+  margin-top: 40px;
+  margin-inline: auto;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 60px;
+  cursor: pointer;
+  transition: background 250ms ease-in-out;
+}
+
+.signup-section form .signup-button:hover {
+  background-color: var(--primary-color-hover);
+}
+
+.signup-section form .links {
+  display: flex;
+  font-size: 14px;
+  margin-inline: auto;
+  margin-top: 16px;
+}
+
+.signup-section form .links a {
+  margin-left: 8px;
+}
