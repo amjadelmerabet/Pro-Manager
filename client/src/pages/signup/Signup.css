@@ -4,6 +4,17 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
+  position: relative;
+  visibility: hidden;
+  opacity: 0;
+  transform: scale(0);
+  transition: visibility 250ms ease-in-out, opacity 250ms ease-in-out, transform 250ms ease-in-out;
+}
+
+.signup-page.visible {
+  visibility: visible;
+  opacity: 1;
+  transform: scale(1);
 }
 
 .signup-page .title {
@@ -20,11 +31,12 @@
   border-radius: 20px;
   width: 1000px;
   /* height: 600px; */
-  padding-block: 24px;
+  padding-block: 48px;
 }
 
 .signup-page .signup-section > .signup-title {
   font-size: 32px;
+  margin-block: 16px;
 }
 
 .signup-page .signup-section form {
@@ -33,6 +45,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  font-size: 14px;
 }
 
 .signup-page .signup-section form > div:not(.links) {
@@ -73,11 +86,57 @@
 
 .signup-section form .links {
   display: flex;
-  font-size: 14px;
+  font-size: 12px;
   margin-inline: auto;
   margin-top: 16px;
 }
 
 .signup-section form .links a {
   margin-left: 8px;
+}
+
+.signup-page .confirm-popup {
+  position: absolute;
+  padding: 16px;
+  background-color: white;
+  border: 1px solid var(--primary-color);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.signup-page .confirm-popup .buttons {
+  display: flex;
+  justify-content: space-around;
+  margin: 24px;
+}
+
+.signup-page .confirm-popup .buttons > button {
+  border: none;
+  border-radius: 4px;
+  color: white;
+  padding: 4px 24px;
+  cursor: pointer;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, .25);
+  transition: transform 250ms ease-in-out, background 250ms ease-in-out;
+}
+
+.signup-page .confirm-popup .buttons > button:hover {
+  transform: scale(0.98);
+}
+
+.signup-page .confirm-popup .buttons > .confirm {
+  background-color: rgb(0, 180, 45);
+}
+
+.signup-page .confirm-popup .buttons > .confirm:hover {
+  background-color: rgb(0, 160, 40);
+}
+
+.signup-page .confirm-popup .buttons > .cancel {
+  background-color: rgb(245, 0, 45);
+}
+
+.signup-page .confirm-popup .buttons > .cancel:hover {
+  background-color: rgb(205, 0, 40);
 }

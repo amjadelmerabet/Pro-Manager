@@ -50,24 +50,50 @@ function App() {
             />
             <Route
               path="dashboard"
-              element={<DashboardRoute isAuthenticated={userAuthenticated} />}
+              element={
+                <DashboardRoute
+                  isAuthenticated={userAuthenticated}
+                  setAuthentication={setUserAuthenticated}
+                />
+              }
             />
             <Route
               path="projects"
-              element={<ProjectsRoute isAuthenticated={userAuthenticated} />}
+              element={
+                <ProjectsRoute
+                  isAuthenticated={userAuthenticated}
+                  setAuthentication={setUserAuthenticated}
+                />
+              }
             ></Route>
             <Route path="project">
-              <Route path=":projectId" element={<SingleProjectRoute />} />
+              <Route
+                path=":projectId"
+                element={
+                  <SingleProjectRoute
+                    isAuthenticated={userAuthenticated}
+                    setAuthentication={setUserAuthenticated}
+                  />
+                }
+              />
             </Route>
             <Route
               path="tasks"
-              element={<TasksRoute isAuthenticated={userAuthenticated} />}
+              element={
+                <TasksRoute
+                  isAuthenticated={userAuthenticated}
+                  setAuthentication={setUserAuthenticated}
+                />
+              }
             />
             <Route path="task">
               <Route
                 path=":taskid"
                 element={
-                  <SingleTaskRoute isAuthenticated={userAuthenticated} />
+                  <SingleTaskRoute
+                    isAuthenticated={userAuthenticated}
+                    setAuthentication={setUserAuthenticated}
+                  />
                 }
               />
             </Route>

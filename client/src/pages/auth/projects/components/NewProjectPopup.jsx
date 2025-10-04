@@ -22,17 +22,14 @@ export default function NewProjectPopup({
   const closePopupDialog = () => {
     setNewProjectClass("");
     setTimeout(() => {
-      setPopupDisplay({ ...popupDisplay, active: false })
+      setPopupDisplay({ ...popupDisplay, active: false });
     }, 250);
-  }
+  };
 
   return (
     <div className="new-project-popup">
       <div className={"new-project" + newProjectClass}>
-        <button
-          className="close-popup"
-          onClick={() => closePopupDialog()}
-        >
+        <button className="close-popup" onClick={() => closePopupDialog()}>
           <IconContext.Provider value={{ style: { color: "rgb(225, 0, 45)" } }}>
             <IoClose />
           </IconContext.Provider>
@@ -50,6 +47,22 @@ export default function NewProjectPopup({
             className="new-project-name-input poppins-regular"
             onChange={(event) =>
               setNewProject({ ...newProject, name: event.target.value })
+            }
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="new-project-deadline"
+            className="new-project-deadline-label poppins-regular"
+          >
+            Deadline
+          </label>
+          <input
+            type="date"
+            name="new-project-deadline"
+            className="new-project-deadline-input poppins-regular"
+            onChange={(event) =>
+              setNewProject({ ...newProject, deadline: event.target.value })
             }
           />
         </div>

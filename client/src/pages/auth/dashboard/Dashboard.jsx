@@ -5,11 +5,11 @@ import AuthHeader from "../components/AuthHeader";
 import "./Dashboard.css";
 import { IconContext } from "react-icons/lib";
 
-export default function DashboardPage({ user }) {
+export default function DashboardPage({ user, setAuthentication }) {
   return (
     <div className="dashboard-page">
       <div className="auth-header-container">
-        <AuthHeader user={user} />
+        <AuthHeader user={user} setAuthentication={setAuthentication} />
       </div>
       <div className="dashboard-container">
         <AllMenu />
@@ -28,26 +28,28 @@ export default function DashboardPage({ user }) {
                     <div className="title">Finish the first chapter ...</div>
                   </div>
                   <table className="details">
-                    <tr>
-                      <td className="property poppins-bold">Status</td>
-                      <td className="value">Doing</td>
-                    </tr>
-                    <tr>
-                      <td className="property poppins-bold">Assigned to</td>
-                      <td className="value">You</td>
-                    </tr>
-                    <tr>
-                      <td className="property poppins-bold">Updated at</td>
-                      <td className="value">Yesterday</td>
-                    </tr>
-                    <tr>
-                      <td className="property poppins-bold">Updated by</td>
-                      <td className="value">You</td>
-                    </tr>
-                    <tr>
-                      <td className="property poppins-bold">Created at</td>
-                      <td className="value">12/20/2024</td>
-                    </tr>
+                    <tbody>
+                      <tr>
+                        <td className="property poppins-bold">Status</td>
+                        <td className="value">Doing</td>
+                      </tr>
+                      <tr>
+                        <td className="property poppins-bold">Assigned to</td>
+                        <td className="value">You</td>
+                      </tr>
+                      <tr>
+                        <td className="property poppins-bold">Updated at</td>
+                        <td className="value">Yesterday</td>
+                      </tr>
+                      <tr>
+                        <td className="property poppins-bold">Updated by</td>
+                        <td className="value">You</td>
+                      </tr>
+                      <tr>
+                        <td className="property poppins-bold">Created at</td>
+                        <td className="value">12/20/2024</td>
+                      </tr>
+                    </tbody>
                   </table>
                   <div className="links">
                     <a href="#" className="open-link poppins-regular-italic">
@@ -65,26 +67,28 @@ export default function DashboardPage({ user }) {
                     <div className="title">English class</div>
                   </div>
                   <table className="details">
-                    <tr>
-                      <td className="property poppins-bold">Status</td>
-                      <td className="value">In progress</td>
-                    </tr>
-                    <tr>
-                      <td className="property poppins-bold">Category</td>
-                      <td className="value">Homework</td>
-                    </tr>
-                    <tr>
-                      <td className="property poppins-bold">Updated at</td>
-                      <td className="value">Yesterday</td>
-                    </tr>
-                    <tr>
-                      <td className="property poppins-bold">Updated by</td>
-                      <td className="value">You</td>
-                    </tr>
-                    <tr>
-                      <td className="property poppins-bold">Created at</td>
-                      <td className="value">12/20/2024</td>
-                    </tr>
+                    <tbody>
+                      <tr>
+                        <td className="property poppins-bold">Status</td>
+                        <td className="value">In progress</td>
+                      </tr>
+                      <tr>
+                        <td className="property poppins-bold">Category</td>
+                        <td className="value">Homework</td>
+                      </tr>
+                      <tr>
+                        <td className="property poppins-bold">Updated at</td>
+                        <td className="value">Yesterday</td>
+                      </tr>
+                      <tr>
+                        <td className="property poppins-bold">Updated by</td>
+                        <td className="value">You</td>
+                      </tr>
+                      <tr>
+                        <td className="property poppins-bold">Created at</td>
+                        <td className="value">12/20/2024</td>
+                      </tr>
+                    </tbody>
                   </table>
                   <div className="links">
                     <a href="#" className="open-link poppins-regular-italic">
@@ -102,26 +106,28 @@ export default function DashboardPage({ user }) {
                     <div className="title">Setup Node JS on my ...</div>
                   </div>
                   <table className="details">
-                    <tr>
-                      <td className="property poppins-bold">Status</td>
-                      <td className="value">Done</td>
-                    </tr>
-                    <tr>
-                      <td className="property poppins-bold">Assigned to</td>
-                      <td className="value">Aiden Kim</td>
-                    </tr>
-                    <tr>
-                      <td className="property poppins-bold">Updated at</td>
-                      <td className="value">Last Friday</td>
-                    </tr>
-                    <tr>
-                      <td className="property poppins-bold">Updated by</td>
-                      <td className="value">You</td>
-                    </tr>
-                    <tr>
-                      <td className="property poppins-bold">Created at</td>
-                      <td className="value">01/05/2025</td>
-                    </tr>
+                    <tbody>
+                      <tr>
+                        <td className="property poppins-bold">Status</td>
+                        <td className="value">Done</td>
+                      </tr>
+                      <tr>
+                        <td className="property poppins-bold">Assigned to</td>
+                        <td className="value">Aiden Kim</td>
+                      </tr>
+                      <tr>
+                        <td className="property poppins-bold">Updated at</td>
+                        <td className="value">Last Friday</td>
+                      </tr>
+                      <tr>
+                        <td className="property poppins-bold">Updated by</td>
+                        <td className="value">You</td>
+                      </tr>
+                      <tr>
+                        <td className="property poppins-bold">Created at</td>
+                        <td className="value">01/05/2025</td>
+                      </tr>
+                    </tbody>
                   </table>
                   <div className="links">
                     <a href="#" className="open-link poppins-regular-italic">
@@ -139,26 +145,28 @@ export default function DashboardPage({ user }) {
                     <div className="title">Database modeling</div>
                   </div>
                   <table className="details">
-                    <tr>
-                      <td className="property poppins-bold">Status</td>
-                      <td className="value">Doing</td>
-                    </tr>
-                    <tr>
-                      <td className="property poppins-bold">Assigned to</td>
-                      <td className="value">Aiden Kim</td>
-                    </tr>
-                    <tr>
-                      <td className="property poppins-bold">Updated at</td>
-                      <td className="value">02/25/2025</td>
-                    </tr>
-                    <tr>
-                      <td className="property poppins-bold">Updated by</td>
-                      <td className="value">Aiden Kim</td>
-                    </tr>
-                    <tr>
-                      <td className="property poppins-bold">Created at</td>
-                      <td className="value">02/20/2025</td>
-                    </tr>
+                    <tbody>
+                      <tr>
+                        <td className="property poppins-bold">Status</td>
+                        <td className="value">Doing</td>
+                      </tr>
+                      <tr>
+                        <td className="property poppins-bold">Assigned to</td>
+                        <td className="value">Aiden Kim</td>
+                      </tr>
+                      <tr>
+                        <td className="property poppins-bold">Updated at</td>
+                        <td className="value">02/25/2025</td>
+                      </tr>
+                      <tr>
+                        <td className="property poppins-bold">Updated by</td>
+                        <td className="value">Aiden Kim</td>
+                      </tr>
+                      <tr>
+                        <td className="property poppins-bold">Created at</td>
+                        <td className="value">02/20/2025</td>
+                      </tr>
+                    </tbody>
                   </table>
                   <div className="links">
                     <a href="#" className="open-link poppins-regular-italic">
@@ -236,7 +244,9 @@ export default function DashboardPage({ user }) {
           <div className="column-2">
             <div className="selected">
               <div className="selected-page-header poppins-bold">
-                <IconContext.Provider value={{ style: { color: "white", fontSize: "20px" } }}>
+                <IconContext.Provider
+                  value={{ style: { color: "white", fontSize: "20px" } }}
+                >
                   <FaRegCheckSquare />
                 </IconContext.Provider>
                 <div className="selected-page-title">
@@ -244,48 +254,52 @@ export default function DashboardPage({ user }) {
                 </div>
               </div>
               <table className="selected-page-details">
-                <tr>
-                  <td className="property poppins-bold">Status</td>
-                  <td className="value poppins-regular">Doing</td>
-                </tr>
-                <tr>
-                  <td className="property poppins-bold">Assigned to</td>
-                  <td className="value poppins-regular">You</td>
-                </tr>
-                <tr>
-                  <td className="property poppins-bold">Updated at</td>
-                  <td className="value poppins-regular">Yesterday</td>
-                </tr>
-                <tr>
-                  <td className="property poppins-bold">Updated by</td>
-                  <td className="value poppins-regular">You</td>
-                </tr>
-                <tr>
-                  <td className="property poppins-bold">Created at</td>
-                  <td className="value poppins-regular">12/20/2024</td>
-                </tr>
-                <tr>
-                  <td className="property poppins-bold">Created by</td>
-                  <td className="value poppins-regular">Aiden Kim</td>
-                </tr>
-                <tr>
-                  <td className="property poppins-bold">Priority</td>
-                  <td className="value poppins-regular">High</td>
-                </tr>
-                <tr>
-                  <td className="property poppins-bold" colSpan={2}>Description</td>
-                </tr>
-                <tr>
-                  <td className="value poppins-regular" colSpan={2}>
-                    "Finish the first chapter of grammar" involves reading,
-                    understanding, and completing all exercises or examples in
-                    the first chapter of a grammar book or study material. Focus
-                    on key concepts, definitions, and rules presented in the
-                    chapter. Ensure you practice any included questions or
-                    assignments to solidify your understanding. Mark the chapter
-                    as complete once you're confident with the material.
-                  </td>
-                </tr>
+                <tbody>
+                  <tr>
+                    <td className="property poppins-bold">Status</td>
+                    <td className="value poppins-regular">Doing</td>
+                  </tr>
+                  <tr>
+                    <td className="property poppins-bold">Assigned to</td>
+                    <td className="value poppins-regular">You</td>
+                  </tr>
+                  <tr>
+                    <td className="property poppins-bold">Updated at</td>
+                    <td className="value poppins-regular">Yesterday</td>
+                  </tr>
+                  <tr>
+                    <td className="property poppins-bold">Updated by</td>
+                    <td className="value poppins-regular">You</td>
+                  </tr>
+                  <tr>
+                    <td className="property poppins-bold">Created at</td>
+                    <td className="value poppins-regular">12/20/2024</td>
+                  </tr>
+                  <tr>
+                    <td className="property poppins-bold">Created by</td>
+                    <td className="value poppins-regular">Aiden Kim</td>
+                  </tr>
+                  <tr>
+                    <td className="property poppins-bold">Priority</td>
+                    <td className="value poppins-regular">High</td>
+                  </tr>
+                  <tr>
+                    <td className="property poppins-bold" colSpan={2}>
+                      Description
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="value poppins-regular" colSpan={2}>
+                      "Finish the first chapter of grammar" involves reading,
+                      understanding, and completing all exercises or examples in
+                      the first chapter of a grammar book or study material. Focus
+                      on key concepts, definitions, and rules presented in the
+                      chapter. Ensure you practice any included questions or
+                      assignments to solidify your understanding. Mark the chapter
+                      as complete once you're confident with the material.
+                    </td>
+                  </tr>
+                </tbody>
               </table>
             </div>
           </div>

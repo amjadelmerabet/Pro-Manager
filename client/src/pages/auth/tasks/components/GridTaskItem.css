@@ -1,14 +1,36 @@
-.tasks-page .tasks.grid .task > .left {
+.tasks-page .tasks.grid .task > .task-header {
   display: flex;
   align-items: center;
 }
 
-.tasks-page .tasks.grid .task > .left > .task-icon {
+.tasks-page .tasks.grid .task > .task-header > .task-icon {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.tasks-page .tasks.grid .task > .left > .task-name {
+.tasks-page .tasks.grid .task > .task-header > .task-name {
   margin-left: 8px;
+}
+
+.tasks-page .tasks.grid .task > .task-body {
+  font-size: 14px;
+  padding: 8px;
+}
+
+.tasks-page .tasks.grid .task > .task-body .short-description {
+  height: 48px;
+  margin-top: 8px;
+  font-size: 12px;
+}
+
+.tasks-page .tasks.grid .task > .task-body .assigned-to,
+.tasks-page .tasks.grid .task > .task-body .state {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.tasks-page .tasks.grid .task .task-body .property-value {
+  margin-left: 8px;
+  grid-column: 2 / -1;
 }

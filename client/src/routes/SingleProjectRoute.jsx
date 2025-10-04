@@ -3,9 +3,13 @@ import Project from "../pages/auth/project/Project";
 import { useEffect } from "react";
 import WrongRoute from "./WrongRoute";
 
-export default function SingleProjectRoute({ isAuthenticated }) {
+export default function SingleProjectRoute({
+  isAuthenticated,
+  setAuthentication,
+}) {
   let navigate = useNavigate();
   let userAuthenticated = JSON.parse(sessionStorage.getItem("authUser"));
+  let userLoggedOut = JSON.parse(sessionStorage.getItem("userLoggedOut"));
 
   const location = useLocation();
   const pathname = location.pathname;
@@ -17,15 +21,24 @@ export default function SingleProjectRoute({ isAuthenticated }) {
 
   useEffect(() => {
     if (!isAuthenticated && !userAuthenticated) {
-      navigate("/signin?redirect=/auth/user/projects");
+      if (userLoggedOut) {
+        navigate("/signin")
+      } else {
+        navigate("/signin?redirect=/auth/user/projects");
+      }
     }
   }, []);
 
   if (isAuthenticated || userAuthenticated) {
     if (user === userAuthenticated.user) {
-      return <Project user={userAuthenticated.user} />
+      return (
+        <Project
+          user={userAuthenticated.user}
+          setAuthentication={setAuthentication}
+        />
+      );
     } else {
-      <WrongRoute />
+      <WrongRoute />;
     }
   }
 }

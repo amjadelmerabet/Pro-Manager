@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 import "./Signup.css";
 
 export default function SignUpPage() {
   const [userBody, setUserBody] = useState({});
-  const [newUserCreated, setNewUserCreated] = useState(0);
+  const [newUserCreated, setNewUserCreated] = useState(false);
+  const [createNewUser, setCreateNewUser] = useState(false);
+  const [signUpStart, setSignUpStart] = useState(false);
+
+  let navigate = useNavigate();
 
   useEffect(() => {
     const createNewUserAPI = async () => {
@@ -16,26 +20,46 @@ export default function SignUpPage() {
       });
       const newUser = await response.json();
     };
-    if (newUserCreated > 0) {
-      setUserBody({
-        ...userBody,
-        name: userBody.first_name + " " + userBody.last_name,
-        created_by: "system",
-        updated_by: "system",
-      });
+    if (createNewUser) {
       createNewUserAPI();
       setTimeout(() => {
+       setCreateNewUser(false);
+       setNewUserCreated(false); 
+      }, 500);
+      setTimeout(() => {
         setUserBody({});
+        navigate("/signin");
       }, 1000);
     }
-  }, [newUserCreated]);
+  }, [createNewUser]);
 
-  const createNewUser = () => {
-    setNewUserCreated(newUserCreated + 1);
+  const openConfirmPopup = () => {
+    let name = userBody.first_name + " " + userBody.last_name;
+    setUserBody({
+      ...userBody,
+      name: name,
+      created_by: "system",
+      updated_by: "system",
+    });
+    setNewUserCreated(true);
   };
 
+  const createUser = () => {
+    setCreateNewUser(true);
+  }
+
+  const cancelCreation = () => {
+    setNewUserCreated(false);
+  }
+
+  useEffect(() => {
+    setTimeout(() => {
+      setSignUpStart(true);
+    }, 250);
+  }, []);
+
   return (
-    <div className="signup-page">
+    <div className={"signup-page" + (signUpStart ? " visible" : "")}>
       <h1 className="title poppins-bold">Pro Manager</h1>
       <div className="signup-section">
         <h2 className="signup-title poppins-bold">Sign up</h2>
@@ -144,10 +168,28 @@ export default function SignUpPage() {
             type="button"
             value="Sign up"
             className="signup-button poppins-bold"
-            onClick={() => createNewUser()}
+            onClick={() => openConfirmPopup()}
           />
         </form>
       </div>
+      {newUserCreated ? 
+      <div className="confirm-popup poppins-regular">
+        <span>Can you confirm that all the details are correct?</span>
+        <div className="buttons">
+          <button
+            className="confirm poppins-semibold"
+            onClick={() => createUser()}
+          >
+            Confirm
+          </button>
+          <button
+            className="cancel poppins-semibold"
+            onClick={() => cancelCreation()}
+          >
+            Cancel
+          </button>
+        </div>
+      </div> : ""}
     </div>
   );
 }

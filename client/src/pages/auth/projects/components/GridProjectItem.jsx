@@ -15,8 +15,9 @@ export default function GridProjectItem({
   completeProject,
   deleteProject,
   user,
-  updatedStatus
+  updatedStatus,
 }) {
+  let projectDeadline = new Date(project.deadline);
   return (
     <div
       className="project"
@@ -136,8 +137,12 @@ export default function GridProjectItem({
             </td>
           </tr>
           <tr>
-            <td className="property poppins-bold">Category</td>
-            <td className="value poppins-regular">School</td>
+            <td className="property poppins-bold">Deadline</td>
+            <td className="value poppins-regular">
+              {project.deadline
+                ? `${projectDeadline.getMonth()}/${projectDeadline.getDate()}/${projectDeadline.getFullYear()}`
+                : "No deadline"}
+            </td>
           </tr>
           <tr>
             <td className="property poppins-bold">Created by</td>

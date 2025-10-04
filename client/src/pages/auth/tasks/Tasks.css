@@ -10,6 +10,11 @@
   transition: transform 250ms ease-in-out;
 }
 
+.tasks-page .tasks.list > .task > .left {
+  display: flex;
+  align-items: center;
+}
+
 .tasks-page .tasks.list > .task:hover {
   transform: scale(1.025);
 }
@@ -26,10 +31,11 @@
   border: 2px solid var(--primary-color);
   padding: 16px;
   transition: transform 250ms ease-in-out;
+  position: relative;
 }
 
 .tasks-page .tasks.grid > .task:hover {
-  transform: scale(1.05);
+  transform: scale(1.05) rotate(-0.5deg);
 }
 
 .tasks-page .tasks > .task:nth-child(odd) {
@@ -41,26 +47,17 @@
 }
 
 .tasks-page .tasks > .task .properties {
-  display: flex;
-}
-
-.tasks-page .tasks > .task .properties > div {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
 }
 
-.tasks-page .tasks > .task .properties > .assignee {
-  width: 180px;
-  grid-template-columns: repeat(3, 1fr);
+.tasks-page .tasks > .task .properties > div {
+  display: flex;
+  margin-left: 24px;
 }
 
-.tasks-page .tasks > .task .properties > .assignee > div:nth-child(1) {
-  grid-column: 1 / 3;
-}
-
-.tasks-page .tasks > .task .properties > .status {
-  margin-left: 8px;
-  width: 120px;
+.tasks-page .tasks.list .task .properties > div {
+  margin-left: 32px;
 }
 
 .tasks-page .tasks > .task > .open-task {
@@ -98,10 +95,16 @@
   background-color: var(--primary-color-hover);
 }
 
-.tasks-page .tasks > .task > .open-task > .visible {
+.tasks-page .tasks.list > .task > .open-task > .visible {
   visibility: visible;
   opacity: 1;
   transform: scale(1);
+}
+
+.tasks-page .tasks.grid > .task .open-task > .visible {
+  visibility: visible;
+  opacity: 1;
+  transform: scale(1) rotate(0.5deg);
 }
 
 .tasks-page .tasks > .task > .task-actions {
@@ -152,10 +155,19 @@
   margin: 200px auto;
 }
 
-.tasks-page .tasks > .task .updated {
+.tasks-page .tasks.list > .task .updated {
   position: absolute;
-  font-size: 12px;
-  width: 200px;
+  font-size: 11px;
+  width: fit-content;
   bottom: 0;
-  left: calc(50% - 100px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.tasks-page .tasks.grid > .task .updated {
+  position: absolute;
+  font-size: 11px;
+  width: fit-content;
+  bottom: 4px;
+  right: 16px;
 }

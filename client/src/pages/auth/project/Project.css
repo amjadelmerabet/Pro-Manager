@@ -90,3 +90,14 @@
 .project-page .project .links a > span {
   margin-left: 8px;
 }
+
+.project-page .project .project-body > .project-info {
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.project-page .project .project-body > .project-info .left {
+  display: flex;
+  gap: 16px;
+}

@@ -8,6 +8,7 @@ export default function LoginPage({ isAuthenticated, setAuthentication }) {
   const [password, setPassword] = useState("");
   const [login, setLogin] = useState("");
   const [incorrectCredentials, setIncorrectCredentials] = useState(false);
+  const [loginStart, setLoginStart] = useState(false);
 
   const [searchParams] = useSearchParams();
   const redirectURL = searchParams.get("redirect");
@@ -15,6 +16,7 @@ export default function LoginPage({ isAuthenticated, setAuthentication }) {
   let navigate = useNavigate();
 
   const userAuthenticated = sessionStorage.getItem("authUser");
+  const logout = sessionStorage.getItem("userLoggedOut");
 
   useEffect(() => {
     if (isAuthenticated || userAuthenticated) {
@@ -27,7 +29,7 @@ export default function LoginPage({ isAuthenticated, setAuthentication }) {
           navigate("/signin");
         }
       } else {
-        if (userAuthenticated) {
+        if (userAuthenticated && !logout) {
           const authUser = JSON.parse(userAuthenticated).user;
           navigate("/auth/" + authUser + "/dashboard");
         } else if (username) {
@@ -43,6 +45,7 @@ export default function LoginPage({ isAuthenticated, setAuthentication }) {
     if (login === "login") {
       // console.log("User trying to login");
       const authUser = async () => {
+        const refreshToken = await cookieStore.get(username);
         const response = await fetch("http://127.0.0.1:3000/users/auth", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -50,11 +53,46 @@ export default function LoginPage({ isAuthenticated, setAuthentication }) {
         });
         const auth = await response.json();
         setLogin("LoginEnded");
-        if (auth.authenticated) {
+        if (auth.authenticated && auth.token) {
+          sessionStorage.clear();
           sessionStorage.setItem(
             "authUser",
-            JSON.stringify({ user: username, authenticated: true })
+            JSON.stringify({
+              user: username,
+              authenticated: true,
+              token: auth.token,
+            })
           );
+          if (!refreshToken) {
+            let refreshTokenExpiresIn = new Date();
+            refreshTokenExpiresIn.setHours(
+              refreshTokenExpiresIn.getHours() + 24 * 7
+            );
+            await cookieStore.set({
+              name: username,
+              value: auth.refresh,
+              expires: refreshTokenExpiresIn,
+              path: "/",
+              secure: true,
+              sameSite: "strict",
+            });
+          } else {
+            if (refreshToken.value !== auth.refresh) {
+              await cookieStore.delete(username);
+              let refreshTokenExpiresIn = new Date();
+              refreshTokenExpiresIn.setHours(
+                refreshTokenExpiresIn.getHours() + 24 * 7
+              );
+              await cookieStore.set({
+                name: username,
+                value: auth.refresh,
+                expires: refreshTokenExpiresIn,
+                path: "/",
+                secure: true,
+                sameSite: "strict",
+              });
+            }
+          }
           setAuthentication(auth.authenticated);
           setIncorrectCredentials(false);
         } else {
@@ -65,17 +103,27 @@ export default function LoginPage({ isAuthenticated, setAuthentication }) {
     }
   }, [login]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setLoginStart(true);
+    }, 250);
+  }, []);
+
   const handleSignIn = async () => {
     setLogin("login");
   };
 
   return (
-    <div className="login-page">
+    <div className={"login-page" + (loginStart ? " visible " : "")}>
       <h1 className="title poppins-bold">Pro Manager</h1>
       <div className="login-section">
         <h2 className="signin-title poppins-bold">Sign in</h2>
         <form className="login-form poppins-regular">
-          {incorrectCredentials ? <div className="incorrect-credentials">Incorrect Credentials</div> : ""}
+          {incorrectCredentials ? (
+            <div className="incorrect-credentials">Incorrect Credentials</div>
+          ) : (
+            ""
+          )}
           <div className="username-section">
             <label htmlFor="username" className="username-label">
               Username

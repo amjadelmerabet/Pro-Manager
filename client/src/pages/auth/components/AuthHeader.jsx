@@ -1,11 +1,28 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { IoIosSearch } from "react-icons/io";
 import ProfilePicture from "../../../assets/profile-picture.jpg";
+import { IconContext } from "react-icons/lib";
+import { useState } from "react";
+import { BsFillTriangleFill } from "react-icons/bs";
+import { CgProfile } from "react-icons/cg";
+import { GoGear } from "react-icons/go";
+import { LuPaintbrush } from "react-icons/lu";
 
 import "./AuthHeader.css";
-import { IconContext } from "react-icons/lib";
+import { IoLogOutOutline } from "react-icons/io5";
 
-export default function AuthHeader({ user }) {
+export default function AuthHeader({ user, setAuthentication }) {
+  const [settingsPopup, setSettingsPopup] = useState(false);
+
+  let navigate = useNavigate();
+
+  const logout = () => {
+    sessionStorage.setItem("userLoggedOut", true);
+    sessionStorage.removeItem("authUser");
+    setAuthentication(false);
+    navigate("/signin");
+  };
+
   return (
     <div className="container">
       <header className="auth-header">
@@ -45,7 +62,33 @@ export default function AuthHeader({ user }) {
             src={ProfilePicture}
             alt="Profile picture"
             className="profile-picture"
+            onClick={() => setSettingsPopup(!settingsPopup)}
           />
+          <div className={"settings" + (settingsPopup ? " visible" : "")}>
+            <IconContext.Provider
+              value={{ style: { color: "var(--primary-color)" } }}
+            >
+              <BsFillTriangleFill className="triangle" />
+            </IconContext.Provider>
+            <ul className="settings-list poppins-regular">
+              <li className="setting-item">
+                <CgProfile />
+                <span>Profile</span>
+              </li>
+              <li className="setting-item">
+                <GoGear />
+                <span>Settings</span>
+              </li>
+              <li className="setting-item">
+                <LuPaintbrush />
+                <span>Themes</span>
+              </li>
+              <li className="setting-item" onClick={() => logout()}>
+                <IoLogOutOutline />
+                <span>Log out</span>
+              </li>
+            </ul>
+          </div>
         </div>
       </header>
     </div>

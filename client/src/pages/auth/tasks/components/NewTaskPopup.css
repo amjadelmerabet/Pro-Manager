@@ -30,7 +30,7 @@
   transform: scale(1);
 }
 
-.new-task-popup .new-task > div {
+.new-task-popup .new-task > div:not(.priority) {
   display: grid;
 }
 
@@ -44,6 +44,18 @@
   padding: 8px;
   border: 1px solid black;
   border-radius: 4px;
+}
+
+.new-task-popup .new-task > .priority > div {
+  margin-top: 8px;
+}
+
+.new-task-popup .new-task > .priority > div > input:not(.new-task > .priority > div > input:nth-child(1)) {
+  margin-left: 24px;
+}
+
+.new-task-popup .new-task > .priority > div > label {
+  margin-left: 8px;
 }
 
 .new-task-popup .new-task > .create-task {
@@ -70,4 +82,8 @@
   top: 8px;
   right: 8px;
   cursor: pointer;
+}
+
+.new-task-popup .new-task > .title {
+  text-align: center;
 }

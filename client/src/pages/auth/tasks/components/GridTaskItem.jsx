@@ -5,6 +5,9 @@ import { BiReset } from "react-icons/bi";
 import { IoCheckmark, IoClose } from "react-icons/io5";
 
 import "./GridTaskItem.css";
+import updatedMessage from "../../../../utils/updatedMessage";
+import { FaFire, FaRegSnowflake } from "react-icons/fa";
+import { RiAlarmWarningFill } from "react-icons/ri";
 
 export default function GridTaskItem({
   task,
@@ -15,8 +18,11 @@ export default function GridTaskItem({
   startTask,
   completeTask,
   resetTask,
-  deleteTask
+  deleteTask,
+  user,
 }) {
+  let updated = new Date(task.updated_on);
+  let updatedStatus = updatedMessage(updated);
   return (
     <div
       className="task"
@@ -109,8 +115,8 @@ export default function GridTaskItem({
           </IconContext.Provider>
         </button>
       </div>
-      <div className="left">
-        <div className="task-icon">
+      <div className="task-header">
+        {/* <div className="task-icon">
           <IconContext.Provider
             value={{
               style: { color: "var(--primary-color)", fontSize: "24px" },
@@ -118,10 +124,45 @@ export default function GridTaskItem({
           >
             <MdTaskAlt />
           </IconContext.Provider>
+        </div> */}
+        <div className="priority task-icon">
+          <IconContext.Provider
+            value={{
+              style: {
+                color:
+                  task.priority === 1
+                    ? "rgb(245, 0, 45)"
+                    : task.priority === 2
+                    ? "rgb(245, 120, 0)"
+                    : "rgb(0, 120, 245)",
+              },
+            }}
+          >
+            {task.priority === 1 ? (
+              <RiAlarmWarningFill />
+            ) : task.priority === 2 ? (
+              <FaFire />
+            ) : (
+              <FaRegSnowflake />
+            )}
+          </IconContext.Provider>
         </div>
         <div className="task-name poppins-regular">{task.name}</div>
       </div>
-      <div className="right"></div>
+      <div className="task-body poppins-regular">
+        <div className="assigned-to">
+          <div className="property-name poppins-semibold">Assigned to</div>
+          <div className="property-value">
+            {task.assigned_to === user ? "You" : task.assigned_to}
+          </div>
+        </div>
+        <div className="state poppins-regular">
+          <div className="property-name poppins-semibold">State</div>
+          <div className="property-value">{task.state === 1 ? "To do" : (task.state === 2 ? "Doing" : "Done")}</div>
+        </div>
+        <div className="short-description">{task.short_description}</div>
+      </div>
+      <div className="updated poppins-regular">{updatedStatus}</div>
     </div>
   );
 }

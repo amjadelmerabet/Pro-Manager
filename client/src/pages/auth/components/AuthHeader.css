@@ -88,4 +88,61 @@
   border-radius: 50%;
   right: 0;
   margin-inline: auto;
+  cursor: pointer;
+}
+
+.auth-header .settings {
+  visibility: hidden;
+  opacity: 0;
+  transform: scale(0);
+  transition: visibility 250ms ease-in-out, opacity 250ms ease-in-out, transform 250ms ease-in-out;
+  position: absolute;
+  bottom: -170px;
+  left: 0;
+  padding: 4px 8px;
+  background-color: var(--primary-color);
+  width: 100%;
+  border-radius: 8px;
+  z-index: 10;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, .25);
+}
+
+.auth-header .settings.visible {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-30%) scale(1);
+}
+
+.auth-header .settings .triangle {
+  visibility: hidden;
+  opacity: 0;
+  transform: scale(0);
+  position: absolute;
+  top: -10px;
+  right: 40px;
+  transition: opacity 250ms ease-in-out, visibility 250ms ease-in-out, transform 250ms ease-in-out;
+}
+
+.auth-header .settings.visible .triangle {
+  visibility: visible;
+  opacity: 1;
+  transform: scale(1);
+}
+
+.auth-header .settings > .settings-list {
+  list-style: none;
+}
+
+.auth-header .settings > .settings-list > .setting-item {
+  padding: 4px 12px;
+  margin-block: 4px;
+  background-color: var(--secondary-color);
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.auth-header .settings > .settings-list > .setting-item > span {
+  margin-left: 8px;
 }

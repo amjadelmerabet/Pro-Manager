@@ -2,6 +2,8 @@ import { BiReset } from "react-icons/bi";
 import { GrFormClock } from "react-icons/gr";
 import { IoCheckmark, IoClose } from "react-icons/io5";
 import { IconContext } from "react-icons/lib";
+import { RiAlarmWarningFill } from "react-icons/ri";
+import { FaFire, FaRegSnowflake } from "react-icons/fa";
 
 import "./ListTaskItem.css";
 
@@ -24,18 +26,44 @@ export default function ListTaskItem({
       onMouseEnter={() => hoverOverTask(task.task_id)}
       onMouseLeave={() => hoverOverTaskEnd()}
     >
-      <div className="task-name poppins-regular">{task.name}</div>
-      <div className="properties">
-        <div className="assignee">
-          <div className="property-name poppins-semibold">Assigned to</div>
-          <div className="property-value poppins-regular">
-            {task.assigned_to === user ? "You" : task.assigned_to}
-          </div>
+      <div className="left">
+        <div className="priority">
+          <IconContext.Provider
+            value={{
+              style: {
+                color:
+                  task.priority === 1
+                    ? "rgb(245, 0, 45)"
+                    : task.priority === 2
+                    ? "rgb(245, 120, 0)"
+                    : "rgb(0, 120, 245)",
+              },
+            }}
+          >
+            {task.priority === 1 ? (
+              <RiAlarmWarningFill />
+            ) : task.priority === 2 ? (
+              <FaFire />
+            ) : (
+              <FaRegSnowflake />
+            )}
+          </IconContext.Provider>
         </div>
-        <div className="status">
-          <div className="property-name poppins-semibold">State</div>
-          <div className="property-value poppins-regular">
-            {task.state === 1 ? "To do" : task.state === 2 ? "Doing" : "Done"}
+        <div className="task-name poppins-regular">{task.name}</div>
+      </div>
+      <div className="right">
+        <div className="properties">
+          <div className="assignee">
+            <div className="property-name poppins-semibold">Assigned to</div>
+            <div className="property-value poppins-regular">
+              {task.assigned_to === user ? "You" : task.assigned_to}
+            </div>
+          </div>
+          <div className="status">
+            <div className="property-name poppins-semibold">State</div>
+            <div className="property-value poppins-regular">
+              {task.state === 1 ? "To do" : task.state === 2 ? "Doing" : "Done"}
+            </div>
           </div>
         </div>
       </div>

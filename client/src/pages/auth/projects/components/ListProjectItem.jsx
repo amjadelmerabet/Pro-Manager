@@ -16,8 +16,10 @@ export default function ListProjectItem({
   resetProject,
   deleteProject,
   hoverOverProject,
-  hoverOverProjectEnd
+  hoverOverProjectEnd,
 }) {
+  let projectDeadline = new Date(project.deadline);
+
   return (
     <div
       className="project"
@@ -134,6 +136,18 @@ export default function ListProjectItem({
                 : project.state === 2
                 ? "In progress"
                 : "Completed"}
+            </div>
+          </div>
+          <div className="deadline">
+            <div className="property-name poppins-semibold">Deadline</div>
+            <div className="property-value poppins-regular">
+              {project.deadline
+                ? projectDeadline.getMonth() +
+                  "/" +
+                  projectDeadline.getDate() +
+                  "/" +
+                  projectDeadline.getFullYear()
+                : "No deadline"}
             </div>
           </div>
           <div className="created-by">

@@ -29,10 +29,89 @@
   background-color: rgb(0, 200, 120);
 }
 
-.task-page .task-body .task-short-description {
-  margin-block: 16px;
+.task-page .task > .task-body span {
+  display: inline-block;
+  margin-top: 16px;
+}
+
+.task-page .task-body .task-short-description,
+.task-page .task-body .task-description.visible {
+  margin-top: 4px;
   padding: 8px 16px;
   background-color: var(--accent-color);
+  border-radius: 4px;
+}
+
+.task-page .task-body .editing-short-description {
+  margin-top: 4px;
+  display: flex;
+}
+
+.task-page .task-body .editing-short-description > .editing-short-description-input {
+  padding: 8px 16px;
+  background-color: var(--accent-color);
+  border-radius: 4px;
+  border: 1px solid var(--primary-color);
+  width: 90%;
+}
+
+.task-page .task-body .editing-short-description > .buttons {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 10%;
+}
+
+.task-page .task-body .editing-short-description > .buttons > input {
+  padding: 4px 8px;
+  height: 80%;
+  border-radius: 4px;
+  border: 1px solid var(--primary-color);
+  background-color: white;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, .25);
+  transition: transform 250ms ease-in-out;
+  cursor: pointer;
+}
+
+.task-page .task-body .editing-short-description > .buttons > input:hover {
+  transform: scale(0.99);
+}
+
+.task-page .task-body .task-description {
+  margin-bottom: 32px;
+}
+
+.task-page .task-body > div:not(.task-info) {
+  position: relative;
+}
+
+.task-page .task-body > div:not(.task-info) > div > .edit {
+  position: absolute;
+  top: 12px;
+  right: 8px;
+  border: 1px solid var(--primary-color);
+  padding: 2px 8px;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  border-radius: 4px;
+  background-color: white;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, .25);
+  cursor: pointer;
+  transition: transform 250ms ease-in-out;
+  visibility: hidden;
+  opacity: 0;
+  transform: scale(0);
+}
+
+.task-page .task-body > div:not(.task-info) > div > .edit:hover {
+  transform: scale(0.98);
+}
+
+.task-page .task-body > div:not(.task-info):hover > div > .edit.visible {
+  visibility: visible;
+  opacity: 1;
+  transform: scale(1);
 }
 
 .task-page .task > .task-header .task-actions > button {
@@ -81,4 +160,21 @@
 
 .task-page .task .links a > span {
   margin-left: 8px;
+}
+
+.task-page .task .task-body > .task-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.task-page .task .task-header > .left .priority-icon {
+  display: flex;
+  align-items: center;
+  margin-right: 8px;
+}
+
+.task-page .task .task-body .task-info .left {
+  display: flex;
+  gap: 16px;
 }
