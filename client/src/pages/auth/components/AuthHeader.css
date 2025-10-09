@@ -143,6 +143,13 @@
   align-items: center;
 }
 
-.auth-header .settings > .settings-list > .setting-item > span {
+.auth-header .settings > .settings-list > .setting-item span {
   margin-left: 8px;
+}
+
+.auth-header .settings > .settings-list > .setting-item a {
+  text-decoration: none;
+  color: black;
+  display: flex;
+  align-items: center;
 }

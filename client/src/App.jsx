@@ -46,7 +46,12 @@ function App() {
           <Route path=":userId">
             <Route
               path="profile"
-              element={<ProfileRoute isAuthenticated={userAuthenticated} />}
+              element={
+                <ProfileRoute
+                  isAuthenticated={userAuthenticated}
+                  setAuthentication={setUserAuthenticated}
+                />
+              }
             />
             <Route
               path="dashboard"

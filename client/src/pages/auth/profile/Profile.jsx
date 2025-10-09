@@ -6,11 +6,11 @@ import NetherlandsFlag from "../../../assets/netherlands-flag.webp";
 import "./Profile.css";
 import ProfileActions from "../components/ProfileActions";
 
-export default function ProfilePage() {
+export default function ProfilePage({ user, setAuthentication }) {
   return (
     <div className="profile-page">
       <div className="auth-header-container">
-        <AuthHeader />
+        <AuthHeader user={user} setAuthentication={setAuthentication} />
       </div>
       <ProfileActions />
       <div className="profile-page-container">

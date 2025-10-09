@@ -72,8 +72,10 @@ export default function AuthHeader({ user, setAuthentication }) {
             </IconContext.Provider>
             <ul className="settings-list poppins-regular">
               <li className="setting-item">
-                <CgProfile />
-                <span>Profile</span>
+                <Link to={"/auth/" + user + "/profile"}>
+                  <CgProfile />
+                  <span>Profile</span>
+                </Link>
               </li>
               <li className="setting-item">
                 <GoGear />
