@@ -388,11 +388,7 @@ export default function Task({ user, setAuthentication }) {
       short_description: editedShortDescription,
       updated_by: user,
     });
-    setTaskUpdated(true);
-    setTimeout(() => {
-      setTaskUpdates({});
-      setTaskUpdated(false);
-    }, 250);
+    setTaskUpdated({ counter: taskUpdated.counter + 1, update: true });
   };
 
   const cancelShortDescriptionEdit = () => {
