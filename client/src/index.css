@@ -124,3 +124,8 @@
 .container {
   margin-inline: 200px;
 }
+
+.feature-disabled {
+  opacity: .65;
+  pointer-events: none;
+}

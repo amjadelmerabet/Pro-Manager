@@ -2,8 +2,9 @@ import { FaRegCheckSquare, FaRegFolder, FaRegStar } from "react-icons/fa";
 import { BsFillTriangleFill } from "react-icons/bs";
 
 import "./AllMenu.css";
+import { Link } from "react-router";
 
-export default function AllMenu() {
+export default function AllMenu({ user }) {
   return (
     <div className="all-menu">
       <div className="application-menu">
@@ -15,12 +16,16 @@ export default function AllMenu() {
           <BsFillTriangleFill className="app-menu-arrow" />
         </div>
         <ul className="modules poppins-regular">
-          <li className="module">My projects</li>
-          <li className="module">My tasks</li>
-          <li className="module">My teams tasks</li>
+          <li className="module">
+            <Link to={`/auth/${user}/projects`}>My projects</Link>
+          </li>
+          <li className="module">
+            <Link to={`/auth/${user}/tasks`}>My tasks</Link>
+          </li>
+          <li className="module feature-disabled">My teams tasks</li>
         </ul>
       </div>
-      <div className="application-menu">
+      <div className="application-menu feature-disabled">
         <div className="app-menu-header">
           <div>
             <FaRegFolder className="app-menu-icon" />
@@ -36,7 +41,7 @@ export default function AllMenu() {
           <li className="module">Completed</li>
         </ul>
       </div>
-      <div className="application-menu">
+      <div className="application-menu feature-disabled">
         <div className="app-menu-header">
           <div>
             <FaRegCheckSquare className="app-menu-icon" />

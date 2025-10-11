@@ -37,7 +37,7 @@ export default function AuthHeader({ user, setAuthentication }) {
           <li className="auth-menu-item poppins-semibold">
             <Link to={"/auth/" + user + "/tasks"}>Tasks</Link>
           </li>
-          <li className="auth-menu-item poppins-semibold">
+          <li className="auth-menu-item poppins-semibold feature-disabled">
             <Link to={"/auth/" + user + "/insights"}>Insights</Link>
           </li>
         </ul>
@@ -77,11 +77,11 @@ export default function AuthHeader({ user, setAuthentication }) {
                   <span>Profile</span>
                 </Link>
               </li>
-              <li className="setting-item">
+              <li className="setting-item feature-disabled">
                 <GoGear />
                 <span>Settings</span>
               </li>
-              <li className="setting-item">
+              <li className="setting-item feature-disabled">
                 <LuPaintbrush />
                 <span>Themes</span>
               </li>

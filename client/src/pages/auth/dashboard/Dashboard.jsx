@@ -345,7 +345,7 @@ export default function DashboardPage({ user, setAuthentication }) {
         <AuthHeader user={user} setAuthentication={setAuthentication} />
       </div>
       <div className="dashboard-container">
-        <AllMenu />
+        <AllMenu user={user} />
         <main>
           <div className="column-1">
             <div className="recent-pages">
@@ -362,7 +362,12 @@ export default function DashboardPage({ user, setAuthentication }) {
                     return (
                       <div
                         key={recentPage.project_id}
-                        className="page"
+                        className={
+                          "page" +
+                          (selectedPage.project_id === recentPage.project_id
+                            ? " selected-recent-page"
+                            : "")
+                        }
                         onClick={() =>
                           setSelectedPage({ ...recentPage, type: "project" })
                         }
@@ -438,7 +443,12 @@ export default function DashboardPage({ user, setAuthentication }) {
                       // <div className="page selected-recent-page">
                       <div
                         key={recentPage.task_id}
-                        className="page"
+                        className={
+                          "page" +
+                          (selectedPage.task_id === recentPage.task_id
+                            ? " selected-recent-page"
+                            : "")
+                        }
                         onClick={() => {
                           setSelectedPage({ ...recentPage, type: "task" });
                         }}
@@ -611,7 +621,7 @@ export default function DashboardPage({ user, setAuthentication }) {
                 </div>
               </div> */}
             </div>
-            <div className="quick-actions">
+            <div className="quick-actions feature-disabled">
               <h4 className="title poppins-bold">Quick actions</h4>
               <ul className="actions poppins-regular">
                 <li className="action">
@@ -748,7 +758,10 @@ export default function DashboardPage({ user, setAuthentication }) {
                     )}
                     {selectedPage.type === "task" ? (
                       <tr>
-                        <td className="value short-description poppins-regular" colSpan={2}>
+                        <td
+                          className="value short-description poppins-regular"
+                          colSpan={2}
+                        >
                           {selectedPage.short_description}
                         </td>
                       </tr>
@@ -761,7 +774,10 @@ export default function DashboardPage({ user, setAuthentication }) {
                       </td>
                     </tr>
                     <tr>
-                      <td className="value description poppins-regular" colSpan={2}>
+                      <td
+                        className="value description poppins-regular"
+                        colSpan={2}
+                      >
                         {selectedPage.description}
                       </td>
                     </tr>
