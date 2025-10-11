@@ -531,7 +531,13 @@ export default function Project({ user, setAuthentication }) {
                 {projectObject.description}
               </p>
               <div className="links poppins-semibold">
-                <Link to={`/auth/${user}/projects?view=${view}`}>
+                <Link
+                  to={
+                    view === "dashboard"
+                      ? `/auth/${user}/dashboard`
+                      : `/auth/${user}/projects?view=${view}`
+                  }
+                >
                   <IconContext.Provider
                     value={{ style: { color: "var(--primary-color)" } }}
                   >

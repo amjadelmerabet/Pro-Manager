@@ -162,7 +162,7 @@ export default function GridTaskItem({
         </div>
         <div className="short-description">{task.short_description}</div>
       </div>
-      <div className="updated poppins-regular">{updatedStatus}</div>
+      <div className="updated poppins-regular">Updated {updatedStatus}</div>
     </div>
   );
 }

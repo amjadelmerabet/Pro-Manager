@@ -16,7 +16,7 @@ export default async function createRefreshToken(token, granted_by, granted_to) 
     const randomStr = randomString(10);
     const now = new Date();
     let expiresIn = new Date();
-    expiresIn.setHours(expiresIn.getHours() + (7 * 24));
+    expiresIn.setHours(now.getHours() + (7 * 24));
     // const hashToken = async (plainToken) => {
     //   const saltRounds = 10;
     //   const hashedToken = await bcrypt.hash(plainToken, saltRounds);

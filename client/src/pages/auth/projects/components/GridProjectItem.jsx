@@ -152,7 +152,7 @@ export default function GridProjectItem({
           </tr>
         </tbody>
       </table>
-      <div className="updated poppins-regular">{updatedStatus}</div>
+      <div className="updated poppins-regular">Updated {updatedStatus}</div>
     </div>
   );
 }

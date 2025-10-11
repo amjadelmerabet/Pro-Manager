@@ -67,7 +67,7 @@ export default function ListTaskItem({
           </div>
         </div>
       </div>
-      <div className="updated poppins-regular">{updatedStatus}</div>
+      <div className="updated poppins-regular">Updated {updatedStatus}</div>
       <div className="open-task">
         <button
           className={

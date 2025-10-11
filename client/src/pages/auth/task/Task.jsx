@@ -630,7 +630,13 @@ export default function Task({ user, setAuthentication }) {
               </div>
             </div>
             <div className="links poppins-semibold">
-              <Link to={`/auth/${user}/tasks?view=${view}`}>
+              <Link
+                to={
+                  view === "dashboard"
+                    ? `/auth/${user}/dashboard`
+                    : `/auth/${user}/tasks?view=${view}`
+                }
+              >
                 <IconContext.Provider
                   value={{
                     style: { color: "var(--primary-color)" },

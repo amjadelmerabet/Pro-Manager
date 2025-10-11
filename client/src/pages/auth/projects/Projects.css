@@ -103,6 +103,15 @@
   align-self: flex-end;
 }
 
+.projects-page .projects.list > .project .updated {
+  position: absolute;
+  font-size: 11px;
+  width: fit-content;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 .projects-page .project .project-actions {
   position: absolute;
   display: flex;

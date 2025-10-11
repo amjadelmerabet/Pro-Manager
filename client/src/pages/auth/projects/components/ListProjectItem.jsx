@@ -17,6 +17,7 @@ export default function ListProjectItem({
   deleteProject,
   hoverOverProject,
   hoverOverProjectEnd,
+  updatedStatus
 }) {
   let projectDeadline = new Date(project.deadline);
 
@@ -158,6 +159,7 @@ export default function ListProjectItem({
           </div>
         </div>
       </div>
+      <div className="updated poppins-regular">Updated {updatedStatus}</div>
     </div>
   );
 }

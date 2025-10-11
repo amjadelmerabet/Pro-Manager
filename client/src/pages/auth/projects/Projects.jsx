@@ -656,6 +656,7 @@ export default function ProjectsPage({ user, setAuthentication }) {
                           deleteProject={deleteProject}
                           hoverOverProject={hoverOverProject}
                           hoverOverProjectEnd={hoverOverProjectEnd}
+                          updatedStatus={updatedStatus}
                         />
                       );
                     }
