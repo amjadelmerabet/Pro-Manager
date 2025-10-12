@@ -65,6 +65,17 @@
   margin-top: 8px;
 }
 
+.dashboard-container .recent-pages > .loading-pages,
+.dashboard-container .recent-pages > .no-recent-pages { 
+  height: 190px;
+  margin-top: 8px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* font-size: 18px; */
+}
+
 .dashboard-container .recent-pages .page {
   background-color: white;
   padding: 4px;
