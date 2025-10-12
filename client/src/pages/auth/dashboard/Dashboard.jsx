@@ -28,7 +28,11 @@ export default function DashboardPage({ user, setAuthentication }) {
     doing: 0,
     done: 0,
   });
-  const [selectedPage, setSelectedPage] = useState();
+  const [selectedPage, setSelectedPage] = useState({});
+  const [loadProjects, setLoadProjects] = useState(0);
+  const [loadTasks, setLoadTasks] = useState(0);
+  const [tempRecentPages, setTempRecentPages] = useState([]);
+  const [recentPagesLoaded, setRecentPagesLoaded] = useState(false);
 
   const { token } = JSON.parse(sessionStorage.getItem("authUser"));
 
@@ -64,7 +68,7 @@ export default function DashboardPage({ user, setAuthentication }) {
             setTries(tries + 1);
             setNewAccessToken({
               counter: newAccessToken.counter + 1,
-              type: "load",
+              type: "projects",
             });
           } else {
             // console.log("Projects fetched:", projectsObject.result);
@@ -86,13 +90,14 @@ export default function DashboardPage({ user, setAuthentication }) {
               inProgress: projectsInProgress,
               completed: projecstCompleted,
             });
-            setRecentPages(recentPages.concat(projectsObject.result));
+            setTempRecentPages(tempRecentPages.concat(projectsObject.result));
+            setProjectsFetched(true);
           }
         } else {
           setTries(tries + 1);
           setNewAccessToken({
             counter: newAccessToken.counter + 1,
-            type: "load",
+            type: "projects",
           });
         }
       } else {
@@ -117,7 +122,7 @@ export default function DashboardPage({ user, setAuthentication }) {
         setTries(tries + 1);
         setNewAccessToken({
           counter: newAccessToken.counter + 1,
-          type: "load",
+          type: "projects",
         });
       } else {
         // console.log("Projects fetched:", projectsObject.result);
@@ -139,10 +144,10 @@ export default function DashboardPage({ user, setAuthentication }) {
           inProgress: projectsInProgress,
           completed: projecstCompleted,
         });
-        setRecentPages(recentPages.concat(projectsObject.result));
+        setTempRecentPages(tempRecentPages.concat(projectsObject.result));
+        setProjectsFetched(true);
       }
     }
-    setProjectsFetched(true);
   };
 
   const getAllTasksAPI = async () => {
@@ -177,7 +182,7 @@ export default function DashboardPage({ user, setAuthentication }) {
             setTries(tries + 1);
             setNewAccessToken({
               counter: newAccessToken.counter + 1,
-              type: "load",
+              type: "tasks",
             });
           } else {
             let tasksToDo = 0;
@@ -198,13 +203,14 @@ export default function DashboardPage({ user, setAuthentication }) {
               doing: tasksDoing,
               done: tasksDone,
             });
-            setRecentPages(recentPages.concat(tasksObject.result));
+            setTempRecentPages(tempRecentPages.concat(tasksObject.result));
+            setTasksFetched(true);
           }
         } else {
           setTries(tries + 1);
           setNewAccessToken({
             counter: newAccessToken.counter + 1,
-            type: "load",
+            type: "tasks",
           });
         }
       } else {
@@ -229,7 +235,7 @@ export default function DashboardPage({ user, setAuthentication }) {
         setTries(tries + 1);
         setNewAccessToken({
           counter: newAccessToken.counter + 1,
-          type: "load",
+          type: "tasks",
         });
       } else {
         let tasksToDo = 0;
@@ -250,10 +256,10 @@ export default function DashboardPage({ user, setAuthentication }) {
           doing: tasksDoing,
           done: tasksDone,
         });
-        setRecentPages(recentPages.concat(tasksObject.result));
+        setTempRecentPages(tempRecentPages.concat(tasksObject.result));
+        setTasksFetched(true);
       }
     }
-    setTasksFetched(true);
   };
 
   const getAccessTokenAPI = async () => {
@@ -282,6 +288,11 @@ export default function DashboardPage({ user, setAuthentication }) {
           sessionStorage.setItem("authUser", JSON.stringify(authUser));
           setTokenValidated(true);
           setTries(0);
+          if (newAccessToken.type === "projects") {
+            setLoadProjects(loadProjects + 1);
+          } else if (newAccessToken.type === "tasks") {
+            setLoadTasks(loadTasks + 1);
+          }
           // if (newAccessToken.type === "load") {
           //   setLoadProjects(loadProjects + 1);
           // } else if (newAccessToken.type === "new") {
@@ -309,18 +320,18 @@ export default function DashboardPage({ user, setAuthentication }) {
   useEffect(() => {
     getAllProjectsAPI();
     // getAllTasksAPI();
-  }, []);
+  }, [loadProjects]);
 
   useEffect(() => {
-    if (projectsFetched) {
+    if (projectsFetched || loadTasks > 0) {
       getAllTasksAPI();
     }
-  }, [projectsFetched]);
+  }, [projectsFetched, loadTasks]);
 
   useEffect(() => {
     if (tasksFetched) {
-      setRecentPages(
-        recentPages.sort((page1, page2) => {
+      setTempRecentPages(
+        tempRecentPages.sort((page1, page2) => {
           return (
             new Date(page2.updated_on).getTime() -
             new Date(page1.updated_on).getTime()
@@ -329,7 +340,10 @@ export default function DashboardPage({ user, setAuthentication }) {
       );
       setTasksFetched(false);
     } else {
-      setRecentPages(recentPages.slice(0, 4));
+      setRecentPages(tempRecentPages.slice(0, 4));
+      setTimeout(() => {
+        setRecentPagesLoaded(true);
+      }, 250);
     }
   }, [tasksFetched]);
 
@@ -350,180 +364,194 @@ export default function DashboardPage({ user, setAuthentication }) {
           <div className="column-1">
             <div className="recent-pages">
               <h4 className="section-title poppins-bold">Recent pages</h4>
-              <div className="pages poppins-regular">
-                {recentPages.map((recentPage) => {
-                  const updatedStatus = updatedMessage(
-                    new Date(recentPage.updated_on)
-                  );
-                  const createdStatus = updatedMessage(
-                    new Date(recentPage.created_on)
-                  );
-                  if (recentPage.project_id) {
-                    return (
-                      <div
-                        key={recentPage.project_id}
-                        className={
-                          "page" +
-                          (selectedPage.project_id === recentPage.project_id
-                            ? " selected-recent-page"
-                            : "")
-                        }
-                        onClick={() =>
-                          setSelectedPage({ ...recentPage, type: "project" })
-                        }
-                      >
-                        <div className="page-header">
-                          <IconContext.Provider
-                            value={{ style: { color: "var(--primary-color)" } }}
-                          >
-                            <FaRegFolder />
-                          </IconContext.Provider>
-                          <div className="title">{recentPage.name}</div>
-                        </div>
-                        <table className="details">
-                          <tbody>
-                            <tr>
-                              <td className="property poppins-semibold">
-                                Status
-                              </td>
-                              <td className="value">
-                                {recentPage.state === 1
-                                  ? "Not started"
-                                  : recentPage.state === 2
-                                  ? "In progress"
-                                  : "Completed"}
-                              </td>
-                            </tr>
-                            <tr>
-                              <td className="property poppins-semibold">
-                                Owner
-                              </td>
-                              <td className="value">
-                                {recentPage.owner === user
-                                  ? "You"
-                                  : recentPage.owner}
-                              </td>
-                            </tr>
-                            <tr>
-                              <td className="property poppins-semibold">
-                                Updated
-                              </td>
-                              <td className="value">{updatedStatus}</td>
-                            </tr>
-                            <tr>
-                              <td className="property poppins-semibold">
-                                Updated by
-                              </td>
-                              <td className="value">
-                                {recentPage.udpated_by === user
-                                  ? "You"
-                                  : recentPage.updated_by}
-                              </td>
-                            </tr>
-                            <tr>
-                              <td className="property poppins-semibold">
-                                Created
-                              </td>
-                              <td className="value">{createdStatus}</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                        <div className="links">
-                          <a
-                            href="#"
-                            className="open-link poppins-regular-italic"
-                          >
-                            Click to open
-                          </a>
-                        </div>
-                      </div>
+              {!recentPagesLoaded ? (
+                <div className="loading-pages poppins-regular">
+                  Loading Pages ...
+                </div>
+              ) : recentPages.length === 0 ? (
+                <div className="no-recent-pages poppins-regular">
+                  You have no recent pages
+                </div>
+              ) : (
+                <div className="pages poppins-regular">
+                  {recentPages.map((recentPage) => {
+                    const updatedStatus = updatedMessage(
+                      new Date(recentPage.updated_on)
                     );
-                  } else if (recentPage.task_id) {
-                    return (
-                      // <div className="page selected-recent-page">
-                      <div
-                        key={recentPage.task_id}
-                        className={
-                          "page" +
-                          (selectedPage.task_id === recentPage.task_id
-                            ? " selected-recent-page"
-                            : "")
-                        }
-                        onClick={() => {
-                          setSelectedPage({ ...recentPage, type: "task" });
-                        }}
-                      >
-                        <div className="page-header">
-                          <IconContext.Provider
-                            value={{ style: { color: "var(--primary-color)" } }}
-                          >
-                            <FaRegCheckSquare />
-                          </IconContext.Provider>
-                          <div className="title">{recentPage.name}</div>
-                        </div>
-                        <table className="details">
-                          <tbody>
-                            <tr>
-                              <td className="property poppins-semibold">
-                                Status
-                              </td>
-                              <td className="value">
-                                {recentPage.state === 1
-                                  ? "To do"
-                                  : recentPage.state === 2
-                                  ? "Doing"
-                                  : "Done"}
-                              </td>
-                            </tr>
-                            <tr>
-                              <td className="property poppins-semibold">
-                                Assigned to
-                              </td>
-                              <td className="value">
-                                {recentPage.assigned_to === user
-                                  ? "You"
-                                  : recentPage.assigned_to}
-                              </td>
-                            </tr>
-                            <tr>
-                              <td className="property poppins-semibold">
-                                Updated
-                              </td>
-                              <td className="value">{updatedStatus}</td>
-                            </tr>
-                            <tr>
-                              <td className="property poppins-semibold">
-                                Updated by
-                              </td>
-                              <td className="value">
-                                {recentPage.updated_by === user
-                                  ? "You"
-                                  : recentPage.updated_by}
-                              </td>
-                            </tr>
-                            <tr>
-                              <td className="property poppins-semibold">
-                                Created
-                              </td>
-                              <td className="value">{createdStatus}</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                        <div className="links">
-                          <Link
-                            to={`/auth/${user}/task/${recentPage.task_id}?view=dashboard`}
-                            className="open-link poppins-regular-italic"
-                          >
-                            Click to open
-                          </Link>
-                        </div>
-                      </div>
+                    const createdStatus = updatedMessage(
+                      new Date(recentPage.created_on)
                     );
-                  } else {
-                    return <div className="page">Unkown page</div>;
-                  }
-                })}
-              </div>
+                    if (Object.keys(recentPage).indexOf("project_id") !== -1) {
+                      return (
+                        <div
+                          key={recentPage.project_id}
+                          className={
+                            "page" +
+                            (selectedPage.project_id === recentPage.project_id
+                              ? " selected-recent-page"
+                              : "")
+                          }
+                          onClick={() =>
+                            setSelectedPage({ ...recentPage, type: "project" })
+                          }
+                        >
+                          <div className="page-header">
+                            <IconContext.Provider
+                              value={{
+                                style: { color: "var(--primary-color)" },
+                              }}
+                            >
+                              <FaRegFolder />
+                            </IconContext.Provider>
+                            <div className="title">{recentPage.name}</div>
+                          </div>
+                          <table className="details">
+                            <tbody>
+                              <tr>
+                                <td className="property poppins-semibold">
+                                  Status
+                                </td>
+                                <td className="value">
+                                  {recentPage.state === 1
+                                    ? "Not started"
+                                    : recentPage.state === 2
+                                    ? "In progress"
+                                    : "Completed"}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td className="property poppins-semibold">
+                                  Owner
+                                </td>
+                                <td className="value">
+                                  {recentPage.owner === user
+                                    ? "You"
+                                    : recentPage.owner}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td className="property poppins-semibold">
+                                  Updated
+                                </td>
+                                <td className="value">{updatedStatus}</td>
+                              </tr>
+                              <tr>
+                                <td className="property poppins-semibold">
+                                  Updated by
+                                </td>
+                                <td className="value">
+                                  {recentPage.udpated_by === user
+                                    ? "You"
+                                    : recentPage.updated_by}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td className="property poppins-semibold">
+                                  Created
+                                </td>
+                                <td className="value">{createdStatus}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <div className="links">
+                            <a
+                              href="#"
+                              className="open-link poppins-regular-italic"
+                            >
+                              Click to open
+                            </a>
+                          </div>
+                        </div>
+                      );
+                    } else if (recentPage.task_id) {
+                      return (
+                        // <div className="page selected-recent-page">
+                        <div
+                          key={recentPage.task_id}
+                          className={
+                            "page" +
+                            (selectedPage.task_id === recentPage.task_id
+                              ? " selected-recent-page"
+                              : "")
+                          }
+                          onClick={() => {
+                            setSelectedPage({ ...recentPage, type: "task" });
+                          }}
+                        >
+                          <div className="page-header">
+                            <IconContext.Provider
+                              value={{
+                                style: { color: "var(--primary-color)" },
+                              }}
+                            >
+                              <FaRegCheckSquare />
+                            </IconContext.Provider>
+                            <div className="title">{recentPage.name}</div>
+                          </div>
+                          <table className="details">
+                            <tbody>
+                              <tr>
+                                <td className="property poppins-semibold">
+                                  Status
+                                </td>
+                                <td className="value">
+                                  {recentPage.state === 1
+                                    ? "To do"
+                                    : recentPage.state === 2
+                                    ? "Doing"
+                                    : "Done"}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td className="property poppins-semibold">
+                                  Assigned to
+                                </td>
+                                <td className="value">
+                                  {recentPage.assigned_to === user
+                                    ? "You"
+                                    : recentPage.assigned_to}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td className="property poppins-semibold">
+                                  Updated
+                                </td>
+                                <td className="value">{updatedStatus}</td>
+                              </tr>
+                              <tr>
+                                <td className="property poppins-semibold">
+                                  Updated by
+                                </td>
+                                <td className="value">
+                                  {recentPage.updated_by === user
+                                    ? "You"
+                                    : recentPage.updated_by}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td className="property poppins-semibold">
+                                  Created
+                                </td>
+                                <td className="value">{createdStatus}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <div className="links">
+                            <Link
+                              to={`/auth/${user}/task/${recentPage.task_id}?view=dashboard`}
+                              className="open-link poppins-regular-italic"
+                            >
+                              Click to open
+                            </Link>
+                          </div>
+                        </div>
+                      );
+                    } else {
+                      return <div className="page">Unkown page</div>;
+                    }
+                  })}
+                </div>
+              )}
             </div>
             <div className="reports">
               <div className="report">
@@ -637,7 +665,7 @@ export default function DashboardPage({ user, setAuthentication }) {
             </div>
           </div>
           <div className="column-2">
-            {!selectedPage ? (
+            {Object.keys(selectedPage).length === 0 ? (
               <div className="selected empty poppins-regular">
                 <div className="nothing-selected">Nothing is selected</div>
               </div>
