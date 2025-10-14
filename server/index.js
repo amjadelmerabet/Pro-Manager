@@ -20,11 +20,11 @@ const server = createServer(async (req, res) => {
   );
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   const authHeader = req.headers["authorization"];
-  if (!authHeader && url !== "/users/auth" && method !== "OPTIONS") {
+  if (!authHeader && url !== "/users/auth" && method !== "OPTIONS" && url !== "/users/new") {
     res.writeHead(401, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ message: "User not authorized" }));
   } else {
-    if (method !== "OPTIONS" && url !== "/users/auth") {
+    if (method !== "OPTIONS" && url !== "/users/auth" && url !== "/users/new") {
       const token = authHeader.split(" ")[1];
       try {
         if (url === "/tokens/access/new" || url === "/tokens/access/check") {
