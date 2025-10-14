@@ -48,6 +48,7 @@ export default function TasksPage({ user, setAuthentication }) {
 
   const [searchParams] = useSearchParams();
   const view = searchParams.get("view");
+  const filterInURL = searchParams.get("filter");
 
   const { token } = JSON.parse(sessionStorage.getItem("authUser"));
 
@@ -55,10 +56,23 @@ export default function TasksPage({ user, setAuthentication }) {
     if (view) {
       setSelectedView(view);
     }
+    if (filterInURL) {
+      filterInURL.split("&").forEach((filterProp) => {
+        const keyValue = filterProp.split("=");
+        let tempFilter = filter;
+        tempFilter[keyValue[0]] = keyValue[1];
+        setFilter(tempFilter);
+      });
+      setTimeout(() => {
+        setApplyFilters(applyFilters + 1);
+      }, 250);
+    } else {
+      console.log("No filters");
+    }
   }, []);
 
   // let navigate = useNavigate();
-  
+
   const fetchTasks = async () => {
     try {
       if (!tokenValidated) {
@@ -136,7 +150,7 @@ export default function TasksPage({ user, setAuthentication }) {
   useEffect(() => {
     fetchTasks();
   }, [newTaskCreated, taskDeleted, taskUpdated, filterCleared, loadTasks]);
-  
+
   const getAccessTokenAPI = async () => {
     // console.log("Getting new access token");
     try {
@@ -221,7 +235,7 @@ export default function TasksPage({ user, setAuthentication }) {
   // useEffect(() => {
 
   // }, [applyFilters]);
-  
+
   const createNewTaskAPI = async () => {
     try {
       if (!tokenValidated) {
@@ -325,7 +339,7 @@ export default function TasksPage({ user, setAuthentication }) {
     setCreate(create + 1);
     // navigate(0);
   };
-  
+
   const deleteTaskAPI = async (id) => {
     try {
       if (!tokenValidated) {
@@ -413,7 +427,7 @@ export default function TasksPage({ user, setAuthentication }) {
   const deleteTask = (id) => {
     setdeletedTaskId({ taskId: id, delete: true });
   };
-  
+
   const updateTaskAPI = async (id) => {
     try {
       if (!tokenValidated) {

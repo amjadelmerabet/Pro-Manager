@@ -353,6 +353,24 @@ export default function DashboardPage({ user, setAuthentication }) {
     }
   }, [recentPages]);
 
+  const createPageName = (name) => {
+    let wordsIncluded = 0;
+    let length = 0;
+    let words = name.split(" ");
+    for (let i = 0; i < words.length; i++) {
+      if (length + words[i].length <= 23) {
+        length += words[i].length + 1;
+        wordsIncluded++;
+      } else {
+        break;
+      }
+    }
+    return (
+      name.split(" ").slice(0, wordsIncluded).join(" ") +
+      (wordsIncluded < name.split(" ").length ? " ..." : "")
+    );
+  };
+
   return (
     <div className="dashboard-page">
       <div className="auth-header-container">
@@ -403,7 +421,9 @@ export default function DashboardPage({ user, setAuthentication }) {
                             >
                               <FaRegFolder />
                             </IconContext.Provider>
-                            <div className="title">{recentPage.name}</div>
+                            <div className="title">
+                              {createPageName(recentPage.name)}
+                            </div>
                           </div>
                           <table className="details">
                             <tbody>
@@ -486,7 +506,9 @@ export default function DashboardPage({ user, setAuthentication }) {
                             >
                               <FaRegCheckSquare />
                             </IconContext.Provider>
-                            <div className="title">{recentPage.name}</div>
+                            <div className="title">
+                              {createPageName(recentPage.name)}
+                            </div>
                           </div>
                           <table className="details">
                             <tbody>
@@ -562,7 +584,9 @@ export default function DashboardPage({ user, setAuthentication }) {
                   {projectsStats.notStarted}
                 </div>
                 <div className="report-link poppins-regular-italic">
-                  <a href="#">Show the list</a>
+                  <Link to={`/auth/${user}/projects?filter=state=1`}>
+                    Show the list
+                  </Link>
                 </div>
               </div>
               <div className="report">
@@ -573,7 +597,9 @@ export default function DashboardPage({ user, setAuthentication }) {
                   {projectsStats.inProgress}
                 </div>
                 <div className="report-link poppins-regular-italic">
-                  <a href="#">Show the list</a>
+                  <Link to={`/auth/${user}/projects?filter=state=2`}>
+                    Show the list
+                  </Link>
                 </div>
               </div>
               <div className="report">
@@ -584,7 +610,9 @@ export default function DashboardPage({ user, setAuthentication }) {
                   {projectsStats.completed}
                 </div>
                 <div className="report-link poppins-regular-italic">
-                  <a href="#">Show the list</a>
+                  <Link to={`/auth/${user}/projects?filter=state=3`}>
+                    Show the list
+                  </Link>
                 </div>
               </div>
               {/* <div className="report disabled">
@@ -602,7 +630,9 @@ export default function DashboardPage({ user, setAuthentication }) {
                   {tasksStats.toDo}
                 </div>
                 <div className="report-link poppins-regular-italic">
-                  <a href="#">Show the list</a>
+                  <Link to={`/auth/${user}/tasks?filter=state=1`}>
+                    Show the list
+                  </Link>
                 </div>
               </div>
               <div className="report">
@@ -613,7 +643,9 @@ export default function DashboardPage({ user, setAuthentication }) {
                   {tasksStats.doing}
                 </div>
                 <div className="report-link poppins-regular-italic">
-                  <a href="#">Show the list</a>
+                  <Link to={`/auth/${user}/tasks?filter=state=2`}>
+                    Show the list
+                  </Link>
                 </div>
               </div>
               <div className="report">
@@ -622,7 +654,9 @@ export default function DashboardPage({ user, setAuthentication }) {
                   {tasksStats.done}
                 </div>
                 <div className="report-link poppins-regular-italic">
-                  <a href="#">Show the list</a>
+                  <Link to={`/auth/${user}/tasks?filter=state=3`}>
+                    Show the list
+                  </Link>
                 </div>
               </div>
               {/* <div className="report disabled">

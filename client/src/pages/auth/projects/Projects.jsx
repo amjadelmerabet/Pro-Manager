@@ -52,6 +52,7 @@ export default function ProjectsPage({ user, setAuthentication }) {
 
   const [searchParams] = useSearchParams();
   const view = searchParams.get("view");
+  const filterInURL = searchParams.get("filter");
 
   const { token } = JSON.parse(sessionStorage.getItem("authUser"));
 
@@ -71,8 +72,21 @@ export default function ProjectsPage({ user, setAuthentication }) {
     if (view) {
       setSelectedView(view);
     }
+    if (filterInURL) {
+      filterInURL.split("&").forEach((filterProp) => {
+        const keyValue = filterProp.split("=");
+        let tempFilter = filter;
+        tempFilter[keyValue[0]] = keyValue[1];
+        setFilter(tempFilter);
+      });
+      setTimeout(() => {
+        setApplyFilters(applyFilters + 1);
+      }, 250);
+    } else {
+      console.log("No filters");
+    }
   }, []);
-  
+
   const getAllProjectsAPI = async () => {
     // console.log("Getting projects");
     try {
@@ -158,7 +172,7 @@ export default function ProjectsPage({ user, setAuthentication }) {
     filterCleared,
     loadProjects,
   ]);
-  
+
   const getAccessTokenAPI = async () => {
     // console.log("Getting new access token");
     try {
@@ -260,7 +274,7 @@ export default function ProjectsPage({ user, setAuthentication }) {
   // useEffect(() => {
 
   // }, [applyFilters]);
-  
+
   const createNewProjectAPI = async () => {
     try {
       if (!tokenValidated) {
@@ -372,7 +386,7 @@ export default function ProjectsPage({ user, setAuthentication }) {
     });
     setCreateProject(createProject + 1);
   };
-  
+
   const updateProjectAPI = async (id) => {
     try {
       if (!tokenValidated) {
@@ -487,7 +501,7 @@ export default function ProjectsPage({ user, setAuthentication }) {
     //   setUpdatedProjectId("");
     // }, 250);
   };
-  
+
   const deleteProjectAPI = async (id) => {
     try {
       if (!tokenValidated) {
