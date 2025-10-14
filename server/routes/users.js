@@ -38,81 +38,6 @@ export async function usersRoute(req, res) {
           })
         );
       }
-    } else if (method === "POST") {
-      if (url === "/users/new") {
-        let body = "";
-        req.on("data", (chunk) => {
-          body += chunk.toString();
-        });
-        req.on("end", async () => {
-          const bodyObject = JSON.parse(body);
-          if (
-            !bodyObject.first_name ||
-            !bodyObject.last_name ||
-            !bodyObject.name ||
-            !bodyObject.username ||
-            !bodyObject.email ||
-            !bodyObject.password
-          ) {
-            res.writeHead(400, { "Content-Type": "application/json" });
-            res.end(
-              JSON.stringify({ message: "Necessary user data is missing" })
-            );
-          } else {
-            const {
-              first_name,
-              last_name,
-              name,
-              username,
-              email,
-              password,
-              updated_by,
-              created_by,
-            } = bodyObject;
-            const newUser = await createUser(
-              first_name,
-              last_name,
-              name,
-              username,
-              email,
-              password,
-              updated_by,
-              created_by
-            );
-            if (newUser.error) {
-              res.writeHead(500, { "Content-Type": "application/json" });
-              if (newUser.error.detail.match(/^Key(.*)=(.*) already exists./)) {
-                if (newUser.error.detail.includes("username")) {
-                  res.end(
-                    JSON.stringify({
-                      error: "A user with the same username already exists.",
-                    })
-                  );
-                } else if (newUser.error.detail.includes("email")) {
-                  res.end(
-                    JSON.stringify({
-                      error: "A user with the same email already exitts.",
-                    })
-                  );
-                } else {
-                  res.end(
-                    JSON.stringify({ error: "Duplicate record detected" })
-                  );
-                }
-              } else {
-                res.end(JSON.stringify({ error: newUser.error }));
-              }
-            } else {
-              res.writeHead(201, { "Content-Type": "application/json" });
-              res.end(
-                JSON.stringify({
-                  message: "User has been created",
-                })
-              );
-            }
-          }
-        });
-      }
     } else if (method === "PATCH") {
       if (url.match(/^\/users\/update\/.+/)) {
         let body = "";
@@ -223,6 +148,77 @@ export async function usersRoute(req, res) {
               message: "Credentials are missing",
             })
           );
+        }
+      });
+    } else if (method === "POST" && url === "/users/new") {
+      let body = "";
+      req.on("data", (chunk) => {
+        body += chunk.toString();
+      });
+      req.on("end", async () => {
+        const bodyObject = JSON.parse(body);
+        if (
+          !bodyObject.first_name ||
+          !bodyObject.last_name ||
+          !bodyObject.name ||
+          !bodyObject.username ||
+          !bodyObject.email ||
+          !bodyObject.password
+        ) {
+          res.writeHead(400, { "Content-Type": "application/json" });
+          res.end(
+            JSON.stringify({ message: "Necessary user data is missing" })
+          );
+        } else {
+          const {
+            first_name,
+            last_name,
+            name,
+            username,
+            email,
+            password,
+            updated_by,
+            created_by,
+          } = bodyObject;
+          const newUser = await createUser(
+            first_name,
+            last_name,
+            name,
+            username,
+            email,
+            password,
+            updated_by,
+            created_by
+          );
+          if (newUser.error) {
+            res.writeHead(500, { "Content-Type": "application/json" });
+            if (newUser.error.detail.match(/^Key(.*)=(.*) already exists./)) {
+              if (newUser.error.detail.includes("username")) {
+                res.end(
+                  JSON.stringify({
+                    error: "A user with the same username already exists.",
+                  })
+                );
+              } else if (newUser.error.detail.includes("email")) {
+                res.end(
+                  JSON.stringify({
+                    error: "A user with the same email already exitts.",
+                  })
+                );
+              } else {
+                res.end(JSON.stringify({ error: "Duplicate record detected" }));
+              }
+            } else {
+              res.end(JSON.stringify({ error: newUser.error }));
+            }
+          } else {
+            res.writeHead(201, { "Content-Type": "application/json" });
+            res.end(
+              JSON.stringify({
+                message: "User has been created",
+              })
+            );
+          }
         }
       });
     } else if (method === "OPTIONS") {
