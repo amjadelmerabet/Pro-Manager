@@ -11,6 +11,11 @@
   height: 12vh;
 }
 
+.application-name a {
+  text-decoration: none;
+  color: black;
+}
+
 .auth-header .auth-menu {
   list-style: none;
   display: flex;

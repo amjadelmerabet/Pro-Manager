@@ -26,7 +26,9 @@ export default function AuthHeader({ user, setAuthentication }) {
   return (
     <div className="container">
       <header className="auth-header">
-        <h1 className="application-name poppins-bold">Pro Manager</h1>
+        <h1 className="application-name poppins-bold">
+          <Link to="/">Pro Manager</Link>
+        </h1>
         <ul className="auth-menu">
           <li className="auth-menu-item poppins-semibold">
             <Link to={"/auth/" + user + "/dashboard"}>Dashboard</Link>
