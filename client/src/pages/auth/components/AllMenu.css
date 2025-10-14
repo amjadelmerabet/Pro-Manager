@@ -5,6 +5,10 @@
   padding: 32px;
 }
 
+.all-menu .welcome {
+  margin-bottom: 24px;
+}
+
 .application-menu .app-menu-header {
   background-color: var(--accent-color);
   padding: 4px 8px;

@@ -118,6 +118,7 @@ export async function usersRoute(req, res) {
         if (bodyObject.username && bodyObject.password) {
           const auth = await authUser(bodyObject.username, bodyObject.password);
           if (auth.status === "success") {
+            const user = await getUserByUsername(bodyObject.username);
             res.writeHead(200, { "Content-Type": "application/json" });
             res.end(
               JSON.stringify({
@@ -125,6 +126,7 @@ export async function usersRoute(req, res) {
                 message: auth.message,
                 token: auth.token,
                 refresh: auth.refresh,
+                name: user[0].name
               })
             );
             // console.log("User successfully authenticated");

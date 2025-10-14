@@ -63,6 +63,7 @@ export default function LoginPage({ isAuthenticated, setAuthentication }) {
               user: username,
               authenticated: true,
               token: auth.token,
+              name: auth.name
             })
           );
           if (!refreshToken) {

@@ -5,8 +5,16 @@ import "./AllMenu.css";
 import { Link } from "react-router";
 
 export default function AllMenu({ user }) {
+  const { name } = JSON.parse(
+    sessionStorage.getItem("authUser")
+  );
+
   return (
     <div className="all-menu">
+      <p className="welcome poppins-regular">
+        Welcome back{" "}
+        <span className="poppins-semibold">{name}</span>
+      </p>
       <div className="application-menu">
         <div className="app-menu-header">
           <div>
