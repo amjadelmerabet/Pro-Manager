@@ -102,12 +102,6 @@
   background-color: var(--primary-color-hover);
 }
 
-.go-back-home {
-  margin-top: 32px;
-  color: black;
-  font-size: 14px;
-}
-
 .incorrect-credentials {
   color: rgb(245, 0, 45);
   margin-inline: auto;

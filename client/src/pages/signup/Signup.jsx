@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 
 import "./Signup.css";
+import { IoArrowBack } from "react-icons/io5";
 
 export default function SignUpPage() {
   const [userBody, setUserBody] = useState({});
   const [newUserCreated, setNewUserCreated] = useState(false);
   const [createNewUser, setCreateNewUser] = useState(false);
   const [signUpStart, setSignUpStart] = useState(false);
+  const [goBackLink, setGoBackLink] = useState(false);
 
   let navigate = useNavigate();
 
@@ -23,8 +25,8 @@ export default function SignUpPage() {
     if (createNewUser) {
       createNewUserAPI();
       setTimeout(() => {
-       setCreateNewUser(false);
-       setNewUserCreated(false); 
+        setCreateNewUser(false);
+        setNewUserCreated(false);
       }, 500);
       setTimeout(() => {
         setUserBody({});
@@ -46,17 +48,24 @@ export default function SignUpPage() {
 
   const createUser = () => {
     setCreateNewUser(true);
-  }
+  };
 
   const cancelCreation = () => {
     setNewUserCreated(false);
-  }
+  };
 
   useEffect(() => {
     setTimeout(() => {
       setSignUpStart(true);
     }, 250);
   }, []);
+
+  const mouseOnGoBackLink = () => {
+    setGoBackLink(true);
+    setTimeout(() => {
+      setGoBackLink(false);
+    }, 250);
+  }
 
   return (
     <div className={"signup-page" + (signUpStart ? " visible" : "")}>
@@ -172,24 +181,37 @@ export default function SignUpPage() {
           />
         </form>
       </div>
-      {newUserCreated ? 
-      <div className="confirm-popup poppins-regular">
-        <span>Can you confirm that all the details are correct?</span>
-        <div className="buttons">
-          <button
-            className="confirm poppins-semibold"
-            onClick={() => createUser()}
-          >
-            Confirm
-          </button>
-          <button
-            className="cancel poppins-semibold"
-            onClick={() => cancelCreation()}
-          >
-            Cancel
-          </button>
+      {newUserCreated ? (
+        <div className="confirm-popup poppins-regular">
+          <span>Can you confirm that all the details are correct?</span>
+          <div className="buttons">
+            <button
+              className="confirm poppins-semibold"
+              onClick={() => createUser()}
+            >
+              Confirm
+            </button>
+            <button
+              className="cancel poppins-semibold"
+              onClick={() => cancelCreation()}
+            >
+              Cancel
+            </button>
+          </div>
         </div>
-      </div> : ""}
+      ) : (
+        ""
+      )}
+      <Link
+        to="/"
+        className={
+          "go-back-home poppins-regular" + (goBackLink ? " mouse-on" : "")
+        }
+        onMouseEnter={() => mouseOnGoBackLink()}
+      >
+        <IoArrowBack />
+        <span>Go back home</span>
+      </Link>
     </div>
   );
 }

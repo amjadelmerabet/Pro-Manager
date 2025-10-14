@@ -4,4 +4,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+}
+
+.not-found-page .app-name {
+  position: fixed;
+  top: 25%;
+  font-size: 48px;;
+}
+
+.not-found-page .go-back-home {
+  text-decoration: none;
 }

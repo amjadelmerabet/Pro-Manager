@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router";
+import { IoArrowBack } from "react-icons/io5";
 
 import "./Login.css";
 
@@ -9,6 +10,7 @@ export default function LoginPage({ isAuthenticated, setAuthentication }) {
   const [login, setLogin] = useState("");
   const [incorrectCredentials, setIncorrectCredentials] = useState(false);
   const [loginStart, setLoginStart] = useState(false);
+  const [goBackLink, setGoBackLink] = useState(false);
 
   const [searchParams] = useSearchParams();
   const redirectURL = searchParams.get("redirect");
@@ -113,6 +115,13 @@ export default function LoginPage({ isAuthenticated, setAuthentication }) {
     setLogin("login");
   };
 
+  const mouseOnGoBackLink = () => {
+    setGoBackLink(true);
+    setTimeout(() => {
+      setGoBackLink(false);
+    }, 250);
+  }
+
   return (
     <div className={"login-page" + (loginStart ? " visible " : "")}>
       <h1 className="title poppins-bold">Pro Manager</h1>
@@ -167,8 +176,15 @@ export default function LoginPage({ isAuthenticated, setAuthentication }) {
           />
         </form>
       </div>
-      <Link to="/" className="go-back-home poppins-regular">
-        Go back home
+      <Link
+        to="/"
+        className={
+          "go-back-home poppins-regular" + (goBackLink ? " mouse-on" : "")
+        }
+        onMouseEnter={() => mouseOnGoBackLink()}
+      >
+        <IoArrowBack />
+        <span>Go back home</span>
       </Link>
     </div>
   );

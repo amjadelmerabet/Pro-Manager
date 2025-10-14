@@ -1,7 +1,35 @@
+import { Link } from "react-router";
+
 import "./PageNotFound.css";
+import { IoArrowBack } from "react-icons/io5";
+import { useState } from "react";
 
 export default function PageNotFound() {
-  return <div className="not-found-page">
-      <h1 className="message poppins-semibold">404 Page Not Found</h1>
-  </div>
+  const [goBackLink, setGoBackLink] = useState(false);
+
+  const mouseOnGoBackLink = () => {
+    setGoBackLink(true);
+    setTimeout(() => {
+      setGoBackLink(false);
+    }, 250);
+  };
+
+  return (
+    <div className="not-found-page">
+      <h1 className="app-name poppins-bold">
+        <Link to="/">Pro Manager</Link>
+      </h1>
+      <h2 className="message poppins-semibold">404 Page Not Found</h2>
+      <Link
+        to="/"
+        className={
+          "go-back-home poppins-regular" + (goBackLink ? " mouse-on" : "")
+        }
+        onMouseEnter={() => mouseOnGoBackLink()}
+      >
+        <IoArrowBack />
+        <span>Go back home</span>
+      </Link>
+    </div>
+  );
 }
