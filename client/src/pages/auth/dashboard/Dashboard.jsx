@@ -460,7 +460,7 @@ export default function DashboardPage({ user, setAuthentication }) {
                                   Updated by
                                 </td>
                                 <td className="value">
-                                  {recentPage.udpated_by === user
+                                  {recentPage.updated_by === user
                                     ? "You"
                                     : recentPage.updated_by}
                                 </td>
@@ -474,12 +474,12 @@ export default function DashboardPage({ user, setAuthentication }) {
                             </tbody>
                           </table>
                           <div className="links">
-                            <a
-                              href="#"
+                            <Link
+                              to={`/auth/${user}/project/${recentPage.project_id}?view=dashboard`}
                               className="open-link poppins-regular-italic"
                             >
                               Click to open
-                            </a>
+                            </Link>
                           </div>
                         </div>
                       );
