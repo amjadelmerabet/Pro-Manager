@@ -5,6 +5,7 @@ import { IconContext } from "react-icons/lib";
 import { useState } from "react";
 
 import "./SectionHeader.css";
+import { IoClose } from "react-icons/io5";
 
 export default function SectionHeader(props) {
   const [filterOpen, setFilterOpen] = useState(false);
@@ -31,6 +32,14 @@ export default function SectionHeader(props) {
     }
   };
 
+  const cancelFilter = () => {
+    setFilterOpen(!filterOpen);
+  };
+
+  const closeFilter = () => {
+    setFilterOpen(!filterOpen);
+  };
+
   const clearFilter = () => {
     props.setFilter({ state: "0" });
     props.setApplyFilters(0);
@@ -41,6 +50,7 @@ export default function SectionHeader(props) {
     props.setFilterCleared(false);
     setTimeout(() => {
       props.setApplyFilters(props.applyFilters + 1);
+      setFilterOpen(!filterOpen);
     }, 250);
   };
 
@@ -93,7 +103,16 @@ export default function SectionHeader(props) {
           </button>
         </div>
         <button
-          className="filter-button poppins-regular"
+          className={
+            "filter-button poppins-regular" +
+            (Object.keys(props.filter).length === 1 &&
+            Number(props.filter.state) === 0
+              ? " filter-popup"
+              : "") +
+            (filterOpen ? " open" : "") +
+            (props.applyFilters === 0 ? " draft-filters" : "")
+          }
+          data-filter-number-popup={Object.keys(props.filter).length}
           onClick={() => openFilter()}
         >
           <IconContext.Provider value={{ style: { fontSize: "28px" } }}>
@@ -103,6 +122,13 @@ export default function SectionHeader(props) {
         <div
           className={"filter poppins-regular" + (filterOpen ? " visible" : "")}
         >
+          <div className="close-filter-popup" onClick={() => closeFilter()}>
+            <IconContext.Provider
+              value={{ style: { color: "rgb(200, 0, 0)" } }}
+            >
+              <IoClose />
+            </IconContext.Provider>
+          </div>
           {props.page === "projects" ? (
             <div className="state-section">
               <label htmlFor="select-state" className="select-state-label">
@@ -143,12 +169,23 @@ export default function SectionHeader(props) {
             ""
           )}
           <div className="filter-section-buttons">
-            <button
-              className="clear-filters-button"
-              onClick={() => clearFilter()}
-            >
-              Clear
-            </button>
+            {Object.keys(props.filter).length === 1 &&
+            Number(props.filter.state) === 0 &&
+            props.applyFilters === 0 ? (
+              <button
+                className="cancel-filters-button"
+                onClick={() => cancelFilter()}
+              >
+                Cancel
+              </button>
+            ) : (
+              <button
+                className="clear-filters-button"
+                onClick={() => clearFilter()}
+              >
+                Clear
+              </button>
+            )}
             <button
               className="apply-filters-button"
               onClick={() => applyFilter()}

@@ -69,7 +69,7 @@
 }
 
 .page-buttons > .filter-button::before {
-  content: "1";
+  content: attr(data-filter-number-popup);
   position: absolute;
   top: -4px;
   left: -4px;
@@ -84,6 +84,14 @@
   justify-content: center;
   align-items: center;
   line-height: 1;
+}
+
+.page-buttons > .filter-popup::before {
+  display: none;
+}
+
+.page-buttons > .draft-filters::before {
+  background-color: rgba(225, 0, 45)
 }
 
 .page-buttons > .filter-button svg {
@@ -157,10 +165,32 @@
   background-color: var(--secondary-color);
 }
 
+.page-buttons .filter .filter-section-buttons .cancel-filters-button,
 .page-buttons .filter .filter-section-buttons .clear-filters-button {
   background-color: white;
 }
 
+.page-buttons .filter .filter-section-buttons .cancel-filters-button:hover,
 .page-buttons .filter .filter-section-buttons .clear-filters-button:hover {
   background-color: rgb(225, 225, 225);
+}
+
+.page-buttons .filter > .close-filter-popup {
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  width: 20px;
+  aspect-ratio: 1 / 1;
+  top: -10px;
+  right: -10px;
+  border-radius: 10px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, .25);
+  cursor: pointer;
+  transition: background-color 250ms ease-in-out;
+}
+
+.page-buttons .filter > .close-filter-popup:hover {
+  background-color: rgb(245, 245, 245);
 }
