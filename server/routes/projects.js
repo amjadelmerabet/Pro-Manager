@@ -45,18 +45,27 @@ export async function projectsRoute(req, res) {
         });
         req.on("end", async () => {
           const newProjectFields = JSON.parse(body);
-          const { name, owner } = newProjectFields;
-          if (!name || !owner) {
+          if (Object.keys(newProjectFields).length === 0) {
             res.writeHead(400, { "Content-Type": "application/json" });
-            res.end(
-              JSON.stringify({ message: "Necessary project data is missing" })
-            );
+            res.end(JSON.stringify({ message: "No data" }));
           } else {
-            res.writeHead(201, { "Content-Type": "application/json" });
-            const newProject = await createProject(newProjectFields);
-            res.end(
-              JSON.stringify({ message: "Project created successfully" })
-            );
+            const { name, owner } = newProjectFields;
+            if (!name || !owner) {
+              res.writeHead(400, { "Content-Type": "application/json" });
+              res.end(
+                JSON.stringify({ message: "Necessary project data is missing" })
+              );
+            } else {
+              res.writeHead(201, { "Content-Type": "application/json" });
+              const newProject = await createProject(newProjectFields);
+              if (newProject.error) {
+                res.writeHead(400, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ message: "There was an error while creating a new project"}))
+              }
+              res.end(
+                JSON.stringify({ message: "Project created successfully" })
+              );
+            }
           }
         });
       }

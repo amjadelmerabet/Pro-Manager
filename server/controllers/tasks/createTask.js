@@ -23,5 +23,6 @@ export default async function createTask(fields) {
     return newTask;
   } catch (error) {
     console.log("Query error: " + error);
+    return { error: error }
   }
 }

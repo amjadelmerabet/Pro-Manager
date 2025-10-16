@@ -1,7 +1,8 @@
 import pool from "../../db/connection.js";
 
 export default async function createProject(fields) {
-  let propertiesToInsert = [];
+  try {
+    let propertiesToInsert = [];
   let query = "INSERT INTO projects (";
   let values = "VALUES (";
   let count = 1;
@@ -20,4 +21,8 @@ export default async function createProject(fields) {
   })
   const newProject = await pool.query(query, propertiesToInsert);
   return newProject;
+  } catch (error) {
+    console.log("Query error: " + error);
+    return { error: error }
+  }
 }
