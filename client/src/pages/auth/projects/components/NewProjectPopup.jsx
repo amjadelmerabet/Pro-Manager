@@ -10,6 +10,7 @@ export default function NewProjectPopup({
   popupDisplay,
   setPopupDisplay,
   createNewProject,
+  parent
 }) {
   const [newProjectClass, setNewProjectClass] = useState("");
 
@@ -22,13 +23,18 @@ export default function NewProjectPopup({
   const closePopupDialog = () => {
     setNewProjectClass("");
     setTimeout(() => {
-      setPopupDisplay({ ...popupDisplay, active: false });
+      if (parent === "dashboard") {
+        setPopupDisplay({ visible: false, type: "" });
+      } else {
+        setPopupDisplay({ ...popupDisplay, active: false });
+      }
     }, 250);
   };
 
   return (
     <div className="new-project-popup">
       <div className={"new-project" + newProjectClass}>
+        <h3 className="title poppins-bold">New Project</h3>
         <button className="close-popup" onClick={() => closePopupDialog()}>
           <IconContext.Provider value={{ style: { color: "rgb(225, 0, 45)" } }}>
             <IoClose />
@@ -76,7 +82,7 @@ export default function NewProjectPopup({
           <textarea
             name="new-project-description"
             rows="8"
-            cols="48"
+            cols="64"
             className="new-project-description-input poppins-regular"
             onChange={(event) =>
               setNewProject({

@@ -1,6 +1,11 @@
 Todos:
   [+]  Make the "show the list" links in the reports of the dashboard open the list with the proper filter applied.
-  []  Update the quick actions links in the dashboard page and make them usable.
+  [+]  Update the quick actions links in the dashboard page and make them usable.
   [+]  Fix the edit short description feature which stopped working after switching from Basic Auth to OAuth 2.0.
   [+]  Understand and fix the bug that causing the dashboard page to show nothing sometimes.
   []  Add the possibility to edit the description of project when a user is viewing the project details page.
+
+Features:
+
+Bugs: 
+  []  @medium There is a bug in the dashboard page that creates some duplicates in the recent pages if a user creates a new project or task.

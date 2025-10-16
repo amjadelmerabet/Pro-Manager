@@ -191,8 +191,10 @@
   font-size: 13px;
 }
 
-.dashboard-container .quick-actions .actions > .action > a {
-  color: black;
+.dashboard-container .quick-actions .actions > .action > button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
 }
 
 .dashboard-container .selected .selected-page-header {

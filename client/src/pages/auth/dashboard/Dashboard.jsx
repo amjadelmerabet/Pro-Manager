@@ -7,6 +7,8 @@ import "./Dashboard.css";
 import { IconContext } from "react-icons/lib";
 import updatedMessage from "../../../utils/updatedMessage";
 import { Link } from "react-router";
+import NewProjectPopup from "../projects/components/NewProjectPopup";
+import NewTaskPopup from "../tasks/components/NewTaskPopup";
 
 export default function DashboardPage({ user, setAuthentication }) {
   const [recentPages, setRecentPages] = useState([]);
@@ -33,8 +35,29 @@ export default function DashboardPage({ user, setAuthentication }) {
   const [loadTasks, setLoadTasks] = useState(0);
   const [tempRecentPages, setTempRecentPages] = useState([]);
   const [recentPagesLoaded, setRecentPagesLoaded] = useState(false);
+  const [popupVisible, setPopupVisible] = useState({
+    visible: false,
+    type: "",
+  });
+  const [newProject, setNewProject] = useState({});
+  const [projectCreatedSuccessfully, setProjectCreatedSuccessfully] =
+    useState(false);
+  const [newProjectCreated, setNewProjectCreated] = useState(0);
+  const [createProject, setCreateProject] = useState(0);
+  const [newTask, setNewTask] = useState({});
+  const [taskCreatedSuccessfully, setTaskCreatedSuccessfully] = useState(false);
+  const [newTaskCreated, setNewTaskCreated] = useState(0);
+  const [createTask, setCreateTask] = useState(0);
 
   const { token } = JSON.parse(sessionStorage.getItem("authUser"));
+
+  const openNewProjectPopup = () => {
+    setPopupVisible({ visible: true, type: "project" });
+  };
+
+  const openNewTaskPopup = () => {
+    setPopupVisible({ visible: true, type: "task" });
+  };
 
   const getAllProjectsAPI = async () => {
     if (!tokenValidated) {
@@ -292,6 +315,16 @@ export default function DashboardPage({ user, setAuthentication }) {
             setLoadProjects(loadProjects + 1);
           } else if (newAccessToken.type === "tasks") {
             setLoadTasks(loadTasks + 1);
+          } else if (
+            newAccessToken.type === "create" &&
+            newAccessToken.page === "project"
+          ) {
+            setCreateProject(createProject + 1);
+          } else if (
+            newAccessToken.type === "create" &&
+            newAccessToken.page === "task"
+          ) {
+            setCreateTask(createTask + 1);
           }
           // if (newAccessToken.type === "load") {
           //   setLoadProjects(loadProjects + 1);
@@ -311,6 +344,99 @@ export default function DashboardPage({ user, setAuthentication }) {
     }
   };
 
+  const createNewProjectAPI = async () => {
+    try {
+      if (!tokenValidated) {
+        const refreshToken = await cookieStore.get(user);
+        if (refreshToken) {
+          const response = await fetch(
+            "http://127.0.0.1:3000/tokens/access/check",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${refreshToken.value}`,
+              },
+              body: JSON.stringify({ token: token }),
+            }
+          );
+          const validAccessToken = await response.json();
+          if (validAccessToken.message === "Valid access token") {
+            const response = await fetch("http://127.0.0.1:3000/projects/new", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify(newProject),
+            });
+            const newProjectObject = await response.json();
+            if (
+              newProjectObject.error === "Invalid access token" &&
+              tries < 3
+            ) {
+              setNewAccessToken({
+                counter: newAccessToken.counter + 1,
+                type: "create",
+                page: "project",
+              });
+            } else {
+              setProjectCreatedSuccessfully(true);
+            }
+          } else {
+            setNewAccessToken({
+              counter: newAccessToken.counter + 1,
+              type: "create",
+              page: "project",
+            });
+          }
+        } else {
+          console.log("Invalid refresh token");
+        }
+      } else {
+        setTimeout(() => {
+          setTokenValidated(false);
+        }, 500);
+        const response = await fetch("http://127.0.0.1:3000/projects/new", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(newProject),
+        });
+        const newProjectObject = await response.json();
+        if (newProjectObject.error === "Invalid access token" && tries < 3) {
+          setNewAccessToken({
+            counter: newAccessToken.counter + 1,
+            type: "create",
+            page: "project",
+          });
+        } else {
+          setProjectCreatedSuccessfully(true);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (Object.keys(newProject).length > 0 && createProject > 0) {
+      createNewProjectAPI();
+    }
+  }, [createProject]);
+
+  const createNewProject = () => {
+    setNewProject({
+      ...newProject,
+      owner: user,
+      created_by: user,
+      updated_by: user,
+    });
+    setCreateProject(createProject + 1);
+  };
+
   useEffect(() => {
     if (newAccessToken.counter > 0) {
       getAccessTokenAPI();
@@ -320,13 +446,23 @@ export default function DashboardPage({ user, setAuthentication }) {
   useEffect(() => {
     getAllProjectsAPI();
     // getAllTasksAPI();
-  }, [loadProjects]);
+  }, [loadProjects, newProjectCreated, newTaskCreated]);
 
   useEffect(() => {
     if (projectsFetched || loadTasks > 0) {
       getAllTasksAPI();
     }
   }, [projectsFetched, loadTasks]);
+
+  useEffect(() => {
+    if (projectCreatedSuccessfully) {
+      setTimeout(() => {
+        setPopupVisible({ visible: false, type: "" });
+        setNewProjectCreated(newProjectCreated + 1);
+        setProjectCreatedSuccessfully(false);
+      }, 250);
+    }
+  }, [projectCreatedSuccessfully]);
 
   useEffect(() => {
     if (tasksFetched) {
@@ -340,9 +476,12 @@ export default function DashboardPage({ user, setAuthentication }) {
       );
       setTasksFetched(false);
     } else {
+      setRecentPagesLoaded(false);
       setRecentPages(tempRecentPages.slice(0, 4));
       setTimeout(() => {
         setRecentPagesLoaded(true);
+        setProjectsFetched(false);
+        setTasksFetched(false);
       }, 250);
     }
   }, [tasksFetched]);
@@ -358,7 +497,7 @@ export default function DashboardPage({ user, setAuthentication }) {
     let length = 0;
     let words = name.split(" ");
     for (let i = 0; i < words.length; i++) {
-      if (length + words[i].length <= 23) {
+      if (length + words[i].length < 22) {
         length += words[i].length + 1;
         wordsIncluded++;
       } else {
@@ -370,6 +509,106 @@ export default function DashboardPage({ user, setAuthentication }) {
       (wordsIncluded < name.split(" ").length ? " ..." : "")
     );
   };
+
+  const createNewTaskAPI = async () => {
+    try {
+      if (!tokenValidated) {
+        const refreshToken = await cookieStore.get(user);
+        if (refreshToken) {
+          const response = await fetch(
+            "http://127.0.0.1:3000/tokens/access/check",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${refreshToken.value}`,
+              },
+              body: JSON.stringify({ token: token }),
+            }
+          );
+          const validAccessToken = await response.json();
+          if (validAccessToken.message === "Valid access token") {
+            const response = await fetch("http://127.0.0.1:3000/tasks/new", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify(newTask),
+            });
+            const newTaskBody = await response.json();
+            if (newTaskBody.error === "Invalid access token" && tries < 3) {
+              setNewAccessToken({
+                counter: newAccessToken.counter + 1,
+                type: "create",
+                page: "task",
+              });
+            } else {
+              setTaskCreatedSuccessfully(true);
+            }
+          } else {
+            setNewAccessToken({
+              counter: newAccessToken.counter + 1,
+              type: "create",
+              page: "task",
+            });
+          }
+        } else {
+          console.log("No refresh token");
+        }
+      } else {
+        setTimeout(() => {
+          setTokenValidated(false);
+        }, 500);
+        const response = await fetch("http://127.0.0.1:3000/tasks/new", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(newTask),
+        });
+        const newTaskBody = await response.json();
+        if (newTaskBody.error === "Invalid access token" && tries < 3) {
+          setNewAccessToken({
+            counter: newAccessToken.counter + 1,
+            type: "create",
+            page: "task",
+          });
+        } else {
+          setTaskCreatedSuccessfully(true);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (Object.keys(newTask).length !== 0 && createTask > 0) {
+      createNewTaskAPI();
+    }
+  }, [createTask]);
+
+  const createNewTask = () => {
+    setNewTask({
+      ...newTask,
+      assigned_to: user,
+      created_by: user,
+      updated_by: user,
+    });
+    setCreateTask(createTask + 1);
+  };
+
+  useEffect(() => {
+    if (taskCreatedSuccessfully) {
+      setTimeout(() => {
+        setPopupVisible({ visible: false, type: "" });
+        setNewTaskCreated(newTaskCreated + 1);
+        setTaskCreatedSuccessfully(false);
+      }, 250);
+    }
+  }, [taskCreatedSuccessfully]);
 
   return (
     <div className="dashboard-page">
@@ -683,17 +922,29 @@ export default function DashboardPage({ user, setAuthentication }) {
                 </div>
               </div> */}
             </div>
-            <div className="quick-actions feature-disabled">
+            <div className="quick-actions">
               <h4 className="title poppins-bold">Quick actions</h4>
               <ul className="actions poppins-regular">
                 <li className="action">
-                  <a href="#">Create a new task</a>
+                  <button
+                    className="poppins-regular"
+                    onClick={() => openNewTaskPopup()}
+                  >
+                    Create a new task
+                  </button>
                 </li>
                 <li className="action">
-                  <a href="#">Create a new project</a>
+                  <button
+                    className="poppins-regular"
+                    onClick={() => openNewProjectPopup()}
+                  >
+                    Create a new project
+                  </button>
                 </li>
-                <li className="action">
-                  <a href="#">Complete today's tasks</a>
+                <li className="action feature-disabled">
+                  <button className="poppins-regular">
+                    Complete today's tasks
+                  </button>
                 </li>
               </ul>
             </div>
@@ -850,6 +1101,31 @@ export default function DashboardPage({ user, setAuthentication }) {
           </div>
         </main>
       </div>
+      {popupVisible.visible ? (
+        popupVisible.type === "project" ? (
+          <NewProjectPopup
+            parent="dashboard"
+            popupDisplay={popupVisible}
+            setPopupDisplay={setPopupVisible}
+            newProject={newProject}
+            setNewProject={setNewProject}
+            createNewProject={createNewProject}
+          />
+        ) : popupVisible.type === "task" ? (
+          <NewTaskPopup
+            parent="dashboard"
+            popupDisplay={popupVisible}
+            setPopupDisplay={setPopupVisible}
+            newTask={newTask}
+            setNewTask={setNewTask}
+            createNewTask={createNewTask}
+          />
+        ) : (
+          ""
+        )
+      ) : (
+        ""
+      )}
     </div>
   );
 }

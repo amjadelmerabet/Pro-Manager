@@ -10,6 +10,7 @@ export default function NewTaskPopup({
   createNewTask,
   popupDisplay,
   setPopupDisplay,
+  parent
 }) {
   const [newTaskClass, setNewTaskClass] = useState("");
 
@@ -22,7 +23,11 @@ export default function NewTaskPopup({
   const closePopupDialog = () => {
     setNewTaskClass("");
     setTimeout(() => {
-      setPopupDisplay({ ...popupDisplay, active: false });
+      if (parent === "dashboard") {
+        setPopupDisplay({ visible: false, type: "" });
+      } else {
+        setPopupDisplay({ ...popupDisplay, active: false });
+      }
     }, 250);
   };
 
