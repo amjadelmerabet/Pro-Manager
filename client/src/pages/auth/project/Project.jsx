@@ -10,6 +10,7 @@ import "./Project.css";
 import { IoCheckmark, IoClose } from "react-icons/io5";
 import { FaArrowLeft } from "react-icons/fa";
 import updatedMessage from "../../../utils/updatedMessage";
+import { MdOutlineModeEdit } from "react-icons/md";
 
 export default function Project({ user, setAuthentication }) {
   const [projectObject, setProjectObject] = useState({});
@@ -28,6 +29,10 @@ export default function Project({ user, setAuthentication }) {
   const [loadProject, setLoadProject] = useState(0);
   const [updatedsuccessfully, setUpdatedsuccessfully] = useState(false);
   const [tokenValidated, setTokenValidated] = useState(false);
+  const [editDescriptionInput, setEditDescriptionInput] = useState(false);
+  const [editedDescription, setEditedDescription] = useState("");
+  const [editButtonVisible, setEditButtonVisible] = useState(false);
+  const [editingDescription, setEditingDescription] = useState(false);
 
   const location = useLocation();
   const pathname = location.pathname;
@@ -399,6 +404,32 @@ export default function Project({ user, setAuthentication }) {
 
   let projectDeadline = new Date(projectObject.deadline);
 
+  const showEditDescriptionButton = () => {
+    setEditButtonVisible(true);
+  };
+
+  const hideEditDescriptionButton = () => {
+    setEditButtonVisible(false);
+  };
+
+  const editDescription = (description) => {
+    setEditedDescription(description);
+    setEditingDescription(true);
+    setEditDescriptionInput(true);
+  };
+
+  const updateDescription = () => {
+    setProjectUpdates({ description: editedDescription, updated_by: user });
+    setProjectUpdated({ counter: projectUpdated.counter + 1, update: true });
+    setEditDescriptionInput(false);
+    setEditingDescription(false);
+  };
+
+  const cancelDescriptionUpdate = () => {
+    setEditingDescription(false);
+    setEditDescriptionInput(false);
+  };
+
   return (
     <div className="project-page">
       <div className="auth-header-container">
@@ -527,25 +558,80 @@ export default function Project({ user, setAuthentication }) {
                   <div className="updated poppins-regular">{updatedStatus}</div>
                 </div>
               </div>
-              <p className="project-description poppins-regular">
-                {projectObject.description}
-              </p>
-              <div className="links poppins-semibold">
-                <Link
-                  to={
-                    view === "dashboard"
-                      ? `/auth/${user}/dashboard`
-                      : `/auth/${user}/projects?view=${view}`
-                  }
-                >
-                  <IconContext.Provider
-                    value={{ style: { color: "var(--primary-color)" } }}
-                  >
-                    <FaArrowLeft />
-                  </IconContext.Provider>
-                  <span>Go back</span>
-                </Link>
+              <div
+                onMouseEnter={() => showEditDescriptionButton()}
+                onMouseLeave={() => hideEditDescriptionButton()}
+              >
+                <span className="description-label poppins-semibold">
+                  Description
+                </span>
+                {!editDescriptionInput ? (
+                  <p className="project-description poppins-regular">
+                    {projectObject.description}
+                  </p>
+                ) : (
+                  <div className="editing-description">
+                    <input
+                      type="text"
+                      className="edit-description-input poppins-regular"
+                      value={editedDescription}
+                      onChange={(event) =>
+                        setEditedDescription(event.target.value)
+                      }
+                    />
+                    <div className="buttons">
+                      <input
+                        type="button"
+                        value="Update"
+                        className="update-description-button poppins-regular"
+                        onClick={() => updateDescription()}
+                      />
+                      <input
+                        type="button"
+                        value="Cancel"
+                        className="cancel-description-update-button poppins-regular"
+                        onClick={() => cancelDescriptionUpdate()}
+                      />
+                    </div>
+                  </div>
+                )}
+                {!editingDescription ? (
+                  <div className="edit-description">
+                    <button
+                      className={
+                        "edit-description-button poppins-regular" +
+                        (editButtonVisible ? " visible" : "")
+                      }
+                      onClick={() => editDescription(projectObject.description)}
+                    >
+                      <IconContext.Provider
+                        value={{ style: { fontSize: "16px" } }}
+                      >
+                        <MdOutlineModeEdit />
+                      </IconContext.Provider>
+                      Edit
+                    </button>
+                  </div>
+                ) : (
+                  ""
+                )}
               </div>
+            </div>
+            <div className="links poppins-semibold">
+              <Link
+                to={
+                  view === "dashboard"
+                    ? `/auth/${user}/dashboard`
+                    : `/auth/${user}/projects?view=${view}`
+                }
+              >
+                <IconContext.Provider
+                  value={{ style: { color: "var(--primary-color)" } }}
+                >
+                  <FaArrowLeft />
+                </IconContext.Provider>
+                <span>Go back</span>
+              </Link>
             </div>
           </div>
         ) : (

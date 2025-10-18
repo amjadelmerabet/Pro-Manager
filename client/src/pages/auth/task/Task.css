@@ -104,14 +104,14 @@
   transform: scale(0);
 }
 
-.task-page .task-body > div:not(.task-info) > div > .edit:hover {
-  transform: scale(0.98);
-}
-
-.task-page .task-body > div:not(.task-info):hover > div > .edit.visible {
+.task-page .task-body > div:not(.task-info):hover > div > .edit {
   visibility: visible;
   opacity: 1;
   transform: scale(1);
+}
+
+.task-page .task-body > div:not(.task-info) > div > .edit:hover {
+  transform: scale(0.98);
 }
 
 .task-page .task > .task-header .task-actions > button {

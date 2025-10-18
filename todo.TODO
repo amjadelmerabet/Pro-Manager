@@ -3,7 +3,7 @@ Todos:
   [+]  Update the quick actions links in the dashboard page and make them usable.
   [+]  Fix the edit short description feature which stopped working after switching from Basic Auth to OAuth 2.0.
   [+]  Understand and fix the bug that causing the dashboard page to show nothing sometimes.
-  []  Add the possibility to edit the description of project when a user is viewing the project details page.
+  [+]  Add the possibility to edit the description of project when a user is viewing the project details page.
 
 Features:
 
