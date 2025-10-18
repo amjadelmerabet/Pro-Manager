@@ -1,10 +1,12 @@
-import ProfilePage from "../pages/auth/profile/Profile";
-import WrongRoute from "./WrongRoute";
-
 import { useLocation, useNavigate } from "react-router";
+import Task from "../../pages/auth/task/Task";
 import { useEffect } from "react";
+import WrongRoute from "../public/WrongRoute";
 
-export default function ProfileRoute({ isAuthenticated, setAuthentication }) {
+export default function SingleTaskRoute({
+  isAuthenticated,
+  setAuthentication,
+}) {
   let navigate = useNavigate();
   let userAuthenticated = JSON.parse(sessionStorage.getItem("authUser"));
   let userLoggedOut = JSON.parse(sessionStorage.getItem("userLoggedOut"));
@@ -22,7 +24,7 @@ export default function ProfileRoute({ isAuthenticated, setAuthentication }) {
       if (userLoggedOut) {
         navigate("/signin");
       } else {
-        navigate("/signin?redirect=/auth/user/profile");
+        navigate("/signin?redirect=/auth/user/tasks");
       }
     }
   }, []);
@@ -30,7 +32,7 @@ export default function ProfileRoute({ isAuthenticated, setAuthentication }) {
   if (isAuthenticated || userAuthenticated) {
     if (user === userAuthenticated.user) {
       return (
-        <ProfilePage
+        <Task
           user={userAuthenticated.user}
           setAuthentication={setAuthentication}
         />

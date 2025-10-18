@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router";
-import Project from "../pages/auth/project/Project";
+import Project from "../../pages/auth/project/Project";
 import { useEffect } from "react";
-import WrongRoute from "./WrongRoute";
+import WrongRoute from "../public/WrongRoute";
 
 export default function SingleProjectRoute({
   isAuthenticated,

@@ -1,4 +1,4 @@
-import Header from "../../components/Header";
+import Header from "../components/Header";
 
 export default function FeaturesPage() {
   return <div className="features-page">

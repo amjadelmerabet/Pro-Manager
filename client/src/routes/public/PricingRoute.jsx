@@ -1,4 +1,4 @@
-import PricingPage from "../pages/pricing/Pricing";
+import PricingPage from "../../pages/public/pricing/Pricing";
 
 export default function PricingRoute() {
   return <PricingPage />

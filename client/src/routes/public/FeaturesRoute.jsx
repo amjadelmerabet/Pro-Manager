@@ -1,4 +1,4 @@
-import FeaturesPage from "../pages/features/Features";
+import FeaturesPage from "../../pages/public/features/Features";
 
 export default function FeaturesRoute() {
   return <FeaturesPage />

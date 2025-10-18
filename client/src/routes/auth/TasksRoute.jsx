@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router";
-import TasksPage from "../pages/auth/tasks/Tasks";
+import TasksPage from "../../pages/auth/tasks/Tasks";
 import { useEffect } from "react";
-import WrongRoute from "./WrongRoute";
+import WrongRoute from "../public/WrongRoute";
 
 export default function TasksRoute({ isAuthenticated, setAuthentication }) {
   let navigate = useNavigate();

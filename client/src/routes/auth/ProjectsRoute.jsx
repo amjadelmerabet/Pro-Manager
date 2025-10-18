@@ -1,12 +1,10 @@
-import { useLocation, useNavigate } from "react-router";
-import Task from "../pages/auth/task/Task";
-import { useEffect } from "react";
-import WrongRoute from "./WrongRoute";
+import ProjectsPage from "../../pages/auth/projects/Projects";
+import WrongRoute from "../public/WrongRoute";
 
-export default function SingleTaskRoute({
-  isAuthenticated,
-  setAuthentication,
-}) {
+import { useLocation, useNavigate } from "react-router";
+import { useEffect } from "react";
+
+export default function ProjectsRoute({ isAuthenticated, setAuthentication }) {
   let navigate = useNavigate();
   let userAuthenticated = JSON.parse(sessionStorage.getItem("authUser"));
   let userLoggedOut = JSON.parse(sessionStorage.getItem("userLoggedOut"));
@@ -24,7 +22,7 @@ export default function SingleTaskRoute({
       if (userLoggedOut) {
         navigate("/signin");
       } else {
-        navigate("/signin?redirect=/auth/user/tasks");
+        navigate("/signin?redirect=/auth/user/projects");
       }
     }
   }, []);
@@ -32,7 +30,7 @@ export default function SingleTaskRoute({
   if (isAuthenticated || userAuthenticated) {
     if (user === userAuthenticated.user) {
       return (
-        <Task
+        <ProjectsPage
           user={userAuthenticated.user}
           setAuthentication={setAuthentication}
         />

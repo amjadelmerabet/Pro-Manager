@@ -1,10 +1,10 @@
-import DashboardPage from "../pages/auth/dashboard/Dashboard";
-import WrongRoute from "./WrongRoute";
+import ProfilePage from "../../pages/auth/profile/Profile";
+import WrongRoute from "../public/WrongRoute";
 
 import { useLocation, useNavigate } from "react-router";
 import { useEffect } from "react";
 
-export default function DashboardRoute({ isAuthenticated, setAuthentication }) {
+export default function ProfileRoute({ isAuthenticated, setAuthentication }) {
   let navigate = useNavigate();
   let userAuthenticated = JSON.parse(sessionStorage.getItem("authUser"));
   let userLoggedOut = JSON.parse(sessionStorage.getItem("userLoggedOut"));
@@ -22,15 +22,15 @@ export default function DashboardRoute({ isAuthenticated, setAuthentication }) {
       if (userLoggedOut) {
         navigate("/signin");
       } else {
-        navigate("/signin?redirect=/auth/user/dashboard");
+        navigate("/signin?redirect=/auth/user/profile");
       }
     }
   }, []);
 
-  if ((isAuthenticated || userAuthenticated) && !userLoggedOut) {
+  if (isAuthenticated || userAuthenticated) {
     if (user === userAuthenticated.user) {
       return (
-        <DashboardPage
+        <ProfilePage
           user={userAuthenticated.user}
           setAuthentication={setAuthentication}
         />

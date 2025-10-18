@@ -1,5 +1,5 @@
-import Footer from "../../components/Footer";
-import Header from "../../components/Header";
+import Footer from "../components/Footer";
+import Header from "../components/Header";
 import DeepDiveSection from "./components/DeepDiveSection";
 import FeaturesSection from "./components/FeaturesSection";
 import HeroSection from "./components/HeroSection";

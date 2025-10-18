@@ -1,10 +1,10 @@
-import ProjectsPage from "../pages/auth/projects/Projects";
-import WrongRoute from "./WrongRoute";
+import DashboardPage from "../../pages/auth/dashboard/Dashboard";
+import WrongRoute from "../public/WrongRoute";
 
 import { useLocation, useNavigate } from "react-router";
 import { useEffect } from "react";
 
-export default function ProjectsRoute({ isAuthenticated, setAuthentication }) {
+export default function DashboardRoute({ isAuthenticated, setAuthentication }) {
   let navigate = useNavigate();
   let userAuthenticated = JSON.parse(sessionStorage.getItem("authUser"));
   let userLoggedOut = JSON.parse(sessionStorage.getItem("userLoggedOut"));
@@ -22,15 +22,15 @@ export default function ProjectsRoute({ isAuthenticated, setAuthentication }) {
       if (userLoggedOut) {
         navigate("/signin");
       } else {
-        navigate("/signin?redirect=/auth/user/projects");
+        navigate("/signin?redirect=/auth/user/dashboard");
       }
     }
   }, []);
 
-  if (isAuthenticated || userAuthenticated) {
+  if ((isAuthenticated || userAuthenticated) && !userLoggedOut) {
     if (user === userAuthenticated.user) {
       return (
-        <ProjectsPage
+        <DashboardPage
           user={userAuthenticated.user}
           setAuthentication={setAuthentication}
         />
