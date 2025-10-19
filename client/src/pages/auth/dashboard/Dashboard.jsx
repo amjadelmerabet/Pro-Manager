@@ -9,6 +9,11 @@ import updatedMessage from "../../../utils/updatedMessage";
 import { Link } from "react-router";
 import NewProjectPopup from "../projects/components/NewProjectPopup";
 import NewTaskPopup from "../tasks/components/NewTaskPopup";
+import fetchUserProjectsUtil from "./utils/fetchUserProjectsUtil";
+import fetchUserTasksUtil from "./utils/fetchUserTasksUtil";
+import getAccessTokenUtil from "./utils/getAccessTokenUtil";
+import createProjectUtil from "./utils/createProjectUtil";
+import createTaskUtil from "./utils/createTaskUtil";
 
 export default function DashboardPage({ user, setAuthentication }) {
   const [recentPages, setRecentPages] = useState([]);
@@ -59,371 +64,20 @@ export default function DashboardPage({ user, setAuthentication }) {
     setPopupVisible({ visible: true, type: "task" });
   };
 
-  const getAllProjectsAPI = async () => {
-    if (!tokenValidated) {
-      const refreshToken = await cookieStore.get(user);
-      if (refreshToken) {
-        const response = await fetch(
-          "http://127.0.0.1:3000/tokens/access/check",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${refreshToken.value}`,
-            },
-            body: JSON.stringify({ token: token }),
-          }
-        );
-        const validAccessToken = await response.json();
-        if (validAccessToken.message === "Valid access token") {
-          const response = await fetch(
-            "http://127.0.0.1:3000/projects/owner/" + user,
-            {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-          const projectsObject = await response.json();
-          if (projectsObject.error === "Invalid access token") {
-            setTries(tries + 1);
-            setNewAccessToken({
-              counter: newAccessToken.counter + 1,
-              type: "projects",
-            });
-          } else {
-            // console.log("Projects fetched:", projectsObject.result);
-            let projectsNotStarted = 0;
-            let projectsInProgress = 0;
-            let projecstCompleted = 0;
-            projectsObject.result.forEach((project) => {
-              if (project.state === 1) {
-                projectsNotStarted++;
-              } else if (project.state === 2) {
-                projectsInProgress++;
-              } else if (project.state === 3) {
-                projecstCompleted++;
-              }
-            });
-            setProjectsStats({
-              ...projectsStats,
-              notStarted: projectsNotStarted,
-              inProgress: projectsInProgress,
-              completed: projecstCompleted,
-            });
-            setTempRecentPages(tempRecentPages.concat(projectsObject.result));
-            setProjectsFetched(true);
-          }
-        } else {
-          setTries(tries + 1);
-          setNewAccessToken({
-            counter: newAccessToken.counter + 1,
-            type: "projects",
-          });
-        }
-      } else {
-        console.log("Invalid refresh token");
-      }
-    } else {
-      setTimeout(() => {
-        setTokenValidated(false);
-      }, 500);
-      const response = await fetch(
-        "http://127.0.0.1:3000/projects/owner/" + user,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const projectsObject = await response.json();
-      if (projectsObject.error === "Invalid access token") {
-        setTries(tries + 1);
-        setNewAccessToken({
-          counter: newAccessToken.counter + 1,
-          type: "projects",
-        });
-      } else {
-        // console.log("Projects fetched:", projectsObject.result);
-        let projectsNotStarted = 0;
-        let projectsInProgress = 0;
-        let projecstCompleted = 0;
-        projectsObject.result.forEach((project) => {
-          if (project.state === 1) {
-            projectsNotStarted++;
-          } else if (project.state === 2) {
-            projectsInProgress++;
-          } else if (project.state === 3) {
-            projecstCompleted++;
-          }
-        });
-        setProjectsStats({
-          ...projectsStats,
-          notStarted: projectsNotStarted,
-          inProgress: projectsInProgress,
-          completed: projecstCompleted,
-        });
-        setTempRecentPages(tempRecentPages.concat(projectsObject.result));
-        setProjectsFetched(true);
-      }
-    }
-  };
-
-  const getAllTasksAPI = async () => {
-    if (!tokenValidated) {
-      const refreshToken = await cookieStore.get(user);
-      if (refreshToken) {
-        const response = await fetch(
-          "http://127.0.0.1:3000/tokens/access/check",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${refreshToken.value}`,
-            },
-            body: JSON.stringify({ token: token }),
-          }
-        );
-        const validAccessToken = await response.json();
-        if (validAccessToken.message === "Valid access token") {
-          const response = await fetch(
-            "http://127.0.0.1:3000/tasks/assigned-to/" + user,
-            {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-          const tasksObject = await response.json();
-          if (tasksObject.error === "Invalid access token" && tries < 3) {
-            setTries(tries + 1);
-            setNewAccessToken({
-              counter: newAccessToken.counter + 1,
-              type: "tasks",
-            });
-          } else {
-            let tasksToDo = 0;
-            let tasksDoing = 0;
-            let tasksDone = 0;
-            tasksObject.result.forEach((task) => {
-              if (task.state === 1) {
-                tasksToDo++;
-              } else if (task.state === 2) {
-                tasksDoing++;
-              } else if (task.state === 3) {
-                tasksDone++;
-              }
-            });
-            setTasksStats({
-              ...tasksStats,
-              toDo: tasksToDo,
-              doing: tasksDoing,
-              done: tasksDone,
-            });
-            setTempRecentPages(tempRecentPages.concat(tasksObject.result));
-            setTasksFetched(true);
-          }
-        } else {
-          setTries(tries + 1);
-          setNewAccessToken({
-            counter: newAccessToken.counter + 1,
-            type: "tasks",
-          });
-        }
-      } else {
-        console.log("Invalid refresh token");
-      }
-    } else {
-      setTimeout(() => {
-        setTokenValidated(false);
-      }, 500);
-      const response = await fetch(
-        "http://127.0.0.1:3000/tasks/assigned-to/" + user,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const tasksObject = await response.json();
-      if (tasksObject.error === "Invalid access token" && tries < 3) {
-        setTries(tries + 1);
-        setNewAccessToken({
-          counter: newAccessToken.counter + 1,
-          type: "tasks",
-        });
-      } else {
-        let tasksToDo = 0;
-        let tasksDoing = 0;
-        let tasksDone = 0;
-        tasksObject.result.forEach((task) => {
-          if (task.state === 1) {
-            tasksToDo++;
-          } else if (task.state === 2) {
-            tasksDoing++;
-          } else if (task.state === 3) {
-            tasksDone++;
-          }
-        });
-        setTasksStats({
-          ...tasksStats,
-          toDo: tasksToDo,
-          doing: tasksDoing,
-          done: tasksDone,
-        });
-        setTempRecentPages(tempRecentPages.concat(tasksObject.result));
-        setTasksFetched(true);
-      }
-    }
-  };
-
-  const getAccessTokenAPI = async () => {
-    // console.log("Getting new access token");
-    try {
-      const refreshToken = await cookieStore.get(user);
-      if (refreshToken) {
-        // console.log(refreshToken);
-        const response = await fetch(
-          "http://127.0.0.1:3000/tokens/access/new",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${refreshToken.value}`,
-            },
-            body: JSON.stringify({ username: user }),
-          }
-        );
-        // console.log("Received a token or something");
-        const accessTokenObject = await response.json();
-        if (!accessTokenObject.error) {
-          const authUser = JSON.parse(sessionStorage.getItem("authUser"));
-          authUser.token = accessTokenObject.token;
-          sessionStorage.removeItem("authUser");
-          sessionStorage.setItem("authUser", JSON.stringify(authUser));
-          setTokenValidated(true);
-          setTries(0);
-          if (newAccessToken.type === "projects") {
-            setLoadProjects(loadProjects + 1);
-          } else if (newAccessToken.type === "tasks") {
-            setLoadTasks(loadTasks + 1);
-          } else if (
-            newAccessToken.type === "create" &&
-            newAccessToken.page === "project"
-          ) {
-            setCreateProject(createProject + 1);
-          } else if (
-            newAccessToken.type === "create" &&
-            newAccessToken.page === "task"
-          ) {
-            setCreateTask(createTask + 1);
-          }
-          // if (newAccessToken.type === "load") {
-          //   setLoadProjects(loadProjects + 1);
-          // } else if (newAccessToken.type === "new") {
-          //   setCreateProject(createProject + 1);
-          // } else if (newAccessToken.type === "update") {
-          //   setUpdatedProjectId({ ...updatedProjectId, update: true });
-          // } else if (newAccessToken.type === "delete") {
-          //   setDeletedProjectId({ ...deletedProjectId, delete: true });
-          // }
-        }
-      } else {
-        console.log("No refresh token");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const createNewProjectAPI = async () => {
-    try {
-      if (!tokenValidated) {
-        const refreshToken = await cookieStore.get(user);
-        if (refreshToken) {
-          const response = await fetch(
-            "http://127.0.0.1:3000/tokens/access/check",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${refreshToken.value}`,
-              },
-              body: JSON.stringify({ token: token }),
-            }
-          );
-          const validAccessToken = await response.json();
-          if (validAccessToken.message === "Valid access token") {
-            const response = await fetch("http://127.0.0.1:3000/projects/new", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-              body: JSON.stringify(newProject),
-            });
-            const newProjectObject = await response.json();
-            if (
-              newProjectObject.error === "Invalid access token" &&
-              tries < 3
-            ) {
-              setNewAccessToken({
-                counter: newAccessToken.counter + 1,
-                type: "create",
-                page: "project",
-              });
-            } else {
-              setProjectCreatedSuccessfully(true);
-            }
-          } else {
-            setNewAccessToken({
-              counter: newAccessToken.counter + 1,
-              type: "create",
-              page: "project",
-            });
-          }
-        } else {
-          console.log("Invalid refresh token");
-        }
-      } else {
-        setTimeout(() => {
-          setTokenValidated(false);
-        }, 500);
-        const response = await fetch("http://127.0.0.1:3000/projects/new", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(newProject),
-        });
-        const newProjectObject = await response.json();
-        if (newProjectObject.error === "Invalid access token" && tries < 3) {
-          setNewAccessToken({
-            counter: newAccessToken.counter + 1,
-            type: "create",
-            page: "project",
-          });
-        } else {
-          setProjectCreatedSuccessfully(true);
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
     if (Object.keys(newProject).length > 0 && createProject > 0) {
-      createNewProjectAPI();
+      createProjectUtil(
+        tokenValidated,
+        user,
+        token,
+        newProject,
+        tries,
+        setTries,
+        newAccessToken,
+        setNewAccessToken,
+        setProjectCreatedSuccessfully,
+        setTokenValidated
+      );
     }
   }, [createProject]);
 
@@ -439,18 +93,58 @@ export default function DashboardPage({ user, setAuthentication }) {
 
   useEffect(() => {
     if (newAccessToken.counter > 0) {
-      getAccessTokenAPI();
+      getAccessTokenUtil(
+        user,
+        setTokenValidated,
+        setTries,
+        newAccessToken,
+        loadProjects,
+        setLoadProjects,
+        loadTasks,
+        setLoadTasks,
+        createProject,
+        setCreateProject,
+        createTask,
+        setCreateTask
+      );
     }
   }, [newAccessToken]);
 
   useEffect(() => {
-    getAllProjectsAPI();
-    // getAllTasksAPI();
+    fetchUserProjectsUtil(
+      tokenValidated,
+      user,
+      token,
+      tries,
+      setTries,
+      newAccessToken,
+      setNewAccessToken,
+      projectsStats,
+      setProjectsStats,
+      tempRecentPages,
+      setTempRecentPages,
+      setProjectsFetched,
+      setTokenValidated
+    );
   }, [loadProjects, newProjectCreated, newTaskCreated]);
 
   useEffect(() => {
     if (projectsFetched || loadTasks > 0) {
-      getAllTasksAPI();
+      fetchUserTasksUtil(
+        tokenValidated,
+        user,
+        token,
+        tries,
+        setTries,
+        newAccessToken,
+        setNewAccessToken,
+        tasksStats,
+        setTasksStats,
+        tempRecentPages,
+        setTempRecentPages,
+        setTasksFetched,
+        setTokenValidated
+      );
     }
   }, [projectsFetched, loadTasks]);
 
@@ -510,83 +204,19 @@ export default function DashboardPage({ user, setAuthentication }) {
     );
   };
 
-  const createNewTaskAPI = async () => {
-    try {
-      if (!tokenValidated) {
-        const refreshToken = await cookieStore.get(user);
-        if (refreshToken) {
-          const response = await fetch(
-            "http://127.0.0.1:3000/tokens/access/check",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${refreshToken.value}`,
-              },
-              body: JSON.stringify({ token: token }),
-            }
-          );
-          const validAccessToken = await response.json();
-          if (validAccessToken.message === "Valid access token") {
-            const response = await fetch("http://127.0.0.1:3000/tasks/new", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-              body: JSON.stringify(newTask),
-            });
-            const newTaskBody = await response.json();
-            if (newTaskBody.error === "Invalid access token" && tries < 3) {
-              setNewAccessToken({
-                counter: newAccessToken.counter + 1,
-                type: "create",
-                page: "task",
-              });
-            } else {
-              setTaskCreatedSuccessfully(true);
-            }
-          } else {
-            setNewAccessToken({
-              counter: newAccessToken.counter + 1,
-              type: "create",
-              page: "task",
-            });
-          }
-        } else {
-          console.log("No refresh token");
-        }
-      } else {
-        setTimeout(() => {
-          setTokenValidated(false);
-        }, 500);
-        const response = await fetch("http://127.0.0.1:3000/tasks/new", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(newTask),
-        });
-        const newTaskBody = await response.json();
-        if (newTaskBody.error === "Invalid access token" && tries < 3) {
-          setNewAccessToken({
-            counter: newAccessToken.counter + 1,
-            type: "create",
-            page: "task",
-          });
-        } else {
-          setTaskCreatedSuccessfully(true);
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
     if (Object.keys(newTask).length !== 0 && createTask > 0) {
-      createNewTaskAPI();
+      createTaskUtil(
+        tokenValidated,
+        user,
+        token,
+        newTask,
+        tries,
+        newAccessToken,
+        setNewAccessToken,
+        setTaskCreatedSuccessfully,
+        setTokenValidated
+      );
     }
   }, [createTask]);
 

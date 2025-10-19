@@ -14,6 +14,10 @@ import updatedMessage from "../../../utils/updatedMessage";
 
 import "./Task.css";
 import { MdOutlineModeEdit } from "react-icons/md";
+import fetchUserTaskUtil from "./utils/fetchUserTaskUtil";
+import updateTaskUtil from "./utils/updateTaskUtil";
+import deleteTaskUtil from "./utils/deleteTaskUtil";
+import getAccessTokenUtil from "./utils/getAccessTokenUtil";
 
 export default function Task({ user, setAuthentication }) {
   const [taskObject, setTaskObject] = useState({});
@@ -44,162 +48,40 @@ export default function Task({ user, setAuthentication }) {
 
   const { token } = JSON.parse(sessionStorage.getItem("authUser"));
 
-  const fetchTaskAPI = async () => {
-    try {
-      if (!tokenValidated) {
-        const refreshToken = await cookieStore.get(user);
-        const response = await fetch(
-          "http://127.0.0.1:3000/tokens/access/check",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${refreshToken.value}`,
-            },
-            body: JSON.stringify({ token: token }),
-          }
-        );
-        const validAccessToken = await response.json();
-        if (validAccessToken.message === "Valid access token") {
-          const response = await fetch(
-            "http://127.0.0.1:3000/tasks/id/" + taskId,
-            {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-          const task = await response.json();
-          if (task.error === "Invalid access token" && tries < 3) {
-            setTries(tries + 1);
-            setNewAccessToken({
-              counter: newAccessToken.counter + 1,
-              type: "load",
-            });
-          } else {
-            setTaskObject(task.result[0]);
-          }
-        } else {
-          setTries(tries + 1);
-          setNewAccessToken({
-            counter: newAccessToken.counter + 1,
-            type: "load",
-          });
-        }
-      } else {
-        const response = await fetch(
-          "http://127.0.0.1:3000/tasks/id/" + taskId,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const task = await response.json();
-        if (task.error === "Invalid access token" && tries < 3) {
-          setTries(tries + 1);
-          setNewAccessToken({
-            counter: newAccessToken.counter + 1,
-            type: "load",
-          });
-        } else {
-          setTimeout(() => {
-            setTokenValidated(false);
-          }, 500);
-          setTaskObject(task.result[0]);
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
     if ((!taskUpdated.update && taskUpdated.counter === 0) || loadTask) {
-      fetchTaskAPI();
+      // fetchTaskAPI();
+      fetchUserTaskUtil(
+        tokenValidated,
+        user,
+        token,
+        taskId,
+        tries,
+        setTries,
+        newAccessToken,
+        setNewAccessToken,
+        setTaskObject,
+        setTokenValidated
+      );
     }
   }, [taskUpdated, loadTask]);
 
-  const updateTaskAPI = async () => {
-    try {
-      if (!tokenValidated) {
-        const refreshToken = await cookieStore.get(user);
-        const response = await fetch(
-          "http://127.0.0.1:3000/tokens/access/check",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${refreshToken.value}`,
-            },
-            body: JSON.stringify({ token: token }),
-          }
-        );
-        const validAccessToken = await response.json();
-        if (validAccessToken.message === "Valid access token") {
-          const response = await fetch(
-            "http://127.0.0.1:3000/tasks/update/" + taskId,
-            {
-              method: "PATCH",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-              body: JSON.stringify(taskUpdates),
-            }
-          );
-          const updatedTask = await response.json();
-          if (updatedTask.error === "Invalid access token" && tries < 3) {
-            setTries(tries + 1);
-            setNewAccessToken({
-              counter: newAccessToken.counter + 1,
-              type: "update",
-            });
-          } else {
-            setUpdatedSuccessfully(true);
-          }
-        } else {
-          setTries(tries + 1);
-          setNewAccessToken({
-            counter: newAccessToken.counter + 1,
-            type: "update",
-          });
-        }
-      } else {
-        const response = await fetch(
-          "http://127.0.0.1:3000/tasks/update/" + taskId,
-          {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify(taskUpdates),
-          }
-        );
-        const updatedTask = await response.json();
-        if (updatedTask.error === "Invalid access token" && tries < 3) {
-          setTries(tries + 1);
-          setNewAccessToken({
-            counter: newAccessToken.counter + 1,
-            type: "update",
-          });
-        } else {
-          setUpdatedSuccessfully(true);
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
     if (taskUpdated.update) {
-      updateTaskAPI();
+      // updateTaskAPI();
+      updateTaskUtil(
+        tokenValidated,
+        user,
+        token,
+        taskId,
+        taskUpdates,
+        tries,
+        setTries,
+        newAccessToken,
+        setNewAccessToken,
+        setUpdatedSuccessfully,
+        setTokenValidated
+      );
     }
   }, [taskUpdated]);
 
@@ -216,135 +98,39 @@ export default function Task({ user, setAuthentication }) {
 
   let navigate = useNavigate();
 
-  const deleteTaskAPI = async () => {
-    try {
-      if (!tokenValidated) {
-        const refreshToken = await cookieStore.get(user);
-        const response = await fetch(
-          "http://127.0.0.1:3000/tokens/access/check",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${refreshToken.value}`,
-            },
-            body: JSON.stringify({ token: token }),
-          }
-        );
-        const validAccessToken = await response.json();
-        if (validAccessToken.message === "Valid access token") {
-          const response = await fetch(
-            "http://127.0.0.1:3000/tasks/delete/" + taskId,
-            {
-              method: "DELETE",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-          const deletedTask = await response.json();
-          if (deletedTask.error === "Invalid access token") {
-            setTries(tries + 1);
-            setNewAccessToken({
-              counter: newAccessToken.counter + 1,
-              type: "delete",
-            });
-          } else {
-            setTimeout(() => {
-              navigate("/auth/" + user + "/tasks");
-            }, 500);
-          }
-        } else {
-          setTries(tries + 1);
-          setTaskDeleted(false);
-          setNewAccessToken({
-            counter: newAccessToken.counter + 1,
-            type: "delete",
-          });
-        }
-      } else {
-        const response = await fetch(
-          "http://127.0.0.1:3000/tasks/delete/" + taskId,
-          {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const deletedTask = await response.json();
-        if (deletedTask.error === "Invalid access token") {
-          setTries(tries + 1);
-          setTaskDeleted(false);
-          setNewAccessToken({
-            counter: newAccessToken.counter + 1,
-            type: "delete",
-          });
-        } else {
-          setTimeout(() => {
-            navigate("/auth/" + user + "/tasks");
-          }, 500);
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
     if (taskDeleted) {
-      deleteTaskAPI();
+      // deleteTaskAPI();
+      deleteTaskUtil(
+        tokenValidated,
+        user,
+        token,
+        taskId,
+        tries,
+        setTries,
+        newAccessToken,
+        setNewAccessToken,
+        setTaskDeleted,
+        setTokenValidated,
+        navigate
+      );
     }
   }, [taskDeleted]);
 
-  const getAccessTokenAPI = async () => {
-    // console.log("Getting new access token");
-    try {
-      const refreshToken = await cookieStore.get(user);
-      if (refreshToken) {
-        // console.log(refreshToken);
-        const response = await fetch(
-          "http://127.0.0.1:3000/tokens/access/new",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${refreshToken.value}`,
-            },
-            body: JSON.stringify({ username: user }),
-          }
-        );
-        // console.log("Received a token or something");
-        const accessTokenObject = await response.json();
-        if (!accessTokenObject.error) {
-          const authUser = JSON.parse(sessionStorage.getItem("authUser"));
-          authUser.token = accessTokenObject.token;
-          sessionStorage.removeItem("authUser");
-          sessionStorage.setItem("authUser", JSON.stringify(authUser));
-          setTokenValidated(true);
-          setTries(0);
-          if (newAccessToken.type === "load") {
-            setLoadTask(loadTask + 1);
-          }
-          if (newAccessToken.type === "update") {
-            setTaskUpdated({ counter: taskUpdated.counter + 1, update: true });
-          } else if (newAccessToken.type === "delete") {
-            setTaskDeleted(true);
-          }
-        }
-      } else {
-        console.log("No refresh token");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
     if (newAccessToken.counter > 0) {
-      getAccessTokenAPI();
+      // getAccessTokenAPI();
+      getAccessTokenUtil(
+        user,
+        setTokenValidated,
+        setTries,
+        newAccessToken,
+        loadTask,
+        setLoadTask,
+        taskUpdated,
+        setTaskUpdated,
+        setTaskDeleted
+      );
     }
   }, [newAccessToken]);
 

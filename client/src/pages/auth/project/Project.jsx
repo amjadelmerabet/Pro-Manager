@@ -11,6 +11,10 @@ import { IoCheckmark, IoClose } from "react-icons/io5";
 import { FaArrowLeft } from "react-icons/fa";
 import updatedMessage from "../../../utils/updatedMessage";
 import { MdOutlineModeEdit } from "react-icons/md";
+import fetchUserProjectUtil from "./utils/fetchUserProjectUtil";
+import getAccessTokenUtil from "./utils/getAccessTokenUtil";
+import updateProjectUtil from "./utils/updateProjectUtil";
+import deleteProjectUtil from "./utils/deleteProjectUtil";
 
 export default function Project({ user, setAuthentication }) {
   const [projectObject, setProjectObject] = useState({});
@@ -48,316 +52,81 @@ export default function Project({ user, setAuthentication }) {
 
   const { token } = JSON.parse(sessionStorage.getItem("authUser"));
 
-  const fetchProjectAPI = async () => {
-    try {
-      if (!tokenValidated) {
-        const refreshToken = await cookieStore.get(user);
-        const response = await fetch(
-          "http://127.0.0.1:3000/tokens/access/check",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${refreshToken.value}`,
-            },
-            body: JSON.stringify({ token: token }),
-          }
-        );
-        const validAccessToken = await response.json();
-        if (validAccessToken.message === "Valid access token") {
-          const response = await fetch(
-            "http://127.0.0.1:3000/projects/id/" + projectId,
-            {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-          const project = await response.json();
-          if (project.error === "Invalid access token") {
-            setTries(tries + 1);
-            setNewAccessToken({
-              counter: newAccessToken.counter + 1,
-              type: "load",
-            });
-          } else {
-            if (project.result.length > 0) {
-              setProjectObject(project.result[0]);
-            } else {
-              setProjectNotFound(true);
-            }
-          }
-        } else {
-          setTries(tries + 1);
-          setNewAccessToken({
-            counter: newAccessToken.counter + 1,
-            type: "load",
-          });
-        }
-      } else {
-        setTimeout(() => {
-          setTokenValidated(false);
-        }, 500);
-        const response = await fetch(
-          "http://127.0.0.1:3000/projects/id/" + projectId,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const project = await response.json();
-        if (project.error === "Invalid access token") {
-          setTries(tries + 1);
-          setNewAccessToken({
-            counter: newAccessToken.counter + 1,
-            type: "load",
-          });
-        } else {
-          if (project.result.length > 0) {
-            setProjectObject(project.result[0]);
-          } else {
-            setProjectNotFound(true);
-          }
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
     if (
       (!projectUpdated.update && projectUpdated.counter === 0) ||
       loadProject
     ) {
-      fetchProjectAPI();
+      // fetchProjectAPI();
+      fetchUserProjectUtil(
+        tokenValidated,
+        user,
+        token,
+        projectId,
+        tries,
+        setTries,
+        newAccessToken,
+        setNewAccessToken,
+        setProjectObject,
+        setProjectNotFound,
+        setTokenValidated
+      );
     }
   }, [updatedsuccessfully, loadProject]);
 
-  const getAccessTokenAPI = async () => {
-    // console.log("Getting new access token");
-    try {
-      const refreshToken = await cookieStore.get(user);
-      if (refreshToken) {
-        // console.log(refreshToken);
-        const response = await fetch(
-          "http://127.0.0.1:3000/tokens/access/new",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${refreshToken.value}`,
-            },
-            body: JSON.stringify({ username: user }),
-          }
-        );
-        // console.log("Received a token or something");
-        const accessTokenObject = await response.json();
-        if (!accessTokenObject.error) {
-          const authUser = JSON.parse(sessionStorage.getItem("authUser"));
-          authUser.token = accessTokenObject.token;
-          sessionStorage.removeItem("authUser");
-          sessionStorage.setItem("authUser", JSON.stringify(authUser));
-          setTokenValidated(true);
-          setTries(0);
-          if (newAccessToken.type === "load") {
-            setLoadProject(loadProject + 1);
-          } else if (newAccessToken.type === "update") {
-            setProjectUpdated({
-              counter: projectUpdated.counter + 1,
-              update: true,
-            });
-            // setTimeout(() => {
-            //   setProjectUpdated(true);
-            // }, 250);
-          } else if (newAccessToken.type === "delete") {
-            setProjectDeleted(false);
-            setTimeout(() => {
-              setProjectDeleted(true);
-            }, 250);
-          }
-        }
-      } else {
-        console.log("No refresh token");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
     if (newAccessToken.counter > 0) {
-      getAccessTokenAPI();
+      // getAccessTokenAPI();
+      getAccessTokenUtil(
+        user,
+        setTokenValidated,
+        setTries,
+        loadProject,
+        setLoadProject,
+        newAccessToken,
+        projectUpdated,
+        setProjectUpdated,
+        setProjectDeleted
+      );
     }
   }, [newAccessToken]);
 
-  const updateProjectAPI = async () => {
-    try {
-      if (!tokenValidated) {
-        const refreshToken = await cookieStore.get(user);
-        const response = await fetch(
-          "http://127.0.0.1:3000/tokens/access/check",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${refreshToken.value}`,
-            },
-            body: JSON.stringify({ token: token }),
-          }
-        );
-        const validAccessToken = await response.json();
-        if (validAccessToken.message === "Valid access token") {
-          const response = await fetch(
-            "http://127.0.0.1:3000/projects/update/" + projectId,
-            {
-              method: "PATCH",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-              body: JSON.stringify(projectUpdates),
-            }
-          );
-          const updatedProject = await response.json();
-          if (updatedProject.error === "Invalid access token" && tries < 3) {
-            setTries(tries + 1);
-            setNewAccessToken({
-              counter: newAccessToken.counter + 1,
-              type: "update",
-            });
-          } else {
-            setUpdatedsuccessfully(true);
-          }
-        } else {
-          setTries(tries + 1);
-          setNewAccessToken({
-            counter: newAccessToken.counter + 1,
-            type: "update",
-          });
-        }
-      } else {
-        setTimeout(() => {
-          setTokenValidated(false);
-        }, 500);
-        const response = await fetch(
-          "http://127.0.0.1:3000/projects/update/" + projectId,
-          {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify(projectUpdates),
-          }
-        );
-        const updatedProject = await response.json();
-        if (updatedProject.error === "Invalid access token" && tries < 3) {
-          setTries(tries + 1);
-          setNewAccessToken({
-            counter: newAccessToken.counter + 1,
-            type: "update",
-          });
-        } else {
-          setUpdatedsuccessfully(true);
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
     if (projectUpdated.update) {
-      updateProjectAPI();
+      // updateProjectAPI();
+      updateProjectUtil(
+        tokenValidated,
+        user,
+        token,
+        projectId,
+        projectUpdates,
+        tries,
+        setTries,
+        newAccessToken,
+        setNewAccessToken,
+        setUpdatedsuccessfully,
+        setTokenValidated
+      );
     }
   }, [projectUpdated]);
 
   let navigate = useNavigate();
 
-  const deleteProjectAPI = async () => {
-    try {
-      if (!tokenValidated) {
-        const refreshToken = await cookieStore.get(user);
-        const response = await fetch(
-          "http://127.0.0.1:3000/tokens/access/check",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${refreshToken.value}`,
-            },
-            body: JSON.stringify({ token: token }),
-          }
-        );
-        const validAccessToken = await response.json();
-        if (validAccessToken.message === "Valid access token") {
-          const response = await fetch(
-            "http://127.0.0.1:3000/projects/delete/" + projectId,
-            {
-              method: "DELETE",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-          const deletedProject = await response.json();
-          if (deletedProject.error === "Invalid access token" && tries < 3) {
-            setTries(tries + 1);
-            setNewAccessToken({
-              counter: newAccessToken.counter + 1,
-              type: "delete",
-            });
-          } else {
-            setTimeout(() => {
-              navigate("/auth/" + user + "/projects");
-            }, 500);
-          }
-        } else {
-          setTries(tries + 1);
-          setNewAccessToken({
-            counter: newAccessToken.counter + 1,
-            type: "delete",
-          });
-        }
-      } else {
-        const response = await fetch(
-          "http://127.0.0.1:3000/projects/delete/" + projectId,
-          {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const deletedProject = await response.json();
-        if (deletedProject.error === "Invalid access token" && tries < 3) {
-          setTries(tries + 1);
-          setNewAccessToken({
-            counter: newAccessToken.counter + 1,
-            type: "delete",
-          });
-        } else {
-          setTimeout(() => {
-            navigate("/auth/" + user + "/projects");
-          }, 500);
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
     if (projectDeleted) {
-      deleteProjectAPI();
+      // deleteProjectAPI();
+      deleteProjectUtil(
+        tokenValidated,
+        user,
+        token,
+        projectId,
+        tries,
+        setTries,
+        newAccessToken,
+        setNewAccessToken,
+        setTokenValidated,
+        navigate
+      );
     }
   }, [projectDeleted]);
 
@@ -380,19 +149,11 @@ export default function Project({ user, setAuthentication }) {
   const completeProject = () => {
     setProjectUpdates({ state: 3, updated_by: user });
     setProjectUpdated({ counter: projectUpdated.counter + 1, update: true });
-    // setTimeout(() => {
-    //   setProjectUpdated(false);
-    //   setProjectUpdates({});
-    // }, 250);
   };
 
   const resetProject = () => {
     setProjectUpdates({ state: 1, updated_by: user });
     setProjectUpdated({ counter: projectUpdated.counter + 1, update: true });
-    // setTimeout(() => {
-    //   setProjectUpdated(false);
-    //   setProjectUpdates({});
-    // });
   };
 
   const deleteProject = () => {

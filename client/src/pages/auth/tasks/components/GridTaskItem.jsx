@@ -1,5 +1,4 @@
 import { IconContext } from "react-icons/lib";
-import { MdTaskAlt } from "react-icons/md";
 import { GrFormClock } from "react-icons/gr";
 import { BiReset } from "react-icons/bi";
 import { IoCheckmark, IoClose } from "react-icons/io5";
@@ -116,15 +115,6 @@ export default function GridTaskItem({
         </button>
       </div>
       <div className="task-header">
-        {/* <div className="task-icon">
-          <IconContext.Provider
-            value={{
-              style: { color: "var(--primary-color)", fontSize: "24px" },
-            }}
-          >
-            <MdTaskAlt />
-          </IconContext.Provider>
-        </div> */}
         <div className="priority task-icon">
           <IconContext.Provider
             value={{
