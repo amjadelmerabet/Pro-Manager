@@ -7,7 +7,7 @@ function tryAgain(
   updatedTaskId,
   setUpdatedTaskId,
   newAccessToken,
-  setNewAccessToken
+  setNewAccessToken,
 ) {
   setTries(tries + 1);
   setUpdatedTaskId({ ...updatedTaskId, update: false });
@@ -28,12 +28,12 @@ async function updateTaskAction(
   setNewAccessToken,
   taskUpdated,
   setTaskUpdated,
-  setTaskUpdates
+  setTaskUpdates,
 ) {
   const updatedTask = await updateTaskByIdAPI(
     updatedTaskId.taskId,
     token,
-    taskUpdates
+    taskUpdates,
   );
   if (updatedTask.error === "Invalid access token" && tries < 3) {
     tryAgain(
@@ -42,7 +42,7 @@ async function updateTaskAction(
       updatedTaskId,
       setUpdatedTaskId,
       newAccessToken,
-      setNewAccessToken
+      setNewAccessToken,
     );
   } else {
     setTimeout(() => {
@@ -67,7 +67,7 @@ export default async function updateTaskUtil(
   taskUpdated,
   setTaskUpdated,
   setTaskUpdates,
-  setTokenValidated
+  setTokenValidated,
 ) {
   try {
     if (!tokenValidated) {
@@ -86,7 +86,7 @@ export default async function updateTaskUtil(
             setNewAccessToken,
             taskUpdated,
             setTaskUpdated,
-            setTaskUpdates
+            setTaskUpdates,
           );
         } else {
           tryAgain(
@@ -95,7 +95,7 @@ export default async function updateTaskUtil(
             updatedTaskId,
             setUpdatedTaskId,
             newAccessToken,
-            setNewAccessToken
+            setNewAccessToken,
           );
         }
       } else {
@@ -116,7 +116,7 @@ export default async function updateTaskUtil(
         setNewAccessToken,
         taskUpdated,
         setTaskUpdated,
-        setTaskUpdates
+        setTaskUpdates,
       );
     }
   } catch (error) {

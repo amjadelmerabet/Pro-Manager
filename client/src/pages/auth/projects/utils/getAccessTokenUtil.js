@@ -9,7 +9,7 @@ function nextAction(
   updatedProjectId,
   setUpdatedProjectId,
   deletedProjectId,
-  setDeletedProjectId
+  setDeletedProjectId,
 ) {
   if (newAccessToken.type === "load") {
     setLoadProjects(loadProjects + 1);
@@ -34,7 +34,7 @@ export default async function getAccessTokenUtil(
   updatedProjectId,
   setUpdatedProjectId,
   deletedProjectId,
-  setDeletedProjectId
+  setDeletedProjectId,
 ) {
   try {
     const refreshToken = await cookieStore.get(user);
@@ -56,7 +56,7 @@ export default async function getAccessTokenUtil(
           updatedProjectId,
           setUpdatedProjectId,
           deletedProjectId,
-          setDeletedProjectId
+          setDeletedProjectId,
         );
       }
     } else {

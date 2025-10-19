@@ -7,7 +7,10 @@
   visibility: hidden;
   opacity: 0;
   transform: scale(0);
-  transition: visibility 250ms ease-in-out, opacity 250ms ease-in-out, transform 250ms ease-in-out;
+  transition:
+    visibility 250ms ease-in-out,
+    opacity 250ms ease-in-out,
+    transform 250ms ease-in-out;
 }
 
 .login-page.visible {
@@ -25,7 +28,7 @@
   height: 560px;
   width: 600px;
   margin-inline: auto;
-  background-color: #CAF0F8;
+  background-color: #caf0f8;
   border-radius: 20px;
   display: flex;
   flex-direction: column;

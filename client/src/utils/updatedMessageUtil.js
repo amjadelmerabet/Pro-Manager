@@ -1,4 +1,4 @@
-export default function updatedMessage(update) {
+export default function updatedMessageUtil(update) {
   let now = new Date();
   const updatedYear = update.getUTCFullYear();
   const currentYear = now.getUTCFullYear();
@@ -28,17 +28,13 @@ export default function updatedMessage(update) {
           const currentMinute = now.getUTCMinutes();
           if (updatedMinute < currentMinute) {
             let difference = currentMinute - updatedMinute;
-            return `${difference} minute${
-              difference > 1 ? "s" : ""
-            } ago`;
+            return `${difference} minute${difference > 1 ? "s" : ""} ago`;
           } else if (updatedMinute === currentMinute) {
             const updatedSecond = update.getUTCSeconds();
             const currentSecond = now.getUTCSeconds();
             if (updatedSecond < currentSecond) {
               let difference = currentSecond - updatedSecond;
-              return `${difference} second${
-                difference > 1 ? "s" : ""
-              } ago`;
+              return `${difference} second${difference > 1 ? "s" : ""} ago`;
             } else {
               return "now";
             }

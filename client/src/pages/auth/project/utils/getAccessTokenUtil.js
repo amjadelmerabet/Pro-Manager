@@ -13,7 +13,7 @@ function nextAction(
   setLoadProject,
   projectUpdated,
   setProjectUpdated,
-  setProjectDeleted
+  setProjectDeleted,
 ) {
   if (newAccessToken.type === "load") {
     setLoadProject(loadProject + 1);
@@ -39,7 +39,7 @@ export default async function getAccessTokenUtil(
   newAccessToken,
   projectUpdated,
   setProjectUpdated,
-  setProjectDeleted
+  setProjectDeleted,
 ) {
   try {
     const refreshToken = await cookieStore.get(user);
@@ -55,7 +55,7 @@ export default async function getAccessTokenUtil(
           setLoadProject,
           projectUpdated,
           setProjectUpdated,
-          setProjectDeleted
+          setProjectDeleted,
         );
       }
     } else {

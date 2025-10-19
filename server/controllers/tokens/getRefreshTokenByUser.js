@@ -5,7 +5,7 @@ export default async function getRefreshTokenByUser(username) {
     // const now = new Date();
     const result = await pool.query(
       "SELECT * FROM tokens WHERE granted_for = $1 AND type = $2",
-      [username, 2]
+      [username, 2],
     );
     var refreshTokens = result.rows;
     return refreshTokens;

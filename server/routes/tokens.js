@@ -77,20 +77,20 @@ export async function tokensRoute(req, res) {
                     process.env.JWT_SECRET,
                     {
                       expiresIn: "15m",
-                    }
+                    },
                   );
                   const accessTokens = await getAccessTokenByUser(username);
                   if (accessTokens.length !== 0) {
                     const updatedAccessToken = await updateToken(
                       accessTokens[0].token_id,
                       accessToken,
-                      username
+                      username,
                     );
                   } else {
                     const newAccessToken = await createAccessToken(
                       accessToken,
                       username,
-                      username
+                      username,
                     );
                   }
                   res.writeHead(201, { "Content-Type": "application/json" });
@@ -99,7 +99,9 @@ export async function tokensRoute(req, res) {
                   console.log(error);
                   res.writeHead(401, { "Content-Type": "application/json" });
                   res.end(
-                    JSON.stringify({ message: "Invalid refresh account token" })
+                    JSON.stringify({
+                      message: "Invalid refresh account token",
+                    }),
                   );
                 }
               } else {
@@ -108,7 +110,7 @@ export async function tokensRoute(req, res) {
                   JSON.stringify({
                     message:
                       "The user doesn't have permission to get an access token",
-                  })
+                  }),
                 );
               }
             } else {

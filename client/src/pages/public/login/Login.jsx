@@ -1,8 +1,19 @@
+// Hooks
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
+
+// Icons
 import { IoArrowBack } from "react-icons/io5";
 
+// Components
+import { Link } from "react-router";
+
+// Utils
+import authUserUtil from "./utils/authUserUtil";
+
+// Styles
 import "./Login.css";
+import loginRedirectUtil from "./utils/loginRedirectUtil";
 
 export default function LoginPage({ isAuthenticated, setAuthentication }) {
   const [username, setUsername] = useState("");
@@ -22,87 +33,25 @@ export default function LoginPage({ isAuthenticated, setAuthentication }) {
 
   useEffect(() => {
     if (isAuthenticated || userAuthenticated) {
-      if (redirectURL) {
-        if (userAuthenticated) {
-          const authUser = JSON.parse(userAuthenticated).user;
-          const userRedirectURL = redirectURL.replace("user", authUser);
-          navigate(userRedirectURL);
-        } else {
-          navigate("/signin");
-        }
-      } else {
-        if (userAuthenticated && !logout) {
-          const authUser = JSON.parse(userAuthenticated).user;
-          navigate("/auth/" + authUser + "/dashboard");
-        } else if (username) {
-          navigate("/auth/" + username + "/dashboard");
-        } else {
-          navigate("/auth/user/dashboard");
-        }
-      }
+      loginRedirectUtil(
+        redirectURL,
+        userAuthenticated,
+        navigate,
+        logout,
+        username,
+      );
     }
   }, [isAuthenticated]);
 
   useEffect(() => {
     if (login === "login") {
-      // console.log("User trying to login");
-      const authUser = async () => {
-        const refreshToken = await cookieStore.get(username);
-        const response = await fetch("http://127.0.0.1:3000/users/auth", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, password }),
-        });
-        const auth = await response.json();
-        setLogin("LoginEnded");
-        if (auth.authenticated && auth.token) {
-          sessionStorage.clear();
-          sessionStorage.setItem(
-            "authUser",
-            JSON.stringify({
-              user: username,
-              authenticated: true,
-              token: auth.token,
-              name: auth.name
-            })
-          );
-          if (!refreshToken) {
-            let refreshTokenExpiresIn = new Date();
-            refreshTokenExpiresIn.setHours(
-              refreshTokenExpiresIn.getHours() + 24 * 7
-            );
-            await cookieStore.set({
-              name: username,
-              value: auth.refresh,
-              expires: refreshTokenExpiresIn,
-              path: "/",
-              secure: true,
-              sameSite: "strict",
-            });
-          } else {
-            if (refreshToken.value !== auth.refresh) {
-              await cookieStore.delete(username);
-              let refreshTokenExpiresIn = new Date();
-              refreshTokenExpiresIn.setHours(
-                refreshTokenExpiresIn.getHours() + 24 * 7
-              );
-              await cookieStore.set({
-                name: username,
-                value: auth.refresh,
-                expires: refreshTokenExpiresIn,
-                path: "/",
-                secure: true,
-                sameSite: "strict",
-              });
-            }
-          }
-          setAuthentication(auth.authenticated);
-          setIncorrectCredentials(false);
-        } else {
-          setIncorrectCredentials(true);
-        }
-      };
-      authUser();
+      authUserUtil(
+        username,
+        password,
+        setLogin,
+        setAuthentication,
+        setIncorrectCredentials,
+      );
     }
   }, [login]);
 
@@ -121,7 +70,7 @@ export default function LoginPage({ isAuthenticated, setAuthentication }) {
     setTimeout(() => {
       setGoBackLink(false);
     }, 250);
-  }
+  };
 
   return (
     <div className={"login-page" + (loginStart ? " visible " : "")}>

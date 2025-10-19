@@ -1,8 +1,12 @@
+// Icons
 import { BiReset } from "react-icons/bi";
 import { FaRegFolder } from "react-icons/fa";
 import { GrFormClock } from "react-icons/gr";
 import { IoCheckmark, IoClose } from "react-icons/io5";
 import { IconContext } from "react-icons/lib";
+
+// Styles
+import "./GridProjectItem.css";
 
 export default function GridProjectItem({
   project,
@@ -132,8 +136,8 @@ export default function GridProjectItem({
               {project.state === 1
                 ? "Not started"
                 : project.state === 2
-                ? "In progress"
-                : "Completed"}
+                  ? "In progress"
+                  : "Completed"}
             </td>
           </tr>
           <tr>

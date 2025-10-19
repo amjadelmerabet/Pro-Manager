@@ -1,7 +1,11 @@
-import { IoClose } from "react-icons/io5";
-import { IconContext } from "react-icons/lib";
+// Hooks
 import { useEffect, useState } from "react";
 
+// Icons
+import { IoClose } from "react-icons/io5";
+import { IconContext } from "react-icons/lib";
+
+// Styles
 import "./NewTaskPopup.css";
 
 export default function NewTaskPopup({
@@ -10,7 +14,7 @@ export default function NewTaskPopup({
   createNewTask,
   popupDisplay,
   setPopupDisplay,
-  parent
+  parent,
 }) {
   const [newTaskClass, setNewTaskClass] = useState("");
 

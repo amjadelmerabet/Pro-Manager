@@ -7,7 +7,7 @@ export default async function getTasksByAssignedToAPI(assignedTo, token) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
   const tasks = await response.json();
   return tasks;

@@ -1,23 +1,29 @@
+// Hooks
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router";
-import { Link } from "react-router";
+
+// Icons
 import { IconContext } from "react-icons/lib";
 import { GrFormClock } from "react-icons/gr";
 import { BiReset } from "react-icons/bi";
 import { IoCheckmark, IoClose } from "react-icons/io5";
 import { FaArrowLeft, FaFire, FaRegSnowflake } from "react-icons/fa";
 import { RiAlarmWarningFill } from "react-icons/ri";
-
-import AuthHeader from "../components/AuthHeader";
-
-import updatedMessage from "../../../utils/updatedMessage";
-
-import "./Task.css";
 import { MdOutlineModeEdit } from "react-icons/md";
+
+// Components
+import AuthHeader from "../components/AuthHeader";
+import { Link } from "react-router";
+
+// Utils
+import updatedMessageUtil from "../../../utils/updatedMessageUtil";
 import fetchUserTaskUtil from "./utils/fetchUserTaskUtil";
 import updateTaskUtil from "./utils/updateTaskUtil";
 import deleteTaskUtil from "./utils/deleteTaskUtil";
 import getAccessTokenUtil from "./utils/getAccessTokenUtil";
+
+// Styles
+import "./Task.css";
 
 export default function Task({ user, setAuthentication }) {
   const [taskObject, setTaskObject] = useState({});
@@ -61,7 +67,7 @@ export default function Task({ user, setAuthentication }) {
         newAccessToken,
         setNewAccessToken,
         setTaskObject,
-        setTokenValidated
+        setTokenValidated,
       );
     }
   }, [taskUpdated, loadTask]);
@@ -80,7 +86,7 @@ export default function Task({ user, setAuthentication }) {
         newAccessToken,
         setNewAccessToken,
         setUpdatedSuccessfully,
-        setTokenValidated
+        setTokenValidated,
       );
     }
   }, [taskUpdated]);
@@ -112,7 +118,7 @@ export default function Task({ user, setAuthentication }) {
         setNewAccessToken,
         setTaskDeleted,
         setTokenValidated,
-        navigate
+        navigate,
       );
     }
   }, [taskDeleted]);
@@ -129,7 +135,7 @@ export default function Task({ user, setAuthentication }) {
         setLoadTask,
         taskUpdated,
         setTaskUpdated,
-        setTaskDeleted
+        setTaskDeleted,
       );
     }
   }, [newAccessToken]);
@@ -182,7 +188,7 @@ export default function Task({ user, setAuthentication }) {
   };
 
   let updated = new Date(taskObject.updated_on);
-  let updatedStatus = updatedMessage(updated);
+  let updatedStatus = updatedMessageUtil(updated);
 
   return (
     <div className="task-page">
@@ -206,8 +212,8 @@ export default function Task({ user, setAuthentication }) {
                           taskObject.priority === 1
                             ? "rgb(245, 0, 45)"
                             : taskObject.priority === 2
-                            ? "rgb(245, 120, 0)"
-                            : "rgb(0, 120, 245)",
+                              ? "rgb(245, 120, 0)"
+                              : "rgb(0, 120, 245)",
                         fontSize: "24px",
                       },
                     }}
@@ -228,15 +234,15 @@ export default function Task({ user, setAuthentication }) {
                     (taskObject.state === 1
                       ? " to-do"
                       : taskObject.state === 2
-                      ? " doing"
-                      : " done")
+                        ? " doing"
+                        : " done")
                   }
                 >
                   {taskObject.state === 1
                     ? "To do"
                     : taskObject.state === 2
-                    ? "Doing"
-                    : "Done"}
+                      ? "Doing"
+                      : "Done"}
                 </h5>
               </div>
               <div className="right">
@@ -328,8 +334,8 @@ export default function Task({ user, setAuthentication }) {
                     {taskObject.priority === 1
                       ? " High"
                       : taskObject.priority === 2
-                      ? " Medium"
-                      : " Low"}
+                        ? " Medium"
+                        : " Low"}
                   </div>
                 </div>
                 <div className="right">

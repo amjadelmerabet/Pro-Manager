@@ -19,13 +19,13 @@
   padding: 10px 15px;
   margin-inline: 10px;
   border-radius: 4px;
-  border: 1px solid #0077B6;
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, .2);
+  border: 1px solid #0077b6;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .newsletter-section form > button {
   margin-inline: 10px;
-  background-color: #0077B6;
+  background-color: #0077b6;
   color: white;
   border: none;
   border-radius: 4px;

@@ -1,21 +1,25 @@
+// Hooks
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 
+// Components
 import AuthHeader from "../components/AuthHeader";
 import SectionHeader from "../components/SectionHeader";
 import NewProjectPopup from "./components/NewProjectPopup";
 import GridProjectItem from "./components/GridProjectItem";
-
-import updatedMessage from "../../../utils/updatedMessage";
-
-import "./Projects.css";
 import ListProjectItem from "./components/ListProjectItem";
+
+// Utils
+import updatedMessageUtil from "../../../utils/updatedMessageUtil";
 import fetchUserProjectsUtil from "./utils/fetchUserProjectsUtil";
 import getAccessTokenUtil from "./utils/getAccessTokenUtil";
 import createProjectUtil from "./utils/createProjectUtil";
 import updateProjectUtil from "./utils/updateProjectUtil";
 import deleteProjectUtil from "./utils/deleteProjectUtil";
 import updateProjectsList from "./utils/updateProjectsList";
+
+// Styles
+import "./Projects.css";
 
 export default function ProjectsPage({ user, setAuthentication }) {
   const [projects, setProjects] = useState([]);
@@ -80,7 +84,7 @@ export default function ProjectsPage({ user, setAuthentication }) {
       newAccessToken,
       setNewAccessToken,
       setProjects,
-      setTokenValidated
+      setTokenValidated,
     );
   }, [
     newProjectCreated,
@@ -104,7 +108,7 @@ export default function ProjectsPage({ user, setAuthentication }) {
         updatedProjectId,
         setUpdatedProjectId,
         deletedProjectId,
-        setDeletedProjectId
+        setDeletedProjectId,
       );
     }
   }, [newAccessToken]);
@@ -131,7 +135,7 @@ export default function ProjectsPage({ user, setAuthentication }) {
         setLoadingNewProject,
         newProjectPopupDisplay,
         setNewProjectPopupDisplay,
-        setTokenValidated
+        setTokenValidated,
       );
     }
   }, [createProject]);
@@ -168,7 +172,7 @@ export default function ProjectsPage({ user, setAuthentication }) {
         projectUpdated,
         setProjectUpdated,
         setProjectUpdates,
-        setTokenValidated
+        setTokenValidated,
       );
     }
   }, [updatedProjectId]);
@@ -202,7 +206,7 @@ export default function ProjectsPage({ user, setAuthentication }) {
         setNewAccessToken,
         projectDeleted,
         setProjectDeleted,
-        setTokenValidated
+        setTokenValidated,
       );
     }
   }, [deletedProjectId]);
@@ -258,7 +262,7 @@ export default function ProjectsPage({ user, setAuthentication }) {
                 if (project.owner === user) {
                   myProjects++;
                   const updated = new Date(project.updated_on);
-                  let updatedStatus = updatedMessage(updated);
+                  let updatedStatus = updatedMessageUtil(updated);
                   if (deletedProjectId.projectId !== project.project_id) {
                     if (selectedView === "grid") {
                       return (
@@ -308,7 +312,7 @@ export default function ProjectsPage({ user, setAuthentication }) {
                 if (project.owner === user) {
                   myProjects++;
                   const updated = new Date(project.updated_on);
-                  let updatedStatus = updatedMessage(updated);
+                  let updatedStatus = updatedMessageUtil(updated);
                   if (deletedProjectId.projectId !== project.project_id) {
                     if (selectedView === "grid") {
                       return (

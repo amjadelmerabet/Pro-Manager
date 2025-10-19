@@ -16,7 +16,7 @@ function nextAction(
   updatedTaskId,
   setUpdatedTaskId,
   deletedTaskId,
-  setDeletedTaskId
+  setDeletedTaskId,
 ) {
   if (newAccessToken.type === "load") {
     setLoadTasks(loadTasks + 1);
@@ -41,7 +41,7 @@ export default async function getAccessTokenUtil(
   updatedTaskId,
   setUpdatedTaskId,
   deletedTaskId,
-  setDeletedTaskId
+  setDeletedTaskId,
 ) {
   try {
     const refreshToken = await cookieStore.get(user);
@@ -60,7 +60,7 @@ export default async function getAccessTokenUtil(
           updatedTaskId,
           setUpdatedTaskId,
           deletedTaskId,
-          setDeletedTaskId
+          setDeletedTaskId,
         );
       }
     } else {

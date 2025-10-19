@@ -37,8 +37,8 @@ export default async function createAccessToken(token, granted_by, granted_to) {
         granted_by,
         now,
         granted_by,
-        expiresIn
-      ]
+        expiresIn,
+      ],
     );
     return accessToken;
   } catch (error) {

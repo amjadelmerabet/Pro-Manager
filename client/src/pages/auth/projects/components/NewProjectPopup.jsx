@@ -1,7 +1,11 @@
-import { IoClose } from "react-icons/io5";
-import { IconContext } from "react-icons/lib";
+// Hooks
 import { useEffect, useState } from "react";
 
+// Icons
+import { IoClose } from "react-icons/io5";
+import { IconContext } from "react-icons/lib";
+
+// Styles
 import "./NewProjectPopup.css";
 
 export default function NewProjectPopup({
@@ -10,7 +14,7 @@ export default function NewProjectPopup({
   popupDisplay,
   setPopupDisplay,
   createNewProject,
-  parent
+  parent,
 }) {
   const [newProjectClass, setNewProjectClass] = useState("");
 

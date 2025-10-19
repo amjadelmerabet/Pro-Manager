@@ -6,7 +6,7 @@ function tryAgain(
   setTries,
   setCreateProject,
   newAccessToken,
-  setNewAccessToken
+  setNewAccessToken,
 ) {
   setTries(tries + 1);
   setCreateProject(0);
@@ -29,7 +29,7 @@ async function createProjectAction(
   setNewProject,
   setLoadingNewProject,
   newProjectPopupDisplay,
-  setNewProjectPopupDisplay
+  setNewProjectPopupDisplay,
 ) {
   const createdProject = await createProjectAPI(newProject, token);
   if (createdProject.error === "Invalid access token") {
@@ -38,7 +38,7 @@ async function createProjectAction(
       setTries,
       setCreateProject,
       newAccessToken,
-      setNewAccessToken
+      setNewAccessToken,
     );
   } else {
     setTimeout(() => {
@@ -70,7 +70,7 @@ export default async function createProjectUtil(
   setLoadingNewProject,
   newProjectPopupDisplay,
   setNewProjectPopupDisplay,
-  setTokenValidated
+  setTokenValidated,
 ) {
   try {
     if (!tokenValidated) {
@@ -91,7 +91,7 @@ export default async function createProjectUtil(
             setNewProject,
             setLoadingNewProject,
             newProjectPopupDisplay,
-            setNewProjectPopupDisplay
+            setNewProjectPopupDisplay,
           );
         } else {
           tryAgain(
@@ -99,7 +99,7 @@ export default async function createProjectUtil(
             setTries,
             setCreateProject,
             newAccessToken,
-            setNewAccessToken
+            setNewAccessToken,
           );
         }
       } else {
@@ -122,7 +122,7 @@ export default async function createProjectUtil(
         setNewProject,
         setLoadingNewProject,
         newProjectPopupDisplay,
-        setNewProjectPopupDisplay
+        setNewProjectPopupDisplay,
       );
     }
   } catch (error) {

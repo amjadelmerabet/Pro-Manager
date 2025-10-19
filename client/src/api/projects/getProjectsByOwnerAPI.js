@@ -7,7 +7,7 @@ export default async function getProjectsByOwnerAPI(owner, token) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
   const projects = await response.json();
   return projects;

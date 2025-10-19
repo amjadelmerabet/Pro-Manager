@@ -7,7 +7,7 @@ function tryAgain(
   updatedProjectId,
   setUpdatedProjectId,
   newAccessToken,
-  setNewAccessToken
+  setNewAccessToken,
 ) {
   setTries(tries + 1);
   setUpdatedProjectId({ ...updatedProjectId, update: false });
@@ -28,12 +28,12 @@ async function updateProjectAction(
   setNewAccessToken,
   projectUpdated,
   setProjectUpdated,
-  setProjectUpdates
+  setProjectUpdates,
 ) {
   const updatedProject = await updateProjectByIdAPI(
     updatedProjectId.projectId,
     token,
-    projectUpdates
+    projectUpdates,
   );
   if (updatedProject.error === "Invalid access token" && tries < 3) {
     tryAgain(
@@ -42,7 +42,7 @@ async function updateProjectAction(
       updatedProjectId,
       setUpdatedProjectId,
       newAccessToken,
-      setNewAccessToken
+      setNewAccessToken,
     );
   } else {
     setTimeout(() => {
@@ -67,7 +67,7 @@ export default async function updateProjectUtil(
   projectUpdated,
   setProjectUpdated,
   setProjectUpdates,
-  setTokenValidated
+  setTokenValidated,
 ) {
   try {
     if (!tokenValidated) {
@@ -86,7 +86,7 @@ export default async function updateProjectUtil(
             setNewAccessToken,
             projectUpdated,
             setProjectUpdated,
-            setProjectUpdates
+            setProjectUpdates,
           );
         } else {
           tryAgain(
@@ -95,7 +95,7 @@ export default async function updateProjectUtil(
             updatedProjectId,
             setUpdatedProjectId,
             newAccessToken,
-            setNewAccessToken
+            setNewAccessToken,
           );
         }
       } else {
@@ -116,7 +116,7 @@ export default async function updateProjectUtil(
         setNewAccessToken,
         projectUpdated,
         setProjectUpdated,
-        setProjectUpdates
+        setProjectUpdates,
       );
     }
   } catch (error) {

@@ -16,11 +16,16 @@ const server = createServer(async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Methods",
-    "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+    "GET, POST, PUT, PATCH, DELETE, OPTIONS",
   );
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   const authHeader = req.headers["authorization"];
-  if (!authHeader && url !== "/users/auth" && method !== "OPTIONS" && url !== "/users/new") {
+  if (
+    !authHeader &&
+    url !== "/users/auth" &&
+    method !== "OPTIONS" &&
+    url !== "/users/new"
+  ) {
     res.writeHead(401, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ message: "User not authorized" }));
   } else {
@@ -59,7 +64,7 @@ const server = createServer(async (req, res) => {
       res.end(
         JSON.stringify({
           message: "The endpoint that you are trying to reach doesn't exist",
-        })
+        }),
       );
     }
   }

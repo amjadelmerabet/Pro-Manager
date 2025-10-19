@@ -17,7 +17,7 @@ async function updateTaskAction(
   setTries,
   newAccessToken,
   setNewAccessToken,
-  setUpdatedSuccessfully
+  setUpdatedSuccessfully,
 ) {
   const updatedTask = await updateTaskByIdAPI(taskId, token, taskUpdates);
   if (updatedTask.error === "Invalid access token" && tries < 3) {
@@ -38,7 +38,7 @@ export default async function updateTaskUtil(
   newAccessToken,
   setNewAccessToken,
   setUpdatedSuccessfully,
-  setTokenValidated
+  setTokenValidated,
 ) {
   try {
     if (!tokenValidated) {
@@ -54,7 +54,7 @@ export default async function updateTaskUtil(
             setTries,
             newAccessToken,
             setNewAccessToken,
-            setUpdatedSuccessfully
+            setUpdatedSuccessfully,
           );
         } else {
           tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
@@ -74,7 +74,7 @@ export default async function updateTaskUtil(
         setTries,
         newAccessToken,
         setNewAccessToken,
-        setUpdatedSuccessfully
+        setUpdatedSuccessfully,
       );
     }
   } catch (error) {

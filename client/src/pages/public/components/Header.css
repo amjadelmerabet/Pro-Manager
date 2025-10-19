@@ -26,7 +26,6 @@ ul.menu li a {
 .auth-section {
   display: flex;
   justify-content: center;
-
 }
 
 .auth-section a {
@@ -49,7 +48,7 @@ ul.menu li a {
 }
 
 .auth-section .signin-button {
-  color: #0077B6;
+  color: #0077b6;
 }
 
 .auth-section .signup-button {

@@ -6,7 +6,7 @@
 }
 
 .features-section .section-title {
-  color: #0077B6;
+  color: #0077b6;
   margin-block: 5px;
 }
 
@@ -16,7 +16,7 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 48px;
   padding: 48px;
-  background-color: #90E0EF;
+  background-color: #90e0ef;
   border-radius: 10px;
 }
 
@@ -24,13 +24,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #CAF0F8;
+  background-color: #caf0f8;
   padding: 20px;
   border-radius: 8px;
 }
 
 .feature .feature-title {
-  color: #0077B6;
+  color: #0077b6;
 }
 
 .feature .feature-details {

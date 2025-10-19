@@ -1,4 +1,10 @@
+// Hooks
+import { useState } from "react";
+
+// Components
 import { Route, Routes } from "react-router";
+
+// Routes
 import {
   AboutRoute,
   BlogRoute,
@@ -17,8 +23,8 @@ import {
   WrongRoute,
 } from "./routes";
 
+// Styles
 import "./App.css";
-import { useState } from "react";
 
 function App() {
   const [userAuthenticated, setUserAuthenticated] = useState(false);

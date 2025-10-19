@@ -10,7 +10,10 @@ export default function DeepDiveSection() {
     <div className="deep-dive-section">
       <h2 className="section-title poppins-semibold">Dive Deeper</h2>
       <div className="deep-dive-features">
-        <div className="deep-dive-feature poppins-regular" data-feature-index="1">
+        <div
+          className="deep-dive-feature poppins-regular"
+          data-feature-index="1"
+        >
           <div>
             <div className="attachment">
               <IconContext.Provider
@@ -51,7 +54,10 @@ export default function DeepDiveSection() {
             </div>
           </div>
         </div>
-        <div className="deep-dive-feature poppins-regular" data-feature-index="2">
+        <div
+          className="deep-dive-feature poppins-regular"
+          data-feature-index="2"
+        >
           <div>
             <div className="attachment">
               <IconContext.Provider
@@ -92,7 +98,10 @@ export default function DeepDiveSection() {
             </div>
           </div>
         </div>
-        <div className="deep-dive-feature poppins-regular" data-feature-index="3">
+        <div
+          className="deep-dive-feature poppins-regular"
+          data-feature-index="3"
+        >
           <div>
             <div className="attachment">
               <IconContext.Provider
@@ -134,7 +143,10 @@ export default function DeepDiveSection() {
             </div>
           </div>
         </div>
-        <div className="deep-dive-feature poppins-regular" data-feature-index="4">
+        <div
+          className="deep-dive-feature poppins-regular"
+          data-feature-index="4"
+        >
           <div>
             <div className="attachment">
               <IconContext.Provider

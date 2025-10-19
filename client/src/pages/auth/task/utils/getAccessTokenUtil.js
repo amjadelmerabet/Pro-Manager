@@ -13,7 +13,7 @@ function nextAction(
   setLoadTask,
   taskUpdated,
   setTaskUpdated,
-  setTaskDeleted
+  setTaskDeleted,
 ) {
   if (newAccessToken.type === "load") {
     setLoadTask(loadTask + 1);
@@ -34,7 +34,7 @@ export default async function getAccessTokenUtil(
   setLoadTask,
   taskUpdated,
   setTaskUpdated,
-  setTaskDeleted
+  setTaskDeleted,
 ) {
   try {
     const refreshToken = await cookieStore.get(user);
@@ -50,7 +50,7 @@ export default async function getAccessTokenUtil(
           setLoadTask,
           taskUpdated,
           setTaskUpdated,
-          setTaskDeleted
+          setTaskDeleted,
         );
       }
     } else {

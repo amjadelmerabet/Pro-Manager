@@ -21,7 +21,9 @@
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
   height: 180px;
   position: relative;
-  transition: transform 250ms ease-in-out, box-shadow 250ms ease-in-out;
+  transition:
+    transform 250ms ease-in-out,
+    box-shadow 250ms ease-in-out;
 }
 
 .projects-page .projects.list > .project {
@@ -33,7 +35,9 @@
   align-items: center;
   position: relative;
   box-shadow: rgba(0, 0, 0, 0.25);
-  transition: transform 250ms ease-in-out, box-shadow 250ms ease-in-out;
+  transition:
+    transform 250ms ease-in-out,
+    box-shadow 250ms ease-in-out;
   margin-block: 8px;
 }
 
@@ -56,7 +60,7 @@
 
 .projects-page .projects.list > .project:hover {
   transform: scale(1.025);
-  box-shadow: 4px 4px 8px rgba(0, 0, 0, .25);
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.25);
 }
 
 .projects-page .projects.grid > .deleting-project {
@@ -79,7 +83,7 @@
   border-radius: 8px;
   border: 2px solid var(--primary-color);
   transform: scale(1.025);
-  box-shadow: rgba(0, 0, 0, .25);
+  box-shadow: rgba(0, 0, 0, 0.25);
   height: 60px;
 }
 
@@ -133,8 +137,11 @@
   visibility: hidden;
   opacity: 0;
   transform: scale(0);
-  transition: opacity 250ms ease-in-out, visibility 250ms ease-in-out,
-    transform 250ms ease-in-out, background 250ms ease-in-out;
+  transition:
+    opacity 250ms ease-in-out,
+    visibility 250ms ease-in-out,
+    transform 250ms ease-in-out,
+    background 250ms ease-in-out;
   cursor: pointer;
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
 }
@@ -200,8 +207,11 @@
   background-color: var(--primary-color);
   color: white;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
-  transition: opacity 250ms ease-in-out, visibility 250ms ease-in-out,
-    transform 250ms ease-in-out, background 250ms ease-in-out;
+  transition:
+    opacity 250ms ease-in-out,
+    visibility 250ms ease-in-out,
+    transform 250ms ease-in-out,
+    background 250ms ease-in-out;
   cursor: pointer;
 }
 

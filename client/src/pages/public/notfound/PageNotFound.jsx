@@ -1,8 +1,14 @@
+// Hooks
+import { useState } from "react";
+
+// Components
 import { Link } from "react-router";
 
-import "./PageNotFound.css";
+// Icons
 import { IoArrowBack } from "react-icons/io5";
-import { useState } from "react";
+
+// Styles
+import "./PageNotFound.css";
 
 export default function PageNotFound() {
   const [goBackLink, setGoBackLink] = useState(false);

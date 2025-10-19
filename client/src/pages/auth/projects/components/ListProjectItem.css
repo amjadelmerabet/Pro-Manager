@@ -10,5 +10,5 @@
 .projects-page .projects.list .project .project-properties {
   display: grid;
   grid-template-columns: 150px 180px 180px;
-  gap: 8px; 
+  gap: 8px;
 }

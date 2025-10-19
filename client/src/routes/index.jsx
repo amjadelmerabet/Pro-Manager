@@ -32,5 +32,5 @@ export {
   SignUpRoute,
   SingleProjectRoute,
   SingleTaskRoute,
-  WrongRoute
+  WrongRoute,
 };

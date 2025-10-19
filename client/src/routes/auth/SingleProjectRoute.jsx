@@ -22,7 +22,7 @@ export default function SingleProjectRoute({
   useEffect(() => {
     if (!isAuthenticated && !userAuthenticated) {
       if (userLoggedOut) {
-        navigate("/signin")
+        navigate("/signin");
       } else {
         navigate("/signin?redirect=/auth/user/projects");
       }

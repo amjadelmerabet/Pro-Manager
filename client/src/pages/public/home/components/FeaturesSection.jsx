@@ -18,7 +18,9 @@ export default function FeaturesSection() {
         <div className="feature">
           <div className="feature-details">
             <div className="feature-icon">
-              <IconContext.Provider value={{ style: { color: "#0077B6", fontSize: "40px" }}}>
+              <IconContext.Provider
+                value={{ style: { color: "#0077B6", fontSize: "40px" } }}
+              >
                 <LuUserRoundCheck />
               </IconContext.Provider>
             </div>
@@ -35,7 +37,9 @@ export default function FeaturesSection() {
         <div className="feature">
           <div className="feature-details">
             <div className="feature-icon">
-              <IconContext.Provider value={{ style: { color: "#0077B6", fontSize: "40px" }}}>
+              <IconContext.Provider
+                value={{ style: { color: "#0077B6", fontSize: "40px" } }}
+              >
                 <WiTime8 />
               </IconContext.Provider>
             </div>
@@ -52,7 +56,9 @@ export default function FeaturesSection() {
         <div className="feature">
           <div className="feature-details">
             <div className="feature-icon">
-              <IconContext.Provider value={{ style: { color: "#0077B6", fontSize: "40px" }}}>
+              <IconContext.Provider
+                value={{ style: { color: "#0077B6", fontSize: "40px" } }}
+              >
                 <LuFilter />
               </IconContext.Provider>
             </div>
@@ -67,7 +73,9 @@ export default function FeaturesSection() {
         <div className="feature">
           <div className="feature-details">
             <div className="feature-icon">
-              <IconContext.Provider value={{ style: { color: "#0077B6", fontSize: "40px" }}}>
+              <IconContext.Provider
+                value={{ style: { color: "#0077B6", fontSize: "40px" } }}
+              >
                 <LuChartPie />
               </IconContext.Provider>
             </div>
@@ -82,7 +90,9 @@ export default function FeaturesSection() {
         <div className="feature">
           <div className="feature-details">
             <div className="feature-icon">
-              <IconContext.Provider value={{ style: { color: "#0077B6", fontSize: "40px" }}}>
+              <IconContext.Provider
+                value={{ style: { color: "#0077B6", fontSize: "40px" } }}
+              >
                 <GrGroup />
               </IconContext.Provider>
             </div>
@@ -99,7 +109,9 @@ export default function FeaturesSection() {
         <div className="feature">
           <div className="feature-details">
             <div className="feature-icon">
-              <IconContext.Provider value={{ style: { color: "#0077B6", fontSize: "40px" } }}>
+              <IconContext.Provider
+                value={{ style: { color: "#0077B6", fontSize: "40px" } }}
+              >
                 <LuTextSearch />
               </IconContext.Provider>
             </div>

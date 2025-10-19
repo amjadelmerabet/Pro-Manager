@@ -9,13 +9,13 @@ export default async function updateUser(username, updates) {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(plainPassword, saltRounds);
     return hashedPassword;
-  }
+  };
   try {
     if (user) {
       let userHashedPassword = "";
       if (updates) {
         if (Object.keys(updates).length === 0) {
-          return { status: "fail", message: "No updates" }
+          return { status: "fail", message: "No updates" };
         } else {
           if (updates.password) {
             userHashedPassword = await hashPassword(updates.password);
@@ -24,7 +24,7 @@ export default async function updateUser(username, updates) {
           let count = 1;
           let now = new Date();
           let propertiesToUpdate = [now];
-          Object.entries(updates).forEach(entry => {
+          Object.entries(updates).forEach((entry) => {
             if (entry[0] === "password") {
               propertiesToUpdate.push(userHashedPassword);
             } else {
@@ -53,7 +53,7 @@ export default async function updateUser(username, updates) {
           return { status: "success" };
         }
       } else {
-        return { status: "fail", message: "No updates" }
+        return { status: "fail", message: "No updates" };
       }
     } else {
       return { status: "fail", message: "404 User not found" };

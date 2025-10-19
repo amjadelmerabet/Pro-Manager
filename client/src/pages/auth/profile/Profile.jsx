@@ -1,10 +1,16 @@
+// Components
 import AuthHeader from "../components/AuthHeader";
 import ProfileMenu from "../components/ProfileMenu";
-import { FaPencilAlt } from "react-icons/fa";
+import ProfileActions from "../components/ProfileActions";
+
+// Assets
 import NetherlandsFlag from "../../../assets/netherlands-flag.webp";
 
+// Icons
+import { FaPencilAlt } from "react-icons/fa";
+
+// Styles
 import "./Profile.css";
-import ProfileActions from "../components/ProfileActions";
 
 export default function ProfilePage({ user, setAuthentication }) {
   return (

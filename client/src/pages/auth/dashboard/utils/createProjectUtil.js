@@ -17,7 +17,7 @@ async function updateProjectAction(
   setTries,
   newAccessToken,
   setNewAccessToken,
-  setProjectCreatedSuccessfully
+  setProjectCreatedSuccessfully,
 ) {
   const newProjectObject = await createProjectAPI(newProject, token);
   if (newProjectObject.error === "Invalid access token" && tries < 3) {
@@ -37,7 +37,7 @@ export default async function createProjectUtil(
   newAccessToken,
   setNewAccessToken,
   setProjectCreatedSuccessfully,
-  setTokenValidated
+  setTokenValidated,
 ) {
   try {
     if (!tokenValidated) {
@@ -52,7 +52,7 @@ export default async function createProjectUtil(
             setTries,
             newAccessToken,
             setNewAccessToken,
-            setProjectCreatedSuccessfully
+            setProjectCreatedSuccessfully,
           );
         } else {
           tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
@@ -70,7 +70,7 @@ export default async function createProjectUtil(
         tries,
         newAccessToken,
         setNewAccessToken,
-        setProjectCreatedSuccessfully
+        setProjectCreatedSuccessfully,
       );
     }
   } catch (error) {

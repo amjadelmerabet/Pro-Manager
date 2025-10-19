@@ -1,19 +1,24 @@
+// Hooks
 import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router";
 
+// Components
 import AuthHeader from "../components/AuthHeader";
 import SectionHeader from "../components/SectionHeader";
 import NewTaskPopup from "./components/NewTaskPopup";
-
-import "./Tasks.css";
-import updatedMessage from "../../../utils/updatedMessage";
-import { useNavigate, useSearchParams } from "react-router";
 import ListTaskItem from "./components/ListTaskItem";
 import GridTaskItem from "./components/GridTaskItem";
+
+// Utils
+import updatedMessageUtil from "../../../utils/updatedMessageUtil";
 import fetchUserTasksUtil from "./utils/fetchUserTasksUtil";
 import getAccessTokenUtil from "./utils/getAccessTokenUtil";
 import createTaskUtil from "./utils/createTaskUtil";
 import deleteTaskUtil from "./utils/deleteTaskUtil";
 import updateTaskUtil from "./utils/updateTaskUtil";
+
+// Styles
+import "./Tasks.css";
 
 export default function TasksPage({ user, setAuthentication }) {
   const [tasks, setTasks] = useState([]);
@@ -81,7 +86,7 @@ export default function TasksPage({ user, setAuthentication }) {
       newAccessToken,
       setNewAccessToken,
       setTasks,
-      setTokenValidated
+      setTokenValidated,
     );
   }, [newTaskCreated, taskDeleted, taskUpdated, filterCleared, loadTasks]);
 
@@ -100,7 +105,7 @@ export default function TasksPage({ user, setAuthentication }) {
         updatedTaskId,
         setUpdatedTaskId,
         deletedTaskId,
-        setDeletedTaskId
+        setDeletedTaskId,
       );
     }
   }, [newAccessToken]);
@@ -155,7 +160,7 @@ export default function TasksPage({ user, setAuthentication }) {
         setLoadingNewTask,
         newTaskPopupDisplay,
         setNewTaskPopupDisplay,
-        setTokenValidated
+        setTokenValidated,
       );
     }
   }, [create]);
@@ -192,7 +197,7 @@ export default function TasksPage({ user, setAuthentication }) {
         setNewAccessToken,
         taskDeleted,
         setTaskDeleted,
-        setTokenValidated
+        setTokenValidated,
       );
     }
   }, [deletedTaskId]);
@@ -218,7 +223,7 @@ export default function TasksPage({ user, setAuthentication }) {
         taskUpdated,
         setTaskUpdated,
         setTaskUpdates,
-        setTokenValidated
+        setTokenValidated,
       );
     }
   }, [updatedTaskId]);
@@ -284,7 +289,7 @@ export default function TasksPage({ user, setAuthentication }) {
             ? tasks.map((task) => {
                 if (task.assigned_to === user) {
                   let updated = new Date(task.updated_on);
-                  const updatedStatus = updatedMessage(updated);
+                  const updatedStatus = updatedMessageUtil(updated);
                   myTasks++;
                   if (selectedView === "list") {
                     return (
@@ -312,6 +317,7 @@ export default function TasksPage({ user, setAuthentication }) {
                         openTask={openTask}
                         hoverOverTask={hoverOverTask}
                         hoverOverTaskEnd={hoverOverTaskEnd}
+                        updatedStatus={updatedStatus}
                         startTask={startTask}
                         completeTask={completeTask}
                         resetTask={resetTask}
@@ -325,7 +331,7 @@ export default function TasksPage({ user, setAuthentication }) {
             : filteredList.map((task) => {
                 if (task.assigned_to === user) {
                   let updated = new Date(task.updated_on);
-                  const updatedStatus = updatedMessage(updated);
+                  const updatedStatus = updatedMessageUtil(updated);
                   myTasks++;
                   if (selectedView === "list") {
                     return (

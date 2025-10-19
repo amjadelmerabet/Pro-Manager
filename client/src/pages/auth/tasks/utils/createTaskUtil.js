@@ -6,7 +6,7 @@ function tryAgain(
   setTries,
   setCreate,
   newAccessToken,
-  setNewAccessToken
+  setNewAccessToken,
 ) {
   setTries(tries + 1);
   setCreate(0);
@@ -29,7 +29,7 @@ async function createTaskAction(
   setNewTask,
   setLoadingNewTask,
   newTaskPopupDisplay,
-  setNewTaskPopupDisplay
+  setNewTaskPopupDisplay,
 ) {
   const createdTask = await createTaskAPI(newTask, token);
   if (createdTask.error === "Invalid access token" && tries < 3) {
@@ -61,7 +61,7 @@ export default async function createTaskUtil(
   setLoadingNewTask,
   newTaskPopupDisplay,
   setNewTaskPopupDisplay,
-  setTokenValidated
+  setTokenValidated,
 ) {
   try {
     if (!tokenValidated) {
@@ -82,7 +82,7 @@ export default async function createTaskUtil(
             setNewTask,
             setLoadingNewTask,
             newTaskPopupDisplay,
-            setNewTaskPopupDisplay
+            setNewTaskPopupDisplay,
           );
         } else {
           tryAgain(
@@ -90,7 +90,7 @@ export default async function createTaskUtil(
             setTries,
             setCreate,
             newAccessToken,
-            setNewAccessToken
+            setNewAccessToken,
           );
         }
       } else {
@@ -113,7 +113,7 @@ export default async function createTaskUtil(
         setNewTask,
         setLoadingNewTask,
         newTaskPopupDisplay,
-        setNewTaskPopupDisplay
+        setNewTaskPopupDisplay,
       );
     }
   } catch (error) {

@@ -18,7 +18,7 @@
 .overview button {
   width: fit-content;
   border: none;
-  background-color: #0077B6;
+  background-color: #0077b6;
   padding: 10px 45px;
   border-radius: 8px;
   color: white;
@@ -34,7 +34,7 @@
 .video {
   width: 80%;
   height: 450px;
-  background-color: #BBBBBB;
+  background-color: #bbbbbb;
   display: flex;
   justify-content: center;
   align-items: center;

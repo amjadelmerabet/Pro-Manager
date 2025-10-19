@@ -7,7 +7,7 @@ export default async function getValidAccessTokenByUser(username) {
     validTime.setMinutes(now.getMinutes() + 1);
     const result = await pool.query(
       "SELECT token FROM tokens WHERE granted_for = $1 AND expires > $2 AND type = $3",
-      [username, validTime, 1]
+      [username, validTime, 1],
     );
     var accessTokens = result.rows;
     return accessTokens;

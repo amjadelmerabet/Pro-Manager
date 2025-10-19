@@ -1,3 +1,4 @@
+// Icons
 import { BiReset } from "react-icons/bi";
 import { GrFormClock } from "react-icons/gr";
 import { IoCheckmark, IoClose } from "react-icons/io5";
@@ -5,6 +6,7 @@ import { IconContext } from "react-icons/lib";
 import { RiAlarmWarningFill } from "react-icons/ri";
 import { FaFire, FaRegSnowflake } from "react-icons/fa";
 
+// Styles
 import "./ListTaskItem.css";
 
 export default function ListTaskItem({
@@ -35,8 +37,8 @@ export default function ListTaskItem({
                   task.priority === 1
                     ? "rgb(245, 0, 45)"
                     : task.priority === 2
-                    ? "rgb(245, 120, 0)"
-                    : "rgb(0, 120, 245)",
+                      ? "rgb(245, 120, 0)"
+                      : "rgb(0, 120, 245)",
               },
             }}
           >

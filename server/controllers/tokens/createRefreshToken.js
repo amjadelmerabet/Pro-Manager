@@ -11,12 +11,16 @@ function randomString(length) {
   return result;
 }
 
-export default async function createRefreshToken(token, granted_by, granted_to) {
+export default async function createRefreshToken(
+  token,
+  granted_by,
+  granted_to,
+) {
   try {
     const randomStr = randomString(10);
     const now = new Date();
     let expiresIn = new Date();
-    expiresIn.setHours(now.getHours() + (7 * 24));
+    expiresIn.setHours(now.getHours() + 7 * 24);
     // const hashToken = async (plainToken) => {
     //   const saltRounds = 10;
     //   const hashedToken = await bcrypt.hash(plainToken, saltRounds);
@@ -35,10 +39,10 @@ export default async function createRefreshToken(token, granted_by, granted_to) 
         now,
         granted_by,
         expiresIn,
-        2
-      ]
+        2,
+      ],
     );
-    return refreshToken
+    return refreshToken;
   } catch (error) {
     console.log("Query error: " + error);
     return { error };

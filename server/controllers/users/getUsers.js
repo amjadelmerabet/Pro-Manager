@@ -5,7 +5,7 @@ export default async function getUsers() {
     const result = await pool.query("SELECT * FROM users");
     const users = result.rows;
     return users;
-  } catch(error) {
+  } catch (error) {
     console.log("Query error: " + error);
   }
 }

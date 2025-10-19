@@ -1,9 +1,11 @@
+// Icons
 import { FaRegFolder } from "react-icons/fa";
 import { IconContext } from "react-icons/lib";
 import { GrFormClock } from "react-icons/gr";
 import { BiReset } from "react-icons/bi";
 import { IoCheckmark, IoClose } from "react-icons/io5";
 
+// Styles
 import "./ListProjectItem.css";
 
 export default function ListProjectItem({
@@ -17,7 +19,7 @@ export default function ListProjectItem({
   deleteProject,
   hoverOverProject,
   hoverOverProjectEnd,
-  updatedStatus
+  updatedStatus,
 }) {
   let projectDeadline = new Date(project.deadline);
 
@@ -135,8 +137,8 @@ export default function ListProjectItem({
               {project.state === 1
                 ? "Not started"
                 : project.state === 2
-                ? "In progress"
-                : "Completed"}
+                  ? "In progress"
+                  : "Completed"}
             </div>
           </div>
           <div className="deadline">

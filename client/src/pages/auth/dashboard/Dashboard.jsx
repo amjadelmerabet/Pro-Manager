@@ -1,19 +1,27 @@
+// Hooks
 import { useEffect, useState } from "react";
+
+// Icons
 import { FaRegCheckSquare, FaRegFolder } from "react-icons/fa";
+import { IconContext } from "react-icons/lib";
+
+// Components
 import AllMenu from "../components/AllMenu";
 import AuthHeader from "../components/AuthHeader";
-
-import "./Dashboard.css";
-import { IconContext } from "react-icons/lib";
-import updatedMessage from "../../../utils/updatedMessage";
 import { Link } from "react-router";
 import NewProjectPopup from "../projects/components/NewProjectPopup";
 import NewTaskPopup from "../tasks/components/NewTaskPopup";
+
+// Utils
+import updatedMessageUtil from "../../../utils/updatedMessageUtil";
 import fetchUserProjectsUtil from "./utils/fetchUserProjectsUtil";
 import fetchUserTasksUtil from "./utils/fetchUserTasksUtil";
 import getAccessTokenUtil from "./utils/getAccessTokenUtil";
 import createProjectUtil from "./utils/createProjectUtil";
 import createTaskUtil from "./utils/createTaskUtil";
+
+// Styles
+import "./Dashboard.css";
 
 export default function DashboardPage({ user, setAuthentication }) {
   const [recentPages, setRecentPages] = useState([]);
@@ -76,7 +84,7 @@ export default function DashboardPage({ user, setAuthentication }) {
         newAccessToken,
         setNewAccessToken,
         setProjectCreatedSuccessfully,
-        setTokenValidated
+        setTokenValidated,
       );
     }
   }, [createProject]);
@@ -105,7 +113,7 @@ export default function DashboardPage({ user, setAuthentication }) {
         createProject,
         setCreateProject,
         createTask,
-        setCreateTask
+        setCreateTask,
       );
     }
   }, [newAccessToken]);
@@ -124,7 +132,7 @@ export default function DashboardPage({ user, setAuthentication }) {
       tempRecentPages,
       setTempRecentPages,
       setProjectsFetched,
-      setTokenValidated
+      setTokenValidated,
     );
   }, [loadProjects, newProjectCreated, newTaskCreated]);
 
@@ -143,7 +151,7 @@ export default function DashboardPage({ user, setAuthentication }) {
         tempRecentPages,
         setTempRecentPages,
         setTasksFetched,
-        setTokenValidated
+        setTokenValidated,
       );
     }
   }, [projectsFetched, loadTasks]);
@@ -166,7 +174,7 @@ export default function DashboardPage({ user, setAuthentication }) {
             new Date(page2.updated_on).getTime() -
             new Date(page1.updated_on).getTime()
           );
-        })
+        }),
       );
       setTasksFetched(false);
     } else {
@@ -215,7 +223,7 @@ export default function DashboardPage({ user, setAuthentication }) {
         newAccessToken,
         setNewAccessToken,
         setTaskCreatedSuccessfully,
-        setTokenValidated
+        setTokenValidated,
       );
     }
   }, [createTask]);
@@ -262,11 +270,11 @@ export default function DashboardPage({ user, setAuthentication }) {
               ) : (
                 <div className="pages poppins-regular">
                   {recentPages.map((recentPage) => {
-                    const updatedStatus = updatedMessage(
-                      new Date(recentPage.updated_on)
+                    const updatedStatus = updatedMessageUtil(
+                      new Date(recentPage.updated_on),
                     );
-                    const createdStatus = updatedMessage(
-                      new Date(recentPage.created_on)
+                    const createdStatus = updatedMessageUtil(
+                      new Date(recentPage.created_on),
                     );
                     if (Object.keys(recentPage).indexOf("project_id") !== -1) {
                       return (
@@ -304,8 +312,8 @@ export default function DashboardPage({ user, setAuthentication }) {
                                   {recentPage.state === 1
                                     ? "Not started"
                                     : recentPage.state === 2
-                                    ? "In progress"
-                                    : "Completed"}
+                                      ? "In progress"
+                                      : "Completed"}
                                 </td>
                               </tr>
                               <tr>
@@ -389,8 +397,8 @@ export default function DashboardPage({ user, setAuthentication }) {
                                   {recentPage.state === 1
                                     ? "To do"
                                     : recentPage.state === 2
-                                    ? "Doing"
-                                    : "Done"}
+                                      ? "Doing"
+                                      : "Done"}
                                 </td>
                               </tr>
                               <tr>
@@ -608,12 +616,12 @@ export default function DashboardPage({ user, setAuthentication }) {
                             ? "Not started"
                             : "To do"
                           : selectedPage.state === 2
-                          ? selectedPage.type === "project"
-                            ? "In progress"
-                            : "Doing"
-                          : selectedPage.type === "project"
-                          ? "Completed"
-                          : "Done"}
+                            ? selectedPage.type === "project"
+                              ? "In progress"
+                              : "Doing"
+                            : selectedPage.type === "project"
+                              ? "Completed"
+                              : "Done"}
                       </td>
                     </tr>
                     <tr>
@@ -624,14 +632,14 @@ export default function DashboardPage({ user, setAuthentication }) {
                             ? "You"
                             : selectedPage.owner
                           : selectedPage.assigned_to === user
-                          ? "You"
-                          : selectedPage.assigned_to}
+                            ? "You"
+                            : selectedPage.assigned_to}
                       </td>
                     </tr>
                     <tr>
                       <td className="property poppins-semibold">Updated</td>
                       <td className="value poppins-regular">
-                        {updatedMessage(new Date(selectedPage.updated_on))}
+                        {updatedMessageUtil(new Date(selectedPage.updated_on))}
                       </td>
                     </tr>
                     <tr>
@@ -645,7 +653,7 @@ export default function DashboardPage({ user, setAuthentication }) {
                     <tr>
                       <td className="property poppins-semibold">Created</td>
                       <td className="value poppins-regular">
-                        {updatedMessage(new Date(selectedPage.created_on))}
+                        {updatedMessageUtil(new Date(selectedPage.created_on))}
                       </td>
                     </tr>
                     <tr>
@@ -672,9 +680,9 @@ export default function DashboardPage({ user, setAuthentication }) {
                               ? "0"
                               : ""
                           }${new Date(
-                            selectedPage.deadline
+                            selectedPage.deadline,
                           ).getMonth()}/${new Date(
-                            selectedPage.deadline
+                            selectedPage.deadline,
                           ).getFullYear()}`}
                         </td>
                       </tr>
@@ -685,8 +693,8 @@ export default function DashboardPage({ user, setAuthentication }) {
                           {selectedPage.priority === 1
                             ? "High"
                             : selectedPage.priority === 2
-                            ? "Medium"
-                            : "Low"}
+                              ? "Medium"
+                              : "Low"}
                         </td>
                       </tr>
                     )}

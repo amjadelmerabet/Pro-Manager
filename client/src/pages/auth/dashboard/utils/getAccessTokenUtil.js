@@ -9,7 +9,7 @@ function nextAction(
   createProject,
   setCreateProject,
   createTask,
-  setCreateTask
+  setCreateTask,
 ) {
   if (newAccessToken.type === "projects") {
     setLoadProjects(loadProjects + 1);
@@ -36,7 +36,7 @@ export default async function getAccessTokenUtil(
   createProject,
   setCreateProject,
   createTask,
-  setCreateTask
+  setCreateTask,
 ) {
   try {
     const refreshToken = await cookieStore.get(user);
@@ -58,7 +58,7 @@ export default async function getAccessTokenUtil(
           createProject,
           setCreateProject,
           createTask,
-          setCreateTask
+          setCreateTask,
         );
       }
     } else {

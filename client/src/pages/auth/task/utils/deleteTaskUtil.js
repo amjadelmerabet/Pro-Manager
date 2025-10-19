@@ -6,7 +6,7 @@ function tryAgain(
   setTries,
   setTaskDeleted,
   newAccessToken,
-  setNewAccessToken
+  setNewAccessToken,
 ) {
   setTries(tries + 1);
   setTaskDeleted(false);
@@ -25,7 +25,7 @@ async function deleteTaskAction(
   newAccessToken,
   setNewAccessToken,
   navigate,
-  user
+  user,
 ) {
   const deletedTask = await deleteTaskByIdAPI(taskId, token);
   if (deletedTask.error === "Invalid access token") {
@@ -34,7 +34,7 @@ async function deleteTaskAction(
       setTries,
       setTaskDeleted,
       newAccessToken,
-      setNewAccessToken
+      setNewAccessToken,
     );
   } else {
     setTimeout(() => {
@@ -54,7 +54,7 @@ export default async function deleteTaskUtil(
   setNewAccessToken,
   setTaskDeleted,
   setTokenValidated,
-  navigate
+  navigate,
 ) {
   try {
     if (!tokenValidated) {
@@ -71,7 +71,7 @@ export default async function deleteTaskUtil(
             newAccessToken,
             setNewAccessToken,
             navigate,
-            user
+            user,
           );
         } else {
           tryAgain(
@@ -79,7 +79,7 @@ export default async function deleteTaskUtil(
             setTries,
             setTaskDeleted,
             newAccessToken,
-            setNewAccessToken
+            setNewAccessToken,
           );
         }
       } else {
@@ -98,7 +98,7 @@ export default async function deleteTaskUtil(
         newAccessToken,
         setNewAccessToken,
         navigate,
-        user
+        user,
       );
     }
   } catch (error) {

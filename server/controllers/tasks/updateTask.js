@@ -16,7 +16,7 @@ export default async function updateTask(id, updates) {
     let now = new Date();
     propertiesToUpdate.push(now);
     query += `, updated_on = $${Object.keys(updates).length + 1} WHERE task_id = '${id}'`;
-    const updatedTask = await pool.query(query, propertiesToUpdate); 
+    const updatedTask = await pool.query(query, propertiesToUpdate);
     // console.log(query);
     // console.log(propertiesToUpdate);
     return { status: "success", message: "Task updated successfully" };

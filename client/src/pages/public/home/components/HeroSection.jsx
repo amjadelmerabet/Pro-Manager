@@ -18,7 +18,9 @@ export default function HeroSection() {
       </div>
       <div className="video-container">
         <div className="video">
-          <IconContext.Provider value={{ style: { color: "white", fontSize: "64px" } }}>
+          <IconContext.Provider
+            value={{ style: { color: "white", fontSize: "64px" } }}
+          >
             <FaPlay />
           </IconContext.Provider>
         </div>

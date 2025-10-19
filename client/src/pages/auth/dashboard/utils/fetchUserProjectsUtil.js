@@ -41,7 +41,7 @@ async function updateProjectAction(
   setProjectsStats,
   tempRecentPages,
   setTempRecentPages,
-  setProjectsFetched
+  setProjectsFetched,
 ) {
   const projectsObject = await getProjectsByOwnerAPI(user, token);
   if (projectsObject.error === "Invalid access token") {
@@ -66,7 +66,7 @@ export default async function fetchUserProjectsUtil(
   tempRecentPages,
   setTempRecentPages,
   setProjectsFetched,
-  setTokenValidated
+  setTokenValidated,
 ) {
   if (!tokenValidated) {
     const refreshToken = await cookieStore.get(user);
@@ -84,7 +84,7 @@ export default async function fetchUserProjectsUtil(
           setProjectsStats,
           tempRecentPages,
           setTempRecentPages,
-          setProjectsFetched
+          setProjectsFetched,
         );
       } else {
         tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
@@ -107,7 +107,7 @@ export default async function fetchUserProjectsUtil(
       setProjectsStats,
       tempRecentPages,
       setTempRecentPages,
-      setProjectsFetched
+      setProjectsFetched,
     );
   }
 }

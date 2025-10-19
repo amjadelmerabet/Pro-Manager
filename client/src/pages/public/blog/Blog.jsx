@@ -1,4 +1,8 @@
+// Components
 import Header from "../components/Header";
+
+// Styles
+import "./Blog.css";
 
 export default function BlogPage() {
   return (

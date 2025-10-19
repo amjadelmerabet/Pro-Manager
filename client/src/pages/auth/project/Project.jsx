@@ -1,20 +1,28 @@
+// Hooks
 import { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate, useSearchParams } from "react-router";
+import { useLocation, useNavigate, useSearchParams } from "react-router";
+
+// Icons
 import { IconContext } from "react-icons/lib";
 import { BiReset } from "react-icons/bi";
 import { GrFormClock } from "react-icons/gr";
-
-import AuthHeader from "../components/AuthHeader";
-
-import "./Project.css";
 import { IoCheckmark, IoClose } from "react-icons/io5";
 import { FaArrowLeft } from "react-icons/fa";
-import updatedMessage from "../../../utils/updatedMessage";
 import { MdOutlineModeEdit } from "react-icons/md";
+
+// Components
+import AuthHeader from "../components/AuthHeader";
+import { Link } from "react-router";
+
+// Utils
+import updatedMessageUtil from "../../../utils/updatedMessageUtil";
 import fetchUserProjectUtil from "./utils/fetchUserProjectUtil";
 import getAccessTokenUtil from "./utils/getAccessTokenUtil";
 import updateProjectUtil from "./utils/updateProjectUtil";
 import deleteProjectUtil from "./utils/deleteProjectUtil";
+
+// Styles
+import "./Project.css";
 
 export default function Project({ user, setAuthentication }) {
   const [projectObject, setProjectObject] = useState({});
@@ -69,7 +77,7 @@ export default function Project({ user, setAuthentication }) {
         setNewAccessToken,
         setProjectObject,
         setProjectNotFound,
-        setTokenValidated
+        setTokenValidated,
       );
     }
   }, [updatedsuccessfully, loadProject]);
@@ -86,7 +94,7 @@ export default function Project({ user, setAuthentication }) {
         newAccessToken,
         projectUpdated,
         setProjectUpdated,
-        setProjectDeleted
+        setProjectDeleted,
       );
     }
   }, [newAccessToken]);
@@ -105,7 +113,7 @@ export default function Project({ user, setAuthentication }) {
         newAccessToken,
         setNewAccessToken,
         setUpdatedsuccessfully,
-        setTokenValidated
+        setTokenValidated,
       );
     }
   }, [projectUpdated]);
@@ -125,7 +133,7 @@ export default function Project({ user, setAuthentication }) {
         newAccessToken,
         setNewAccessToken,
         setTokenValidated,
-        navigate
+        navigate,
       );
     }
   }, [projectDeleted]);
@@ -161,7 +169,7 @@ export default function Project({ user, setAuthentication }) {
   };
 
   let updated = new Date(projectObject.updated_on);
-  let updatedStatus = updatedMessage(updated);
+  let updatedStatus = updatedMessageUtil(updated);
 
   let projectDeadline = new Date(projectObject.deadline);
 
@@ -214,15 +222,15 @@ export default function Project({ user, setAuthentication }) {
                     (projectObject.state === 1
                       ? " not-started"
                       : projectObject.state === 2
-                      ? " in-progress"
-                      : " completed")
+                        ? " in-progress"
+                        : " completed")
                   }
                 >
                   {projectObject.state === 1
                     ? "Not started"
                     : projectObject.state === 2
-                    ? "In progress"
-                    : "Completed"}
+                      ? "In progress"
+                      : "Completed"}
                 </h5>
               </div>
               <div className="right">

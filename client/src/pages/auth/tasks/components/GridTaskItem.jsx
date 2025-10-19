@@ -1,12 +1,13 @@
+// Icons
 import { IconContext } from "react-icons/lib";
 import { GrFormClock } from "react-icons/gr";
 import { BiReset } from "react-icons/bi";
 import { IoCheckmark, IoClose } from "react-icons/io5";
-
-import "./GridTaskItem.css";
-import updatedMessage from "../../../../utils/updatedMessage";
 import { FaFire, FaRegSnowflake } from "react-icons/fa";
 import { RiAlarmWarningFill } from "react-icons/ri";
+
+// Styles
+import "./GridTaskItem.css";
 
 export default function GridTaskItem({
   task,
@@ -14,14 +15,13 @@ export default function GridTaskItem({
   openTask,
   hoverOverTask,
   hoverOverTaskEnd,
+  updatedStatus,
   startTask,
   completeTask,
   resetTask,
   deleteTask,
   user,
 }) {
-  let updated = new Date(task.updated_on);
-  let updatedStatus = updatedMessage(updated);
   return (
     <div
       className="task"
@@ -123,8 +123,8 @@ export default function GridTaskItem({
                   task.priority === 1
                     ? "rgb(245, 0, 45)"
                     : task.priority === 2
-                    ? "rgb(245, 120, 0)"
-                    : "rgb(0, 120, 245)",
+                      ? "rgb(245, 120, 0)"
+                      : "rgb(0, 120, 245)",
               },
             }}
           >
@@ -148,7 +148,9 @@ export default function GridTaskItem({
         </div>
         <div className="state poppins-regular">
           <div className="property-name poppins-semibold">State</div>
-          <div className="property-value">{task.state === 1 ? "To do" : (task.state === 2 ? "Doing" : "Done")}</div>
+          <div className="property-value">
+            {task.state === 1 ? "To do" : task.state === 2 ? "Doing" : "Done"}
+          </div>
         </div>
         <div className="short-description">{task.short_description}</div>
       </div>

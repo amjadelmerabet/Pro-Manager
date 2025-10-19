@@ -38,7 +38,7 @@ async function getUserTasksAction(
   setTasksStats,
   tempRecentPages,
   setTempRecentPages,
-  setTasksFetched
+  setTasksFetched,
 ) {
   const tasksObject = await getTasksByAssignedToAPI(user, token);
   if (tasksObject.error === "Invalid access token" && tries < 3) {
@@ -63,7 +63,7 @@ export default async function fetchAllTasksUtil(
   tempRecentPages,
   setTempRecentPages,
   setTasksFetched,
-  setTokenValidated
+  setTokenValidated,
 ) {
   if (!tokenValidated) {
     const refreshToken = await cookieStore.get(user);
@@ -81,7 +81,7 @@ export default async function fetchAllTasksUtil(
           setTasksStats,
           tempRecentPages,
           setTempRecentPages,
-          setTasksFetched
+          setTasksFetched,
         );
       } else {
         tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
@@ -104,7 +104,7 @@ export default async function fetchAllTasksUtil(
       setTasksStats,
       tempRecentPages,
       setTempRecentPages,
-      setTasksFetched
+      setTasksFetched,
     );
   }
 }

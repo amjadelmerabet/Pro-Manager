@@ -8,7 +8,10 @@
   visibility: hidden;
   opacity: 0;
   transform: scale(0);
-  transition: visibility 250ms ease-in-out, opacity 250ms ease-in-out, transform 250ms ease-in-out;
+  transition:
+    visibility 250ms ease-in-out,
+    opacity 250ms ease-in-out,
+    transform 250ms ease-in-out;
 }
 
 .signup-page.visible {
@@ -117,8 +120,10 @@
   color: white;
   padding: 4px 24px;
   cursor: pointer;
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, .25);
-  transition: transform 250ms ease-in-out, background 250ms ease-in-out;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+  transition:
+    transform 250ms ease-in-out,
+    background 250ms ease-in-out;
 }
 
 .signup-page .confirm-popup .buttons > button:hover {

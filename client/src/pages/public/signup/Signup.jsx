@@ -1,8 +1,15 @@
+// Hooks
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 
-import "./Signup.css";
+// Components
+import { Link } from "react-router";
+
+// Icons
 import { IoArrowBack } from "react-icons/io5";
+
+// Styles
+import "./Signup.css";
 
 export default function SignUpPage() {
   const [userBody, setUserBody] = useState({});
@@ -65,7 +72,7 @@ export default function SignUpPage() {
     setTimeout(() => {
       setGoBackLink(false);
     }, 250);
-  }
+  };
 
   return (
     <div className={"signup-page" + (signUpStart ? " visible" : "")}>

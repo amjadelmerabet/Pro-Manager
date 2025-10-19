@@ -44,7 +44,7 @@
   padding: 16px 24px;
   color: white;
   border-radius: 12px;
-  box-shadow: 0 0 12px rgba(0, 0, 0, .45);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.45);
   height: calc(100% - 32px);
 }
 
@@ -66,7 +66,7 @@
 }
 
 .dashboard-container .recent-pages > .loading-pages,
-.dashboard-container .recent-pages > .no-recent-pages { 
+.dashboard-container .recent-pages > .no-recent-pages {
   height: 190px;
   margin-top: 8px;
   width: 100%;
@@ -80,12 +80,14 @@
   background-color: white;
   padding: 4px;
   border-radius: 8px;
-  transition: box-shadow 250ms ease-in-out, transform 250ms ease-in-out;
+  transition:
+    box-shadow 250ms ease-in-out,
+    transform 250ms ease-in-out;
   cursor: default;
 }
 
 .dashboard-container .recent-pages .page:hover {
-  box-shadow: 0 0 8px rgba(0, 0, 0, .25);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);
   transform: scale(1.05);
 }
 
@@ -138,16 +140,18 @@
   align-items: center;
   color: white;
   position: relative;
-  transition: box-shadow 250ms ease-in-out, transform 250ms ease-in-out;
+  transition:
+    box-shadow 250ms ease-in-out,
+    transform 250ms ease-in-out;
 }
 
 .dashboard-container .reports > .report:hover {
-  box-shadow: 0 0 12px rgba(0, 0, 0, .45);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.45);
   transform: scale(1.05);
 }
 
 .dashboard-container .reports > .disabled {
-  opacity: .65;
+  opacity: 0.65;
   pointer-events: none;
 }
 

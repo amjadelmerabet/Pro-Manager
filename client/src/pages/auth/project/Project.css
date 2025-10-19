@@ -53,9 +53,11 @@
   justify-content: center;
   padding: 4px 24px;
   border-radius: 24px;
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, .25);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
   cursor: pointer;
-  transition: background 250ms ease-in-out, transform 250ms ease-in-out;
+  transition:
+    background 250ms ease-in-out,
+    transform 250ms ease-in-out;
 }
 
 .project-page .project > .project-header > .right button:hover {
@@ -113,7 +115,11 @@
   position: relative;
 }
 
-.project-page .project .project-body > div:not(.project-info) .edit-description-button {
+.project-page
+  .project
+  .project-body
+  > div:not(.project-info)
+  .edit-description-button {
   position: absolute;
   top: 12px;
   right: 8px;
@@ -124,7 +130,7 @@
   align-items: center;
   border-radius: 4px;
   background-color: white;
-  box-shadow: 1px 1px 2px rgba(0, 0, 0, .25);
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
   cursor: pointer;
   transition: transform 250ms ease-in-out;
   visibility: hidden;
@@ -132,14 +138,22 @@
   transform: scale(0);
 }
 
-.project-page .project .project-body > div:not(.project-info):hover .edit-description-button {
+.project-page
+  .project
+  .project-body
+  > div:not(.project-info):hover
+  .edit-description-button {
   visibility: visible;
   opacity: 1;
   transform: scale(1);
 }
 
-.project-page .project .project-body > div:not(.project-info) .edit-description-button:hover {
-  transform: scale(0.98)
+.project-page
+  .project
+  .project-body
+  > div:not(.project-info)
+  .edit-description-button:hover {
+  transform: scale(0.98);
 }
 
 .project-page .project .project-body .editing-description {
@@ -147,7 +161,11 @@
   display: flex;
 }
 
-.project-page .project .project-body .editing-description > .edit-description-input {
+.project-page
+  .project
+  .project-body
+  .editing-description
+  > .edit-description-input {
   padding: 8px 16px;
   background-color: var(--accent-color);
   border-radius: 4px;
@@ -168,11 +186,16 @@
   border-radius: 4px;
   border: 1px solid var(--primary-color);
   background-color: white;
-  box-shadow: 1px 1px 2px rgba(0, 0, 0, .25);
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
   transition: transform 250ms ease-in-out;
   cursor: pointer;
 }
 
-.project-page .project .project-body .editing-description > .buttons > input:hover {
-  transform: scale(0.99)
+.project-page
+  .project
+  .project-body
+  .editing-description
+  > .buttons
+  > input:hover {
+  transform: scale(0.99);
 }

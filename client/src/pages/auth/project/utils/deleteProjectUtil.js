@@ -17,7 +17,7 @@ async function deleteProjectAction(
   newAccessToken,
   setNewAccessToken,
   user,
-  navigate
+  navigate,
 ) {
   const deletedProject = await deleteProjectByIdAPI(projectId, token);
   if (deletedProject.error === "Invalid access token" && tries < 3) {
@@ -39,7 +39,7 @@ export default async function deleteProjectUtil(
   newAccessToken,
   setNewAccessToken,
   setTokenValidated,
-  navigate
+  navigate,
 ) {
   try {
     if (!tokenValidated) {
@@ -55,7 +55,7 @@ export default async function deleteProjectUtil(
             newAccessToken,
             setNewAccessToken,
             user,
-            navigate
+            navigate,
           );
         } else {
           tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
@@ -75,7 +75,7 @@ export default async function deleteProjectUtil(
         newAccessToken,
         setNewAccessToken,
         user,
-        navigate
+        navigate,
       );
     }
   } catch (error) {

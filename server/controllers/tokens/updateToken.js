@@ -9,7 +9,7 @@ export default async function updateToken(tokenId, token, username) {
     // expiresIn.setSeconds(now.getSeconds() + 30);
     const updatedAccessToken = await pool.query(
       "UPDATE tokens SET token = $1, expires = $2, updated_on = $3, updated_by = $4 WHERE token_id = $5",
-      [token, expiresIn, now, username, tokenId]
+      [token, expiresIn, now, username, tokenId],
     );
     return updatedAccessToken;
   } catch (error) {

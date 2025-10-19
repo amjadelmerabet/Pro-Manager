@@ -18,11 +18,11 @@ export default async function createTask(fields) {
         query += values;
       }
       propertiesToInsert.push(field[1]);
-    })
+    });
     const newTask = await pool.query(query, propertiesToInsert);
     return newTask;
   } catch (error) {
     console.log("Query error: " + error);
-    return { error: error }
+    return { error: error };
   }
 }

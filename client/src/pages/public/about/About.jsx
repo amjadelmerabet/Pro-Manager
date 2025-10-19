@@ -1,4 +1,8 @@
+// Components
 import Header from "../components/Header";
+
+// Styles
+import "./About.css";
 
 export default function AboutPage() {
   return (
