@@ -182,6 +182,7 @@ export default function DashboardPage({ user, setAuthentication }) {
       setRecentPages(tempRecentPages.slice(0, 4));
       setTimeout(() => {
         setRecentPagesLoaded(true);
+        setTempRecentPages([]);
         setProjectsFetched(false);
         setTasksFetched(false);
       }, 250);
