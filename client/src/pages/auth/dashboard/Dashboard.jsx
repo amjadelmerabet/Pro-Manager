@@ -221,6 +221,7 @@ export default function DashboardPage({ user, setAuthentication }) {
         token,
         newTask,
         tries,
+        setTries,
         newAccessToken,
         setNewAccessToken,
         setTaskCreatedSuccessfully,
