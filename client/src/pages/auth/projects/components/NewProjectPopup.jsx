@@ -17,6 +17,8 @@ export default function NewProjectPopup({
   parent,
 }) {
   const [newProjectClass, setNewProjectClass] = useState("");
+  const [deadlineInPast, setDeadlineInPast] = useState(false);
+  const [showWarningMessage, setShowWarningMessage] = useState(false);
 
   useEffect(() => {
     setTimeout(() => {
@@ -33,6 +35,23 @@ export default function NewProjectPopup({
         setPopupDisplay({ ...popupDisplay, active: false });
       }
     }, 250);
+  };
+
+  const checkDeadlineAndUpdateProject = (deadline) => {
+    const today = new Date().getDate();
+    const deadlineDate = new Date(deadline).getDate();
+    if (deadlineDate > today) {
+      setNewProject({ ...newProject, deadline: event.target.value });
+      setShowWarningMessage(false);
+      setTimeout(() => {
+        setDeadlineInPast(false);
+      }, 50);
+    } else {
+      setDeadlineInPast(true);
+      setTimeout(() => {
+        setShowWarningMessage(true);
+      }, 50);
+    }
   };
 
   return (
@@ -67,12 +86,24 @@ export default function NewProjectPopup({
           >
             Deadline
           </label>
+          {deadlineInPast ? (
+            <span
+              className={
+                "wrong-deadline-message poppins-light" +
+                (showWarningMessage ? " visible" : "")
+              }
+            >
+              * Deadline can't be in the past
+            </span>
+          ) : (
+            ""
+          )}
           <input
             type="date"
             name="new-project-deadline"
             className="new-project-deadline-input poppins-regular"
             onChange={(event) =>
-              setNewProject({ ...newProject, deadline: event.target.value })
+              checkDeadlineAndUpdateProject(event.target.value)
             }
           />
         </div>
@@ -109,7 +140,10 @@ export default function NewProjectPopup({
         </div>
         <button
           type="button"
-          className="create-project poppins-semibold"
+          className={
+            "create-project poppins-semibold" +
+            (deadlineInPast ? " feature-disabled error" : "")
+          }
           onClick={() => createNewProject()}
         >
           Create

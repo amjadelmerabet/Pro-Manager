@@ -10,7 +10,7 @@ function tryAgain(tries, setTries, newAccessToken, setNewAccessToken) {
   });
 }
 
-async function updateProjectAction(
+async function createProjectAction(
   newProject,
   token,
   tries,
@@ -45,7 +45,7 @@ export default async function createProjectUtil(
       if (refreshToken) {
         const validAccessToken = await checkAccessTokenAPI(token, refreshToken);
         if (validAccessToken.message === "Valid access token") {
-          updateProjectAction(
+          createProjectAction(
             newProject,
             token,
             tries,
@@ -64,10 +64,11 @@ export default async function createProjectUtil(
       setTimeout(() => {
         setTokenValidated(false);
       }, 500);
-      updateProjectAction(
+      createProjectAction(
         newProject,
         token,
         tries,
+        setTries,
         newAccessToken,
         setNewAccessToken,
         setProjectCreatedSuccessfully,

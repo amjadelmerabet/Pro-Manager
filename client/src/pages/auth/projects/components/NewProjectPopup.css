@@ -64,6 +64,10 @@
   background-color: var(--primary-color-hover);
 }
 
+.new-project-popup .new-project > .create-project.error {
+  background-color: rgb(245, 0, 45);
+}
+
 .new-project-popup .new-project > .close-popup {
   width: fit-content;
   border: none;
@@ -77,4 +81,20 @@
 
 .new-project-popup .new-project > .title {
   text-align: center;
+}
+
+.new-project-popup .new-project .wrong-deadline-message {
+  visibility: hidden;
+  opacity: 0;
+  transform: scale(0);
+  color: rgb(245, 0, 45);
+  font-style: italic;
+  font-size: 12px;
+  transition: all 50ms ease-in-out;
+}
+
+.new-project-popup .new-project .wrong-deadline-message.visible {
+  visibility: visible;
+  opacity: 1;
+  transform: scale(1);
 }
