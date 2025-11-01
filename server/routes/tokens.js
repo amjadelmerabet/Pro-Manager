@@ -69,7 +69,7 @@ export async function tokensRoute(req, res) {
                   //   user[0],
                   //   process.env.JWT_SECRET,
                   //   {
-                  //     expiresIn: "30s",
+                  //     expiresIn: "2m",
                   //   }
                   // );
                   const accessToken = jwt.sign(

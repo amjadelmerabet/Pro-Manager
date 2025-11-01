@@ -51,6 +51,10 @@ export default async function authUser(username, password) {
       const validRefreshToken = await getValidRefreshTokenByUser(username);
       let refreshToken = "";
       if (validRefreshToken.length === 0) {
+        // Short expiration time for testing purposes only
+        // refreshToken = jwt.sign(user[0], process.env.JWT_REFRESH, {
+        //   expiresIn: "5m",
+        // });
         refreshToken = jwt.sign(user[0], process.env.JWT_REFRESH, {
           expiresIn: "7d",
         });

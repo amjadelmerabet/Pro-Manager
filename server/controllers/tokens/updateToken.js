@@ -6,7 +6,7 @@ export default async function updateToken(tokenId, token, username) {
     let expiresIn = new Date();
     expiresIn.setMinutes(now.getMinutes() + 15);
     // For testing purposes only
-    // expiresIn.setSeconds(now.getSeconds() + 30);
+    // expiresIn.setSeconds(now.getSeconds() + 120);
     const updatedAccessToken = await pool.query(
       "UPDATE tokens SET token = $1, expires = $2, updated_on = $3, updated_by = $4 WHERE token_id = $5",
       [token, expiresIn, now, username, tokenId],
