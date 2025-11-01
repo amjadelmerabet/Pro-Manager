@@ -87,9 +87,11 @@ export default function AuthHeader({ user, setAuthentication }) {
                 <LuPaintbrush />
                 <span>Themes</span>
               </li>
-              <li className="setting-item" onClick={() => logout()}>
-                <IoLogOutOutline />
-                <span>Log out</span>
+              <li className="setting-item">
+                <div className="logout-button" onClick={() => logout()}>
+                  <IoLogOutOutline />
+                  <span>Log out</span>
+                </div>
               </li>
             </ul>
           </div>

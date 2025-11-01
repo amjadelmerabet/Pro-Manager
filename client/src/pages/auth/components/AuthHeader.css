@@ -149,9 +149,13 @@
   margin-block: 4px;
   background-color: var(--secondary-color);
   border-radius: 4px;
-  cursor: pointer;
+  /* cursor: pointer; */
   display: flex;
   align-items: center;
+}
+
+.auth-header .settings > .settings-list > .setting-item > .logout-button {
+  cursor: pointer;
 }
 
 .auth-header .settings > .settings-list > .setting-item span {
