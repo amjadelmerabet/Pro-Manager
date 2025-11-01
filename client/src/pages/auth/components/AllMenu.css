@@ -44,4 +44,12 @@
 .application-menu .module > a {
   color: black;
   text-decoration: none;
+  cursor: pointer;
+}
+
+.application-menu .module > button {
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
 }
