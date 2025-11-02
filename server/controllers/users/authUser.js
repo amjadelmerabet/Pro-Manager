@@ -37,6 +37,7 @@ export default async function authUser(username, password) {
             accessTokens[0].token_id,
             accessToken,
             username,
+            "access"
           );
         } else {
           const newAccessToken = await createAccessToken(
@@ -64,6 +65,7 @@ export default async function authUser(username, password) {
             refreshTokens[0].token_id,
             refreshToken,
             username,
+            "refresh"
           );
         } else {
           const newRefreshToken = await createRefreshToken(

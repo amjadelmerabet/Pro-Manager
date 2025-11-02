@@ -85,6 +85,7 @@ export async function tokensRoute(req, res) {
                       accessTokens[0].token_id,
                       accessToken,
                       username,
+                      "access"
                     );
                   } else {
                     const newAccessToken = await createAccessToken(
