@@ -53,6 +53,148 @@
   position: relative;
 }
 
+.page-buttons .sort-button {
+  position: relative;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.page-buttons .sort-button::before {
+  content: attr(data-filter-number-popup);
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  font-size: 11px;
+  background-color: var(--primary-color);
+  color: white;
+  width: 14px;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 1;
+}
+
+.page-buttons .no-sort::before {
+  display: none;
+}
+
+.page-buttons .draft-sort::before {
+  background-color: rgb(225, 0, 45);
+}
+
+.page-buttons .sort-popup {
+  position: absolute;
+  /* bottom: -128px; */
+  top: 50px;
+  left: 0;
+  width: 100%;
+  border-radius: 4px;
+  padding: 8px;
+  background-color: var(--primary-color);
+  color: white;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(100%);
+  transition:
+    opacity 250ms ease-in-out,
+    visibility 250ms ease-in-out,
+    transform 250ms ease-in-out;
+  z-index: 10;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.page-buttons .sort-popup.visible {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.page-buttons .sort-popup .sort-type {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 8px auto;
+}
+
+.page-buttons .sort-type .ascending-sort-section,
+.page-buttons .sort-type .descending-sort-section {
+  display: flex;
+  align-items: center;
+}
+
+.page-buttons .sort-popup .sort-type input {
+  margin-left: 8px;
+}
+
+.page-buttons .sort-popup select {
+  padding: 2px 8px;
+  margin-left: 16px;
+  border-radius: 4px;
+  border: 1px solid black;
+  cursor: pointer;
+}
+
+.page-buttons .sort-popup .sort-actions {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin-top: 16px;
+}
+
+.page-buttons .sort-popup .sort-actions > button {
+  padding: 2px 24px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition:
+    transform 250ms ease-in-out,
+    background 250ms ease-in-out;
+}
+
+.page-buttons .sort-popup .sort-actions > .apply-sort-button {
+  background-color: var(--accent-color);
+}
+
+.page-buttons .sort-popup .sort-actions > .apply-sort-button:hover {
+  background-color: var(--secondary-color);
+}
+
+/* .page-buttons .sort-popup .sort-actions .feature-disabled {
+  background-color: rgb(225, 0, 45);
+  color: white;
+} */
+
+.page-buttons .sort-popup .sort-actions > .cancel-sort-button,
+.page-buttons .sort-popup .sort-actions > .clear-sort-button {
+  background-color: white;
+}
+
+.page-buttons .sort-popup .close-sort-popup {
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  width: 20px;
+  aspect-ratio: 1 / 1;
+  top: -10px;
+  right: -10px;
+  border-radius: 10px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  transition: background-color 250ms ease-in-out;
+}
+
 .page-buttons > .filter-button {
   position: relative;
   background: transparent;
@@ -86,7 +228,7 @@
   line-height: 1;
 }
 
-.page-buttons > .filter-popup::before {
+.page-buttons > .no-filters::before {
   display: none;
 }
 
@@ -107,7 +249,7 @@
 
 .page-buttons .filter {
   position: absolute;
-  bottom: -90px;
+  bottom: -98px;
   left: 0;
   width: 100%;
   border-radius: 4px;
@@ -136,7 +278,7 @@
 
 .page-buttons .filter select {
   padding: 2px 8px;
-  margin-left: 8px;
+  margin-left: 16px;
   border-radius: 4px;
   border: 1px solid black;
   cursor: pointer;
