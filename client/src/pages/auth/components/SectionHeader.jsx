@@ -6,9 +6,11 @@ import { useState } from "react";
 
 import "./SectionHeader.css";
 import { IoClose } from "react-icons/io5";
+import { TbArrowsSort } from "react-icons/tb";
 
 export default function SectionHeader(props) {
   const [filterOpen, setFilterOpen] = useState(false);
+  const [sortOpen, setSortOpen] = useState(false);
 
   const handleButtonClick = () => {
     props.setPopupDisplay({ ...props.popupDisplay, active: true });
@@ -22,8 +24,26 @@ export default function SectionHeader(props) {
     props.setSelectedView("grid");
   };
 
+  const openSortPopup = () => {
+    if (filterOpen) {
+      setFilterOpen(!filterOpen);
+    }
+    setSortOpen(!sortOpen);
+  };
+
   const openFilter = () => {
+    if (sortOpen) {
+      setSortOpen(!sortOpen);
+    }
     setFilterOpen(!filterOpen);
+  };
+
+  const changeSort = (value) => {
+    if (value === "0") {
+      props.setSort({ sort_by: value, type: 1 });
+    } else {
+      props.setSort({ ...props.sort, sort_by: value });
+    }
   };
 
   const changeFilter = (type, value) => {
@@ -32,12 +52,30 @@ export default function SectionHeader(props) {
     }
   };
 
+  const cancelSort = () => {
+    props.setSort({ sort_by: "0", type: 1 })
+    setSortOpen(!sortOpen);
+  };
+
   const cancelFilter = () => {
     setFilterOpen(!filterOpen);
   };
 
+  const closeSortPopup = () => {
+    setSortOpen(!sortOpen);
+  };
+
   const closeFilter = () => {
     setFilterOpen(!filterOpen);
+  };
+
+  const clearSort = () => {
+    props.setSort({ sort_by: "0", type: 1 });
+    props.setApplySort(0);
+    props.setSortCleared(true);
+    setTimeout(() => {
+      props.setSortCleared(false);
+    }, 250);
   };
 
   const clearFilter = () => {
@@ -46,12 +84,28 @@ export default function SectionHeader(props) {
     props.setFilterCleared(true);
   };
 
+  const applySort = () => {
+    // props.setSortCleared(false);
+    setTimeout(() => {
+      props.setApplySort(props.applySort + 1);
+      setSortOpen(!sortOpen);
+    });
+  };
+
   const applyFilter = () => {
     props.setFilterCleared(false);
     setTimeout(() => {
       props.setApplyFilters(props.applyFilters + 1);
       setFilterOpen(!filterOpen);
     }, 250);
+  };
+
+  const setAscendingSort = () => {
+    props.setSort({ ...props.sort, type: 1 });
+  };
+
+  const setDescendingSort = () => {
+    props.setSort({ ...props.sort, type: 2 });
   };
 
   return (
@@ -104,10 +158,129 @@ export default function SectionHeader(props) {
         </div>
         <button
           className={
+            "sort-button poppins-regular" +
+            (Number(props.sort.sort_by) === 0 ? " no-sort" : "") +
+            (props.applySort === 0 && Number(props.sort.sort_by) !== 0
+              ? " draft-sort"
+              : "")
+          }
+          onClick={() => openSortPopup()}
+        >
+          <IconContext.Provider value={{ style: { fontSize: "28px" } }}>
+            <TbArrowsSort />
+          </IconContext.Provider>
+        </button>
+        <div
+          className={
+            "sort-popup poppins-regular" + (sortOpen ? " visible" : "")
+          }
+        >
+          <div className="close-sort-popup" onClick={() => closeSortPopup()}>
+            <IconContext.Provider
+              value={{ style: { color: "rgb(200, 0, 0)" } }}
+            >
+              <IoClose />
+            </IconContext.Provider>
+          </div>
+          {props.page === "projects" ? (
+            <div className="sort-section">
+              <label htmlFor="sort-by" className="sort-label">
+                Sort by
+              </label>
+              <select
+                name="sort-by"
+                className="poppins-regular"
+                id="sort-by"
+                value={props.sort.sort_by}
+                onChange={(event) => changeSort(event.target.value)}
+              >
+                <option value="0">-- None --</option>
+                <option value="1">State</option>
+                <option value="2">Deadline</option>
+              </select>
+              {Number(props.sort.sort_by) !== 0 ? (
+                <div className="sort-type">
+                  <div className="ascending-sort-section poppins-regular">
+                    <label
+                      htmlFor="ascending-sort"
+                      className="ascending-sort-label"
+                    >
+                      Ascending
+                    </label>
+                    <input
+                      type="radio"
+                      name="sort-type"
+                      id="ascending-sort"
+                      className="ascending-sort"
+                      checked={props.sort.type === 1}
+                      onChange={(event) =>
+                        event.target.value === "on" ? setAscendingSort() : ""
+                      }
+                    />
+                  </div>
+                  <div className="descending-sort-section poppins-regular">
+                    <label
+                      htmlFor="descending-sort"
+                      className="descending-sort-label"
+                    >
+                      Descending
+                    </label>
+                    <input
+                      type="radio"
+                      name="sort-type"
+                      id="descending-sort"
+                      className="descending-sort"
+                      checked={props.sort.type === 2}
+                      onChange={(event) =>
+                        event.target.value === "on" ? setDescendingSort() : ""
+                      }
+                    />
+                  </div>
+                </div>
+              ) : (
+                ""
+              )}
+              <div className="sort-actions">
+                {(Object.keys(props.sort).length === 2 &&
+                  Number(props.sort.sort_by) === 0) ||
+                props.applySort === 0 ? (
+                  <button
+                    className="cancel-sort-button poppins-regular"
+                    onClick={() => cancelSort()}
+                  >
+                    Cancel
+                  </button>
+                ) : (
+                  <button
+                    className="clear-sort-button poppins-regular"
+                    onClick={() => clearSort()}
+                  >
+                    Clear
+                  </button>
+                )}
+                <button
+                  className={
+                    "apply-sort-button poppins-regular" +
+                    (Number(props.sort.sort_by) === 0
+                      ? " feature-disabled"
+                      : "")
+                  }
+                  onClick={() => applySort()}
+                >
+                  Apply
+                </button>
+              </div>
+            </div>
+          ) : (
+            ""
+          )}
+        </div>
+        <button
+          className={
             "filter-button poppins-regular" +
             (Object.keys(props.filter).length === 1 &&
             Number(props.filter.state) === 0
-              ? " filter-popup"
+              ? " no-filters"
               : "") +
             (filterOpen ? " open" : "") +
             (props.applyFilters === 0 ? " draft-filters" : "")
@@ -173,21 +346,21 @@ export default function SectionHeader(props) {
             Number(props.filter.state) === 0 &&
             props.applyFilters === 0 ? (
               <button
-                className="cancel-filters-button"
+                className="cancel-filters-button poppins-regular"
                 onClick={() => cancelFilter()}
               >
                 Cancel
               </button>
             ) : (
               <button
-                className="clear-filters-button"
+                className="clear-filters-button poppins-regular"
                 onClick={() => clearFilter()}
               >
                 Clear
               </button>
             )}
             <button
-              className="apply-filters-button"
+              className="apply-filters-button poppins-regular"
               onClick={() => applyFilter()}
             >
               Apply

@@ -16,7 +16,7 @@ import getAccessTokenUtil from "./utils/getAccessTokenUtil";
 import createProjectUtil from "./utils/createProjectUtil";
 import updateProjectUtil from "./utils/updateProjectUtil";
 import deleteProjectUtil from "./utils/deleteProjectUtil";
-import updateProjectsList from "./utils/updateProjectsList";
+import updateProjectsListUtil from "./utils/updateProjectsListUtil";
 
 // Styles
 import "./Projects.css";
@@ -50,6 +50,9 @@ export default function ProjectsPage({ user, setAuthentication }) {
   const [tries, setTries] = useState(0);
   const [loadProjects, setLoadProjects] = useState(0);
   const [tokenValidated, setTokenValidated] = useState(false);
+  const [sort, setSort] = useState({ sort_by: "0", type: 1 });
+  const [sortCleared, setSortCleared] = useState(false);
+  const [applySort, setApplySort] = useState(0);
 
   const [searchParams] = useSearchParams();
   const view = searchParams.get("view");
@@ -84,7 +87,7 @@ export default function ProjectsPage({ user, setAuthentication }) {
       newAccessToken,
       setNewAccessToken,
       setProjects,
-      setTokenValidated,
+      setTokenValidated
     );
   }, [
     newProjectCreated,
@@ -92,6 +95,7 @@ export default function ProjectsPage({ user, setAuthentication }) {
     projectUpdated,
     filterCleared,
     loadProjects,
+    sortCleared,
   ]);
 
   useEffect(() => {
@@ -108,14 +112,52 @@ export default function ProjectsPage({ user, setAuthentication }) {
         updatedProjectId,
         setUpdatedProjectId,
         deletedProjectId,
-        setDeletedProjectId,
+        setDeletedProjectId
       );
     }
   }, [newAccessToken]);
 
   useEffect(() => {
-    updateProjectsList(filter, search, projects, setFilteredList);
+    updateProjectsListUtil(filter, search, projects, setFilteredList);
   }, [search, applyFilters]);
+
+  useEffect(() => {
+    const sortProjects = (unsoredProjectsList) => {
+      if (Number(sort.sort_by) !== 0) {
+        if (sort.sort_by === "1") {
+          unsoredProjectsList.sort((a, b) => {
+            if (sort.type === 1) {
+              return a.state - b.state;
+            } else {
+              return b.state - a.state;
+            }
+          });
+        } else if (sort.sort_by === "2") {
+          unsoredProjectsList.sort((a, b) => {
+            if (sort.type === 1) {
+              return (
+                new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
+              );
+            } else {
+              return (
+                new Date(b.deadline).getTime() - new Date(a.deadline).getTime()
+              );
+            }
+          });
+        }
+      }
+      return unsoredProjectsList;
+    };
+    if (applySort > 0) {
+      setProjects((currentList) => {
+        return sortProjects(currentList);
+      });
+    }
+  }, [applySort]);
+
+  useEffect(() => {
+    console.log(projects);
+  }, [projects]);
 
   useEffect(() => {
     if (Object.keys(newProject).length > 0 && createProject > 0) {
@@ -135,7 +177,7 @@ export default function ProjectsPage({ user, setAuthentication }) {
         setLoadingNewProject,
         newProjectPopupDisplay,
         setNewProjectPopupDisplay,
-        setTokenValidated,
+        setTokenValidated
       );
     }
   }, [createProject]);
@@ -172,7 +214,7 @@ export default function ProjectsPage({ user, setAuthentication }) {
         projectUpdated,
         setProjectUpdated,
         setProjectUpdates,
-        setTokenValidated,
+        setTokenValidated
       );
     }
   }, [updatedProjectId]);
@@ -206,7 +248,7 @@ export default function ProjectsPage({ user, setAuthentication }) {
         setNewAccessToken,
         projectDeleted,
         setProjectDeleted,
-        setTokenValidated,
+        setTokenValidated
       );
     }
   }, [deletedProjectId]);
@@ -255,6 +297,11 @@ export default function ProjectsPage({ user, setAuthentication }) {
           applyFilters={applyFilters}
           setApplyFilters={setApplyFilters}
           setFilterCleared={setFilterCleared}
+          sort={sort}
+          setSort={setSort}
+          applySort={applySort}
+          setApplySort={setApplySort}
+          setSortCleared={setSortCleared}
         />
         <div className={"projects " + selectedView}>
           {search === "" && applyFilters === 0

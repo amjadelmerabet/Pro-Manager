@@ -7,6 +7,11 @@ Todos:
   [+]  Add a check to the deadline date input in the new project popup to ensure that the deadline date is not in the past.
 
 Features:
+  [+]  As a user I would like to sort my projects either by their states or by their deadlines.
+  []  As a user I would like to sort my tasks either by their states or by their priorities.
+  []  As a user I would like to group my projects by their states.
+  []  As a user I would like to group my tasks either by their states or by their priorities.
+  []  As a user I would like to be able to find my projects and tasks using a global search input.
 
 Bugs: 
   [+]  @medium There is a bug in the dashboard page that creates some duplicates in the recent pages if a user creates a new project or task.

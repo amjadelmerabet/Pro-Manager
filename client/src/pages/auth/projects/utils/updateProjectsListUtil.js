@@ -2,7 +2,7 @@ export default function updateProjectsList(
   filter,
   search,
   projects,
-  setFilteredList,
+  setFilteredList
 ) {
   if (Object.keys(filter).length !== 0) {
     if (filter.state && Number(filter.state) !== 0) {
