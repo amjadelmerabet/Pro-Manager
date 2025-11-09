@@ -53,7 +53,7 @@ export default function SectionHeader(props) {
   };
 
   const cancelSort = () => {
-    props.setSort({ sort_by: "0", type: 1 })
+    props.setSort({ sort_by: "0", type: 1 });
     setSortOpen(!sortOpen);
   };
 
@@ -183,7 +183,7 @@ export default function SectionHeader(props) {
             </IconContext.Provider>
           </div>
           {props.page === "projects" ? (
-            <div className="sort-section">
+            <div className="sort-by-section">
               <label htmlFor="sort-by" className="sort-label">
                 Sort by
               </label>
@@ -198,82 +198,97 @@ export default function SectionHeader(props) {
                 <option value="1">State</option>
                 <option value="2">Deadline</option>
               </select>
-              {Number(props.sort.sort_by) !== 0 ? (
-                <div className="sort-type">
-                  <div className="ascending-sort-section poppins-regular">
-                    <label
-                      htmlFor="ascending-sort"
-                      className="ascending-sort-label"
-                    >
-                      Ascending
-                    </label>
-                    <input
-                      type="radio"
-                      name="sort-type"
-                      id="ascending-sort"
-                      className="ascending-sort"
-                      checked={props.sort.type === 1}
-                      onChange={(event) =>
-                        event.target.value === "on" ? setAscendingSort() : ""
-                      }
-                    />
-                  </div>
-                  <div className="descending-sort-section poppins-regular">
-                    <label
-                      htmlFor="descending-sort"
-                      className="descending-sort-label"
-                    >
-                      Descending
-                    </label>
-                    <input
-                      type="radio"
-                      name="sort-type"
-                      id="descending-sort"
-                      className="descending-sort"
-                      checked={props.sort.type === 2}
-                      onChange={(event) =>
-                        event.target.value === "on" ? setDescendingSort() : ""
-                      }
-                    />
-                  </div>
-                </div>
-              ) : (
-                ""
-              )}
-              <div className="sort-actions">
-                {(Object.keys(props.sort).length === 2 &&
-                  Number(props.sort.sort_by) === 0) ||
-                props.applySort === 0 ? (
-                  <button
-                    className="cancel-sort-button poppins-regular"
-                    onClick={() => cancelSort()}
-                  >
-                    Cancel
-                  </button>
-                ) : (
-                  <button
-                    className="clear-sort-button poppins-regular"
-                    onClick={() => clearSort()}
-                  >
-                    Clear
-                  </button>
-                )}
-                <button
-                  className={
-                    "apply-sort-button poppins-regular" +
-                    (Number(props.sort.sort_by) === 0
-                      ? " feature-disabled"
-                      : "")
-                  }
-                  onClick={() => applySort()}
+            </div>
+          ) : props.page === "tasks" ? (
+            <div className="sort-by-section">
+              <label htmlFor="sort-by" className="sort-label">
+                Sort by
+              </label>
+              <select
+                name="sort-by"
+                className="poppins-regular"
+                id="sort-by"
+                value={props.sort.sort_by}
+                onChange={(event) => changeSort(event.target.value)}
+              >
+                <option value="0">-- None --</option>
+                <option value="1">State</option>
+                <option value="2">Priority</option>
+              </select>
+            </div>
+          ) : (
+            ""
+          )}
+          {Number(props.sort.sort_by) !== 0 ? (
+            <div className="sort-type">
+              <div className="ascending-sort-section poppins-regular">
+                <label
+                  htmlFor="ascending-sort"
+                  className="ascending-sort-label"
                 >
-                  Apply
-                </button>
+                  Ascending
+                </label>
+                <input
+                  type="radio"
+                  name="sort-type"
+                  id="ascending-sort"
+                  className="ascending-sort"
+                  checked={props.sort.type === 1}
+                  onChange={(event) =>
+                    event.target.value === "on" ? setAscendingSort() : ""
+                  }
+                />
+              </div>
+              <div className="descending-sort-section poppins-regular">
+                <label
+                  htmlFor="descending-sort"
+                  className="descending-sort-label"
+                >
+                  Descending
+                </label>
+                <input
+                  type="radio"
+                  name="sort-type"
+                  id="descending-sort"
+                  className="descending-sort"
+                  checked={props.sort.type === 2}
+                  onChange={(event) =>
+                    event.target.value === "on" ? setDescendingSort() : ""
+                  }
+                />
               </div>
             </div>
           ) : (
             ""
           )}
+          <div className="sort-actions">
+            {(Object.keys(props.sort).length === 2 &&
+              Number(props.sort.sort_by) === 0) ||
+            props.applySort === 0 ? (
+              <button
+                className="cancel-sort-button poppins-regular"
+                onClick={() => cancelSort()}
+              >
+                Cancel
+              </button>
+            ) : (
+              <button
+                className="clear-sort-button poppins-regular"
+                onClick={() => clearSort()}
+              >
+                Clear
+              </button>
+            )}
+            <button
+              className={
+                "apply-sort-button poppins-regular" +
+                (Number(props.sort.sort_by) === 0 ? " feature-disabled" : "")
+              }
+              onClick={() => applySort()}
+            >
+              Apply
+            </button>
+          </div>
         </div>
         <button
           className={
