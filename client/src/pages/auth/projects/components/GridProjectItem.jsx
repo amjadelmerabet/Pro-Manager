@@ -132,12 +132,33 @@ export default function GridProjectItem({
         <tbody>
           <tr>
             <td className="property poppins-bold">State</td>
-            <td className="value poppins-regular">
-              {project.state === 1
-                ? "Not started"
-                : project.state === 2
-                  ? "In progress"
-                  : "Completed"}
+            <td
+              className={
+                "value state-value poppins-regular" +
+                (project.state === 1
+                  ? " not-started-value"
+                  : project.state === 2
+                    ? " in-progress-value"
+                    : " completed-value")
+              }
+            >
+              <div>
+                <span
+                  className={
+                    "state" +
+                    (project.state === 1
+                      ? " not-started"
+                      : project.state === 2
+                        ? " in-progress"
+                        : " completed")
+                  }
+                ></span>
+                {project.state === 1
+                  ? "Not started"
+                  : project.state === 2
+                    ? "In progress"
+                    : "Completed"}
+              </div>
             </td>
           </tr>
           <tr>

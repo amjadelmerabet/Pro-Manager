@@ -11,6 +11,9 @@
 }
 
 .section-header .search {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -292,7 +295,7 @@
 }
 
 .page-buttons .filter .filter-section-buttons button {
-  padding: 4px 24px;
+  padding: 2px 24px;
   border: none;
   border-radius: 4px;
   cursor: pointer;

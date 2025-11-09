@@ -14,7 +14,7 @@
 .projects-page .projects.grid > .project {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   border: 2px solid var(--primary-color);
   border-radius: 10px;
   padding: 16px;
@@ -41,9 +41,9 @@
   margin-block: 8px;
 }
 
-.projects-page .projects.list > .project .project-properties {
+/* .projects-page .projects.list > .project .project-properties {
   display: flex;
-}
+} */
 
 .projects-page .projects.list > .project .project-properties > div {
   display: flex;
@@ -98,22 +98,33 @@
 
 .projects-page .project > .project-body {
   font-size: 14px;
+  margin-top: 12px;
+}
+
+.projects-page .project .project-body .value {
+  display: flex;
+  align-items: center;
 }
 
 .projects-page .project > .project-body td:nth-child(2) {
-  width: 60%;
+  width: fit-content
 }
 
 .projects-page .project > .updated {
+  position: absolute;
   font-size: 12px;
   align-self: flex-end;
 }
 
+.projects-page .projects.grid > .project .updated {
+  bottom: 4px;
+  right: 16px;
+}
+
 .projects-page .projects.list > .project .updated {
-  position: absolute;
   font-size: 11px;
   width: fit-content;
-  bottom: 0;
+  bottom: 2px;
   left: 50%;
   transform: translateX(-50%);
 }
@@ -224,4 +235,42 @@
 .projects > .project:hover > .open-project > button:hover {
   background-color: var(--primary-color-hover);
   transform: scale(0.98) rotate(0.5deg);
+}
+
+.projects-page .projects .project .state-value {
+  padding: 0 8px;
+  border-radius: 12px
+}
+
+.projects-page .projects .project .not-started-value {
+  background-color: rgba(245, 0, 45, .25);
+}
+
+.projects-page .projects .project .in-progress-value {
+  background-color: rgba(245, 120, 45, .25);
+}
+
+.projects-page .projects .project .completed-value {
+  background-color: rgba(0, 200, 120, .25);
+}
+
+.projects-page .projects .project span.state {
+  display: inline-block;
+  width: 10px;
+  aspect-ratio: 1 / 1;
+  margin-right: 4px;
+  border-radius: 5px;
+
+}
+
+.projects-page .projects .project .not-started {
+  background-color: rgb(245, 0, 45);
+}
+
+.projects-page .projects .project .in-progress {
+  background-color: rgb(245, 120, 45);
+}
+
+.projects-page .projects .project .completed {
+  background-color: rgb(0, 200, 120);
 }

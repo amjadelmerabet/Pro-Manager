@@ -7,8 +7,13 @@
   margin-left: 8px;
 }
 
+.projects-page .projects.list .project > .right {
+  width: fit-content;
+}
+
 .projects-page .projects.list .project .project-properties {
   display: grid;
-  grid-template-columns: 150px 180px 180px;
+  grid-template-columns: repeat(3, 160px);
   gap: 8px;
+  font-size: 14px;
 }
