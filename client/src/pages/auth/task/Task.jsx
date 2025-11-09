@@ -67,7 +67,7 @@ export default function Task({ user, setAuthentication }) {
         newAccessToken,
         setNewAccessToken,
         setTaskObject,
-        setTokenValidated,
+        setTokenValidated
       );
     }
   }, [taskUpdated, loadTask]);
@@ -86,7 +86,7 @@ export default function Task({ user, setAuthentication }) {
         newAccessToken,
         setNewAccessToken,
         setUpdatedSuccessfully,
-        setTokenValidated,
+        setTokenValidated
       );
     }
   }, [taskUpdated]);
@@ -118,7 +118,7 @@ export default function Task({ user, setAuthentication }) {
         setNewAccessToken,
         setTaskDeleted,
         setTokenValidated,
-        navigate,
+        navigate
       );
     }
   }, [taskDeleted]);
@@ -135,7 +135,7 @@ export default function Task({ user, setAuthentication }) {
         setLoadTask,
         taskUpdated,
         setTaskUpdated,
-        setTaskDeleted,
+        setTaskDeleted
       );
     }
   }, [newAccessToken]);
@@ -232,12 +232,22 @@ export default function Task({ user, setAuthentication }) {
                   className={
                     "task-state poppins-semibold" +
                     (taskObject.state === 1
-                      ? " to-do"
+                      ? " to-do-state"
                       : taskObject.state === 2
-                        ? " doing"
-                        : " done")
+                        ? " doing-state"
+                        : " done-state")
                   }
                 >
+                  <span
+                    className={
+                      "state" +
+                      (taskObject.state === 1
+                        ? " to-do"
+                        : taskObject.state === 2
+                          ? " doing"
+                          : " done")
+                    }
+                  ></span>
                   {taskObject.state === 1
                     ? "To do"
                     : taskObject.state === 2

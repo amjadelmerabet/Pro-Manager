@@ -50,6 +50,7 @@
 .tasks-page .tasks > .task .properties {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  font-size: 14px;
 }
 
 .tasks-page .tasks > .task .properties > div {
@@ -179,4 +180,44 @@
   width: fit-content;
   bottom: 4px;
   right: 16px;
+}
+
+.tasks-page .tasks .task .status .property-value {
+  padding: 0 8px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  width: fit-content;
+}
+
+.tasks-page .tasks .task .status .to-do-state {
+  background-color: rgb(245, 160, 180);
+}
+
+.tasks-page .tasks .task .status .doing-state {
+  background-color: rgb(120, 200, 245);
+}
+
+.tasks-page .tasks .task .status .done-state {
+  background-color: rgb(80, 245, 165);
+}
+
+.tasks-page .tasks .task .status .state {
+  display: inline-block;
+  width: 8px;
+  aspect-ratio: 1 / 1;
+  margin-right: 4px;
+  border-radius: 4px;
+}
+
+.tasks-page .tasks .task .status .to-do {
+  background-color: rgb(245, 0, 45);
+}
+
+.tasks-page .tasks .task .status .doing {
+  background-color: rgb(45, 160, 225);
+}
+
+.tasks-page .tasks .task .status .done {
+  background-color: rgb(0, 200, 120);
 }

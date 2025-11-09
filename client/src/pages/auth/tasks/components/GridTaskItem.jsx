@@ -146,9 +146,28 @@ export default function GridTaskItem({
             {task.assigned_to === user ? "You" : task.assigned_to}
           </div>
         </div>
-        <div className="state poppins-regular">
+        <div className="status poppins-regular">
           <div className="property-name poppins-semibold">State</div>
-          <div className="property-value">
+          <div
+            className={
+              "property-value" +
+              (task.state === 1
+                ? " to-do-state"
+                : task.state === 2
+                  ? " doing-state"
+                  : " done-state")
+            }
+          >
+            <span
+              className={
+                "state" +
+                (task.state === 1
+                  ? " to-do"
+                  : task.state === 2
+                    ? " doing"
+                    : " done")
+              }
+            ></span>
             {task.state === 1 ? "To do" : task.state === 2 ? "Doing" : "Done"}
           </div>
         </div>
