@@ -1,0 +1,24 @@
+.dashboard-container .quick-actions {
+  margin: 24px 48px;
+}
+
+.dashboard-container .quick-actions .actions {
+  list-style: none;
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--secondary-color);
+  padding: 8px 20px;
+  margin-block: 4px;
+  border-radius: 8px;
+}
+
+.dashboard-container .quick-actions .actions > .action {
+  margin-inline: 8px;
+  font-size: 13px;
+}
+
+.dashboard-container .quick-actions .actions > .action > button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}

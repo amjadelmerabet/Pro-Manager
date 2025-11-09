@@ -5,6 +5,7 @@ Todos:
   [+]  Understand and fix the bug that causing the dashboard page to show nothing sometimes.
   [+]  Add the possibility to edit the description of project when a user is viewing the project details page.
   [+]  Add a check to the deadline date input in the new project popup to ensure that the deadline date is not in the past.
+  []  Make use of the confirm password input in the sign up form.
 
 Features:
   [+]  As a user I would like to sort my projects either by their states or by their deadlines.
