@@ -13,19 +13,38 @@
 .task-page .task > .task-header .task-state {
   margin-left: 16px;
   border-radius: 24px;
-  padding: 2px 16px;
-  color: white;
+  padding: 2px 12px;
 }
 
-.task-page .task > .task-header .to-do {
+.task-page .task > .task-header .to-do-state {
+  background-color: rgb(245, 160, 180);
+}
+
+.task-page .task > .task-header .doing-state {
+  background-color: rgb(120, 200, 245);
+}
+
+.task-page .task > .task-header .done-state {
+  background-color: rgb(80, 245, 165);
+}
+
+.task-page .task .task-header .state {
+  display: inline-block;
+  width: 8px;
+  aspect-ratio: 1 / 1;
+  border-radius: 4px;
+  margin-right: 4px;
+}
+
+.task-page .task .task-header .to-do {
   background-color: rgb(245, 0, 45);
 }
 
-.task-page .task > .task-header .doing {
-  background-color: rgb(245, 120, 45);
+.task-page .task .task-header .doing {
+  background-color: rgb(45, 160, 225);
 }
 
-.task-page .task > .task-header .done {
+.task-page .task .task-header .done {
   background-color: rgb(0, 200, 120);
 }
 

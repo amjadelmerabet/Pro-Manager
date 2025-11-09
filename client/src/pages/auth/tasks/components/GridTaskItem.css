@@ -25,7 +25,7 @@
 }
 
 .tasks-page .tasks.grid .task > .task-body .assigned-to,
-.tasks-page .tasks.grid .task > .task-body .state {
+.tasks-page .tasks.grid .task > .task-body .status {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
 }
