@@ -49,6 +49,9 @@ export default function TasksPage({ user, setAuthentication }) {
   const [tries, setTries] = useState(0);
   const [loadTasks, setLoadTasks] = useState(0);
   const [tokenValidated, setTokenValidated] = useState(false);
+  const [sort, setSort] = useState({ sort_by: "0", type: 1 });
+  const [sortCleared, setSortCleared] = useState(false);
+  const [applySort, setApplySort] = useState(0);
 
   const [searchParams] = useSearchParams();
   const view = searchParams.get("view");
@@ -86,9 +89,16 @@ export default function TasksPage({ user, setAuthentication }) {
       newAccessToken,
       setNewAccessToken,
       setTasks,
-      setTokenValidated,
+      setTokenValidated
     );
-  }, [newTaskCreated, taskDeleted, taskUpdated, filterCleared, loadTasks]);
+  }, [
+    newTaskCreated,
+    taskDeleted,
+    taskUpdated,
+    filterCleared,
+    loadTasks,
+    sortCleared,
+  ]);
 
   useEffect(() => {
     if (newAccessToken.counter > 0) {
@@ -105,7 +115,7 @@ export default function TasksPage({ user, setAuthentication }) {
         updatedTaskId,
         setUpdatedTaskId,
         deletedTaskId,
-        setDeletedTaskId,
+        setDeletedTaskId
       );
     }
   }, [newAccessToken]);
@@ -142,6 +152,34 @@ export default function TasksPage({ user, setAuthentication }) {
   }, [search, applyFilters]);
 
   useEffect(() => {
+    const sortTasks = (unsortedTasksList) => {
+      if (Number(sort.sort_by) === 1) {
+        unsortedTasksList.sort((a, b) => {
+          if (sort.type === 1) {
+            return a.state - b.state;
+          } else {
+            return b.state - a.state;
+          }
+        });
+      } else if (Number(sort.sort_by) === 2) {
+        unsortedTasksList.sort((a, b) => {
+          if (sort.type === 1) {
+            return a.priority - b.priority;
+          } else {
+            return b.priority - a.priority;
+          }
+        });
+      }
+      return unsortedTasksList;
+    };
+    if (applySort > 0) {
+      setTasks((currentList) => {
+        return sortTasks(currentList);
+      });
+    }
+  }, [applySort]);
+
+  useEffect(() => {
     if (Object.keys(newTask).length > 0 && create > 0) {
       // createNewTaskAPI();
       createTaskUtil(
@@ -160,7 +198,7 @@ export default function TasksPage({ user, setAuthentication }) {
         setLoadingNewTask,
         newTaskPopupDisplay,
         setNewTaskPopupDisplay,
-        setTokenValidated,
+        setTokenValidated
       );
     }
   }, [create]);
@@ -197,7 +235,7 @@ export default function TasksPage({ user, setAuthentication }) {
         setNewAccessToken,
         taskDeleted,
         setTaskDeleted,
-        setTokenValidated,
+        setTokenValidated
       );
     }
   }, [deletedTaskId]);
@@ -223,7 +261,7 @@ export default function TasksPage({ user, setAuthentication }) {
         taskUpdated,
         setTaskUpdated,
         setTaskUpdates,
-        setTokenValidated,
+        setTokenValidated
       );
     }
   }, [updatedTaskId]);
@@ -283,6 +321,11 @@ export default function TasksPage({ user, setAuthentication }) {
           applyFilters={applyFilters}
           setApplyFilters={setApplyFilters}
           setFilterCleared={setFilterCleared}
+          sort={sort}
+          setSort={setSort}
+          applySort={applySort}
+          setApplySort={setApplySort}
+          setSortCleared={setSortCleared}
         />
         <ul className={"tasks " + selectedView}>
           {search === "" && applyFilters === 0
