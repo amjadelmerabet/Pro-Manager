@@ -77,7 +77,7 @@ export default function Project({ user, setAuthentication }) {
         setNewAccessToken,
         setProjectObject,
         setProjectNotFound,
-        setTokenValidated,
+        setTokenValidated
       );
     }
   }, [updatedsuccessfully, loadProject]);
@@ -94,7 +94,7 @@ export default function Project({ user, setAuthentication }) {
         newAccessToken,
         projectUpdated,
         setProjectUpdated,
-        setProjectDeleted,
+        setProjectDeleted
       );
     }
   }, [newAccessToken]);
@@ -113,7 +113,7 @@ export default function Project({ user, setAuthentication }) {
         newAccessToken,
         setNewAccessToken,
         setUpdatedsuccessfully,
-        setTokenValidated,
+        setTokenValidated
       );
     }
   }, [projectUpdated]);
@@ -133,7 +133,7 @@ export default function Project({ user, setAuthentication }) {
         newAccessToken,
         setNewAccessToken,
         setTokenValidated,
-        navigate,
+        navigate
       );
     }
   }, [projectDeleted]);
@@ -226,6 +226,16 @@ export default function Project({ user, setAuthentication }) {
                         : " completed")
                   }
                 >
+                  <span
+                    className={
+                      "state" +
+                      (projectObject.state === 1
+                        ? " not-started-state"
+                        : projectObject.state === 2
+                          ? " in-progress-state"
+                          : " completed-state")
+                    }
+                  ></span>
                   {projectObject.state === 1
                     ? "Not started"
                     : projectObject.state === 2

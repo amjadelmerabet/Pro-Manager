@@ -133,12 +133,33 @@ export default function ListProjectItem({
         <div className="project-properties">
           <div className="state">
             <div className="property-name poppins-semibold">State</div>
-            <div className="property-value poppins-regular">
-              {project.state === 1
-                ? "Not started"
-                : project.state === 2
-                  ? "In progress"
-                  : "Completed"}
+            <div
+              className={
+                "property-value state-value poppins-regular" +
+                (project.state === 1
+                  ? " not-started-value"
+                  : project.state === 2
+                    ? " in-progress-value"
+                    : " completed-value")
+              }
+            >
+              <div>
+                <span
+                  className={
+                    "state" +
+                    (project.state === 1
+                      ? " not-started"
+                      : project.state === 2
+                        ? " in-progress"
+                        : " completed")
+                  }
+                ></span>
+                {project.state === 1
+                  ? "Not started"
+                  : project.state === 2
+                    ? "In progress"
+                    : "Completed"}
+              </div>
             </div>
           </div>
           <div className="deadline">
