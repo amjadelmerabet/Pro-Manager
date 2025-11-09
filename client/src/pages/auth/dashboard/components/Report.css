@@ -1,0 +1,29 @@
+.dashboard-container .reports > .report {
+  width: 275px;
+  height: 165px;
+  background-color: var(--primary-color);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  color: white;
+  position: relative;
+  transition:
+    box-shadow 250ms ease-in-out,
+    transform 250ms ease-in-out;
+}
+
+.dashboard-container .reports > .report:hover {
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.45);
+  transform: scale(1.05);
+}
+
+.dashboard-container .reports > .report > .report-value {
+  font-size: 32px;
+}
+
+.dashboard-container .reports > .report > .report-link > a {
+  color: white;
+  font-size: 12px;
+}

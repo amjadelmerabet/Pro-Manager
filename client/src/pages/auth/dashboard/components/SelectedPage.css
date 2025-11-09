@@ -1,0 +1,23 @@
+.dashboard-container .selected .selected-page-header {
+  display: flex;
+  align-items: center;
+  margin-block: 8px;
+}
+
+.dashboard-container .selected .selected-page-title {
+  font-size: 20px;
+  margin-left: 16px;
+}
+
+.dashboard-container .selected .selected-page-details tr > td {
+  padding-block: 8px;
+}
+
+.dashboard-container .selected .selected-page-details tr > .short-description,
+.dashboard-container .selected .selected-page-details tr > .description {
+  padding-block: 0 8px;
+}
+
+.dashboard-container .selected .selected-page-details tr > td:nth-child(2) {
+  padding-left: 48px;
+}

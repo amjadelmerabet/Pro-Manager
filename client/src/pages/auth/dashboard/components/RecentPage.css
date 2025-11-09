@@ -1,0 +1,81 @@
+.dashboard-container main .recent-pages {
+  margin: 16px 24px;
+  background-color: var(--accent-color);
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.dashboard-container main .recent-pages > .section-title {
+  color: var(--primary-color);
+}
+
+.dashboard-container .recent-pages > .pages {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-top: 8px;
+}
+
+.dashboard-container .recent-pages > .loading-pages,
+.dashboard-container .recent-pages > .no-recent-pages {
+  height: 190px;
+  margin-top: 8px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* font-size: 18px; */
+}
+
+.dashboard-container .recent-pages .recent-page {
+  background-color: white;
+  padding: 4px;
+  border-radius: 8px;
+  transition:
+    box-shadow 250ms ease-in-out,
+    transform 250ms ease-in-out;
+  cursor: default;
+}
+
+.dashboard-container .recent-pages .page:hover {
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);
+  transform: scale(1.05);
+}
+
+.dashboard-container .recent-pages .selected-recent-page {
+  border: 2px solid var(--primary-color);
+}
+
+.dashboard-container .recent-pages .recent-page > .page-header {
+  display: flex;
+  align-items: center;
+  padding: 4px;
+}
+
+.dashboard-container .recent-pages .recent-page .title {
+  font-size: 14px;
+  margin-left: 8px;
+  margin-block: 4px;
+}
+
+.dashboard-container .recent-pages .recent-page .details {
+  font-size: 12px;
+  margin-block: 8px;
+  padding-inline: 8px;
+}
+
+.dashboard-container .recent-pages .recent-page .details tr > .value {
+  padding-left: 16px;
+}
+
+.dashboard-container .recent-pages .recent-page .links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-block: 8px;
+}
+
+.dashboard-container .recent-pages .recent-page .open-link {
+  font-size: 12px;
+  color: blue;
+}
