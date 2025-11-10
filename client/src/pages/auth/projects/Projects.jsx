@@ -16,7 +16,8 @@ import getAccessTokenUtil from "./utils/getAccessTokenUtil";
 import createProjectUtil from "./utils/createProjectUtil";
 import updateProjectUtil from "./utils/updateProjectUtil";
 import deleteProjectUtil from "./utils/deleteProjectUtil";
-import updateProjectsListUtil from "./utils/updateProjectsListUtil";
+import filterProjectsUtil from "./utils/filterProjectsUtil";
+import sortProjectsUtil from "./utils/sortProjectsUtil";
 
 // Styles
 import "./Projects.css";
@@ -42,7 +43,6 @@ export default function ProjectsPage({ user, setAuthentication }) {
   const [selectedView, setSelectedView] = useState("grid");
   const [filter, setFilter] = useState({ state: "0" });
   const [applyFilters, setApplyFilters] = useState(0);
-  const [filterCleared, setFilterCleared] = useState(false);
   const [newAccessToken, setNewAccessToken] = useState({
     counter: 0,
     type: "",
@@ -51,8 +51,9 @@ export default function ProjectsPage({ user, setAuthentication }) {
   const [loadProjects, setLoadProjects] = useState(0);
   const [tokenValidated, setTokenValidated] = useState(false);
   const [sort, setSort] = useState({ sort_by: "0", type: 1 });
-  const [sortCleared, setSortCleared] = useState(false);
   const [applySort, setApplySort] = useState(0);
+  const [sortedList, setSortedList] = useState([]);
+  // const [projectsFetched, setProjectsFetched] = useState(false);
 
   const [searchParams] = useSearchParams();
   const view = searchParams.get("view");
@@ -89,13 +90,14 @@ export default function ProjectsPage({ user, setAuthentication }) {
       setProjects,
       setTokenValidated
     );
+    // setProjectsFetched(true);
   }, [
     newProjectCreated,
     projectDeleted,
     projectUpdated,
-    filterCleared,
+    // filterCleared,
     loadProjects,
-    sortCleared,
+    // sortCleared,
   ]);
 
   useEffect(() => {
@@ -118,40 +120,24 @@ export default function ProjectsPage({ user, setAuthentication }) {
   }, [newAccessToken]);
 
   useEffect(() => {
-    updateProjectsListUtil(filter, search, projects, setFilteredList);
+    filterProjectsUtil(
+      filter,
+      search,
+      applySort === 0 ? projects : sortedList,
+      setFilteredList
+    );
   }, [search, applyFilters]);
 
   useEffect(() => {
-    const sortProjects = (unsoredProjectsList) => {
-      if (Number(sort.sort_by) !== 0) {
-        if (sort.sort_by === "1") {
-          unsoredProjectsList.sort((a, b) => {
-            if (sort.type === 1) {
-              return a.state - b.state;
-            } else {
-              return b.state - a.state;
-            }
-          });
-        } else if (sort.sort_by === "2") {
-          unsoredProjectsList.sort((a, b) => {
-            if (sort.type === 1) {
-              return (
-                new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
-              );
-            } else {
-              return (
-                new Date(b.deadline).getTime() - new Date(a.deadline).getTime()
-              );
-            }
-          });
-        }
-      }
-      return unsoredProjectsList;
-    };
     if (applySort > 0) {
-      setProjects((currentList) => {
-        return sortProjects(currentList);
+      setSortedList((currentList) => {
+        return sortProjectsUtil(currentList, projects, sort);
       });
+      if (applyFilters > 0) {
+        setFilteredList((currentList) => {
+          return sortProjectsUtil(currentList, projects, sort);
+        });
+      }
     }
   }, [applySort]);
 
@@ -296,65 +282,114 @@ export default function ProjectsPage({ user, setAuthentication }) {
           setFilter={setFilter}
           applyFilters={applyFilters}
           setApplyFilters={setApplyFilters}
-          setFilterCleared={setFilterCleared}
           sort={sort}
           setSort={setSort}
           applySort={applySort}
           setApplySort={setApplySort}
-          setSortCleared={setSortCleared}
         />
         <div className={"projects " + selectedView}>
           {search === "" && applyFilters === 0
-            ? projects.map((project) => {
-                if (project.owner === user) {
-                  myProjects++;
-                  const updated = new Date(project.updated_on);
-                  let updatedStatus = updatedMessageUtil(updated);
-                  if (deletedProjectId.projectId !== project.project_id) {
-                    if (selectedView === "grid") {
-                      return (
-                        <GridProjectItem
-                          key={project.project_id}
-                          project={project}
-                          openProjectClass={openProjectClass}
-                          hoverOverProject={hoverOverProject}
-                          hoverOverProjectEnd={hoverOverProjectEnd}
-                          openProject={openProject}
-                          startProject={startProject}
-                          resetProject={resetProject}
-                          completeProject={completeProject}
-                          deleteProject={deleteProject}
-                          user={user}
-                          updatedStatus={updatedStatus}
-                        />
-                      );
+            ? applySort === 0
+              ? projects.map((project) => {
+                  if (project.owner === user) {
+                    myProjects++;
+                    const updated = new Date(project.updated_on);
+                    let updatedStatus = updatedMessageUtil(updated);
+                    if (deletedProjectId.projectId !== project.project_id) {
+                      if (selectedView === "grid") {
+                        return (
+                          <GridProjectItem
+                            key={project.project_id}
+                            project={project}
+                            openProjectClass={openProjectClass}
+                            hoverOverProject={hoverOverProject}
+                            hoverOverProjectEnd={hoverOverProjectEnd}
+                            openProject={openProject}
+                            startProject={startProject}
+                            resetProject={resetProject}
+                            completeProject={completeProject}
+                            deleteProject={deleteProject}
+                            user={user}
+                            updatedStatus={updatedStatus}
+                          />
+                        );
+                      } else {
+                        return (
+                          <ListProjectItem
+                            key={project.project_id}
+                            project={project}
+                            user={user}
+                            openProjectClass={openProjectClass}
+                            openProject={openProject}
+                            startProject={startProject}
+                            completeProject={completeProject}
+                            resetProject={resetProject}
+                            deleteProject={deleteProject}
+                            hoverOverProject={hoverOverProject}
+                            hoverOverProjectEnd={hoverOverProjectEnd}
+                            updatedStatus={updatedStatus}
+                          />
+                        );
+                      }
                     } else {
                       return (
-                        <ListProjectItem
-                          key={project.project_id}
-                          project={project}
-                          user={user}
-                          openProjectClass={openProjectClass}
-                          openProject={openProject}
-                          startProject={startProject}
-                          completeProject={completeProject}
-                          resetProject={resetProject}
-                          deleteProject={deleteProject}
-                          hoverOverProject={hoverOverProject}
-                          hoverOverProjectEnd={hoverOverProjectEnd}
-                          updatedStatus={updatedStatus}
-                        />
+                        <div className={"deleting-project poppins-semibold"}>
+                          Project being deleted ...
+                        </div>
                       );
                     }
-                  } else {
-                    return (
-                      <div className={"deleting-project poppins-semibold"}>
-                        Project being deleted ...
-                      </div>
-                    );
                   }
-                }
-              })
+                })
+              : sortedList.map((project) => {
+                  if (project.owner === user) {
+                    myProjects++;
+                    const updated = new Date(project.updated_on);
+                    let updatedStatus = updatedMessageUtil(updated);
+                    if (deletedProjectId.projectId !== project.project_id) {
+                      if (selectedView === "grid") {
+                        return (
+                          <GridProjectItem
+                            key={project.project_id}
+                            project={project}
+                            openProjectClass={openProjectClass}
+                            hoverOverProject={hoverOverProject}
+                            hoverOverProjectEnd={hoverOverProjectEnd}
+                            openProject={openProject}
+                            startProject={startProject}
+                            resetProject={resetProject}
+                            completeProject={completeProject}
+                            deleteProject={deleteProject}
+                            user={user}
+                            updatedStatus={updatedStatus}
+                          />
+                        );
+                      } else {
+                        return (
+                          <ListProjectItem
+                            key={project.project_id}
+                            project={project}
+                            user={user}
+                            openProjectClass={openProjectClass}
+                            openProject={openProject}
+                            startProject={startProject}
+                            completeProject={completeProject}
+                            resetProject={resetProject}
+                            deleteProject={deleteProject}
+                            hoverOverProject={hoverOverProject}
+                            hoverOverProjectEnd={hoverOverProjectEnd}
+                            updatedStatus={updatedStatus}
+                          />
+                        );
+                      }
+                    } else {
+                      return (
+                        <div className={"deleting-project poppins-semibold"}>
+                          Project being deleted ...
+                        </div>
+                      );
+                    }
+                  }
+                })
             : filteredList.map((project) => {
                 if (project.owner === user) {
                   myProjects++;

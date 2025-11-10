@@ -19,6 +19,8 @@ import updateTaskUtil from "./utils/updateTaskUtil";
 
 // Styles
 import "./Tasks.css";
+import filterTasksUtil from "./utils/filterTasksUtil";
+import sortTasksUtil from "./utils/sortTasksUtil";
 
 export default function TasksPage({ user, setAuthentication }) {
   const [tasks, setTasks] = useState([]);
@@ -41,7 +43,6 @@ export default function TasksPage({ user, setAuthentication }) {
   const [selectedView, setSelectedView] = useState("list");
   const [filter, setFilter] = useState({ state: "0" });
   const [applyFilters, setApplyFilters] = useState(0);
-  const [filterCleared, setFilterCleared] = useState(false);
   const [newAccessToken, setNewAccessToken] = useState({
     counter: 0,
     type: "",
@@ -50,8 +51,8 @@ export default function TasksPage({ user, setAuthentication }) {
   const [loadTasks, setLoadTasks] = useState(0);
   const [tokenValidated, setTokenValidated] = useState(false);
   const [sort, setSort] = useState({ sort_by: "0", type: 1 });
-  const [sortCleared, setSortCleared] = useState(false);
   const [applySort, setApplySort] = useState(0);
+  const [sortedList, setSortedList] = useState([]);
 
   const [searchParams] = useSearchParams();
   const view = searchParams.get("view");
@@ -91,14 +92,7 @@ export default function TasksPage({ user, setAuthentication }) {
       setTasks,
       setTokenValidated
     );
-  }, [
-    newTaskCreated,
-    taskDeleted,
-    taskUpdated,
-    filterCleared,
-    loadTasks,
-    sortCleared,
-  ]);
+  }, [newTaskCreated, taskDeleted, taskUpdated, loadTasks]);
 
   useEffect(() => {
     if (newAccessToken.counter > 0) {
@@ -121,61 +115,24 @@ export default function TasksPage({ user, setAuthentication }) {
   }, [newAccessToken]);
 
   useEffect(() => {
-    if (Object.keys(filter).length !== 0) {
-      if (filter.state && Number(filter.state) !== 0) {
-        if (search !== "") {
-          let newList = tasks.filter((task) => {
-            if (
-              task.state === Number(filter.state) &&
-              task.name.toLowerCase().includes(search.toLowerCase())
-            ) {
-              return task;
-            }
-          });
-          setFilteredList(newList);
-        } else {
-          let newList = tasks.filter((task) => {
-            if (task.state === Number(filter.state)) {
-              return task;
-            }
-          });
-          setFilteredList(newList);
-        }
-      } else {
-        let newList = tasks.filter((task) => {
-          if (task.name.toLowerCase().includes(search.toLowerCase()))
-            return task;
-        });
-        setFilteredList(newList);
-      }
-    }
+    filterTasksUtil(
+      filter,
+      search,
+      applySort === 0 ? tasks : sortedList,
+      setFilteredList
+    );
   }, [search, applyFilters]);
 
   useEffect(() => {
-    const sortTasks = (unsortedTasksList) => {
-      if (Number(sort.sort_by) === 1) {
-        unsortedTasksList.sort((a, b) => {
-          if (sort.type === 1) {
-            return a.state - b.state;
-          } else {
-            return b.state - a.state;
-          }
-        });
-      } else if (Number(sort.sort_by) === 2) {
-        unsortedTasksList.sort((a, b) => {
-          if (sort.type === 1) {
-            return a.priority - b.priority;
-          } else {
-            return b.priority - a.priority;
-          }
+    if (applySort > 0) {
+      setSortedList((currentList) => {
+        return sortTasksUtil(currentList, tasks, sort);
+      });
+      if (applyFilters > 0) {
+        setFilteredList((currentList) => {
+          return sortTasksUtil(currentList, tasks, sort);
         });
       }
-      return unsortedTasksList;
-    };
-    if (applySort > 0) {
-      setTasks((currentList) => {
-        return sortTasks(currentList);
-      });
     }
   }, [applySort]);
 
@@ -320,57 +277,98 @@ export default function TasksPage({ user, setAuthentication }) {
           setFilter={setFilter}
           applyFilters={applyFilters}
           setApplyFilters={setApplyFilters}
-          setFilterCleared={setFilterCleared}
           sort={sort}
           setSort={setSort}
           applySort={applySort}
           setApplySort={setApplySort}
-          setSortCleared={setSortCleared}
         />
         <ul className={"tasks " + selectedView}>
           {search === "" && applyFilters === 0
-            ? tasks.map((task) => {
-                if (task.assigned_to === user) {
-                  let updated = new Date(task.updated_on);
-                  const updatedStatus = updatedMessageUtil(updated);
-                  myTasks++;
-                  if (selectedView === "list") {
-                    return (
-                      <ListTaskItem
-                        key={task.task_id}
-                        task={task}
-                        user={user}
-                        hoverOverTask={hoverOverTask}
-                        hoverOverTaskEnd={hoverOverTaskEnd}
-                        updatedStatus={updatedStatus}
-                        openTaskClass={openTaskClass}
-                        openTask={openTask}
-                        startTask={startTask}
-                        completeTask={completeTask}
-                        resetTask={resetTask}
-                        deleteTask={deleteTask}
-                      />
-                    );
-                  } else {
-                    return (
-                      <GridTaskItem
-                        key={task.task_id}
-                        task={task}
-                        openTaskClass={openTaskClass}
-                        openTask={openTask}
-                        hoverOverTask={hoverOverTask}
-                        hoverOverTaskEnd={hoverOverTaskEnd}
-                        updatedStatus={updatedStatus}
-                        startTask={startTask}
-                        completeTask={completeTask}
-                        resetTask={resetTask}
-                        deleteTask={deleteTask}
-                        user={user}
-                      />
-                    );
+            ? applySort === 0
+              ? tasks.map((task) => {
+                  if (task.assigned_to === user) {
+                    let updated = new Date(task.updated_on);
+                    const updatedStatus = updatedMessageUtil(updated);
+                    myTasks++;
+                    if (selectedView === "list") {
+                      return (
+                        <ListTaskItem
+                          key={task.task_id}
+                          task={task}
+                          user={user}
+                          hoverOverTask={hoverOverTask}
+                          hoverOverTaskEnd={hoverOverTaskEnd}
+                          updatedStatus={updatedStatus}
+                          openTaskClass={openTaskClass}
+                          openTask={openTask}
+                          startTask={startTask}
+                          completeTask={completeTask}
+                          resetTask={resetTask}
+                          deleteTask={deleteTask}
+                        />
+                      );
+                    } else {
+                      return (
+                        <GridTaskItem
+                          key={task.task_id}
+                          task={task}
+                          openTaskClass={openTaskClass}
+                          openTask={openTask}
+                          hoverOverTask={hoverOverTask}
+                          hoverOverTaskEnd={hoverOverTaskEnd}
+                          updatedStatus={updatedStatus}
+                          startTask={startTask}
+                          completeTask={completeTask}
+                          resetTask={resetTask}
+                          deleteTask={deleteTask}
+                          user={user}
+                        />
+                      );
+                    }
                   }
-                }
-              })
+                })
+              : sortedList.map((task) => {
+                  if (task.assigned_to === user) {
+                    let updated = new Date(task.updated_on);
+                    const updatedStatus = updatedMessageUtil(updated);
+                    myTasks++;
+                    if (selectedView === "list") {
+                      return (
+                        <ListTaskItem
+                          key={task.task_id}
+                          task={task}
+                          user={user}
+                          hoverOverTask={hoverOverTask}
+                          hoverOverTaskEnd={hoverOverTaskEnd}
+                          updatedStatus={updatedStatus}
+                          openTaskClass={openTaskClass}
+                          openTask={openTask}
+                          startTask={startTask}
+                          completeTask={completeTask}
+                          resetTask={resetTask}
+                          deleteTask={deleteTask}
+                        />
+                      );
+                    } else {
+                      return (
+                        <GridTaskItem
+                          key={task.task_id}
+                          task={task}
+                          openTaskClass={openTaskClass}
+                          openTask={openTask}
+                          hoverOverTask={hoverOverTask}
+                          hoverOverTaskEnd={hoverOverTaskEnd}
+                          updatedStatus={updatedStatus}
+                          startTask={startTask}
+                          completeTask={completeTask}
+                          resetTask={resetTask}
+                          deleteTask={deleteTask}
+                          user={user}
+                        />
+                      );
+                    }
+                  }
+                })
             : filteredList.map((task) => {
                 if (task.assigned_to === user) {
                   let updated = new Date(task.updated_on);
@@ -402,6 +400,7 @@ export default function TasksPage({ user, setAuthentication }) {
                         openTask={openTask}
                         hoverOverTask={hoverOverTask}
                         hoverOverTaskEnd={hoverOverTaskEnd}
+                        updatedStatus={updatedStatus}
                         startTask={startTask}
                         completeTask={completeTask}
                         resetTask={resetTask}
