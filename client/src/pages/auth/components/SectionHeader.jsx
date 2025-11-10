@@ -72,20 +72,14 @@ export default function SectionHeader(props) {
   const clearSort = () => {
     props.setSort({ sort_by: "0", type: 1 });
     props.setApplySort(0);
-    props.setSortCleared(true);
-    setTimeout(() => {
-      props.setSortCleared(false);
-    }, 250);
   };
 
   const clearFilter = () => {
     props.setFilter({ state: "0" });
     props.setApplyFilters(0);
-    props.setFilterCleared(true);
   };
 
   const applySort = () => {
-    // props.setSortCleared(false);
     setTimeout(() => {
       props.setApplySort(props.applySort + 1);
       setSortOpen(!sortOpen);
@@ -93,7 +87,6 @@ export default function SectionHeader(props) {
   };
 
   const applyFilter = () => {
-    props.setFilterCleared(false);
     setTimeout(() => {
       props.setApplyFilters(props.applyFilters + 1);
       setFilterOpen(!filterOpen);
