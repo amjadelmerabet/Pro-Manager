@@ -1,12 +1,15 @@
+import { useState } from "react";
+import { IconContext } from "react-icons/lib";
 import { PiListBold } from "react-icons/pi";
 import { FiFilter } from "react-icons/fi";
 import { HiViewGrid } from "react-icons/hi";
-import { IconContext } from "react-icons/lib";
-import { useState } from "react";
-
-import "./SectionHeader.css";
 import { IoClose } from "react-icons/io5";
 import { TbArrowsSort } from "react-icons/tb";
+import { LuKanban } from "react-icons/lu";
+import { MdOutlineDoNotDisturbAlt } from "react-icons/md";
+import { ImCross } from "react-icons/im";
+
+import "./SectionHeader.css";
 
 export default function SectionHeader(props) {
   const [filterOpen, setFilterOpen] = useState(false);
@@ -22,6 +25,10 @@ export default function SectionHeader(props) {
 
   const setGridView = () => {
     props.setSelectedView("grid");
+  };
+
+  const setKanbanView = () => {
+    props.setSelectedView("kanban");
   };
 
   const openSortPopup = () => {
@@ -146,6 +153,17 @@ export default function SectionHeader(props) {
           >
             <IconContext.Provider value={{ style: { fontSize: "28px" } }}>
               <HiViewGrid />
+            </IconContext.Provider>
+          </button>
+          <button
+            className={
+              "kanban-view" +
+              (props.selectedView === "kanban" ? " selected" : "")
+            }
+            onClick={() => setKanbanView()}
+          >
+            <IconContext.Provider value={{ style: { fontSize: "28px" } }}>
+              <LuKanban />
             </IconContext.Provider>
           </button>
         </div>
@@ -291,14 +309,22 @@ export default function SectionHeader(props) {
               ? " no-filters"
               : "") +
             (filterOpen ? " open" : "") +
-            (props.applyFilters === 0 ? " draft-filters" : "")
+            (props.applyFilters === 0 ? " draft-filters" : "") +
+            (props.selectedView === "kanban" ? " filter-disabled" : "")
           }
           data-filter-number-popup={Object.keys(props.filter).length}
           onClick={() => openFilter()}
         >
-          <IconContext.Provider value={{ style: { fontSize: "28px" } }}>
-            <FiFilter />
-          </IconContext.Provider>
+          {props.selectedView !== "kanban" ? (
+            <IconContext.Provider value={{ style: { fontSize: "28px" } }}>
+              <FiFilter />
+            </IconContext.Provider>
+          ) : (
+            <IconContext.Provider value={{ style: { fontSize: "28px" } }}>
+              <FiFilter />
+              <ImCross />
+            </IconContext.Provider>
+          )}
         </button>
         <div
           className={"filter poppins-regular" + (filterOpen ? " visible" : "")}
