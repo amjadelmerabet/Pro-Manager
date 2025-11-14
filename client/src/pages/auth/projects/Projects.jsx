@@ -8,6 +8,7 @@ import SectionHeader from "../components/SectionHeader";
 import NewProjectPopup from "./components/NewProjectPopup";
 import GridProjectItem from "./components/GridProjectItem";
 import ListProjectItem from "./components/ListProjectItem";
+import KanbanCardProject from "./components/KanbanCardProject";
 
 // Utils
 import updatedMessageUtil from "../../../utils/updatedMessageUtil";
@@ -53,6 +54,7 @@ export default function ProjectsPage({ user, setAuthentication }) {
   const [sort, setSort] = useState({ sort_by: "0", type: 1 });
   const [applySort, setApplySort] = useState(0);
   const [sortedList, setSortedList] = useState([]);
+  // const [notStartedProjects, setNotStartedProjects] = useState(0);
   // const [projectsFetched, setProjectsFetched] = useState(false);
 
   const [searchParams] = useSearchParams();
@@ -262,6 +264,19 @@ export default function ProjectsPage({ user, setAuthentication }) {
   };
 
   let myProjects = 0;
+  let projectsNotStarted = 0;
+  let projectsInProgress = 0;
+  let projectsCompleted = 0;
+  projects.forEach((project) => {
+    myProjects++;
+    if (project.state === 1) {
+      projectsNotStarted++;
+    } else if (project.state === 2) {
+      projectsInProgress++;
+    } else if (project.state === 3) {
+      projectsCompleted++;
+    }
+  });
 
   return (
     <div className="projects-page">
@@ -288,111 +303,172 @@ export default function ProjectsPage({ user, setAuthentication }) {
           setApplySort={setApplySort}
         />
         <div className={"projects " + selectedView}>
-          {search === "" && applyFilters === 0
-            ? applySort === 0
-              ? projects.map((project) => {
-                  if (project.owner === user) {
-                    myProjects++;
-                    const updated = new Date(project.updated_on);
-                    let updatedStatus = updatedMessageUtil(updated);
-                    if (deletedProjectId.projectId !== project.project_id) {
-                      if (selectedView === "grid") {
-                        return (
-                          <GridProjectItem
-                            key={project.project_id}
-                            project={project}
-                            openProjectClass={openProjectClass}
-                            hoverOverProject={hoverOverProject}
-                            hoverOverProjectEnd={hoverOverProjectEnd}
-                            openProject={openProject}
-                            startProject={startProject}
-                            resetProject={resetProject}
-                            completeProject={completeProject}
-                            deleteProject={deleteProject}
-                            user={user}
-                            updatedStatus={updatedStatus}
-                          />
-                        );
-                      } else {
-                        return (
-                          <ListProjectItem
-                            key={project.project_id}
-                            project={project}
-                            user={user}
-                            openProjectClass={openProjectClass}
-                            openProject={openProject}
-                            startProject={startProject}
-                            completeProject={completeProject}
-                            resetProject={resetProject}
-                            deleteProject={deleteProject}
-                            hoverOverProject={hoverOverProject}
-                            hoverOverProjectEnd={hoverOverProjectEnd}
-                            updatedStatus={updatedStatus}
-                          />
-                        );
-                      }
-                    } else {
-                      return (
-                        <div className={"deleting-project poppins-semibold"}>
-                          Project being deleted ...
-                        </div>
-                      );
-                    }
-                  }
-                })
-              : sortedList.map((project) => {
-                  if (project.owner === user) {
-                    myProjects++;
-                    const updated = new Date(project.updated_on);
-                    let updatedStatus = updatedMessageUtil(updated);
-                    if (deletedProjectId.projectId !== project.project_id) {
-                      if (selectedView === "grid") {
-                        return (
-                          <GridProjectItem
-                            key={project.project_id}
-                            project={project}
-                            openProjectClass={openProjectClass}
-                            hoverOverProject={hoverOverProject}
-                            hoverOverProjectEnd={hoverOverProjectEnd}
-                            openProject={openProject}
-                            startProject={startProject}
-                            resetProject={resetProject}
-                            completeProject={completeProject}
-                            deleteProject={deleteProject}
-                            user={user}
-                            updatedStatus={updatedStatus}
-                          />
-                        );
-                      } else {
-                        return (
-                          <ListProjectItem
-                            key={project.project_id}
-                            project={project}
-                            user={user}
-                            openProjectClass={openProjectClass}
-                            openProject={openProject}
-                            startProject={startProject}
-                            completeProject={completeProject}
-                            resetProject={resetProject}
-                            deleteProject={deleteProject}
-                            hoverOverProject={hoverOverProject}
-                            hoverOverProjectEnd={hoverOverProjectEnd}
-                            updatedStatus={updatedStatus}
-                          />
-                        );
-                      }
-                    } else {
-                      return (
-                        <div className={"deleting-project poppins-semibold"}>
-                          Project being deleted ...
-                        </div>
-                      );
-                    }
-                  }
-                })
-            : filteredList.map((project) => {
+          {selectedView === "kanban" ? (
+            <div className="kanban-board">
+              <div className="kanban-column">
+                <div className="kanban-header poppins-semibold not-started">
+                  Not started
+                  <span className="count">{projectsNotStarted}</span>
+                </div>
+                <div className="projects-cards">
+                  {applySort === 0
+                    ? projects
+                        .filter((project) => project.state === 1)
+                        .map((project) => {
+                          let updated = new Date(project.updated_on);
+                          let updatedStatus = updatedMessageUtil(updated);
+                          return (
+                            <KanbanCardProject
+                              key={project.project_id}
+                              project={project}
+                              user={user}
+                              hoverOverProject={hoverOverProject}
+                              hoverOverProjectEnd={hoverOverProjectEnd}
+                              openProjectClass={openProjectClass}
+                              openProject={openProject}
+                              startProject={startProject}
+                              completeProject={completeProject}
+                              resetProject={resetProject}
+                              deleteProject={deleteProject}
+                              updatedStatus={updatedStatus}
+                            />
+                          );
+                        })
+                    : sortedList
+                        .filter((project) => project.state === 1)
+                        .map((project) => {
+                          let updated = new Date(project.updated_on);
+                          let updatedStatus = updatedMessageUtil(updated);
+                          return (
+                            <KanbanCardProject
+                              key={project.project_id}
+                              project={project}
+                              user={user}
+                              hoverOverProject={hoverOverProject}
+                              hoverOverProjectEnd={hoverOverProjectEnd}
+                              openProjectClass={openProjectClass}
+                              openProject={openProject}
+                              startProject={startProject}
+                              completeProject={completeProject}
+                              resetProject={resetProject}
+                              deleteProject={deleteProject}
+                              updatedStatus={updatedStatus}
+                            />
+                          );
+                        })}
+                </div>
+              </div>
+              <div className="kanban-column">
+                <div className="kanban-header poppins-semibold in-progress">
+                  In progress
+                  <span className="count">{projectsInProgress}</span>
+                </div>
+                <div className="projects-cards">
+                  {applySort === 0
+                    ? projects
+                        .filter((project) => project.state === 2)
+                        .map((project) => {
+                          let updated = new Date(project.updated_on);
+                          let updatedStatus = updatedMessageUtil(updated);
+                          return (
+                            <KanbanCardProject
+                              key={project.project_id}
+                              project={project}
+                              user={user}
+                              hoverOverProject={hoverOverProject}
+                              hoverOverProjectEnd={hoverOverProjectEnd}
+                              openProjectClass={openProjectClass}
+                              openProject={openProject}
+                              startProject={startProject}
+                              completeProject={completeProject}
+                              resetProject={resetProject}
+                              deleteProject={deleteProject}
+                              updatedStatus={updatedStatus}
+                            />
+                          );
+                        })
+                    : sortedList
+                        .filter((project) => project.state === 2)
+                        .map((project) => {
+                          let updated = new Date(project.updated_on);
+                          let updatedStatus = updatedMessageUtil(updated);
+                          return (
+                            <KanbanCardProject
+                              key={project.project_id}
+                              project={project}
+                              user={user}
+                              hoverOverProject={hoverOverProject}
+                              hoverOverProjectEnd={hoverOverProjectEnd}
+                              openProjectClass={openProjectClass}
+                              openProject={openProject}
+                              startProject={startProject}
+                              completeProject={completeProject}
+                              resetProject={resetProject}
+                              deleteProject={deleteProject}
+                              updatedStatus={updatedStatus}
+                            />
+                          );
+                        })}
+                </div>
+              </div>
+              <div className="kanban-column">
+                <div className="kanban-header poppins-semibold completed">
+                  Completed
+                  <span className="count">{projectsCompleted}</span>
+                </div>
+                <div className="projects-cards">
+                  {applySort === 0
+                    ? projects
+                        .filter((project) => project.state === 3)
+                        .map((project) => {
+                          let updated = new Date(project.updated_on);
+                          let updatedStatus = updatedMessageUtil(updated);
+                          return (
+                            <KanbanCardProject
+                              key={project.project_id}
+                              project={project}
+                              user={user}
+                              hoverOverProject={hoverOverProject}
+                              hoverOverProjectEnd={hoverOverProjectEnd}
+                              openProjectClass={openProjectClass}
+                              openProject={openProject}
+                              startProject={startProject}
+                              completeProject={completeProject}
+                              resetProject={resetProject}
+                              deleteProject={deleteProject}
+                              updatedStatus={updatedStatus}
+                            />
+                          );
+                        })
+                    : sortedList
+                        .filter((project) => project.state === 3)
+                        .map((project) => {
+                          let updated = new Date(project.updated_on);
+                          let updatedStatus = updatedMessageUtil(updated);
+                          return (
+                            <KanbanCardProject
+                              key={project.project_id}
+                              project={project}
+                              user={user}
+                              hoverOverProject={hoverOverProject}
+                              hoverOverProjectEnd={hoverOverProjectEnd}
+                              openProjectClass={openProjectClass}
+                              openProject={openProject}
+                              startProject={startProject}
+                              completeProject={completeProject}
+                              resetProject={resetProject}
+                              deleteProject={deleteProject}
+                              updatedStatus={updatedStatus}
+                            />
+                          );
+                        })}
+                </div>
+              </div>
+            </div>
+          ) : search === "" && applyFilters === 0 ? (
+            applySort === 0 ? (
+              projects.map((project) => {
                 if (project.owner === user) {
-                  myProjects++;
                   const updated = new Date(project.updated_on);
                   let updatedStatus = updatedMessageUtil(updated);
                   if (deletedProjectId.projectId !== project.project_id) {
@@ -427,6 +503,7 @@ export default function ProjectsPage({ user, setAuthentication }) {
                           deleteProject={deleteProject}
                           hoverOverProject={hoverOverProject}
                           hoverOverProjectEnd={hoverOverProjectEnd}
+                          updatedStatus={updatedStatus}
                         />
                       );
                     }
@@ -438,7 +515,108 @@ export default function ProjectsPage({ user, setAuthentication }) {
                     );
                   }
                 }
-              })}
+              })
+            ) : (
+              sortedList.map((project) => {
+                if (project.owner === user) {
+                  const updated = new Date(project.updated_on);
+                  let updatedStatus = updatedMessageUtil(updated);
+                  if (deletedProjectId.projectId !== project.project_id) {
+                    if (selectedView === "grid") {
+                      return (
+                        <GridProjectItem
+                          key={project.project_id}
+                          project={project}
+                          openProjectClass={openProjectClass}
+                          hoverOverProject={hoverOverProject}
+                          hoverOverProjectEnd={hoverOverProjectEnd}
+                          openProject={openProject}
+                          startProject={startProject}
+                          resetProject={resetProject}
+                          completeProject={completeProject}
+                          deleteProject={deleteProject}
+                          user={user}
+                          updatedStatus={updatedStatus}
+                        />
+                      );
+                    } else {
+                      return (
+                        <ListProjectItem
+                          key={project.project_id}
+                          project={project}
+                          user={user}
+                          openProjectClass={openProjectClass}
+                          openProject={openProject}
+                          startProject={startProject}
+                          completeProject={completeProject}
+                          resetProject={resetProject}
+                          deleteProject={deleteProject}
+                          hoverOverProject={hoverOverProject}
+                          hoverOverProjectEnd={hoverOverProjectEnd}
+                          updatedStatus={updatedStatus}
+                        />
+                      );
+                    }
+                  } else {
+                    return (
+                      <div className={"deleting-project poppins-semibold"}>
+                        Project being deleted ...
+                      </div>
+                    );
+                  }
+                }
+              })
+            )
+          ) : (
+            filteredList.map((project) => {
+              if (project.owner === user) {
+                const updated = new Date(project.updated_on);
+                let updatedStatus = updatedMessageUtil(updated);
+                if (deletedProjectId.projectId !== project.project_id) {
+                  if (selectedView === "grid") {
+                    return (
+                      <GridProjectItem
+                        key={project.project_id}
+                        project={project}
+                        openProjectClass={openProjectClass}
+                        hoverOverProject={hoverOverProject}
+                        hoverOverProjectEnd={hoverOverProjectEnd}
+                        openProject={openProject}
+                        startProject={startProject}
+                        resetProject={resetProject}
+                        completeProject={completeProject}
+                        deleteProject={deleteProject}
+                        user={user}
+                        updatedStatus={updatedStatus}
+                      />
+                    );
+                  } else {
+                    return (
+                      <ListProjectItem
+                        key={project.project_id}
+                        project={project}
+                        user={user}
+                        openProjectClass={openProjectClass}
+                        openProject={openProject}
+                        startProject={startProject}
+                        completeProject={completeProject}
+                        resetProject={resetProject}
+                        deleteProject={deleteProject}
+                        hoverOverProject={hoverOverProject}
+                        hoverOverProjectEnd={hoverOverProjectEnd}
+                      />
+                    );
+                  }
+                } else {
+                  return (
+                    <div className={"deleting-project poppins-semibold"}>
+                      Project being deleted ...
+                    </div>
+                  );
+                }
+              }
+            })
+          )}
           {loadingNewProject ? (
             <div className="loading-new-project poppins-regular">
               Creating a new project ...

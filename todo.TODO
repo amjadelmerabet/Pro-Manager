@@ -10,7 +10,7 @@ Todos:
 Features:
   [+]  As a user I would like to sort my projects either by their states or by their deadlines.
   [+]  As a user I would like to sort my tasks either by their states or by their priorities.
-  []  As a user I would like to group my projects by their states.
+  [+]  As a user I would like to group my projects by their states.
   []  As a user I would like to group my tasks either by their states or by their priorities.
   []  As a user I would like to be able to find my projects and tasks using a global search input.
 
@@ -19,3 +19,4 @@ Bugs:
   [+]  @medium Sorting projects and tasks doesn't work in some cases with the filter applied.
   []  @low When creating or updating a project or a task while a sort is applied, the sort then gets reseted to the default one.
   []  @low When trying to sort projects or tasks while they have been filtered using the search feature, it doesn't get applied until you update the search keyword.
+  []  @medium Sorting projects or tasks while the list is already filtered by a search keyword doesn't work.

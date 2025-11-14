@@ -48,6 +48,10 @@
   margin-left: 8px;
 }
 
+.section-header .page-buttons .kanban-view {
+  margin-left: 8px;
+}
+
 .section-header .page-buttons .select-view > .selected {
   background-color: var(--accent-color);
 }
@@ -204,6 +208,11 @@
   background: transparent;
   border: none;
   cursor: pointer;
+  display: flex;
+}
+
+.page-buttons > .filter-disabled {
+  pointer-events: none;
 }
 
 .page-buttons button {
@@ -232,6 +241,10 @@
   line-height: 1;
 }
 
+.page-buttons > .filter-disabled::before {
+  display: none;
+}
+
 .page-buttons > .no-filters::before {
   display: none;
 }
@@ -243,6 +256,14 @@
 .page-buttons > .filter-button svg {
   transform: rotateY(180deg);
   display: flex;
+}
+
+.page-buttons > .filter-disabled svg:nth-child(2) {
+  color: rgb(225, 0, 45);
+  position: absolute;
+  font-size: 14px !important;
+  top: -4px;
+  left: -4px;
 }
 
 .page-buttons .actions > button {
