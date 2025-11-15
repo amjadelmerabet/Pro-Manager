@@ -1,6 +1,5 @@
-export default function sortTasksUtil(unsortedTasksList, tasks, sort) {
-  let unsortedList =
-    unsortedTasksList.length === 0 ? [...tasks] : [...unsortedTasksList];
+export default function sortTasksUtil(tasks, sort) {
+  let unsortedList = [...tasks];
   if (Number(sort.sort_by) === 1) {
     unsortedList.sort((a, b) => {
       if (sort.type === 1) {

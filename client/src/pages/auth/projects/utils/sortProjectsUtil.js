@@ -1,6 +1,8 @@
-export default function sortProjectsUtil(unsoredProjectsList, projects, sort) {
-  let unsortedList =
-    unsoredProjectsList.length === 0 ? [...projects] : [...unsoredProjectsList];
+export default function sortProjectsUtil(projects, sort) {
+  let unsortedList = [...projects];
+  unsortedList.sort((a, b) => {
+    return new Date(b.updated_on).getTime() - new Date(a.updated_on).getTime();
+  });
   if (Number(sort.sort_by) !== 0) {
     if (sort.sort_by === "1") {
       unsortedList.sort((a, b) => {

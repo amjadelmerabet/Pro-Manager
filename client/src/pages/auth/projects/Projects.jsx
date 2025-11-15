@@ -93,14 +93,7 @@ export default function ProjectsPage({ user, setAuthentication }) {
       setTokenValidated
     );
     // setProjectsFetched(true);
-  }, [
-    newProjectCreated,
-    projectDeleted,
-    projectUpdated,
-    // filterCleared,
-    loadProjects,
-    // sortCleared,
-  ]);
+  }, [newProjectCreated, projectDeleted, projectUpdated, loadProjects]);
 
   useEffect(() => {
     if (newAccessToken.counter > 0) {
@@ -122,26 +115,24 @@ export default function ProjectsPage({ user, setAuthentication }) {
   }, [newAccessToken]);
 
   useEffect(() => {
-    filterProjectsUtil(
-      filter,
-      search,
-      applySort === 0 ? projects : sortedList,
-      setFilteredList
-    );
-  }, [search, applyFilters]);
+    if (search !== "" || applyFilters > 0 || projects || applySort === 0) {
+      filterProjectsUtil(
+        filter,
+        search,
+        applySort === 0 ? projects : sortedList,
+        setFilteredList
+      );
+    }
+  }, [search, applyFilters, projects, applySort]);
 
   useEffect(() => {
-    if (applySort > 0) {
-      setSortedList((currentList) => {
-        return sortProjectsUtil(currentList, projects, sort);
-      });
-      if (applyFilters > 0) {
-        setFilteredList((currentList) => {
-          return sortProjectsUtil(currentList, projects, sort);
-        });
-      }
+    if (applySort > 0 || projects) {
+      setSortedList(sortProjectsUtil(projects, sort));
     }
-  }, [applySort]);
+    if (applySort > 0 && (applyFilters > 0 || search !== "")) {
+      setFilteredList(sortProjectsUtil(filteredList, sort));
+    }
+  }, [applySort, projects]);
 
   useEffect(() => {
     console.log(projects);
@@ -604,6 +595,7 @@ export default function ProjectsPage({ user, setAuthentication }) {
                         deleteProject={deleteProject}
                         hoverOverProject={hoverOverProject}
                         hoverOverProjectEnd={hoverOverProjectEnd}
+                        updatedStatus={updatedStatus}
                       />
                     );
                   }

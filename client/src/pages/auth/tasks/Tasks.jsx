@@ -115,26 +115,24 @@ export default function TasksPage({ user, setAuthentication }) {
   }, [newAccessToken]);
 
   useEffect(() => {
-    filterTasksUtil(
-      filter,
-      search,
-      applySort === 0 ? tasks : sortedList,
-      setFilteredList
-    );
-  }, [search, applyFilters]);
+    if (search !== "" || applyFilters > 0 || tasks || applySort === 0) {
+      filterTasksUtil(
+        filter,
+        search,
+        applySort === 0 ? tasks : sortedList,
+        setFilteredList
+      );
+    }
+  }, [search, applyFilters, tasks, applySort]);
 
   useEffect(() => {
-    if (applySort > 0) {
-      setSortedList((currentList) => {
-        return sortTasksUtil(currentList, tasks, sort);
-      });
-      if (applyFilters > 0) {
-        setFilteredList((currentList) => {
-          return sortTasksUtil(currentList, tasks, sort);
-        });
-      }
+    if (applySort > 0 || tasks) {
+      setSortedList(sortTasksUtil(tasks, sort));
     }
-  }, [applySort]);
+    if (applySort > 0 && (applyFilters > 0 || search !== "")) {
+      setFilteredList(sortTasksUtil(filteredList, sort));
+    }
+  }, [applySort, tasks]);
 
   useEffect(() => {
     if (Object.keys(newTask).length > 0 && create > 0) {
