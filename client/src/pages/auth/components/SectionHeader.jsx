@@ -155,17 +155,21 @@ export default function SectionHeader(props) {
               <HiViewGrid />
             </IconContext.Provider>
           </button>
-          <button
-            className={
-              "kanban-view" +
-              (props.selectedView === "kanban" ? " selected" : "")
-            }
-            onClick={() => setKanbanView()}
-          >
-            <IconContext.Provider value={{ style: { fontSize: "28px" } }}>
-              <LuKanban />
-            </IconContext.Provider>
-          </button>
+          {props.page === "projects" ? (
+            <button
+              className={
+                "kanban-view" +
+                (props.selectedView === "kanban" ? " selected" : "")
+              }
+              onClick={() => setKanbanView()}
+            >
+              <IconContext.Provider value={{ style: { fontSize: "28px" } }}>
+                <LuKanban />
+              </IconContext.Provider>
+            </button>
+          ) : (
+            ""
+          )}
         </div>
         <button
           className={

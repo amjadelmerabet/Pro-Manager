@@ -17,6 +17,7 @@ Features:
 Bugs: 
   [+]  @medium There is a bug in the dashboard page that creates some duplicates in the recent pages if a user creates a new project or task.
   [+]  @medium Sorting projects and tasks doesn't work in some cases with the filter applied.
-  []  @low When creating or updating a project or a task while a sort is applied, the sort then gets reseted to the default one.
-  []  @low When trying to sort projects or tasks while they have been filtered using the search feature, it doesn't get applied until you update the search keyword.
-  []  @medium Sorting projects or tasks while the list is already filtered by a search keyword doesn't work.
+  [+]  @low When creating a new project or task while a sort or/and a filter is applied, the new record doesn't show on the list until you refresh the page.
+  [+]  @low When updating a project or task while a sort or/and a filter is applied the update doesn't show on the list until you refresh the page.
+  [+]  @low When deleting a project or task while a sort or/and a filter is applied the animation of the project being deleted stays on the list until you refresh the page.
+  [+]  @low When trying to sort projects or tasks while they have been filtered using the search feature, it doesn't get applied until you update the search keyword.
