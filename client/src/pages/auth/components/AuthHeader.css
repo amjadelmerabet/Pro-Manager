@@ -1,5 +1,6 @@
 .auth-header-container {
   background-color: var(--accent-color);
+  padding-inline: 200px;
 }
 
 .auth-header {

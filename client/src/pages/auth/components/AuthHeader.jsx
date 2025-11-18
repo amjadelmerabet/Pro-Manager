@@ -11,7 +11,12 @@ import { LuPaintbrush } from "react-icons/lu";
 import "./AuthHeader.css";
 import { IoLogOutOutline } from "react-icons/io5";
 
-export default function AuthHeader({ user, setAuthentication }) {
+export default function AuthHeader({
+  user,
+  setAuthentication,
+  globalSearch,
+  setGlobalSearch,
+}) {
   const [settingsPopup, setSettingsPopup] = useState(false);
 
   let navigate = useNavigate();
@@ -24,7 +29,7 @@ export default function AuthHeader({ user, setAuthentication }) {
   };
 
   return (
-    <div className="container">
+    <div>
       <header className="auth-header">
         <h1 className="application-name poppins-bold">
           <Link to="/">Pro Manager</Link>
@@ -50,6 +55,8 @@ export default function AuthHeader({ user, setAuthentication }) {
             id="global-search"
             className="global-search poppins-regular"
             placeholder="Global search ..."
+            value={globalSearch}
+            onChange={(event) => setGlobalSearch(event.target.value)}
           />
           <IconContext.Provider
             value={{

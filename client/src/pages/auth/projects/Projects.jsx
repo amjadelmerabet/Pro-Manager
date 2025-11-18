@@ -22,6 +22,9 @@ import sortProjectsUtil from "./utils/sortProjectsUtil";
 
 // Styles
 import "./Projects.css";
+import countMatchingRecords from "../utils/countMatchingRecords";
+import GlobalSearch from "../components/GlobalSearch";
+import fetchUserTasksUtil from "../tasks/utils/fetchUserTasksUtil";
 
 export default function ProjectsPage({ user, setAuthentication }) {
   const [projects, setProjects] = useState([]);
@@ -54,6 +57,13 @@ export default function ProjectsPage({ user, setAuthentication }) {
   const [sort, setSort] = useState({ sort_by: "0", type: 1 });
   const [applySort, setApplySort] = useState(0);
   const [sortedList, setSortedList] = useState([]);
+  const [globalSearch, setGlobalSearch] = useState("");
+  const [globalSearchList, setGlobalSearchList] = useState([]);
+  const [globalSearchInputFocus, setGlobalSearchInputFocus] = useState(false);
+  const [projectsFetched, setProjectsFetched] = useState(false);
+  const [tasks, setTasks] = useState([]);
+  const [tasksFetched, setTasksFetched] = useState(false);
+  const [globalSearchClosed, setGlobalSearchClosed] = useState(false);
   // const [notStartedProjects, setNotStartedProjects] = useState(0);
   // const [projectsFetched, setProjectsFetched] = useState(false);
 
@@ -90,10 +100,32 @@ export default function ProjectsPage({ user, setAuthentication }) {
       newAccessToken,
       setNewAccessToken,
       setProjects,
-      setTokenValidated
+      setTokenValidated,
+      globalSearchList,
+      setGlobalSearchList,
+      setProjectsFetched
     );
     // setProjectsFetched(true);
   }, [newProjectCreated, projectDeleted, projectUpdated, loadProjects]);
+
+  useEffect(() => {
+    if (projectsFetched) {
+      fetchUserTasksUtil(
+        tokenValidated,
+        user,
+        token,
+        tries,
+        setTries,
+        newAccessToken,
+        setNewAccessToken,
+        setTasks,
+        setTokenValidated,
+        globalSearchList,
+        setGlobalSearchList,
+        setTasksFetched
+      );
+    }
+  }, [projectsFetched]);
 
   useEffect(() => {
     if (newAccessToken.counter > 0) {
@@ -269,12 +301,52 @@ export default function ProjectsPage({ user, setAuthentication }) {
     }
   });
 
+  let { projectsMatchingSearch, tasksMatchingSearch } = countMatchingRecords(
+    globalSearchList,
+    globalSearch
+  );
+
+  const closeGlobalSearch = () => {
+    setGlobalSearchClosed(true);
+    setGlobalSearchInputFocus(false);
+    setGlobalSearch("");
+    setTimeout(() => {
+      setGlobalSearchClosed(false);
+    }, 500);
+  };
+
   return (
     <div className="projects-page">
       <div className="auth-header-container">
-        <AuthHeader user={user} setAuthentication={setAuthentication} />
+        <AuthHeader
+          user={user}
+          setAuthentication={setAuthentication}
+          globalSearch={globalSearch}
+          setGlobalSearch={setGlobalSearch}
+        />
       </div>
       <div className="container">
+        {(globalSearch !== "" || globalSearchInputFocus) &&
+        !globalSearchClosed ? (
+          <div>
+            <div
+              className="global-search-container"
+              onClick={() => closeGlobalSearch()}
+            ></div>
+            <GlobalSearch
+              globalSearch={globalSearch}
+              setGlobalSearch={setGlobalSearch}
+              setGlobalSearchInputFocus={setGlobalSearchInputFocus}
+              globalSearchList={globalSearchList}
+              user={user}
+              projectsMatchingSearch={projectsMatchingSearch}
+              tasksMatchingSearch={tasksMatchingSearch}
+              closeGlobalSearch={closeGlobalSearch}
+            />
+          </div>
+        ) : (
+          ""
+        )}
         <SectionHeader
           title="Your projects"
           selectedView={selectedView}
