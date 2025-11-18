@@ -2,7 +2,12 @@
 import { useEffect, useState } from "react";
 
 // Icons
-import { FaRegCheckSquare, FaRegFolder } from "react-icons/fa";
+import {
+  FaFire,
+  FaRegCheckSquare,
+  FaRegFolder,
+  FaRegSnowflake,
+} from "react-icons/fa";
 import { IconContext } from "react-icons/lib";
 
 // Components
@@ -27,6 +32,10 @@ import createPageName from "./utils/createPageNameUtil";
 
 // Styles
 import "./Dashboard.css";
+import { RiAlarmWarningFill } from "react-icons/ri";
+import { IoClose } from "react-icons/io5";
+import GlobalSearch from "../components/GlobalSearch";
+import countMatchingRecords from "../utils/countMatchingRecords";
 
 export default function DashboardPage({ user, setAuthentication }) {
   const [recentPages, setRecentPages] = useState([]);
@@ -66,6 +75,10 @@ export default function DashboardPage({ user, setAuthentication }) {
   const [taskCreatedSuccessfully, setTaskCreatedSuccessfully] = useState(false);
   const [newTaskCreated, setNewTaskCreated] = useState(0);
   const [createTask, setCreateTask] = useState(0);
+  const [globalSearch, setGlobalSearch] = useState("");
+  const [globalSearchList, setGlobalSearchList] = useState([]);
+  const [globalSearchInputFocus, setGlobalSearchInputFocus] = useState(false);
+  const [globalSearchClosed, setGlobalSearchClosed] = useState(false);
 
   const { token } = JSON.parse(sessionStorage.getItem("authUser"));
 
@@ -173,6 +186,7 @@ export default function DashboardPage({ user, setAuthentication }) {
 
   useEffect(() => {
     if (tasksFetched) {
+      setGlobalSearchList([...tempRecentPages]);
       setTempRecentPages(
         tempRecentPages.sort((page1, page2) => {
           return (
@@ -267,12 +281,52 @@ export default function DashboardPage({ user, setAuthentication }) {
     },
   ];
 
+  let { projectsMatchingSearch, tasksMatchingSearch } = countMatchingRecords(
+    globalSearchList,
+    globalSearch
+  );
+
+  const closeGlobalSearch = () => {
+    setGlobalSearchClosed(true);
+    setGlobalSearchInputFocus(false);
+    setGlobalSearch("");
+    setTimeout(() => {
+      setGlobalSearchClosed(false);
+    }, 500);
+  };
+
   return (
     <div className="dashboard-page">
       <div className="auth-header-container">
-        <AuthHeader user={user} setAuthentication={setAuthentication} />
+        <AuthHeader
+          user={user}
+          setAuthentication={setAuthentication}
+          globalSearch={globalSearch}
+          setGlobalSearch={setGlobalSearch}
+        />
       </div>
       <div className="dashboard-container">
+        {(globalSearch !== "" || globalSearchInputFocus) &&
+        !globalSearchClosed ? (
+          <div>
+            <div
+              className="global-search-container"
+              onClick={() => closeGlobalSearch()}
+            ></div>
+            <GlobalSearch
+              globalSearch={globalSearch}
+              setGlobalSearch={setGlobalSearch}
+              setGlobalSearchInputFocus={setGlobalSearchInputFocus}
+              globalSearchList={globalSearchList}
+              user={user}
+              projectsMatchingSearch={projectsMatchingSearch}
+              tasksMatchingSearch={tasksMatchingSearch}
+              closeGlobalSearch={closeGlobalSearch}
+            />
+          </div>
+        ) : (
+          ""
+        )}
         <AllMenu user={user} setPopupDisplay={setPopupVisible} />
         <main>
           <div className="column-1">

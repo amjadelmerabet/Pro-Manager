@@ -17,12 +17,17 @@ async function getProjectsAction(
   newAccessToken,
   setNewAccessToken,
   setProjects,
+  globalSearchList,
+  setGlobalSearchList,
+  setProjectsFetched
 ) {
   const projectsObject = await getProjectsByOwnerAPI(user, token);
   if (projectsObject.error === "Invalid access token" && tries < 3) {
     tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
   } else {
     setProjects(projectsObject.result);
+    setGlobalSearchList([...globalSearchList, ...projectsObject.result]);
+    setProjectsFetched(true);
   }
 }
 
@@ -36,6 +41,9 @@ export default async function fetchUserProjectsUtil(
   setNewAccessToken,
   setProjects,
   setTokenValidated,
+  globalSearchList,
+  setGlobalSearchList,
+  setProjectsFetched
 ) {
   try {
     if (!tokenValidated) {
@@ -51,6 +59,9 @@ export default async function fetchUserProjectsUtil(
             newAccessToken,
             setNewAccessToken,
             setProjects,
+            globalSearchList,
+            setGlobalSearchList,
+            setProjectsFetched
           );
         } else {
           tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
@@ -70,6 +81,9 @@ export default async function fetchUserProjectsUtil(
         newAccessToken,
         setNewAccessToken,
         setProjects,
+        globalSearchList,
+        setGlobalSearchList,
+        setProjectsFetched
       );
     }
   } catch (error) {
