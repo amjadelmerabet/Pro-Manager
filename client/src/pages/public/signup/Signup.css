@@ -145,3 +145,16 @@
 .signup-page .confirm-popup .buttons > .cancel:hover {
   background-color: rgb(205, 0, 40);
 }
+
+.signup-page .error-message {
+  color: rgb(245, 0, 45);
+}
+
+.signup-page label.no-match {
+  color: rgb(245, 0, 45);
+}
+
+.signup-page input.no-match {
+  border: 1px solid rgb(245, 0, 45);
+  background-color: rgba(245, 120, 165, .25)
+}

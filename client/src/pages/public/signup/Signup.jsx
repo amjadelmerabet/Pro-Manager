@@ -17,6 +17,9 @@ export default function SignUpPage() {
   const [createNewUser, setCreateNewUser] = useState(false);
   const [signUpStart, setSignUpStart] = useState(false);
   const [goBackLink, setGoBackLink] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [noMatch, setNoMatch] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(false);
 
   let navigate = useNavigate();
 
@@ -42,6 +45,18 @@ export default function SignUpPage() {
     }
   }, [createNewUser]);
 
+  useEffect(() => {
+    if (confirmPassword !== "" && userBody.password) {
+      if (userBody.password !== confirmPassword) {
+        setNoMatch(true);
+      } else {
+        setNoMatch(false);
+      }
+    } else {
+      setNoMatch(false);
+    }
+  }, [confirmPassword]);
+
   const openConfirmPopup = () => {
     let name = userBody.first_name + " " + userBody.last_name;
     setUserBody({
@@ -50,7 +65,12 @@ export default function SignUpPage() {
       created_by: "system",
       updated_by: "system",
     });
-    setNewUserCreated(true);
+    if (noMatch) {
+      setErrorMessage(true);
+    } else {
+      setErrorMessage(false);
+      setNewUserCreated(true);
+    }
   };
 
   const createUser = () => {
@@ -79,6 +99,13 @@ export default function SignUpPage() {
       <h1 className="title poppins-bold">Pro Manager</h1>
       <div className="signup-section">
         <h2 className="signup-title poppins-bold">Sign up</h2>
+        {errorMessage ? (
+          <p className="error-message poppins-regular">
+            Make sure both passwords are matching
+          </p>
+        ) : (
+          ""
+        )}
         <form className="signup-form poppins-regular">
           <div>
             <div className="first-name-section">
@@ -163,7 +190,9 @@ export default function SignUpPage() {
             <div className="confirm-password-section">
               <label
                 htmlFor="confirm-password"
-                className="confirm-password-label"
+                className={
+                  "confirm-password-label" + (noMatch ? " no-match" : "")
+                }
               >
                 Confirm your password
               </label>
@@ -171,8 +200,11 @@ export default function SignUpPage() {
                 type="password"
                 name="confirm-password"
                 id="confirm-password-input"
-                className="confirm-password-input"
+                className={
+                  "confirm-password-input" + (noMatch ? " no-match" : "")
+                }
                 required
+                onChange={(event) => setConfirmPassword(event.target.value)}
               />
             </div>
           </div>
