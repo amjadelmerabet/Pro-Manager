@@ -19,6 +19,7 @@ export default async function createProject(fields) {
       }
       propertiesToInsert.push(field[1]);
     });
+    query += " RETURNING project_id";
     const newProject = await pool.query(query, propertiesToInsert);
     return newProject;
   } catch (error) {

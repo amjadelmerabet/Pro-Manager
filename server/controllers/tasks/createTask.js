@@ -19,6 +19,7 @@ export default async function createTask(fields) {
       }
       propertiesToInsert.push(field[1]);
     });
+    query += " RETURNING task_id";
     const newTask = await pool.query(query, propertiesToInsert);
     return newTask;
   } catch (error) {
