@@ -24,8 +24,8 @@ export async function tokensRoute(req, res) {
 
   if (req.user) {
     if (method === "GET") {
-      if (url.match(/^\/tokens\/access\/.+/)) {
-        const username = pathname.replace("/tokens/access/", "");
+      if (url.match(/^\/api\/tokens\/access\/.+/)) {
+        const username = pathname.replace("/api/tokens/access/", "");
         const accessTokens = await getAccessTokenByUser(username);
         if (accessTokens.length > 0) {
           res.writeHead(200, { "Content-Type": "application/json" });
@@ -34,8 +34,8 @@ export async function tokensRoute(req, res) {
           res.writeHead(404, { "Content-Type": "application/json" });
           res.end(JSON.stringify({ result: accessTokens }));
         }
-      } else if (url.match(/^\/tokens\/refresh\/.+/)) {
-        const username = pathname.replace("/tokens/refresh/", "");
+      } else if (url.match(/^\/api\/tokens\/refresh\/.+/)) {
+        const username = pathname.replace("/api/tokens/refresh/", "");
         const refreshTokens = await getRefreshTokenByUser(username);
         if (refreshTokens.length > 0) {
           res.writeHead(200, { "Content-Type": "application/json" });
@@ -47,7 +47,7 @@ export async function tokensRoute(req, res) {
       }
     } else if (method === "POST") {
       // console.log("Requesting a new access token");
-      if (url === "/tokens/access/new") {
+      if (url === "/api/tokens/access/new") {
         let body = "";
         req.on("data", (chunk) => {
           body += chunk.toString();
@@ -123,7 +123,7 @@ export async function tokensRoute(req, res) {
             res.end(JSON.stringify({ message: "Unauthorized user" }));
           }
         });
-      } else if (url === "/tokens/access/check") {
+      } else if (url === "/api/tokens/access/check") {
         let body = "";
         req.on("data", (chunk) => {
           body += chunk.toString();

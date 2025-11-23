@@ -16,18 +16,18 @@ export async function usersRoute(req, res) {
 
   if (req.user) {
     if (method === "GET") {
-      if (url === "/users") {
+      if (url === "/api/users") {
         res.writeHead(200, { "Content-Type": "application/json" });
         const users = await getUsers();
         res.end(JSON.stringify({ retult: users }));
-      } else if (url.match(/^\/users\/id\/.+/)) {
+      } else if (url.match(/^\/api\/users\/id\/.+/)) {
         res.writeHead(200, { "Content-Type": "application/json b" });
-        const userId = pathname.replace("/users/id/", "");
+        const userId = pathname.replace("/api/users/id/", "");
         const user = await getUserById(userId);
         res.end(JSON.stringify({ result: user }));
-      } else if (url.match(/^\/users\/username\/.*/)) {
+      } else if (url.match(/^\/api\/users\/username\/.*/)) {
         res.writeHead(200, { "Content-Type": "application/json" });
-        const username = pathname.replace("/users/username/", "");
+        const username = pathname.replace("/api/users/username/", "");
         const user = await getUserByUsername(username);
         res.end(JSON.stringify({ result: user }));
       } else {
@@ -39,13 +39,13 @@ export async function usersRoute(req, res) {
         );
       }
     } else if (method === "PATCH") {
-      if (url.match(/^\/users\/update\/.+/)) {
+      if (url.match(/^\/api\/users\/update\/.+/)) {
         let body = "";
         req.on("data", (chunk) => {
           body += chunk;
         });
         req.on("end", async () => {
-          const username = url.replace("/users/update/", "");
+          const username = url.replace("/api/users/update/", "");
           if (body === "") {
             res.writeHead(400, { "Content-Type": "application/json" });
             res.end(JSON.stringify({ message: "No updates" }));
@@ -88,9 +88,9 @@ export async function usersRoute(req, res) {
         );
       }
     } else if (method === "DELETE") {
-      if (url.match(/^\/users\/delete\/.+/)) {
+      if (url.match(/^\/api\/users\/delete\/.+/)) {
         res.writeHead(200, { "Content-Type": "application/json" });
-        const username = pathname.replace("/users/delete/", "");
+        const username = pathname.replace("/api/users/delete/", "");
         const deletedUser = await deleteUser(username);
         console.log(deletedUser);
         res.end(JSON.stringify({ message: "User deleted successfully" }));
@@ -107,7 +107,7 @@ export async function usersRoute(req, res) {
       res.end(JSON.stringify({ messsage: "Method Not Allowed" }));
     }
   } else {
-    if (method === "POST" && url === "/users/auth") {
+    if (method === "POST" && url === "/api/users/auth") {
       // console.log("A user is trying to login");
       let body = "";
       req.on("data", (chunk) => {
@@ -152,7 +152,7 @@ export async function usersRoute(req, res) {
           );
         }
       });
-    } else if (method === "POST" && url === "/users/new") {
+    } else if (method === "POST" && url === "/api/users/new") {
       let body = "";
       req.on("data", (chunk) => {
         body += chunk.toString();
@@ -228,7 +228,7 @@ export async function usersRoute(req, res) {
       res.end();
       return;
     } else {
-      res.writeHead(401);
+      res.writeHead(401, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ messsage: "User not authenticated" }));
     }
   }
