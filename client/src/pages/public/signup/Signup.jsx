@@ -10,6 +10,7 @@ import { IoArrowBack } from "react-icons/io5";
 
 // Styles
 import "./Signup.css";
+import createNewUserAPI from "../../../api/users/createNewUserAPI";
 
 export default function SignUpPage() {
   const [userBody, setUserBody] = useState({});
@@ -24,14 +25,7 @@ export default function SignUpPage() {
   let navigate = useNavigate();
 
   useEffect(() => {
-    const createNewUserAPI = async () => {
-      const response = await fetch("http://127.0.0.1:3000/users/new", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(userBody),
-      });
-      const newUser = await response.json();
-    };
+    createNewUserAPI(userBody);
     if (createNewUser) {
       createNewUserAPI();
       setTimeout(() => {

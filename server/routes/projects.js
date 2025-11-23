@@ -15,18 +15,18 @@ export async function projectsRoute(req, res) {
 
   if (req.user) {
     if (method === "GET") {
-      if (url === "/projects") {
+      if (url === "/api/projects") {
         res.writeHead(200, { "Content-Type": "application/json" });
         const projects = await getProjects();
         res.end(JSON.stringify({ result: projects }));
-      } else if (url.match(/^\/projects\/id\/.+/)) {
+      } else if (url.match(/^\/api\/projects\/id\/.+/)) {
         res.writeHead(200, { "Content-Type": "application/json" });
-        const projectId = pathname.replace("/projects/id/", "");
+        const projectId = pathname.replace("/api/projects/id/", "");
         const project = await getProjectById(projectId);
         res.end(JSON.stringify({ result: project }));
-      } else if (url.match(/^\/projects\/owner\/.+/)) {
+      } else if (url.match(/^\/api\/projects\/owner\/.+/)) {
         res.writeHead(200, { "Content-Type": "application/json" });
-        const projectOwner = pathname.replace("/projects/owner/", "");
+        const projectOwner = pathname.replace("/api/projects/owner/", "");
         const projects = await getProjectsByOwner(projectOwner);
         res.end(JSON.stringify({ result: projects }));
       } else {
@@ -34,11 +34,11 @@ export async function projectsRoute(req, res) {
         res.end(
           JSON.stringify({
             message: "The endpoint that you are trying to reach doesn't exist",
-          }),
+          })
         );
       }
     } else if (method === "POST") {
-      if (url === "/projects/new") {
+      if (url === "/api/projects/new") {
         let body = "";
         req.on("data", (chunk) => {
           body += chunk;
@@ -55,7 +55,7 @@ export async function projectsRoute(req, res) {
               res.end(
                 JSON.stringify({
                   message: "Necessary project data is missing",
-                }),
+                })
               );
             } else {
               res.writeHead(201, { "Content-Type": "application/json" });
@@ -65,19 +65,23 @@ export async function projectsRoute(req, res) {
                 res.end(
                   JSON.stringify({
                     message: "There was an error while creating a new project",
-                  }),
+                  })
                 );
               }
+              const projectId = newProject.rows[0].project_id;
               res.end(
-                JSON.stringify({ message: "Project created successfully" }),
+                JSON.stringify({
+                  message: "Project created successfully",
+                  project_id: projectId,
+                })
               );
             }
           }
         });
       }
     } else if (method === "PATCH") {
-      if (url.match(/^\/projects\/update\/.+/)) {
-        const projectId = pathname.replace("/projects/update/", "");
+      if (url.match(/^\/api\/projects\/update\/.+/)) {
+        const projectId = pathname.replace("/api/projects/update/", "");
         let body = "";
         req.on("data", (chunk) => {
           body += chunk;
@@ -105,7 +109,7 @@ export async function projectsRoute(req, res) {
                 if (updatedProject.status === "success") {
                   res.writeHead(200, { "Content-Type": "application/json" });
                   res.end(
-                    JSON.stringify({ message: "Project updated successfully" }),
+                    JSON.stringify({ message: "Project updated successfully" })
                   );
                 } else {
                   if (updatedProject.message === "404 Project not found") {
@@ -113,7 +117,7 @@ export async function projectsRoute(req, res) {
                     res.end(
                       JSON.stringify({
                         message: "There is no project with the id " + projectId,
-                      }),
+                      })
                     );
                   } else {
                     res.writeHead(400, { "Content-Type": "application/json" });
@@ -122,7 +126,7 @@ export async function projectsRoute(req, res) {
                         message:
                           "There was an error updating the project with the id " +
                           projectId,
-                      }),
+                      })
                     );
                   }
                 }
@@ -135,12 +139,12 @@ export async function projectsRoute(req, res) {
         res.end(
           JSON.stringify({
             message: "The endpoint that you are trying to reach doesn't exist",
-          }),
+          })
         );
       }
     } else if (method === "DELETE") {
-      if (url.match(/^\/projects\/delete\/.+/)) {
-        const projectId = pathname.replace("/projects/delete/", "");
+      if (url.match(/^\/api\/projects\/delete\/.+/)) {
+        const projectId = pathname.replace("/api/projects/delete/", "");
         const deletedProject = await deleteProject(projectId);
         if (deletedProject.status === "success") {
           res.writeHead(200, { "Content-Type": "application/json" });
@@ -152,7 +156,7 @@ export async function projectsRoute(req, res) {
               message:
                 "There was an error deleting the project with the id " +
                 projectId,
-            }),
+            })
           );
         }
       } else {
@@ -160,7 +164,7 @@ export async function projectsRoute(req, res) {
         res.end(
           JSON.stringify({
             message: "The endpoint that you are trying to reach doesn't exist",
-          }),
+          })
         );
       }
     } else {

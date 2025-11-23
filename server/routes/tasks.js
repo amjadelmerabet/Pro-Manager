@@ -15,19 +15,19 @@ export async function tasksRoute(req, res) {
 
   if (req.user) {
     if (method === "GET") {
-      if (url === "/tasks") {
+      if (url === "/api/tasks") {
         res.writeHead(200, { "Content-Type": "application/json" });
         const tasks = await getTasks();
         res.end(JSON.stringify({ result: tasks }));
       } else {
-        if (url.match(/^\/tasks\/id\/.+/)) {
-          const taskId = url.replace("/tasks/id/", "");
+        if (url.match(/^\/api\/tasks\/id\/.+/)) {
+          const taskId = url.replace("/api/tasks/id/", "");
           const task = await getTaskById(taskId);
           res.writeHead(200, { "Content-Type": "application/json" });
           res.end(JSON.stringify({ result: task }));
-        } else if (url.match(/^\/tasks\/assigned-to\/.+/)) {
+        } else if (url.match(/^\/api\/tasks\/assigned-to\/.+/)) {
           res.writeHead(200, { "Content-Type": "application/json" });
-          const assignedTo = pathname.replace("/tasks/assigned-to/", "");
+          const assignedTo = pathname.replace("/api/tasks/assigned-to/", "");
           const tasks = await getTasksByAssignedTo(assignedTo);
           res.end(JSON.stringify({ result: tasks }));
         } else {
@@ -36,12 +36,12 @@ export async function tasksRoute(req, res) {
             JSON.stringify({
               message:
                 "The endpoint that you are trying to reach doesn't exist",
-            }),
+            })
           );
         }
       }
     } else if (method === "POST") {
-      if (url === "/tasks/new") {
+      if (url === "/api/tasks/new") {
         let body = "";
         req.on("data", (chunk) => {
           body += chunk;
@@ -60,7 +60,7 @@ export async function tasksRoute(req, res) {
               if (!name || !short_description || !assigned_to) {
                 res.writeHead(400, { "Content-Type": "application/json" });
                 res.end(
-                  JSON.stringify({ message: "Necessary data is missing" }),
+                  JSON.stringify({ message: "Necessary data is missing" })
                 );
               } else {
                 const newTask = await createTask(newTaskFields);
@@ -69,12 +69,16 @@ export async function tasksRoute(req, res) {
                   res.end(
                     JSON.stringify({
                       message: "There was an error while creating a new task",
-                    }),
+                    })
                   );
                 } else {
                   res.writeHead(201, { "Content-Type": "application/json" });
+                  const taskId = newTask?.rows[0].task_id;
                   res.end(
-                    JSON.stringify({ message: "Task created successfully" }),
+                    JSON.stringify({
+                      message: "Task created successfully",
+                      task_id: taskId,
+                    })
                   );
                 }
               }
@@ -86,12 +90,12 @@ export async function tasksRoute(req, res) {
         res.end(
           JSON.stringify({
             message: "The endpoint that you are trying to reach doesn't exist",
-          }),
+          })
         );
       }
     } else if (method === "PATCH") {
-      if (url.match(/^\/tasks\/update\/.+/)) {
-        const taskId = pathname.replace("/tasks/update/", "");
+      if (url.match(/^\/api\/tasks\/update\/.+/)) {
+        const taskId = pathname.replace("/api/tasks/update/", "");
         let body = "";
         req.on("data", (chunk) => {
           body += chunk;
@@ -114,7 +118,7 @@ export async function tasksRoute(req, res) {
                 if (updatedTask.status === "success") {
                   res.writeHead(200, { "Content-Type": "application/json" });
                   res.end(
-                    JSON.stringify({ message: "Task updated successfully" }),
+                    JSON.stringify({ message: "Task updated successfully" })
                   );
                 } else if (updatedTask.message === "404 Task not found") {
                   res.writeHead(404, { "Content-Type": "application/json" });
@@ -124,7 +128,7 @@ export async function tasksRoute(req, res) {
                   res.end(
                     JSON.stringify({
                       message: "There was an error while updating a task",
-                    }),
+                    })
                   );
                 }
               }
@@ -136,12 +140,12 @@ export async function tasksRoute(req, res) {
         res.end(
           JSON.stringify({
             message: "The endpoint that you are trying to reach doesn't exist",
-          }),
+          })
         );
       }
     } else if (method === "DELETE") {
-      if (url.match(/^\/tasks\/delete\/.+/)) {
-        const taskId = pathname.replace("/tasks/delete/", "");
+      if (url.match(/^\/api\/tasks\/delete\/.+/)) {
+        const taskId = pathname.replace("/api/tasks/delete/", "");
         const deletedTask = await deleteTask(taskId);
         if (deletedTask.status === "success") {
           res.writeHead(200, { "Content-Type": "application/json" });
@@ -155,7 +159,7 @@ export async function tasksRoute(req, res) {
             res.end(
               JSON.stringify({
                 message: "There was an error while deleting a task",
-              }),
+              })
             );
           }
         }
@@ -164,7 +168,7 @@ export async function tasksRoute(req, res) {
         res.end(
           JSON.stringify({
             message: "The endpoint that you are trying to reach doesn't exist",
-          }),
+          })
         );
       }
     } else {
