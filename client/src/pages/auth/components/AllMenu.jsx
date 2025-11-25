@@ -1,8 +1,27 @@
 import { FaRegCheckSquare, FaRegFolder, FaRegStar } from "react-icons/fa";
 import { BsFillTriangleFill } from "react-icons/bs";
+import {
+  TbCopyCheckFilled,
+  TbFolder,
+  TbFolderBolt,
+  TbFolderCheck,
+  TbFolderCog,
+  TbFolderFilled,
+  TbFolderPlus,
+  TbFoldersFilled,
+  TbList,
+  TbListDetails,
+  TbSquare,
+  TbSquareArrowRight,
+  TbSquareCheck,
+  TbSquareCheckFilled,
+  TbSquarePlus,
+  TbStar,
+} from "react-icons/tb";
 
 import "./AllMenu.css";
 import { Link } from "react-router";
+import { IconContext } from "react-icons/lib";
 
 export default function AllMenu({ user, setPopupDisplay }) {
   const { name } = JSON.parse(sessionStorage.getItem("authUser"));
@@ -15,25 +34,54 @@ export default function AllMenu({ user, setPopupDisplay }) {
       <div className="application-menu">
         <div className="app-menu-header">
           <div>
-            <FaRegStar className="app-menu-icon" />
+            <TbStar className="app-menu-icon" />
             <h4 className="app-menu-title poppins-semibold">Favorites</h4>
           </div>
           <BsFillTriangleFill className="app-menu-arrow" />
         </div>
         <ul className="modules poppins-regular">
           <li className="module">
-            <Link to={`/auth/${user}/projects`}>My projects</Link>
+            <Link to={`/auth/${user}/projects`}>
+              <IconContext.Provider
+                value={{ style: { color: "var(--primary-color)" } }}
+              >
+                <TbFolderFilled className="module-icon" />
+              </IconContext.Provider>
+              My projects
+            </Link>
           </li>
           <li className="module">
-            <Link to={`/auth/${user}/tasks`}>My tasks</Link>
+            <Link to={`/auth/${user}/tasks`}>
+              <IconContext.Provider
+                value={{ style: { color: "var(--primary-color)" } }}
+              >
+                <TbSquareCheckFilled className="module-icon" />
+              </IconContext.Provider>
+              My tasks
+            </Link>
           </li>
-          <li className="module feature-disabled">My teams tasks</li>
+          <li className="module feature-disabled">
+            <IconContext.Provider
+              value={{ style: { color: "var(--primary-color)" } }}
+            >
+              <TbCopyCheckFilled className="module-icon" />
+            </IconContext.Provider>
+            My teams tasks
+          </li>
+          <li className="module feature-disabled">
+            <IconContext.Provider
+              value={{ style: { color: "var(--primary-color)" } }}
+            >
+              <TbFoldersFilled className="module-icon" />
+            </IconContext.Provider>
+            My teams projects
+          </li>
         </ul>
       </div>
       <div className="application-menu">
         <div className="app-menu-header">
           <div>
-            <FaRegFolder className="app-menu-icon" />
+            <TbFolder className="app-menu-icon" />
             <div className="app-menu-title poppins-semibold">Projects</div>
           </div>
           <BsFillTriangleFill className="app-menu-arrow" />
@@ -46,31 +94,60 @@ export default function AllMenu({ user, setPopupDisplay }) {
                 setPopupDisplay({ visible: true, type: "project" });
               }}
             >
+              <IconContext.Provider
+                value={{ style: { color: "var(--primary-color)" } }}
+              >
+                <TbFolderPlus className="module-icon" />
+              </IconContext.Provider>
               Create new
             </button>
           </li>
           <li className="module">
-            <Link to={`/auth/${user}/projects`}>All projects</Link>
+            <Link to={`/auth/${user}/projects`}>
+              <IconContext.Provider
+                value={{ style: { color: "var(--primary-color)" } }}
+              >
+                <TbListDetails className="module-icon" />
+              </IconContext.Provider>
+              All projects
+            </Link>
           </li>
           <li className="module">
             <Link to={`/auth/${user}/projects?filter=state=1`}>
+              <IconContext.Provider
+                value={{ style: { color: "var(--primary-color)" } }}
+              >
+                <TbFolderBolt className="module-icon" />
+              </IconContext.Provider>
               Not started
             </Link>
           </li>
           <li className="module">
             <Link to={`/auth/${user}/projects?filter=state=2`}>
+              <IconContext.Provider
+                value={{ style: { color: "var(--primary-color)" } }}
+              >
+                <TbFolderCog className="module-icon" />
+              </IconContext.Provider>
               In progress
             </Link>
           </li>
           <li className="module">
-            <Link to={`/auth/${user}/projects?filter=state=3`}>Completed</Link>
+            <Link to={`/auth/${user}/projects?filter=state=3`}>
+              <IconContext.Provider
+                value={{ style: { color: "var(--primary-color)" } }}
+              >
+                <TbFolderCheck className="module-icon" />
+              </IconContext.Provider>
+              Completed
+            </Link>
           </li>
         </ul>
       </div>
       <div className="application-menu">
         <div className="app-menu-header">
           <div>
-            <FaRegCheckSquare className="app-menu-icon" />
+            <TbSquareCheck className="app-menu-icon" />
             <div className="app-menu-title poppins-semibold">Tasks</div>
           </div>
           {/* <TbTriangleInvertedFilled className="app-menu-arrow" /> */}
@@ -84,20 +161,53 @@ export default function AllMenu({ user, setPopupDisplay }) {
                 setPopupDisplay({ visible: true, type: "task" });
               }}
             >
+              <IconContext.Provider
+                value={{ style: { color: "var(--primary-color)" } }}
+              >
+                <TbSquarePlus className="module-icon" />
+              </IconContext.Provider>
               Create new
             </button>
           </li>
           <li className="module">
-            <Link to={`/auth/${user}/tasks`}>All tasks</Link>
+            <Link to={`/auth/${user}/tasks`}>
+              <IconContext.Provider
+                value={{ style: { color: "var(--primary-color)" } }}
+              >
+                <TbList className="module-icon" />
+              </IconContext.Provider>
+              All tasks
+            </Link>
           </li>
           <li className="module">
-            <Link to={`/auth/${user}/tasks?filter=state=1`}>To do</Link>
+            <Link to={`/auth/${user}/tasks?filter=state=1`}>
+              <IconContext.Provider
+                value={{ style: { color: "var(--primary-color)" } }}
+              >
+                <TbSquare className="module-icon" />
+              </IconContext.Provider>
+              To do
+            </Link>
           </li>
           <li className="module">
-            <Link to={`/auth/${user}/tasks?filter=state=2`}>Doing</Link>
+            <Link to={`/auth/${user}/tasks?filter=state=2`}>
+              <IconContext.Provider
+                value={{ style: { color: "var(--primary-color)" } }}
+              >
+                <TbSquareArrowRight className="module-icon" />
+              </IconContext.Provider>
+              Doing
+            </Link>
           </li>
           <li className="module">
-            <Link to={`/auth/${user}/tasks?filter=state=3`}>Done</Link>
+            <Link to={`/auth/${user}/tasks?filter=state=3`}>
+              <IconContext.Provider
+                value={{ style: { color: "var(--primary-color)" } }}
+              >
+                <TbSquareCheck className="module-icon" />
+              </IconContext.Provider>
+              Done
+            </Link>
           </li>
         </ul>
       </div>

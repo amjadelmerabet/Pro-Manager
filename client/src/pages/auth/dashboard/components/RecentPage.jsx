@@ -3,6 +3,15 @@ import { IconContext } from "react-icons/lib";
 import { Link } from "react-router";
 
 import "./RecentPage.css";
+import {
+  TbFolder,
+  TbFolderBolt,
+  TbFolderCheck,
+  TbFolderCog,
+  TbSquare,
+  TbSquareArrowRight,
+  TbSquareCheck,
+} from "react-icons/tb";
 
 export default function RecentPage({
   type,
@@ -32,7 +41,7 @@ export default function RecentPage({
               style: { color: "var(--primary-color)" },
             }}
           >
-            <FaRegFolder />
+            <TbFolder />
           </IconContext.Provider>
           <div className="title">{createPageName(recentPage.name)}</div>
         </div>
@@ -100,7 +109,7 @@ export default function RecentPage({
               style: { color: "var(--primary-color)" },
             }}
           >
-            <FaRegCheckSquare />
+            <TbSquareCheck />
           </IconContext.Provider>
           <div className="title">{createPageName(recentPage.name)}</div>
         </div>

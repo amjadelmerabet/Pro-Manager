@@ -1,4 +1,4 @@
-import { FaRegCheckSquare, FaRegFolder } from "react-icons/fa";
+import { TbFolderOpen, TbSquareCheck } from "react-icons/tb";
 import { IconContext } from "react-icons/lib";
 
 import "./SelectedPage.css";
@@ -15,9 +15,9 @@ export default function SelectedPage({
           value={{ style: { color: "white", fontSize: "24px" } }}
         >
           {selectedPage.type === "project" ? (
-            <FaRegFolder />
+            <TbFolderOpen />
           ) : (
-            <FaRegCheckSquare />
+            <TbSquareCheck />
           )}
         </IconContext.Provider>
         <div className="selected-page-title">{selectedPage.name}</div>
