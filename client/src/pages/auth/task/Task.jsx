@@ -24,6 +24,7 @@ import getAccessTokenUtil from "./utils/getAccessTokenUtil";
 
 // Styles
 import "./Task.css";
+import { TbSquareCheck } from "react-icons/tb";
 
 export default function Task({ user, setAuthentication }) {
   const [taskObject, setTaskObject] = useState({});
@@ -204,27 +205,16 @@ export default function Task({ user, setAuthentication }) {
           <div className="task">
             <div className="task-header">
               <div className="left">
-                <h5 className="priority-icon poppins-semibold">
+                <h5 className="task-icon poppins-semibold">
                   <IconContext.Provider
                     value={{
                       style: {
-                        color:
-                          taskObject.priority === 1
-                            ? "rgb(245, 0, 45)"
-                            : taskObject.priority === 2
-                              ? "rgb(245, 120, 0)"
-                              : "rgb(0, 120, 245)",
-                        fontSize: "24px",
+                        color: "var(--primary-color)",
+                        fontSize: "28px",
                       },
                     }}
                   >
-                    {taskObject.priority === 1 ? (
-                      <RiAlarmWarningFill />
-                    ) : taskObject.priority === 2 ? (
-                      <FaFire />
-                    ) : (
-                      <FaRegSnowflake />
-                    )}
+                    <TbSquareCheck />
                   </IconContext.Provider>
                 </h5>
                 <h2 className="task-title poppins-bold">{taskObject.name}</h2>
@@ -340,12 +330,34 @@ export default function Task({ user, setAuthentication }) {
                       : taskObject.assigned_to}
                   </div>
                   <div className="priority poppins-regular">
-                    Priority
-                    {taskObject.priority === 1
-                      ? " High"
-                      : taskObject.priority === 2
-                        ? " Medium"
-                        : " Low"}
+                    <span className="priority-label">Priority</span>
+                    <div className="priority-value">
+                      <IconContext.Provider
+                        value={{
+                          style: {
+                            color:
+                              taskObject.priority === 1
+                                ? "rgb(245, 0, 45)"
+                                : taskObject.priority === 2
+                                  ? "rgb(245, 120, 0)"
+                                  : "rgb(0, 120, 245)",
+                          },
+                        }}
+                      >
+                        {taskObject.priority === 1 ? (
+                          <RiAlarmWarningFill className="priority-icon" />
+                        ) : taskObject.priority === 2 ? (
+                          <FaFire className="priority-icon" />
+                        ) : (
+                          <FaRegSnowflake className="priority-icon" />
+                        )}
+                      </IconContext.Provider>
+                      {taskObject.priority === 1
+                        ? " High"
+                        : taskObject.priority === 2
+                          ? " Medium"
+                          : " Low"}
+                    </div>
                   </div>
                 </div>
                 <div className="right">

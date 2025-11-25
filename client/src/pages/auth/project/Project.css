@@ -130,6 +130,15 @@
   gap: 16px;
 }
 
+.project-page .project .project-header .project-title {
+  display: flex;
+  align-items: center;
+}
+
+.project-page .project .project-header .project-icon {
+  margin-right: 8px;
+}
+
 .project-page .project .project-body > div:not(.project-info) {
   position: relative;
 }

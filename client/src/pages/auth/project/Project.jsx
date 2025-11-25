@@ -23,6 +23,7 @@ import deleteProjectUtil from "./utils/deleteProjectUtil";
 
 // Styles
 import "./Project.css";
+import { TbFolder } from "react-icons/tb";
 
 export default function Project({ user, setAuthentication }) {
   const [projectObject, setProjectObject] = useState({});
@@ -214,6 +215,9 @@ export default function Project({ user, setAuthentication }) {
             <div className="project-header">
               <div className="left">
                 <h2 className="project-title poppins-bold">
+                  <IconContext.Provider value={{ style: { color: "var(--primary-color)", fontSize: "28px" } }}>
+                    <TbFolder className="project-icon" />
+                  </IconContext.Provider>
                   {projectObject.name}
                 </h2>
                 <h5

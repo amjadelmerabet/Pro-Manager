@@ -1,5 +1,5 @@
 import { IconContext } from "react-icons/lib";
-import { FaRegFolder } from "react-icons/fa";
+import { TbFolder } from "react-icons/tb";
 import { GrFormClock } from "react-icons/gr";
 import { BiReset } from "react-icons/bi";
 import { IoCheckmark, IoClose } from "react-icons/io5";
@@ -119,7 +119,7 @@ export default function KanbanCardProject({
               },
             }}
           >
-            <FaRegFolder />
+            <TbFolder />
           </IconContext.Provider>
         </div>
         <div className="project-name poppins-bold">{project.name}</div>
