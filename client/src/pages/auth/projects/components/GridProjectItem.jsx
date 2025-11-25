@@ -1,6 +1,6 @@
 // Icons
 import { BiReset } from "react-icons/bi";
-import { FaRegFolder } from "react-icons/fa";
+import { TbFolder } from "react-icons/tb";
 import { GrFormClock } from "react-icons/gr";
 import { IoCheckmark, IoClose } from "react-icons/io5";
 import { IconContext } from "react-icons/lib";
@@ -123,7 +123,7 @@ export default function GridProjectItem({
               },
             }}
           >
-            <FaRegFolder />
+            <TbFolder />
           </IconContext.Provider>
         </div>
         <div className="project-name poppins-bold">{project.name}</div>

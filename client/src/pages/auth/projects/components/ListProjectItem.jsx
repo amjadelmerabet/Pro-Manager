@@ -1,5 +1,5 @@
 // Icons
-import { FaRegFolder } from "react-icons/fa";
+import { TbFolder } from "react-icons/tb";
 import { IconContext } from "react-icons/lib";
 import { GrFormClock } from "react-icons/gr";
 import { BiReset } from "react-icons/bi";
@@ -124,7 +124,7 @@ export default function ListProjectItem({
               },
             }}
           >
-            <FaRegFolder />
+            <TbFolder />
           </IconContext.Provider>
         </div>
         <div className="project-name poppins-semibold">{project.name}</div>
