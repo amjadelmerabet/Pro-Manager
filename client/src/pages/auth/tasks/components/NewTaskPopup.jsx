@@ -5,8 +5,12 @@ import { useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { IconContext } from "react-icons/lib";
 
+// APIs
+import getProjectsByOwnerAPI from "../../../../api/projects/getProjectsByOwnerAPI";
+
 // Styles
 import "./NewTaskPopup.css";
+import getNewAccessTokenAPI from "../../../../api/tokens/getNewAccessTokenAPI";
 
 export default function NewTaskPopup({
   newTask,
@@ -15,8 +19,44 @@ export default function NewTaskPopup({
   popupDisplay,
   setPopupDisplay,
   parent,
+  user,
 }) {
   const [newTaskClass, setNewTaskClass] = useState("");
+  const [projects, setProjects] = useState([]);
+  const [newAccessToken, setNewAccessToken] = useState(0);
+  const [getProjects, setGetProjects] = useState();
+  const [dataIsMissing, setDataIsMissing] = useState(false);
+
+  const { token } = JSON.parse(sessionStorage.getItem("authUser"));
+
+  useEffect(() => {
+    setNewTask({ ...newTask, priority: 2 });
+  }, []);
+
+  useEffect(() => {
+    const getUserProjects = async () => {
+      const projects = await getProjectsByOwnerAPI(user, token);
+      if (projects.error === "Invalid access token") {
+        setNewAccessToken(newAccessToken + 1);
+      }
+      setProjects(projects.result);
+    };
+    getUserProjects();
+  }, [getProjects]);
+
+  useEffect(() => {
+    const getNewAccessToken = async () => {
+      const cookie = await cookieStore.get(user);
+      const response = await getNewAccessTokenAPI(user, cookie);
+      const accessToken = response.token;
+      const authUser = JSON.parse(sessionStorage.getItem("authUser"));
+      authUser.token = accessToken;
+      sessionStorage.removeItem("authUser");
+      sessionStorage.setItem("authUser", JSON.stringify(authUser));
+      setGetProjects(getProjects + 1);
+    };
+    getNewAccessToken();
+  }, [newAccessToken]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -35,6 +75,18 @@ export default function NewTaskPopup({
     }, 250);
   };
 
+  const handleCreateNewTask = () => {
+    if (!newTask.name || !newTask.priority || !newTask.short_description) {
+      setDataIsMissing(true);
+    } else {
+      setDataIsMissing(false);
+      if (newTask.project === "none") {
+        newTask.project = null;
+      }
+      createNewTask();
+    }
+  };
+
   return (
     <div className="new-task-popup">
       <div className={"new-task" + newTaskClass}>
@@ -44,12 +96,20 @@ export default function NewTaskPopup({
             <IoClose />
           </IconContext.Provider>
         </button>
+        {dataIsMissing ? (
+          <span className="missing-data poppins-regular">
+            Some necessary data is missing
+          </span>
+        ) : (
+          ""
+        )}
         <div>
           <label
             htmlFor="new-task-name"
             className="new-task-name-label poppins-regular"
           >
             Name
+            <span className="required-field">*</span>
           </label>
           <input
             type="text"
@@ -58,11 +118,17 @@ export default function NewTaskPopup({
             onChange={(event) =>
               setNewTask({ ...newTask, name: event.target.value })
             }
+            required
           />
         </div>
         <div className="priority">
           <label htmlFor="priority" className="priority-label poppins-regular">
             Priority
+            {newTask.priority === "" ? (
+              <span className="required-field">*</span>
+            ) : (
+              ""
+            )}
           </label>
           <div>
             <input
@@ -74,6 +140,7 @@ export default function NewTaskPopup({
                   ? setNewTask({ ...newTask, priority: 1 })
                   : ""
               }
+              required
             />
             <label
               htmlFor="new-task-high-priority"
@@ -118,10 +185,44 @@ export default function NewTaskPopup({
         </div>
         <div>
           <label
+            htmlFor="project"
+            className="new-task-project-label poppins-regular"
+          >
+            Project
+          </label>
+          <select
+            name="project"
+            id="project"
+            className="new-task-project-select poppins-regular"
+            onChange={(event) => {
+              setNewTask({ ...newTask, project: event.target.value });
+            }}
+          >
+            <option value="none">-- None --</option>
+            {projects.map((project, index) => {
+              return (
+                <option
+                  key={index}
+                  className="poppins-regular"
+                  value={project.project_id}
+                >
+                  {project.name}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+        <div>
+          <label
             htmlFor="new-task-short-description"
             className="new-task-short-description-label poppins-regular"
           >
             Short description
+            {!newTask.short_description || newTask.short_description === "" ? (
+              <span className="required-field">*</span>
+            ) : (
+              ""
+            )}
           </label>
           <textarea
             name="new-task-short-description"
@@ -131,6 +232,7 @@ export default function NewTaskPopup({
             onChange={(event) =>
               setNewTask({ ...newTask, short_description: event.target.value })
             }
+            required
           ></textarea>
         </div>
         <div>
@@ -153,7 +255,7 @@ export default function NewTaskPopup({
         <button
           type="button"
           className="create-task poppins-semibold"
-          onClick={() => createNewTask()}
+          onClick={() => handleCreateNewTask()}
         >
           Create
         </button>

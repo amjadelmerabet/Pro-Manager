@@ -94,3 +94,18 @@
 .new-task-popup .new-task > .title {
   text-align: center;
 }
+
+.new-task-popup .new-task .new-task-project-select {
+  padding: 4px 8px;
+}
+
+.new-task-popup .new-task .required-field {
+  color: red;
+  margin-left: 4px;
+}
+
+.new-task-popup .new-task .missing-data {
+  color: rgb(245, 0, 45);
+  font-size: 14px;
+  text-align: center;
+}

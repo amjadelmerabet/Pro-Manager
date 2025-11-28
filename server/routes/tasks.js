@@ -30,6 +30,11 @@ export async function tasksRoute(req, res) {
           const assignedTo = pathname.replace("/api/tasks/assigned-to/", "");
           const tasks = await getTasksByAssignedTo(assignedTo);
           res.end(JSON.stringify({ result: tasks }));
+        } else if (url.match(/^\/api\/tasks\/project\/.+/)) {
+          res.writeHead(200, { "Content-Type": "application/json" });
+          const project = pathname.replace("/api/tasks/project/", "");
+          const tasks = await getTasksByProject(project);
+          res.end(JSON.stringify({ result: tasks }));
         } else {
           res.writeHead(404, { "Content-Type": "application/json" });
           res.end(
