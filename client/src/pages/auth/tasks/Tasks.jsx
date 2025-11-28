@@ -505,6 +505,7 @@ export default function TasksPage({ user, setAuthentication }) {
             createNewTask={createNewTask}
             popupDisplay={newTaskPopupDisplay}
             setPopupDisplay={setNewTaskPopupDisplay}
+            user={user}
           />
         ) : (
           ""

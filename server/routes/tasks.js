@@ -6,6 +6,7 @@ import deleteTask from "../controllers/tasks/deleteTask.js";
 
 import { parse } from "url";
 import getTasksByAssignedTo from "../controllers/tasks/getTasksByAssignedTo.js";
+import getTasksByProject from "../controllers/tasks/getTasksByProject.js";
 
 export async function tasksRoute(req, res) {
   const { method, url } = req;
@@ -29,6 +30,11 @@ export async function tasksRoute(req, res) {
           res.writeHead(200, { "Content-Type": "application/json" });
           const assignedTo = pathname.replace("/api/tasks/assigned-to/", "");
           const tasks = await getTasksByAssignedTo(assignedTo);
+          res.end(JSON.stringify({ result: tasks }));
+        } else if (url.match(/^\/api\/tasks\/project\/.+/)) {
+          res.writeHead(200, { "Content-Type": "application/json" });
+          const project = pathname.replace("/api/tasks/project/", "");
+          const tasks = await getTasksByProject(project);
           res.end(JSON.stringify({ result: tasks }));
         } else {
           res.writeHead(404, { "Content-Type": "application/json" });
