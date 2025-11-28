@@ -24,7 +24,8 @@ import getAccessTokenUtil from "./utils/getAccessTokenUtil";
 
 // Styles
 import "./Task.css";
-import { TbSquareCheck } from "react-icons/tb";
+import { TbFolderFilled, TbSquareCheck } from "react-icons/tb";
+import getProjectByIdAPI from "../../../api/projects/getProjectByIdAPI";
 
 export default function Task({ user, setAuthentication }) {
   const [taskObject, setTaskObject] = useState({});
@@ -43,6 +44,8 @@ export default function Task({ user, setAuthentication }) {
   });
   const [loadTask, setLoadTask] = useState(0);
   const [updatedSuccessfully, setUpdatedSuccessfully] = useState(false);
+  const [project, setProject] = useState({});
+  const [taskFetched, setTasksFetched] = useState(false);
 
   const location = useLocation();
   const pathname = location.pathname;
@@ -52,6 +55,7 @@ export default function Task({ user, setAuthentication }) {
 
   const [searchParams] = useSearchParams();
   const view = searchParams.get("view");
+  const projectId = searchParams.get("project");
 
   const { token } = JSON.parse(sessionStorage.getItem("authUser"));
 
@@ -68,10 +72,23 @@ export default function Task({ user, setAuthentication }) {
         newAccessToken,
         setNewAccessToken,
         setTaskObject,
-        setTokenValidated
+        setTokenValidated,
+        setTasksFetched
       );
     }
   }, [taskUpdated, loadTask]);
+
+  useEffect(() => {
+    const getLinkedProjectUtil = async (id) => {
+      const response = await getProjectByIdAPI(id, token);
+      setProject(response.result[0]);
+    };
+    if (projectId) {
+      getLinkedProjectUtil(projectId);
+    } else if (Object.keys(taskObject).indexOf("project") !== -1) {
+      getLinkedProjectUtil(taskObject.project);
+    }
+  }, [taskFetched]);
 
   useEffect(() => {
     if (taskUpdated.update) {
@@ -359,6 +376,35 @@ export default function Task({ user, setAuthentication }) {
                           : " Low"}
                     </div>
                   </div>
+                  <div className="project poppins-regular">
+                    <span className="project-label">Project</span>
+                    {taskObject.project ? (
+                      <div className="project-value">
+                        <IconContext.Provider
+                          value={{
+                            style: {
+                              color: "var(--primary-color)",
+                              fontSize: "18px",
+                            },
+                          }}
+                        >
+                          <TbFolderFilled />
+                        </IconContext.Provider>
+                        <Link
+                          to={
+                            view
+                              ? `/auth/${user}/project/${taskObject.project}?task=${taskObject.task_id}?view=${view}`
+                              : `/auth/${user}/project/${taskObject.project}?task=${taskObject.task_id}`
+                          }
+                          className="project-link"
+                        >
+                          {project.name ? project.name : "Loading ..."}
+                        </Link>
+                      </div>
+                    ) : (
+                      <div className="project-value">No project</div>
+                    )}
+                  </div>
                 </div>
                 <div className="right">
                   <div className="updated poppins-regular">{updatedStatus}</div>
@@ -442,9 +488,13 @@ export default function Task({ user, setAuthentication }) {
             <div className="links poppins-semibold">
               <Link
                 to={
-                  view === "dashboard"
-                    ? `/auth/${user}/dashboard`
-                    : `/auth/${user}/tasks?view=${view}`
+                  view
+                    ? view === "dashboard"
+                      ? `/auth/${user}/dashboard`
+                      : `/auth/${user}/tasks?view=${view}`
+                    : projectId
+                      ? `/auth/${user}/project/${projectId}`
+                      : `/auth/${user}/dashboard`
                 }
               >
                 <IconContext.Provider

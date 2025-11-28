@@ -17,12 +17,14 @@ async function fetchTaskAction(
   newAccessToken,
   setNewAccessToken,
   setTaskObject,
+  setTaskFetched
 ) {
   const task = await getTaskByIdAPI(taskId, token);
   if (task.error === "Invalid access token" && tries < 3) {
     tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
   } else {
     setTaskObject(task.result[0]);
+    setTaskFetched(true);
   }
 }
 
@@ -37,6 +39,7 @@ export default async function fetchUserTaskUtil(
   setNewAccessToken,
   setTaskObject,
   setTokenValidated,
+  setTaskFetched
 ) {
   try {
     if (!tokenValidated) {
@@ -52,6 +55,7 @@ export default async function fetchUserTaskUtil(
             newAccessToken,
             setNewAccessToken,
             setTaskObject,
+            setTaskFetched
           );
         } else {
           tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
@@ -71,6 +75,7 @@ export default async function fetchUserTaskUtil(
         newAccessToken,
         setNewAccessToken,
         setTaskObject,
+        setTaskFetched
       );
     }
   } catch (error) {

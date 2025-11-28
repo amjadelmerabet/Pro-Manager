@@ -6,6 +6,7 @@ import deleteTask from "../controllers/tasks/deleteTask.js";
 
 import { parse } from "url";
 import getTasksByAssignedTo from "../controllers/tasks/getTasksByAssignedTo.js";
+import getTasksByProject from "../controllers/tasks/getTasksByProject.js";
 
 export async function tasksRoute(req, res) {
   const { method, url } = req;

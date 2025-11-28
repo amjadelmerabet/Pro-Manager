@@ -7,7 +7,7 @@ import { IconContext } from "react-icons/lib";
 import { BiReset } from "react-icons/bi";
 import { GrFormClock } from "react-icons/gr";
 import { IoCheckmark, IoClose } from "react-icons/io5";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft, FaFire, FaRegSnowflake } from "react-icons/fa";
 import { MdOutlineModeEdit } from "react-icons/md";
 
 // Components
@@ -23,7 +23,9 @@ import deleteProjectUtil from "./utils/deleteProjectUtil";
 
 // Styles
 import "./Project.css";
-import { TbFolder } from "react-icons/tb";
+import { TbFolder, TbSquareCheck } from "react-icons/tb";
+import getTasksByProjectAPI from "../../../api/tasks/getTasksByProjectAPI";
+import { RiAlarmWarningFill } from "react-icons/ri";
 
 export default function Project({ user, setAuthentication }) {
   const [projectObject, setProjectObject] = useState({});
@@ -46,6 +48,9 @@ export default function Project({ user, setAuthentication }) {
   const [editedDescription, setEditedDescription] = useState("");
   const [editButtonVisible, setEditButtonVisible] = useState(false);
   const [editingDescription, setEditingDescription] = useState(false);
+  const [loadTasks, setLoadTasks] = useState(false);
+  const [tasks, setTasks] = useState([]);
+  const [hoveredOverTask, setHoveredOverTask] = useState("");
 
   const location = useLocation();
   const pathname = location.pathname;
@@ -57,6 +62,7 @@ export default function Project({ user, setAuthentication }) {
   const projectId = array[1];
 
   const [searchParams] = useSearchParams();
+  const taskId = searchParams.get("task");
   const view = searchParams.get("view");
 
   const { token } = JSON.parse(sessionStorage.getItem("authUser"));
@@ -82,6 +88,14 @@ export default function Project({ user, setAuthentication }) {
       );
     }
   }, [updatedsuccessfully, loadProject]);
+
+  useEffect(() => {
+    const fetchProjectTasksUtil = async (projectId) => {
+      const tasks = await getTasksByProjectAPI(projectId, token);
+      setTasks(tasks.result);
+    };
+    fetchProjectTasksUtil(projectId);
+  }, []);
 
   useEffect(() => {
     if (newAccessToken.counter > 0) {
@@ -200,6 +214,14 @@ export default function Project({ user, setAuthentication }) {
     setEditDescriptionInput(false);
   };
 
+  const hoverOverTask = (taskId) => {
+    setHoveredOverTask(taskId);
+  };
+
+  const hoverOverTaskEnded = () => {
+    setHoveredOverTask("");
+  };
+
   return (
     <div className="project-page">
       <div className="auth-header-container">
@@ -215,7 +237,14 @@ export default function Project({ user, setAuthentication }) {
             <div className="project-header">
               <div className="left">
                 <h2 className="project-title poppins-bold">
-                  <IconContext.Provider value={{ style: { color: "var(--primary-color)", fontSize: "28px" } }}>
+                  <IconContext.Provider
+                    value={{
+                      style: {
+                        color: "var(--primary-color)",
+                        fontSize: "28px",
+                      },
+                    }}
+                  >
                     <TbFolder className="project-icon" />
                   </IconContext.Provider>
                   {projectObject.name}
@@ -400,12 +429,132 @@ export default function Project({ user, setAuthentication }) {
                 )}
               </div>
             </div>
+            <h3 className="project-tasks-title poppins-bold">
+              <IconContext.Provider
+                value={{ style: { color: "var(--primary-color)" } }}
+              >
+                <TbSquareCheck />
+              </IconContext.Provider>
+              Tasks
+            </h3>
+            <div className="project-tasks-section">
+              <div className="tasks">
+                {tasks.length !== 0 ? (
+                  tasks.map((task) => {
+                    return (
+                      <div
+                        key={task.task_id}
+                        className="task poppins-regular"
+                        onMouseEnter={() => hoverOverTask(task.task_id)}
+                        onMouseLeave={() => hoverOverTaskEnded()}
+                      >
+                        <div
+                          className={
+                            "open-task" +
+                            (hoveredOverTask === task.task_id ? " visible" : "")
+                          }
+                        >
+                          <Link
+                            to={
+                              view
+                                ? `/auth/${user}/task/${task.task_id}?project=${projectId}?view=${view}`
+                                : `/auth/${user}/task/${task.task_id}?project=${projectId}`
+                            }
+                            className="open-button"
+                          >
+                            Open
+                          </Link>
+                        </div>
+                        <div className="left">
+                          <div className="task-icon">
+                            <IconContext.Provider
+                              value={{
+                                style: {
+                                  color:
+                                    task.priority === 1
+                                      ? "rgb(245, 0, 45)"
+                                      : task.priority === 2
+                                        ? "rgb(245, 120, 0)"
+                                        : "rgb(0, 120, 245)",
+                                },
+                              }}
+                            >
+                              {task.priority === 1 ? (
+                                <RiAlarmWarningFill />
+                              ) : task.priority === 2 ? (
+                                <FaFire />
+                              ) : (
+                                <FaRegSnowflake />
+                              )}
+                            </IconContext.Provider>
+                          </div>
+                          {task.name}
+                        </div>
+                        <div className="right">
+                          <div className="task-properties">
+                            <div className="task-assignee">
+                              <div className="label poppins-semibold">
+                                Assigned to
+                              </div>
+                              <div className="value">
+                                {task.assigned_to === user
+                                  ? "You"
+                                  : task.assigned_to}
+                              </div>
+                            </div>
+                            <div className="task-state">
+                              <div className="label poppins-semibold">
+                                State
+                              </div>
+                              <div
+                                className={
+                                  "value" +
+                                  (task.state === 1
+                                    ? " to-do-state"
+                                    : task.state === 2
+                                      ? " doing-state"
+                                      : " done-state")
+                                }
+                              >
+                                <span
+                                  className={
+                                    "state-value" +
+                                    (task.state === 1
+                                      ? " to-do"
+                                      : task.state === 2
+                                        ? " doing"
+                                        : " done")
+                                  }
+                                ></span>
+                                {task.state === 1
+                                  ? "To do"
+                                  : task.state === 2
+                                    ? "Doing"
+                                    : "Done"}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <span className="poppins-regular">
+                    This project has no tasks
+                  </span>
+                )}
+              </div>
+            </div>
             <div className="links poppins-semibold">
               <Link
                 to={
-                  view === "dashboard"
-                    ? `/auth/${user}/dashboard`
-                    : `/auth/${user}/projects?view=${view}`
+                  view
+                    ? view === "dashboard"
+                      ? `/auth/${user}/dashboard`
+                      : `/auth/${user}/projects?view=${view}`
+                    : taskId
+                      ? `/auth/${user}/task/${taskId}`
+                      : `/auth/${user}/dashboard`
                 }
               >
                 <IconContext.Provider
