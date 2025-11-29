@@ -26,6 +26,7 @@ import "./Project.css";
 import { TbFolder, TbSquareCheck } from "react-icons/tb";
 import getTasksByProjectAPI from "../../../api/tasks/getTasksByProjectAPI";
 import { RiAlarmWarningFill } from "react-icons/ri";
+import fetchProjectTasksUtil from "./utils/fetchProjectTasksUtil";
 
 export default function Project({ user, setAuthentication }) {
   const [projectObject, setProjectObject] = useState({});
@@ -51,6 +52,7 @@ export default function Project({ user, setAuthentication }) {
   const [loadTasks, setLoadTasks] = useState(false);
   const [tasks, setTasks] = useState([]);
   const [hoveredOverTask, setHoveredOverTask] = useState("");
+  const [projectFetched, setProjectFetched] = useState(false);
 
   const location = useLocation();
   const pathname = location.pathname;
@@ -84,18 +86,28 @@ export default function Project({ user, setAuthentication }) {
         setNewAccessToken,
         setProjectObject,
         setProjectNotFound,
-        setTokenValidated
+        setTokenValidated,
+        setProjectFetched
       );
     }
   }, [updatedsuccessfully, loadProject]);
 
   useEffect(() => {
-    const fetchProjectTasksUtil = async (projectId) => {
-      const tasks = await getTasksByProjectAPI(projectId, token);
-      setTasks(tasks.result);
-    };
-    fetchProjectTasksUtil(projectId);
-  }, []);
+    if (loadTasks || projectFetched) {
+      fetchProjectTasksUtil(
+        projectId,
+        token,
+        setTasks,
+        tokenValidated,
+        setTokenValidated,
+        user,
+        tries,
+        setTries,
+        newAccessToken,
+        setNewAccessToken
+      );
+    }
+  }, [loadTasks, projectFetched]);
 
   useEffect(() => {
     if (newAccessToken.counter > 0) {
@@ -109,7 +121,8 @@ export default function Project({ user, setAuthentication }) {
         newAccessToken,
         projectUpdated,
         setProjectUpdated,
-        setProjectDeleted
+        setProjectDeleted,
+        setLoadTasks
       );
     }
   }, [newAccessToken]);
@@ -156,7 +169,6 @@ export default function Project({ user, setAuthentication }) {
   useEffect(() => {
     if (updatedsuccessfully) {
       setTimeout(() => {
-        console.log("success");
         setProjectUpdated({ counter: 0, update: false });
         setProjectUpdates({});
         setUpdatedsuccessfully(false);
@@ -538,6 +550,8 @@ export default function Project({ user, setAuthentication }) {
                       </div>
                     );
                   })
+                ) : !projectFetched ? (
+                  <span className="poppins-regular">Loading Tasks ...</span>
                 ) : (
                   <span className="poppins-regular">
                     This project has no tasks

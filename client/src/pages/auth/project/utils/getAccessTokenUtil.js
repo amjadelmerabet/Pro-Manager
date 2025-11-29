@@ -14,6 +14,7 @@ function nextAction(
   projectUpdated,
   setProjectUpdated,
   setProjectDeleted,
+  setLoadTasks
 ) {
   if (newAccessToken.type === "load") {
     setLoadProject(loadProject + 1);
@@ -26,6 +27,11 @@ function nextAction(
     setProjectDeleted(false);
     setTimeout(() => {
       setProjectDeleted(true);
+    }, 250);
+  } else if (newAccessToken.type === "load-tasks") {
+    setLoadTasks(true);
+    setTimeout(() => {
+      setLoadTasks(false);
     }, 250);
   }
 }
@@ -40,6 +46,7 @@ export default async function getAccessTokenUtil(
   projectUpdated,
   setProjectUpdated,
   setProjectDeleted,
+  setLoadTasks
 ) {
   try {
     const refreshToken = await cookieStore.get(user);
@@ -56,6 +63,7 @@ export default async function getAccessTokenUtil(
           projectUpdated,
           setProjectUpdated,
           setProjectDeleted,
+          setLoadTasks
         );
       }
     } else {

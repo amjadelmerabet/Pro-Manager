@@ -25,7 +25,7 @@ import getAccessTokenUtil from "./utils/getAccessTokenUtil";
 // Styles
 import "./Task.css";
 import { TbFolderFilled, TbSquareCheck } from "react-icons/tb";
-import getProjectByIdAPI from "../../../api/projects/getProjectByIdAPI";
+import fetchLinkedProjectUtil from "./utils/fetchLinkedProjectUtil";
 
 export default function Task({ user, setAuthentication }) {
   const [taskObject, setTaskObject] = useState({});
@@ -46,6 +46,7 @@ export default function Task({ user, setAuthentication }) {
   const [updatedSuccessfully, setUpdatedSuccessfully] = useState(false);
   const [project, setProject] = useState({});
   const [taskFetched, setTasksFetched] = useState(false);
+  const [loadProject, setLoadProject] = useState(false);
 
   const location = useLocation();
   const pathname = location.pathname;
@@ -79,16 +80,34 @@ export default function Task({ user, setAuthentication }) {
   }, [taskUpdated, loadTask]);
 
   useEffect(() => {
-    const getLinkedProjectUtil = async (id) => {
-      const response = await getProjectByIdAPI(id, token);
-      setProject(response.result[0]);
-    };
     if (projectId) {
-      getLinkedProjectUtil(projectId);
+      fetchLinkedProjectUtil(
+        projectId,
+        token,
+        user,
+        tokenValidated,
+        setTokenValidated,
+        tries,
+        setTries,
+        newAccessToken,
+        setNewAccessToken,
+        setProject
+      );
     } else if (Object.keys(taskObject).indexOf("project") !== -1) {
-      getLinkedProjectUtil(taskObject.project);
+      fetchLinkedProjectUtil(
+        taskObject.project,
+        token,
+        user,
+        tokenValidated,
+        setTokenValidated,
+        tries,
+        setTries,
+        newAccessToken,
+        setNewAccessToken,
+        setProject
+      );
     }
-  }, [taskFetched]);
+  }, [taskFetched, loadProject]);
 
   useEffect(() => {
     if (taskUpdated.update) {
@@ -153,7 +172,8 @@ export default function Task({ user, setAuthentication }) {
         setLoadTask,
         taskUpdated,
         setTaskUpdated,
-        setTaskDeleted
+        setTaskDeleted,
+        setLoadProject
       );
     }
   }, [newAccessToken]);

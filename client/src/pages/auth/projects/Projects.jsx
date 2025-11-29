@@ -167,10 +167,6 @@ export default function ProjectsPage({ user, setAuthentication }) {
   }, [applySort, projects]);
 
   useEffect(() => {
-    console.log(projects);
-  }, [projects]);
-
-  useEffect(() => {
     if (Object.keys(newProject).length > 0 && createProject > 0) {
       createProjectUtil(
         tokenValidated,
