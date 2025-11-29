@@ -1,68 +1,57 @@
-import getTaskByIdAPI from "../../../../api/tasks/getTaskByIdAPI";
-import checkAccessTokenAPI from "../../../../api/tokens/checkAccessTokenAPI";
+import getTasksByProjectAPI from "../../../../api/tasks/getTasksByProjectAPI";
+import getNewAccessTokenAPI from "../../../../api/tokens/getNewAccessTokenAPI";
 
 function tryAgain(tries, setTries, newAccessToken, setNewAccessToken) {
   setTries(tries + 1);
   setNewAccessToken({
     counter: newAccessToken.counter + 1,
-    type: "load",
+    type: "load-tasks",
   });
 }
 
-async function fetchTaskAction(
-  taskId,
+async function fetchProjectTasksAction(
+  projectId,
   token,
   tries,
   setTries,
   newAccessToken,
   setNewAccessToken,
-  setTaskObject,
-  setTaskFetched,
-  setTokenValidated
+  setTasks
 ) {
-  const task = await getTaskByIdAPI(taskId, token);
-  if (task.error === "Invalid access token" && tries < 3) {
-    setTokenValidated(false);
+  const tasks = await getTasksByProjectAPI(projectId, token);
+  if (tasks.error === "Invalid access token") {
     tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
   } else {
-    setTaskObject(task.result[0]);
-    setTaskFetched(true);
-    setTimeout(() => {
-      setTokenValidated(false);
-    }, 500);
+    setTasks(tasks.result);
   }
 }
 
-export default async function fetchUserTaskUtil(
-  tokenValidated,
-  user,
+export default async function fetchProjectTasksUtil(
+  projectId,
   token,
-  taskId,
+  setTasks,
+  tokenValidated,
+  setTokenValidated,
+  user,
   tries,
   setTries,
   newAccessToken,
-  setNewAccessToken,
-  setTaskObject,
-  setTokenValidated,
-  setTaskFetched
+  setNewAccessToken
 ) {
   try {
     if (!tokenValidated) {
       const refreshToken = await cookieStore.get(user);
       if (refreshToken) {
-        const validAccessToken = await checkAccessTokenAPI(token, refreshToken);
+        const validAccessToken = await getNewAccessTokenAPI(user, refreshToken);
         if (validAccessToken.message === "Valid access token") {
-          setTokenValidated(true);
-          fetchTaskAction(
-            taskId,
+          fetchProjectTasksAction(
+            projectId,
             token,
             tries,
             setTries,
             newAccessToken,
             setNewAccessToken,
-            setTaskObject,
-            setTaskFetched,
-            setTokenValidated
+            setTasks
           );
         } else {
           tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
@@ -74,16 +63,14 @@ export default async function fetchUserTaskUtil(
       setTimeout(() => {
         setTokenValidated(false);
       }, 500);
-      fetchTaskAction(
-        taskId,
+      fetchProjectTasksAction(
+        projectId,
         token,
         tries,
         setTries,
         newAccessToken,
         setNewAccessToken,
-        setTaskObject,
-        setTaskFetched,
-        setTokenValidated
+        setTasks
       );
     }
   } catch (error) {

@@ -84,8 +84,6 @@ export default function TasksPage({ user, setAuthentication }) {
       setTimeout(() => {
         setApplyFilters(applyFilters + 1);
       }, 250);
-    } else {
-      console.log("No filters");
     }
   }, []);
 

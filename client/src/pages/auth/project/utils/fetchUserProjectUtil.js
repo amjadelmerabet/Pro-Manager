@@ -18,16 +18,23 @@ async function fetchProjectAction(
   setNewAccessToken,
   setProjectObject,
   setProjectNotFound,
+  setProjectFetched,
+  setTokenValidated
 ) {
   const project = await getProjectByIdAPI(projectId, token);
   if (project.error === "Invalid access token") {
+    setTokenValidated(false);
     tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
   } else {
     if (project.result.length > 0) {
       setProjectObject(project.result[0]);
+      setProjectFetched(true);
     } else {
       setProjectNotFound(true);
     }
+    setTimeout(() => {
+      setTokenValidated(false);
+    }, 500);
   }
 }
 
@@ -43,6 +50,7 @@ export default async function fetchUserProjectUtil(
   setProjectObject,
   setProjectNotFound,
   setTokenValidated,
+  setProjectFetched
 ) {
   try {
     if (!tokenValidated) {
@@ -50,6 +58,7 @@ export default async function fetchUserProjectUtil(
       if (refreshToken) {
         const validAccessToken = await checkAccessTokenAPI(token, refreshToken);
         if (validAccessToken.message === "Valid access token") {
+          setTokenValidated(true);
           fetchProjectAction(
             projectId,
             token,
@@ -59,6 +68,8 @@ export default async function fetchUserProjectUtil(
             setNewAccessToken,
             setProjectObject,
             setProjectNotFound,
+            setProjectFetched,
+            setTokenValidated
           );
         } else {
           tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
@@ -79,6 +90,8 @@ export default async function fetchUserProjectUtil(
         setNewAccessToken,
         setProjectObject,
         setProjectNotFound,
+        setProjectFetched,
+        setTokenValidated
       );
     }
   } catch (error) {
