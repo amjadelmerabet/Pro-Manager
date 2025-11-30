@@ -9,10 +9,13 @@ import { GrFormClock } from "react-icons/gr";
 import { IoCheckmark, IoClose } from "react-icons/io5";
 import { FaArrowLeft, FaFire, FaRegSnowflake } from "react-icons/fa";
 import { MdOutlineModeEdit } from "react-icons/md";
+import { TbFolder, TbSquareCheck, TbSquarePlus } from "react-icons/tb";
+import { RiAlarmWarningFill } from "react-icons/ri";
 
 // Components
 import AuthHeader from "../components/AuthHeader";
 import { Link } from "react-router";
+import NewTaskPopup from "../tasks/components/NewTaskPopup";
 
 // Utils
 import updatedMessageUtil from "../../../utils/updatedMessageUtil";
@@ -20,13 +23,11 @@ import fetchUserProjectUtil from "./utils/fetchUserProjectUtil";
 import getAccessTokenUtil from "./utils/getAccessTokenUtil";
 import updateProjectUtil from "./utils/updateProjectUtil";
 import deleteProjectUtil from "./utils/deleteProjectUtil";
+import fetchProjectTasksUtil from "./utils/fetchProjectTasksUtil";
+import createNewProjectTaskUtil from "./utils/createNewProjectTaskUtil";
 
 // Styles
 import "./Project.css";
-import { TbFolder, TbSquareCheck } from "react-icons/tb";
-import getTasksByProjectAPI from "../../../api/tasks/getTasksByProjectAPI";
-import { RiAlarmWarningFill } from "react-icons/ri";
-import fetchProjectTasksUtil from "./utils/fetchProjectTasksUtil";
 
 export default function Project({ user, setAuthentication }) {
   const [projectObject, setProjectObject] = useState({});
@@ -53,6 +54,12 @@ export default function Project({ user, setAuthentication }) {
   const [tasks, setTasks] = useState([]);
   const [hoveredOverTask, setHoveredOverTask] = useState("");
   const [projectFetched, setProjectFetched] = useState(false);
+  const [openNewTaskPopup, setOpenNewTaskPopup] = useState({
+    active: false,
+    type: "task",
+  });
+  const [newTask, setNewTask] = useState({});
+  const [newTaskToCreate, setNewTaskToCreate] = useState(0);
 
   const location = useLocation();
   const pathname = location.pathname;
@@ -176,6 +183,25 @@ export default function Project({ user, setAuthentication }) {
     }
   }, [updatedsuccessfully]);
 
+  useEffect(() => {
+    if (newTaskToCreate > 0) {
+      createNewProjectTaskUtil(
+        tokenValidated,
+        setTokenValidated,
+        user,
+        token,
+        newTask,
+        setLoadTasks,
+        tries,
+        setTries,
+        newAccessToken,
+        setNewAccessToken,
+        openNewTaskPopup,
+        setOpenNewTaskPopup
+      );
+    }
+  }, [newTaskToCreate]);
+
   const startProject = () => {
     setProjectUpdates({ state: 2, updated_by: user });
     setProjectUpdated({ counter: projectUpdated.counter + 1, update: true });
@@ -232,6 +258,17 @@ export default function Project({ user, setAuthentication }) {
 
   const hoverOverTaskEnded = () => {
     setHoveredOverTask("");
+  };
+
+  const createNewTask = (projectId) => {
+    setNewTask({
+      ...newTask,
+      project: projectId,
+      assigned_to: user,
+      created_by: user,
+      updated_by: user,
+    });
+    setNewTaskToCreate(newTaskToCreate + 1);
   };
 
   return (
@@ -441,18 +478,35 @@ export default function Project({ user, setAuthentication }) {
                 )}
               </div>
             </div>
-            <h3 className="project-tasks-title poppins-bold">
-              <IconContext.Provider
-                value={{ style: { color: "var(--primary-color)" } }}
+            <div className="project-tasks-header poppins-regular">
+              <h3 className="project-tasks-title poppins-bold">
+                <IconContext.Provider
+                  value={{ style: { color: "var(--primary-color)" } }}
+                >
+                  <TbSquareCheck />
+                </IconContext.Provider>
+                Tasks
+              </h3>
+              <button
+                className="create-new-task poppins-regular"
+                onClick={() =>
+                  setOpenNewTaskPopup({ ...openNewTaskPopup, active: true })
+                }
               >
-                <TbSquareCheck />
-              </IconContext.Provider>
-              Tasks
-            </h3>
+                <IconContext.Provider
+                  value={{ style: { color: "var(--primary-color)" } }}
+                >
+                  <TbSquarePlus className="create-new-task-icon" />
+                </IconContext.Provider>
+                Create new task
+              </button>
+            </div>
             <div className="project-tasks-section">
               <div className="tasks">
                 {tasks.length !== 0 ? (
                   tasks.map((task) => {
+                    const taskUpdated = new Date(task.updated_on);
+                    const updatedStatus = updatedMessageUtil(taskUpdated);
                     return (
                       <div
                         key={task.task_id}
@@ -547,6 +601,7 @@ export default function Project({ user, setAuthentication }) {
                             </div>
                           </div>
                         </div>
+                        <div className="updated">Updated {updatedStatus}</div>
                       </div>
                     );
                   })
@@ -586,6 +641,19 @@ export default function Project({ user, setAuthentication }) {
           </div>
         )}
       </div>
+      {openNewTaskPopup.active ? (
+        <NewTaskPopup
+          newTask={newTask}
+          setNewTask={setNewTask}
+          createNewTask={createNewTask}
+          popupDisplay={openNewTaskPopup}
+          setPopupDisplay={setOpenNewTaskPopup}
+          user={user}
+          parentProjectId={projectObject.project_id}
+        />
+      ) : (
+        ""
+      )}
     </div>
   );
 }

@@ -97,6 +97,7 @@
 
 .new-task-popup .new-task .new-task-project-select {
   padding: 4px 8px;
+  border-radius: 4px;
 }
 
 .new-task-popup .new-task .required-field {
@@ -108,4 +109,9 @@
   color: rgb(245, 0, 45);
   font-size: 14px;
   text-align: center;
+}
+
+.new-task-popup .new-task .disabled {
+  color: rgba(45, 45, 45);
+  border: darkgray 1px solid;
 }

@@ -14,7 +14,9 @@ function nextAction(
   projectUpdated,
   setProjectUpdated,
   setProjectDeleted,
-  setLoadTasks
+  setLoadTasks,
+  newTaskToCreate,
+  setNewTaskToCreate
 ) {
   if (newAccessToken.type === "load") {
     setLoadProject(loadProject + 1);
@@ -33,6 +35,8 @@ function nextAction(
     setTimeout(() => {
       setLoadTasks(false);
     }, 250);
+  } else if (newAccessToken.type === "create-task") {
+    setNewTaskToCreate(newTaskToCreate + 1);
   }
 }
 
@@ -46,7 +50,9 @@ export default async function getAccessTokenUtil(
   projectUpdated,
   setProjectUpdated,
   setProjectDeleted,
-  setLoadTasks
+  setLoadTasks,
+  newTaskToCreate,
+  setNewTaskToCreate
 ) {
   try {
     const refreshToken = await cookieStore.get(user);
@@ -63,8 +69,13 @@ export default async function getAccessTokenUtil(
           projectUpdated,
           setProjectUpdated,
           setProjectDeleted,
-          setLoadTasks
+          setLoadTasks,
+          newTaskToCreate,
+          setNewTaskToCreate
         );
+        setTimeout(() => {
+          setTokenValidated(false);
+        }, 500);
       }
     } else {
       console.log("No refresh token");

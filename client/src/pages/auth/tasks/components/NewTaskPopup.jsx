@@ -20,12 +20,16 @@ export default function NewTaskPopup({
   setPopupDisplay,
   parent,
   user,
+  parentProjectId,
 }) {
   const [newTaskClass, setNewTaskClass] = useState("");
   const [projects, setProjects] = useState([]);
   const [newAccessToken, setNewAccessToken] = useState(0);
-  const [getProjects, setGetProjects] = useState();
+  const [getProjects, setGetProjects] = useState(0);
   const [dataIsMissing, setDataIsMissing] = useState(false);
+  const [projectValue, setProjectValue] = useState(
+    parentProjectId ? parentProjectId : "none"
+  );
 
   const { token } = JSON.parse(sessionStorage.getItem("authUser"));
 
@@ -80,11 +84,17 @@ export default function NewTaskPopup({
       setDataIsMissing(true);
     } else {
       setDataIsMissing(false);
-      if (newTask.project === "none") {
-        newTask.project = null;
+      if (parentProjectId) {
+        createNewTask(parentProjectId);
+      } else {
+        createNewTask();
       }
-      createNewTask();
     }
+  };
+
+  const changeSelectedProject = (projectId) => {
+    setProjectValue(projectId);
+    setNewTask({ ...newTask, project: projectId });
   };
 
   return (
@@ -193,10 +203,15 @@ export default function NewTaskPopup({
           <select
             name="project"
             id="project"
-            className="new-task-project-select poppins-regular"
+            className={
+              "new-task-project-select poppins-regular" +
+              (parentProjectId ? " disabled" : "")
+            }
             onChange={(event) => {
-              setNewTask({ ...newTask, project: event.target.value });
+              changeSelectedProject(event.target.value);
             }}
+            disabled={parentProjectId}
+            value={projectValue}
           >
             <option value="none">-- None --</option>
             {projects.map((project, index) => {
@@ -205,6 +220,13 @@ export default function NewTaskPopup({
                   key={index}
                   className="poppins-regular"
                   value={project.project_id}
+                  // selected={
+                  //   parentProjectId
+                  //     ? parentProjectId === project.project_id
+                  //       ? true
+                  //       : false
+                  //     : false
+                  // }
                 >
                   {project.name}
                 </option>

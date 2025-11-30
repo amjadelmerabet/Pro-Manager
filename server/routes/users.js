@@ -19,7 +19,7 @@ export async function usersRoute(req, res) {
       if (url === "/api/users") {
         res.writeHead(200, { "Content-Type": "application/json" });
         const users = await getUsers();
-        res.end(JSON.stringify({ retult: users }));
+        res.end(JSON.stringify({ result: users }));
       } else if (url.match(/^\/api\/users\/id\/.+/)) {
         res.writeHead(200, { "Content-Type": "application/json b" });
         const userId = pathname.replace("/api/users/id/", "");
