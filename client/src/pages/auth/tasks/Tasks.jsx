@@ -195,12 +195,25 @@ export default function TasksPage({ user, setAuthentication }) {
   }, [newTaskPopupDisplay]);
 
   const createNewTask = () => {
-    setNewTask({
-      ...newTask,
-      assigned_to: user,
-      created_by: user,
-      updated_by: user,
-    });
+    if (newTask.project && newTask.project === "none") {
+      setNewTask((current) => {
+        delete current.project;
+        current = {
+          ...current,
+          assigned_to: user,
+          created_by: user,
+          updated_by: user,
+        };
+        return current;
+      });
+    } else {
+      setNewTask({
+        ...newTask,
+        assigned_to: user,
+        created_by: user,
+        updated_by: user,
+      });
+    }
     setCreate(create + 1);
     // navigate(0);
   };

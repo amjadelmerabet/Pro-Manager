@@ -482,6 +482,7 @@ export default function DashboardPage({ user, setAuthentication }) {
             newTask={newTask}
             setNewTask={setNewTask}
             createNewTask={createNewTask}
+            user={user}
           />
         ) : (
           ""
