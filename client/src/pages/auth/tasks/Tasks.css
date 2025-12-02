@@ -26,7 +26,8 @@
   margin-bottom: 24px;
 }
 
-.tasks-page .tasks.grid > .task {
+.tasks-page .tasks.grid > .task,
+.tasks-page .kanban-board .task {
   height: 180px;
   border-radius: 10px;
   border: 2px solid var(--primary-color);
@@ -35,15 +36,18 @@
   position: relative;
 }
 
-.tasks-page .tasks.grid > .task:hover {
+.tasks-page .tasks.grid > .task:hover,
+.tasks-page .kanban-board .task:hover {
   transform: scale(1.05) rotate(-0.5deg);
 }
 
-.tasks-page .tasks > .task:nth-child(odd) {
+.tasks-page .tasks > .task:nth-child(odd),
+.tasks-page .kanban-board .kanban-column > .task:nth-child(odd) {
   background-color: var(--accent-color);
 }
 
-.tasks-page .tasks > .task:nth-child(even) {
+.tasks-page .tasks > .task:nth-child(even),
+.tasks-page .kanban-board .kanban-column > .task:nth-child(even) {
   background-color: var(--secondary-color);
 }
 
@@ -62,7 +66,8 @@
   margin-left: 32px;
 }
 
-.tasks-page .tasks > .task > .open-task {
+.tasks-page .tasks > .task > .open-task,
+.tasks-page .kanban-board .task > .open-task {
   position: absolute;
   top: 0;
   left: 0;
@@ -72,14 +77,16 @@
   transition: background 250ms ease-in-out;
 }
 
-.tasks-page .tasks > .task:hover .open-task {
+.tasks-page .tasks > .task:hover .open-task,
+.tasks-page .kanban-board .task:hover .open-task {
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: rgba(45, 45, 45, 0.1);
 }
 
-.tasks-page .tasks > .task > .open-task > .open {
+.tasks-page .tasks > .task > .open-task > .open,
+.tasks-page .kanban-board .task > .open-task > .open {
   visibility: hidden;
   opacity: 0;
   transform: scale(0);
@@ -97,7 +104,8 @@
   box-shadow: rgba(0, 0, 0, 0.25);
 }
 
-.tasks-page .tasks > .task > .open-task > .open:hover {
+.tasks-page .tasks > .task > .open-task > .open:hover,
+.tasks-page .kanban-board .task > .open-task > .open:hover {
   background-color: var(--primary-color-hover);
 }
 
@@ -107,13 +115,15 @@
   transform: scale(1);
 }
 
-.tasks-page .tasks.grid > .task .open-task > .visible {
+.tasks-page .tasks.grid > .task .open-task > .visible,
+.tasks-page .kanban-board .task .open-task > .visible {
   visibility: visible;
   opacity: 1;
   transform: scale(1) rotate(0.5deg);
 }
 
-.tasks-page .tasks > .task > .task-actions {
+.tasks-page .tasks > .task > .task-actions,
+.tasks-page .kanban-board .task > .task-actions {
   position: absolute;
   top: -12px;
   right: -12px;
@@ -121,7 +131,8 @@
   gap: 4px;
 }
 
-.tasks-page .tasks > .task > .task-actions button {
+.tasks-page .tasks > .task > .task-actions button,
+.tasks-page .kanban-board .task > .task-actions button {
   visibility: hidden;
   opacity: 0;
   transform: scale(0);
@@ -143,7 +154,8 @@
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
 }
 
-.tasks-page .tasks > .task:hover button {
+.tasks-page .tasks > .task:hover button,
+.tasks-page .kanban-board .task:hover button {
   visibility: visible;
   opacity: 1;
   transform: scale(1);
@@ -174,7 +186,8 @@
   transform: translateX(-50%);
 }
 
-.tasks-page .tasks.grid > .task .updated {
+.tasks-page .tasks.grid > .task .updated,
+.tasks-page .kanban-board .task .updated {
   position: absolute;
   font-size: 11px;
   width: fit-content;
@@ -220,4 +233,79 @@
 
 .tasks-page .tasks .task .status .done {
   background-color: rgb(0, 200, 120);
+}
+
+.tasks-page .tasks .kanban-board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.tasks-page .tasks .kanban-board .kanban-column {
+  padding: 16px;
+  border-radius: 20px;
+  display: grid;
+  gap: 16px;
+  height: fit-content;
+}
+
+.tasks-page .tasks .kanban-board .todo {
+  background-color: rgba(245, 0, 45, 0.2);
+}
+
+.tasks-page .tasks .kanban-board .doing {
+  background-color: rgba(45, 160, 225, 0.2);
+}
+
+.tasks-page .tasks .kanban-board .done {
+  background-color: rgba(0, 200, 120, 0.2);
+}
+
+.tasks-page .tasks .kanban-board .column-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-block: 16px;
+  width: 88%;
+  margin-inline: auto;
+  border-radius: 8px;
+  color: white;
+  margin-top: 12px;
+  position: relative;
+}
+
+.tasks-page .tasks .kanban-board .column-header .tasks-count {
+  position: absolute;
+  right: 12px;
+  width: 40px;
+  height: 60%;
+  background-color: white;
+  color: black;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+}
+
+.tasks-page .tasks .kanban-board .kanban-column > div:last-child {
+  margin-bottom: 12px;
+}
+
+.tasks-page .tasks .kanban-board .todo > div:nth-child(1) {
+  background-color: rgb(245, 20, 65);
+}
+
+.tasks-page .tasks .kanban-board .doing > div:nth-child(1) {
+  background-color: rgb(45, 160, 225);
+}
+
+.tasks-page .tasks .kanban-board .done > div:nth-child(1) {
+  background-color: rgb(0, 200, 120);
+}
+
+.tasks-page .tasks .kanban-board .kanban-card {
+  width: 88%;
+  margin-inline: auto;
 }

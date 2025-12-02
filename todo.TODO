@@ -12,6 +12,8 @@ Features:
   [+]  As a user I would like to sort my tasks either by their states or by their priorities.
   [+]  As a user I would like to group my projects by their states.
   []  As a user I would like to group my tasks either by their states or by their priorities.
+    [+]  As a user I would like to group my tasks by their states.
+    []  As a user I would like to group my tasks by their priorities.
   [+]  As a user I would like to be able to find my projects and tasks using a global search input.
 
 Bugs: 
