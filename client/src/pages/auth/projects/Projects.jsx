@@ -361,6 +361,8 @@ export default function ProjectsPage({ user, setAuthentication }) {
           applySort={applySort}
           setApplySort={setApplySort}
         />
+        {/* REFACTOR: The code for the kanban view can be refactored with a shorter version */}
+        {/* FIXME: Using the search feature doesn't work when the kanban view is selected */}
         <div className={"projects " + selectedView}>
           {selectedView === "kanban" ? (
             <div className="kanban-board">

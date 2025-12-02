@@ -1,0 +1,36 @@
+.tasks-page .kanban-board .task > .task-header {
+  display: flex;
+  align-items: center;
+}
+
+.tasks-page .kanban-board .task > .task-header > .task-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tasks-page .kanban-board .task > .task-header > .task-name {
+  margin-left: 8px;
+}
+
+.tasks-page .kanban-board .task > .task-body {
+  font-size: 14px;
+  padding: 8px;
+}
+
+.tasks-page .kanban-board .task > .task-body .short-description {
+  height: 48px;
+  margin-top: 8px;
+  font-size: 12px;
+}
+
+.tasks-page .kanban-board .task > .task-body .assigned-to,
+.tasks-page .kanban-board .task > .task-body .status {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.tasks-page .kanban-board .task .task-body .property-value {
+  margin-left: 8px;
+  grid-column: 2 / -1;
+}

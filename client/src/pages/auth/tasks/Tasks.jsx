@@ -24,6 +24,7 @@ import sortTasksUtil from "./utils/sortTasksUtil";
 import fetchUserProjectsUtil from "../projects/utils/fetchUserProjectsUtil";
 import GlobalSearch from "../components/GlobalSearch";
 import countMatchingRecords from "../utils/countMatchingRecords";
+import KanbanCardTask from "./components/KanbanCardTask";
 
 export default function TasksPage({ user, setAuthentication }) {
   const [tasks, setTasks] = useState([]);
@@ -299,6 +300,19 @@ export default function TasksPage({ user, setAuthentication }) {
 
   let myTasks = 0;
 
+  let toDoTasks = 0;
+  let doingTasks = 0;
+  let doneTasks = 0;
+  tasks.forEach((task) => {
+    if (task.state === 1) {
+      toDoTasks++;
+    } else if (task.state === 2) {
+      doingTasks++;
+    } else if (task.state === 3) {
+      doneTasks++;
+    }
+  });
+
   let { projectsMatchingSearch, tasksMatchingSearch } = countMatchingRecords(
     globalSearchList,
     globalSearch
@@ -312,6 +326,12 @@ export default function TasksPage({ user, setAuthentication }) {
       setGlobalSearchClosed(false);
     }, 500);
   };
+
+  const kanbanColumns = [
+    { display: "To do", state: 1, class: "todo" },
+    { display: "Doing", state: 2, class: "doing" },
+    { display: "Done", state: 3, class: "done" },
+  ];
 
   return (
     <div className="tasks-page">
@@ -364,93 +384,97 @@ export default function TasksPage({ user, setAuthentication }) {
           setApplySort={setApplySort}
         />
         <ul className={"tasks " + selectedView}>
-          {search === "" && applyFilters === 0
-            ? applySort === 0
-              ? tasks.map((task) => {
-                  if (task.assigned_to === user) {
-                    let updated = new Date(task.updated_on);
-                    const updatedStatus = updatedMessageUtil(updated);
-                    myTasks++;
-                    if (selectedView === "list") {
-                      return (
-                        <ListTaskItem
-                          key={task.task_id}
-                          task={task}
-                          user={user}
-                          hoverOverTask={hoverOverTask}
-                          hoverOverTaskEnd={hoverOverTaskEnd}
-                          updatedStatus={updatedStatus}
-                          openTaskClass={openTaskClass}
-                          openTask={openTask}
-                          startTask={startTask}
-                          completeTask={completeTask}
-                          resetTask={resetTask}
-                          deleteTask={deleteTask}
-                        />
-                      );
-                    } else {
-                      return (
-                        <GridTaskItem
-                          key={task.task_id}
-                          task={task}
-                          openTaskClass={openTaskClass}
-                          openTask={openTask}
-                          hoverOverTask={hoverOverTask}
-                          hoverOverTaskEnd={hoverOverTaskEnd}
-                          updatedStatus={updatedStatus}
-                          startTask={startTask}
-                          completeTask={completeTask}
-                          resetTask={resetTask}
-                          deleteTask={deleteTask}
-                          user={user}
-                        />
-                      );
-                    }
-                  }
-                })
-              : sortedList.map((task) => {
-                  if (task.assigned_to === user) {
-                    let updated = new Date(task.updated_on);
-                    const updatedStatus = updatedMessageUtil(updated);
-                    myTasks++;
-                    if (selectedView === "list") {
-                      return (
-                        <ListTaskItem
-                          key={task.task_id}
-                          task={task}
-                          user={user}
-                          hoverOverTask={hoverOverTask}
-                          hoverOverTaskEnd={hoverOverTaskEnd}
-                          updatedStatus={updatedStatus}
-                          openTaskClass={openTaskClass}
-                          openTask={openTask}
-                          startTask={startTask}
-                          completeTask={completeTask}
-                          resetTask={resetTask}
-                          deleteTask={deleteTask}
-                        />
-                      );
-                    } else {
-                      return (
-                        <GridTaskItem
-                          key={task.task_id}
-                          task={task}
-                          openTaskClass={openTaskClass}
-                          openTask={openTask}
-                          hoverOverTask={hoverOverTask}
-                          hoverOverTaskEnd={hoverOverTaskEnd}
-                          updatedStatus={updatedStatus}
-                          startTask={startTask}
-                          completeTask={completeTask}
-                          resetTask={resetTask}
-                          deleteTask={deleteTask}
-                          user={user}
-                        />
-                      );
-                    }
-                  }
-                })
-            : filteredList.map((task) => {
+          {selectedView === "kanban" ? (
+            <div className="kanban-board">
+              {kanbanColumns.map((column, index) => {
+                return (
+                  <div className={"kanban-column " + column.class} key={index}>
+                    <div className="column-header poppins-bold">
+                      {column.display}
+                      <span className="tasks-count poppins-semibold">
+                        {column.state === 1
+                          ? toDoTasks
+                          : column.state === 2
+                            ? doingTasks
+                            : doneTasks}
+                      </span>
+                    </div>
+                    {search === "" && applyFilters === 0
+                      ? applySort === 0
+                        ? tasks.map((task) => {
+                            myTasks++;
+                            const updated = new Date(task.updated_on);
+                            const updatedStatus = updatedMessageUtil(updated);
+                            if (task.state === column.state) {
+                              return (
+                                <KanbanCardTask
+                                  key={task.task_id}
+                                  task={task}
+                                  openTaskClass={openTaskClass}
+                                  openTask={openTask}
+                                  hoverOverTask={hoverOverTask}
+                                  hoverOverTaskEnd={hoverOverTaskEnd}
+                                  updatedStatus={updatedStatus}
+                                  startTask={startTask}
+                                  completeTask={completeTask}
+                                  resetTask={resetTask}
+                                  deleteTask={deleteTask}
+                                  user={user}
+                                />
+                              );
+                            }
+                          })
+                        : sortedList.map((task) => {
+                            if (task.state === column.state) {
+                              myTasks++;
+                              const updated = new Date(task.updated_on);
+                              const updatedStatus = updatedMessageUtil(updated);
+                              return (
+                                <KanbanCardTask
+                                  task={task}
+                                  openTaskClass={openTaskClass}
+                                  openTask={openTask}
+                                  hoverOverTask={hoverOverTask}
+                                  hoverOverTaskEnd={hoverOverTaskEnd}
+                                  updatedStatus={updatedStatus}
+                                  startTask={startTask}
+                                  completeTask={completeTask}
+                                  resetTask={resetTask}
+                                  deleteTask={deleteTask}
+                                  user={user}
+                                />
+                              );
+                            }
+                          })
+                      : filteredList.map((task) => {
+                          if (task.state === column.state) {
+                            myTasks++;
+                            const updated = new Date(task.updated_on);
+                            const updatedStatus = updatedMessageUtil(updated);
+                            return (
+                              <KanbanCardTask
+                                task={task}
+                                openTaskClass={openTaskClass}
+                                openTask={openTask}
+                                hoverOverTask={hoverOverTask}
+                                hoverOverTaskEnd={hoverOverTaskEnd}
+                                updatedStatus={updatedStatus}
+                                startTask={startTask}
+                                completeTask={completeTask}
+                                resetTask={resetTask}
+                                deleteTask={deleteTask}
+                                user={user}
+                              />
+                            );
+                          }
+                        })}
+                  </div>
+                );
+              })}
+            </div>
+          ) : search === "" && applyFilters === 0 ? (
+            applySort === 0 ? (
+              tasks.map((task) => {
                 if (task.assigned_to === user) {
                   let updated = new Date(task.updated_on);
                   const updatedStatus = updatedMessageUtil(updated);
@@ -491,7 +515,95 @@ export default function TasksPage({ user, setAuthentication }) {
                     );
                   }
                 }
-              })}
+              })
+            ) : (
+              sortedList.map((task) => {
+                if (task.assigned_to === user) {
+                  let updated = new Date(task.updated_on);
+                  const updatedStatus = updatedMessageUtil(updated);
+                  myTasks++;
+                  if (selectedView === "list") {
+                    return (
+                      <ListTaskItem
+                        key={task.task_id}
+                        task={task}
+                        user={user}
+                        hoverOverTask={hoverOverTask}
+                        hoverOverTaskEnd={hoverOverTaskEnd}
+                        updatedStatus={updatedStatus}
+                        openTaskClass={openTaskClass}
+                        openTask={openTask}
+                        startTask={startTask}
+                        completeTask={completeTask}
+                        resetTask={resetTask}
+                        deleteTask={deleteTask}
+                      />
+                    );
+                  } else {
+                    return (
+                      <GridTaskItem
+                        key={task.task_id}
+                        task={task}
+                        openTaskClass={openTaskClass}
+                        openTask={openTask}
+                        hoverOverTask={hoverOverTask}
+                        hoverOverTaskEnd={hoverOverTaskEnd}
+                        updatedStatus={updatedStatus}
+                        startTask={startTask}
+                        completeTask={completeTask}
+                        resetTask={resetTask}
+                        deleteTask={deleteTask}
+                        user={user}
+                      />
+                    );
+                  }
+                }
+              })
+            )
+          ) : (
+            filteredList.map((task) => {
+              if (task.assigned_to === user) {
+                let updated = new Date(task.updated_on);
+                const updatedStatus = updatedMessageUtil(updated);
+                myTasks++;
+                if (selectedView === "list") {
+                  return (
+                    <ListTaskItem
+                      key={task.task_id}
+                      task={task}
+                      user={user}
+                      hoverOverTask={hoverOverTask}
+                      hoverOverTaskEnd={hoverOverTaskEnd}
+                      updatedStatus={updatedStatus}
+                      openTaskClass={openTaskClass}
+                      openTask={openTask}
+                      startTask={startTask}
+                      completeTask={completeTask}
+                      resetTask={resetTask}
+                      deleteTask={deleteTask}
+                    />
+                  );
+                } else {
+                  return (
+                    <GridTaskItem
+                      key={task.task_id}
+                      task={task}
+                      openTaskClass={openTaskClass}
+                      openTask={openTask}
+                      hoverOverTask={hoverOverTask}
+                      hoverOverTaskEnd={hoverOverTaskEnd}
+                      updatedStatus={updatedStatus}
+                      startTask={startTask}
+                      completeTask={completeTask}
+                      resetTask={resetTask}
+                      deleteTask={deleteTask}
+                      user={user}
+                    />
+                  );
+                }
+              }
+            })
+          )}
           {loadingNewTask ? (
             <div className="loading-new-task poppins-regular">
               Creating a new task ...

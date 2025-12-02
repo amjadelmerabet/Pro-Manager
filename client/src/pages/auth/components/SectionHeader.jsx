@@ -155,7 +155,6 @@ export default function SectionHeader(props) {
               <HiViewGrid />
             </IconContext.Provider>
           </button>
-          {props.page === "projects" ? (
             <button
               className={
                 "kanban-view" +
@@ -167,9 +166,6 @@ export default function SectionHeader(props) {
                 <LuKanban />
               </IconContext.Provider>
             </button>
-          ) : (
-            ""
-          )}
         </div>
         <button
           className={
