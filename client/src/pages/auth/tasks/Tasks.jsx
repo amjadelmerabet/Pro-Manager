@@ -64,6 +64,7 @@ export default function TasksPage({ user, setAuthentication }) {
   const [projectsFetched, setProjectsFetched] = useState(false);
   const [projects, setProjects] = useState([]);
   const [globalSearchClosed, setGlobalSearchClosed] = useState(false);
+  const [groupBy, setGroupBy] = useState("");
 
   const [searchParams] = useSearchParams();
   const view = searchParams.get("view");
@@ -303,6 +304,9 @@ export default function TasksPage({ user, setAuthentication }) {
   let toDoTasks = 0;
   let doingTasks = 0;
   let doneTasks = 0;
+  let highTasks = 0;
+  let mediumTasks = 0;
+  let lowTasks = 0;
   tasks.forEach((task) => {
     if (task.state === 1) {
       toDoTasks++;
@@ -310,6 +314,13 @@ export default function TasksPage({ user, setAuthentication }) {
       doingTasks++;
     } else if (task.state === 3) {
       doneTasks++;
+    }
+    if (task.priority === 1) {
+      highTasks++;
+    } else if (task.priority === 2) {
+      mediumTasks++;
+    } else if (task.priority === 3) {
+      lowTasks++;
     }
   });
 
@@ -331,6 +342,9 @@ export default function TasksPage({ user, setAuthentication }) {
     { display: "To do", state: 1, class: "todo" },
     { display: "Doing", state: 2, class: "doing" },
     { display: "Done", state: 3, class: "done" },
+    { display: "High", priority: 1, class: "high" },
+    { display: "Medium", priority: 2, class: "medium" },
+    { display: "Low", priority: 3, class: "low" },
   ];
 
   return (
@@ -382,50 +396,109 @@ export default function TasksPage({ user, setAuthentication }) {
           setSort={setSort}
           applySort={applySort}
           setApplySort={setApplySort}
+          groupBy={groupBy}
+          setGroupBy={setGroupBy}
         />
         <ul className={"tasks " + selectedView}>
           {selectedView === "kanban" ? (
             <div className="kanban-board">
               {kanbanColumns.map((column, index) => {
-                return (
-                  <div className={"kanban-column " + column.class} key={index}>
-                    <div className="column-header poppins-bold">
-                      {column.display}
-                      <span className="tasks-count poppins-semibold">
-                        {column.state === 1
-                          ? toDoTasks
-                          : column.state === 2
-                            ? doingTasks
-                            : doneTasks}
-                      </span>
-                    </div>
-                    {search === "" && applyFilters === 0
-                      ? applySort === 0
-                        ? tasks.map((task) => {
-                            myTasks++;
-                            const updated = new Date(task.updated_on);
-                            const updatedStatus = updatedMessageUtil(updated);
-                            if (task.state === column.state) {
-                              return (
-                                <KanbanCardTask
-                                  key={task.task_id}
-                                  task={task}
-                                  openTaskClass={openTaskClass}
-                                  openTask={openTask}
-                                  hoverOverTask={hoverOverTask}
-                                  hoverOverTaskEnd={hoverOverTaskEnd}
-                                  updatedStatus={updatedStatus}
-                                  startTask={startTask}
-                                  completeTask={completeTask}
-                                  resetTask={resetTask}
-                                  deleteTask={deleteTask}
-                                  user={user}
-                                />
-                              );
-                            }
-                          })
-                        : sortedList.map((task) => {
-                            if (task.state === column.state) {
+                if (column[groupBy]) {
+                  return (
+                    <div
+                      className={"kanban-column " + column.class}
+                      key={index}
+                    >
+                      {groupBy === "state" && column.state ? (
+                        <div className="column-header poppins-bold">
+                          {column.display}
+                          <span className="tasks-count poppins-semibold">
+                            {column.state === 1
+                              ? toDoTasks
+                              : column.state === 2
+                                ? doingTasks
+                                : doneTasks}
+                          </span>
+                        </div>
+                      ) : groupBy === "priority" && column.priority ? (
+                        <div className="column-header poppins-bold">
+                          {column.display}
+                          <span className="tasks-count poppins-semibold">
+                            {column.priority === 1
+                              ? highTasks
+                              : column.priority === 2
+                                ? mediumTasks
+                                : lowTasks}
+                          </span>
+                        </div>
+                      ) : (
+                        ""
+                      )}
+                      {search === "" && applyFilters === 0
+                        ? applySort === 0
+                          ? tasks.map((task) => {
+                              myTasks++;
+                              const updated = new Date(task.updated_on);
+                              const updatedStatus = updatedMessageUtil(updated);
+                              if (
+                                (groupBy === "state" &&
+                                  task.state === column.state) ||
+                                (groupBy === "priority" &&
+                                  task.priority === column.priority)
+                              ) {
+                                return (
+                                  <KanbanCardTask
+                                    key={task.task_id}
+                                    task={task}
+                                    openTaskClass={openTaskClass}
+                                    openTask={openTask}
+                                    hoverOverTask={hoverOverTask}
+                                    hoverOverTaskEnd={hoverOverTaskEnd}
+                                    updatedStatus={updatedStatus}
+                                    startTask={startTask}
+                                    completeTask={completeTask}
+                                    resetTask={resetTask}
+                                    deleteTask={deleteTask}
+                                    user={user}
+                                  />
+                                );
+                              }
+                            })
+                          : sortedList.map((task) => {
+                              if (
+                                (groupBy === "state" &&
+                                  task.state === column.state) ||
+                                (groupBy === "priority" &&
+                                  task.priority === column.priority)
+                              ) {
+                                myTasks++;
+                                const updated = new Date(task.updated_on);
+                                const updatedStatus =
+                                  updatedMessageUtil(updated);
+                                return (
+                                  <KanbanCardTask
+                                    task={task}
+                                    openTaskClass={openTaskClass}
+                                    openTask={openTask}
+                                    hoverOverTask={hoverOverTask}
+                                    hoverOverTaskEnd={hoverOverTaskEnd}
+                                    updatedStatus={updatedStatus}
+                                    startTask={startTask}
+                                    completeTask={completeTask}
+                                    resetTask={resetTask}
+                                    deleteTask={deleteTask}
+                                    user={user}
+                                  />
+                                );
+                              }
+                            })
+                        : filteredList.map((task) => {
+                            if (
+                              (groupBy === "state" &&
+                                task.state === column.state) ||
+                              (groupBy === "priority" &&
+                                task.priority === column.priority)
+                            ) {
                               myTasks++;
                               const updated = new Date(task.updated_on);
                               const updatedStatus = updatedMessageUtil(updated);
@@ -445,31 +518,10 @@ export default function TasksPage({ user, setAuthentication }) {
                                 />
                               );
                             }
-                          })
-                      : filteredList.map((task) => {
-                          if (task.state === column.state) {
-                            myTasks++;
-                            const updated = new Date(task.updated_on);
-                            const updatedStatus = updatedMessageUtil(updated);
-                            return (
-                              <KanbanCardTask
-                                task={task}
-                                openTaskClass={openTaskClass}
-                                openTask={openTask}
-                                hoverOverTask={hoverOverTask}
-                                hoverOverTaskEnd={hoverOverTaskEnd}
-                                updatedStatus={updatedStatus}
-                                startTask={startTask}
-                                completeTask={completeTask}
-                                resetTask={resetTask}
-                                deleteTask={deleteTask}
-                                user={user}
-                              />
-                            );
-                          }
-                        })}
-                  </div>
-                );
+                          })}
+                    </div>
+                  );
+                }
               })}
             </div>
           ) : search === "" && applyFilters === 0 ? (
