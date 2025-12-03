@@ -14,20 +14,48 @@ import "./SectionHeader.css";
 export default function SectionHeader(props) {
   const [filterOpen, setFilterOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
+  const [kanbanSelectOpen, setKanbanSelectOpen] = useState(false);
+  const [kanbanSelectVisible, setKanbanSelectVisible] = useState(false);
 
   const handleButtonClick = () => {
     props.setPopupDisplay({ ...props.popupDisplay, active: true });
   };
 
   const setListView = () => {
+    handleKanbanSelect();
     props.setSelectedView("list");
   };
 
   const setGridView = () => {
+    handleKanbanSelect();
     props.setSelectedView("grid");
   };
 
+  const handleKanbanSelect = () => {
+    if (!kanbanSelectOpen) {
+      setTimeout(() => {
+        setKanbanSelectOpen(true);
+      }, 250);
+      setTimeout(() => {
+        setKanbanSelectVisible(true);
+      }, 500);
+    } else {
+      setTimeout(() => {
+        setKanbanSelectVisible(false);
+      }, 250);
+      setTimeout(() => {
+        setKanbanSelectOpen(false);
+      }, 500);
+    }
+  };
+
   const setKanbanView = () => {
+    if (props.page === "tasks") {
+      if (props.groupBy !== "priority") {
+        props.setGroupBy("state");
+      }
+      handleKanbanSelect();
+    }
     props.setSelectedView("kanban");
   };
 
@@ -108,6 +136,18 @@ export default function SectionHeader(props) {
     props.setSort({ ...props.sort, type: 2 });
   };
 
+  const groupByState = () => {
+    props.setGroupBy("state");
+    props.setSelectedView("kanban");
+    handleKanbanSelect();
+  };
+
+  const groupByPriority = () => {
+    props.setGroupBy("priority");
+    props.setSelectedView("kanban");
+    handleKanbanSelect();
+  };
+
   return (
     <div className="section-header">
       <h2 className="title poppins-bold">{props.title}</h2>
@@ -155,17 +195,40 @@ export default function SectionHeader(props) {
               <HiViewGrid />
             </IconContext.Provider>
           </button>
-            <button
+          <button
+            className={
+              "kanban-view" +
+              (props.selectedView === "kanban" ? " selected" : "")
+            }
+            onClick={() => setKanbanView()}
+          >
+            <IconContext.Provider value={{ style: { fontSize: "28px" } }}>
+              <LuKanban />
+            </IconContext.Provider>
+          </button>
+          {kanbanSelectOpen ? (
+            <div
               className={
-                "kanban-view" +
-                (props.selectedView === "kanban" ? " selected" : "")
+                "kanban-select poppins-regular" +
+                (kanbanSelectVisible ? " visible" : "")
               }
-              onClick={() => setKanbanView()}
             >
-              <IconContext.Provider value={{ style: { fontSize: "28px" } }}>
-                <LuKanban />
-              </IconContext.Provider>
-            </button>
+              <button
+                className="group-by-state poppins-regular"
+                onClick={() => groupByState()}
+              >
+                State
+              </button>
+              <button
+                className="group-by-priority poppins-regular"
+                onClick={() => groupByPriority()}
+              >
+                Priority
+              </button>
+            </div>
+          ) : (
+            ""
+          )}
         </div>
         <button
           className={

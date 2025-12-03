@@ -262,6 +262,18 @@
   background-color: rgba(0, 200, 120, 0.2);
 }
 
+.tasks-page .tasks .kanban-board .high {
+  background-color: rgba(245, 0, 45, 0.2);
+}
+
+.tasks-page .tasks .kanban-board .medium {
+  background-color: rgba(245, 120, 0, 0.2);
+}
+
+.tasks-page .tasks .kanban-board .low {
+  background-color: rgba(45, 160, 225, 0.2);
+}
+
 .tasks-page .tasks .kanban-board .column-header {
   display: flex;
   justify-content: center;
@@ -303,6 +315,18 @@
 
 .tasks-page .tasks .kanban-board .done > div:nth-child(1) {
   background-color: rgb(0, 200, 120);
+}
+
+.tasks-page .tasks .kanban-board .high > div:nth-child(1) {
+  background-color: rgb(245, 20, 65);
+}
+
+.tasks-page .tasks .kanban-board .medium > div:nth-child(1) {
+  background-color: rgb(245, 120, 0);
+}
+
+.tasks-page .tasks .kanban-board .low > div:nth-child(1) {
+  background-color: rgb(45, 160, 225);
 }
 
 .tasks-page .tasks .kanban-board .kanban-card {
