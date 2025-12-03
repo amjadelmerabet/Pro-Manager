@@ -45,7 +45,7 @@ export default function TasksPage({ user, setAuthentication }) {
   const [search, setSearch] = useState("");
   const [filteredList, setFilteredList] = useState([]);
   const [selectedView, setSelectedView] = useState("list");
-  const [filter, setFilter] = useState({ state: "0" });
+  const [filter, setFilter] = useState({ state: "0", priority: "0" });
   const [applyFilters, setApplyFilters] = useState(0);
   const [newAccessToken, setNewAccessToken] = useState({
     counter: 0,

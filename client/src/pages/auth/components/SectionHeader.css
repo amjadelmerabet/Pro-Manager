@@ -52,6 +52,29 @@
   margin-left: 8px;
 }
 
+.section-header .page-buttons .kanban-view .tooltip {
+  position: absolute;
+  top: -90%;
+  font-size: 12px;
+  width: 80px;
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: 4px;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0) translateX(-100%);
+  transition:
+    opacity 250ms ease-in-out,
+    visibility 250ms ease-in-out,
+    transform 250ms ease-in-out;
+}
+
+.section-header .page-buttons .kanban-view .tooltip.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1) translateX(0);
+}
+
 .section-header .page-buttons .select-view > .selected {
   background-color: var(--accent-color);
 }
@@ -274,7 +297,7 @@
 
 .page-buttons .filter {
   position: absolute;
-  bottom: -98px;
+  bottom: -128px;
   left: 0;
   width: 100%;
   border-radius: 4px;
@@ -307,6 +330,16 @@
   border-radius: 4px;
   border: 1px solid black;
   cursor: pointer;
+}
+
+.page-buttons .filter .filters {
+  display: grid;
+  gap: 4px;
+}
+
+.page-buttons .filter .filters > div {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
 }
 
 .page-buttons .filter .filter-section-buttons {

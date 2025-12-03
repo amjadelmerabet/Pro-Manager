@@ -6,8 +6,6 @@ import { HiViewGrid } from "react-icons/hi";
 import { IoClose } from "react-icons/io5";
 import { TbArrowsSort } from "react-icons/tb";
 import { LuKanban } from "react-icons/lu";
-import { MdOutlineDoNotDisturbAlt } from "react-icons/md";
-import { ImCross } from "react-icons/im";
 
 import "./SectionHeader.css";
 
@@ -16,6 +14,8 @@ export default function SectionHeader(props) {
   const [sortOpen, setSortOpen] = useState(false);
   const [kanbanSelectOpen, setKanbanSelectOpen] = useState(false);
   const [kanbanSelectVisible, setKanbanSelectVisible] = useState(false);
+  const [toolTipShown, setToolTipShown] = useState(false);
+  const [toolTipVisible, setToolTipVisible] = useState(false);
 
   const handleButtonClick = () => {
     props.setPopupDisplay({ ...props.popupDisplay, active: true });
@@ -24,15 +24,17 @@ export default function SectionHeader(props) {
   const setListView = () => {
     handleKanbanSelect();
     props.setSelectedView("list");
+    handleKanbanSelect("list");
   };
 
   const setGridView = () => {
     handleKanbanSelect();
     props.setSelectedView("grid");
+    handleKanbanSelect("grid");
   };
 
-  const handleKanbanSelect = () => {
-    if (!kanbanSelectOpen) {
+  const handleKanbanSelect = (selectedView) => {
+    if (!kanbanSelectOpen && selectedView === "kanban") {
       setTimeout(() => {
         setKanbanSelectOpen(true);
       }, 250);
@@ -49,12 +51,15 @@ export default function SectionHeader(props) {
     }
   };
 
+  const openKanbanSelect = () => {
+    handleKanbanSelect(props.selectedView);
+  };
+
   const setKanbanView = () => {
     if (props.page === "tasks") {
       if (props.groupBy !== "priority") {
         props.setGroupBy("state");
       }
-      handleKanbanSelect();
     }
     props.setSelectedView("kanban");
   };
@@ -83,7 +88,13 @@ export default function SectionHeader(props) {
 
   const changeFilter = (type, value) => {
     if (type === "state") {
-      props.setFilter({ state: value });
+      props.setFilter((current) => {
+        return { ...current, state: value };
+      });
+    } else if (type === "priority") {
+      props.setFilter((current) => {
+        return { ...current, priority: value };
+      });
     }
   };
 
@@ -110,7 +121,7 @@ export default function SectionHeader(props) {
   };
 
   const clearFilter = () => {
-    props.setFilter({ state: "0" });
+    props.setFilter({ state: "0", priority: "0" });
     props.setApplyFilters(0);
   };
 
@@ -139,13 +150,27 @@ export default function SectionHeader(props) {
   const groupByState = () => {
     props.setGroupBy("state");
     props.setSelectedView("kanban");
-    handleKanbanSelect();
+    handleKanbanSelect(props.selectedView);
   };
 
   const groupByPriority = () => {
     props.setGroupBy("priority");
     props.setSelectedView("kanban");
-    handleKanbanSelect();
+    handleKanbanSelect(props.selectedView);
+  };
+
+  const showToolTip = () => {
+    setToolTipShown(true);
+    setTimeout(() => {
+      setToolTipVisible(true);
+    }, 250);
+  };
+
+  const hideToolTip = () => {
+    setToolTipVisible(false);
+    setTimeout(() => {
+      setToolTipShown(false);
+    }, 250);
   };
 
   return (
@@ -201,7 +226,21 @@ export default function SectionHeader(props) {
               (props.selectedView === "kanban" ? " selected" : "")
             }
             onClick={() => setKanbanView()}
+            onDoubleClick={() => openKanbanSelect()}
+            onMouseEnter={() => showToolTip()}
+            onMouseLeave={() => hideToolTip()}
           >
+            {toolTipShown ? (
+              <div
+                className={
+                  "tooltip poppins-regular" + (toolTipVisible ? " visible" : "")
+                }
+              >
+                Double click
+              </div>
+            ) : (
+              ""
+            )}
             <IconContext.Provider value={{ style: { fontSize: "28px" } }}>
               <LuKanban />
             </IconContext.Provider>
@@ -286,8 +325,18 @@ export default function SectionHeader(props) {
                 onChange={(event) => changeSort(event.target.value)}
               >
                 <option value="0">-- None --</option>
-                <option value="1">State</option>
-                <option value="2">Priority</option>
+                {props.groupBy === "priority" ||
+                props.selectedView !== "kanban" ? (
+                  <option value="1">State</option>
+                ) : (
+                  ""
+                )}
+                {props.groupBy === "state" ||
+                props.selectedView !== "kanban" ? (
+                  <option value="2">Priority</option>
+                ) : (
+                  ""
+                )}
               </select>
             </div>
           ) : (
@@ -367,27 +416,23 @@ export default function SectionHeader(props) {
         <button
           className={
             "filter-button poppins-regular" +
-            (Object.keys(props.filter).length === 1 &&
-            Number(props.filter.state) === 0
+            (Number(props.filter.state) === 0 &&
+            Number(props.filter.priority) === 0
               ? " no-filters"
               : "") +
             (filterOpen ? " open" : "") +
-            (props.applyFilters === 0 ? " draft-filters" : "") +
-            (props.selectedView === "kanban" ? " filter-disabled" : "")
+            (props.applyFilters === 0 ? " draft-filters" : "")
           }
-          data-filter-number-popup={Object.keys(props.filter).length}
+          data-filter-number-popup={
+            Object.values(props.filter).filter((property) =>
+              property !== "0" ? property : ""
+            ).length
+          }
           onClick={() => openFilter()}
         >
-          {props.selectedView !== "kanban" ? (
-            <IconContext.Provider value={{ style: { fontSize: "28px" } }}>
-              <FiFilter />
-            </IconContext.Provider>
-          ) : (
-            <IconContext.Provider value={{ style: { fontSize: "28px" } }}>
-              <FiFilter />
-              <ImCross />
-            </IconContext.Provider>
-          )}
+          <IconContext.Provider value={{ style: { fontSize: "28px" } }}>
+            <FiFilter />
+          </IconContext.Provider>
         </button>
         <div
           className={"filter poppins-regular" + (filterOpen ? " visible" : "")}
@@ -418,29 +463,55 @@ export default function SectionHeader(props) {
               </select>
             </div>
           ) : props.page === "tasks" ? (
-            <div className="state-section">
-              <label htmlFor="select-state" className="select-state-label">
-                State
-              </label>
-              <select
-                name="select-state"
-                id="select-state"
-                className="poppins-regular"
-                value={props.filter.state}
-                onChange={(event) => changeFilter("state", event.target.value)}
-              >
-                <option value="0">-- None --</option>
-                <option value="1">To do</option>
-                <option value="2">Doing</option>
-                <option value="3">Done</option>
-              </select>
+            <div className="filters">
+              <div className="state-section">
+                <label htmlFor="select-state" className="select-state-label">
+                  State
+                </label>
+                <select
+                  name="select-state"
+                  id="select-state"
+                  className="poppins-regular"
+                  value={props.filter.state}
+                  onChange={(event) =>
+                    changeFilter("state", event.target.value)
+                  }
+                >
+                  <option value="0">-- None --</option>
+                  <option value="1">To do</option>
+                  <option value="2">Doing</option>
+                  <option value="3">Done</option>
+                </select>
+              </div>
+              <div className="priority-section">
+                <label
+                  htmlFor="select-priority"
+                  className="select-priority-label"
+                >
+                  Priority
+                </label>
+                <select
+                  name="priority-select"
+                  id="priority-select"
+                  className="poppins-regular"
+                  value={props.filter.priority}
+                  onChange={(event) =>
+                    changeFilter("priority", event.target.value)
+                  }
+                >
+                  <option value="0">-- None --</option>
+                  <option value="1">High</option>
+                  <option value="2">Medium</option>
+                  <option value="3">Low</option>
+                </select>
+              </div>
             </div>
           ) : (
             ""
           )}
           <div className="filter-section-buttons">
-            {Object.keys(props.filter).length === 1 &&
-            Number(props.filter.state) === 0 &&
+            {Number(props.filter.state) === 0 &&
+            Number(props.filter.priority) === 0 &&
             props.applyFilters === 0 ? (
               <button
                 className="cancel-filters-button poppins-regular"
