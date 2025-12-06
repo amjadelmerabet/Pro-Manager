@@ -21,13 +21,12 @@ export default function SignUpPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [noMatch, setNoMatch] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
-
+  
   let navigate = useNavigate();
 
   useEffect(() => {
-    createNewUserAPI(userBody);
     if (createNewUser) {
-      createNewUserAPI();
+      createNewUserAPI(userBody);
       setTimeout(() => {
         setCreateNewUser(false);
         setNewUserCreated(false);
