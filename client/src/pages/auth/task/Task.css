@@ -64,7 +64,8 @@
   border-radius: 4px;
 }
 
-.task-page .task-body .editing-short-description {
+.task-page .task-body .editing-short-description,
+.task-page .task-body .editing-description {
   margin-top: 4px;
   display: flex;
 }
@@ -72,7 +73,11 @@
 .task-page
   .task-body
   .editing-short-description
-  > .editing-short-description-input {
+  > .editing-short-description-input,
+.task-page
+  .task-body
+  .editing-description
+  > .editing-description-input {
   padding: 8px 16px;
   background-color: var(--accent-color);
   border-radius: 4px;
@@ -80,14 +85,16 @@
   width: 90%;
 }
 
-.task-page .task-body .editing-short-description > .buttons {
+.task-page .task-body .editing-short-description > .buttons,
+.task-page .task-body .editing-description > .buttons {
   display: flex;
   justify-content: space-around;
   align-items: center;
   width: 10%;
 }
 
-.task-page .task-body .editing-short-description > .buttons > input {
+.task-page .task-body .editing-short-description > .buttons > input,
+.task-page .task-body .editing-description > .buttons > input {
   padding: 4px 8px;
   height: 80%;
   border-radius: 4px;
@@ -98,11 +105,13 @@
   cursor: pointer;
 }
 
-.task-page .task-body .editing-short-description > .buttons > input:hover {
+.task-page .task-body .editing-short-description > .buttons > input:hover,
+.task-page .task-body .editing-description > .buttons > input:hover {
   transform: scale(0.99);
 }
 
-.task-page .task-body .task-description {
+.task-page .task-body .task-description,
+.task-page .task-body .editing-description {
   margin-bottom: 32px;
 }
 
@@ -130,6 +139,32 @@
 }
 
 .task-page .task-body > div:not(.task-info):hover > div > .edit {
+  visibility: visible;
+  opacity: 1;
+  transform: scale(1);
+}
+
+.task-page .task-body > .task-info .edit-project {
+  position: absolute;
+  top: 0;
+  right: -65px;
+  border: 1px solid var(--primary-color);
+  padding: 2px 8px;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  border-radius: 4px;
+  background-color: white;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  transition: transform 250ms ease-in-out;
+  visibility: hidden;
+  opacity: 0;
+  transform: scale(0);
+}
+
+.task-page .task-body > .task-info .project-value:hover + .edit-project,
+.task-page .task-body > .task-info .project .edit-project:hover {
   visibility: visible;
   opacity: 1;
   transform: scale(1);
@@ -209,6 +244,7 @@
 .task-page .task .task-info .priority {
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
 .task-page .task .task-info .priority > .priority-label {
@@ -225,7 +261,38 @@
   border-radius: 10px;
 }
 
+.task-page .task .task-info .editing-priority,
+.task-page .task .task-info .editing-project {
+  display: flex;
+  gap: 8px;
+}
+
+.task-page .task .task-info .editing-priority-select,
+.task-page .task .task-info .editing-project-select {
+  padding: 2px 4px;
+  border: none;
+  background-color: rgba(200, 200, 200, 0.25);
+  border-radius: 10px;
+}
+
+.task-page .task .task-info .editing-priority > input,
+.task-page .task .task-info .editing-project > input {
+  padding: 0 4px;
+  cursor: pointer;
+  background-color: white;
+  border: 1px solid var(--primary-color);
+  border-radius: 4px;
+  font-size: 12px;
+  transition: transform 250ms ease-in-out;
+}
+
+.task-page .task .task-info .editing-priority > input:hover,
+.task-page .task .task-info .editing-project > input:hover {
+  transform: scale(0.98);
+}
+
 .task-page .task .task-info .project {
+  position: relative;
   display: flex;
   align-items: center;
 }

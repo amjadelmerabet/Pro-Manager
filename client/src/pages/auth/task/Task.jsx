@@ -21,19 +21,18 @@ import fetchUserTaskUtil from "./utils/fetchUserTaskUtil";
 import updateTaskUtil from "./utils/updateTaskUtil";
 import deleteTaskUtil from "./utils/deleteTaskUtil";
 import getAccessTokenUtil from "./utils/getAccessTokenUtil";
+import fetchLinkedProjectUtil from "./utils/fetchLinkedProjectUtil";
+import fetchUserProjectsUtil from "./utils/fetchUserProjectsUtil";
 
 // Styles
 import "./Task.css";
 import { TbFolderFilled, TbSquareCheck } from "react-icons/tb";
-import fetchLinkedProjectUtil from "./utils/fetchLinkedProjectUtil";
 
 export default function Task({ user, setAuthentication }) {
   const [taskObject, setTaskObject] = useState({});
   const [taskUpdates, setTaskUpdates] = useState({});
   const [taskUpdated, setTaskUpdated] = useState({ counter: 0, update: false });
   const [taskDeleted, setTaskDeleted] = useState(false);
-  const [showEditingButton, setShowEditingButton] = useState(false);
-  // const [editShortDescription, setEditShortDescription] = useState(false);
   const [editingShortDesciprtion, setEditingShortDescription] = useState(false);
   const [editedShortDescription, setEditedShortDescription] = useState("");
   const [tries, setTries] = useState(0);
@@ -47,6 +46,14 @@ export default function Task({ user, setAuthentication }) {
   const [project, setProject] = useState({});
   const [taskFetched, setTasksFetched] = useState(false);
   const [loadProject, setLoadProject] = useState(false);
+  const [editingDescription, setEditingDescription] = useState(false);
+  const [editedDescription, setEditedDescription] = useState("");
+  const [editingPriority, setEditingPriority] = useState(false);
+  const [editedPriority, setEditedPriority] = useState(0);
+  const [editingProject, setEditingProject] = useState(false);
+  const [editedProject, setEditedProject] = useState("");
+  const [userProjects, setUserProjects] = useState([]);
+  const [loadProjects, setLoadProjects] = useState(false);
 
   const location = useLocation();
   const pathname = location.pathname;
@@ -59,6 +66,19 @@ export default function Task({ user, setAuthentication }) {
   const projectId = searchParams.get("project");
 
   const { token } = JSON.parse(sessionStorage.getItem("authUser"));
+
+  useEffect(() => {
+    fetchUserProjectsUtil(
+      tokenValidated,
+      user,
+      token,
+      tries,
+      setTries,
+      newAccessToken,
+      setNewAccessToken,
+      setUserProjects
+    );
+  }, [loadProjects]);
 
   useEffect(() => {
     if ((!taskUpdated.update && taskUpdated.counter === 0) || loadTask) {
@@ -107,7 +127,7 @@ export default function Task({ user, setAuthentication }) {
         setProject
       );
     }
-  }, [taskFetched, loadProject]);
+  }, [taskFetched, loadProject, taskUpdated]);
 
   useEffect(() => {
     if (taskUpdated.update) {
@@ -199,14 +219,6 @@ export default function Task({ user, setAuthentication }) {
     setTaskDeleted(true);
   };
 
-  const hoverOverShortDescription = () => {
-    setShowEditingButton(true);
-  };
-
-  const hoverOverShortDescriptionEnd = () => {
-    setShowEditingButton(false);
-  };
-
   const editShortDescription = (taskShortDescription) => {
     setEditedShortDescription(taskShortDescription);
     setEditingShortDescription(true);
@@ -223,6 +235,60 @@ export default function Task({ user, setAuthentication }) {
 
   const cancelShortDescriptionEdit = () => {
     setEditingShortDescription(false);
+  };
+
+  const editDescription = (taskDescription) => {
+    setEditedDescription(taskDescription);
+    setEditingDescription(true);
+  };
+
+  const confirmDescriptionEdit = () => {
+    setEditingDescription(false);
+    setTaskUpdates({
+      description: editedDescription,
+      updated_by: user,
+    });
+    setTaskUpdated({ counter: taskUpdated.counter + 1, update: true });
+  };
+
+  const cancelDescriptionEdit = () => {
+    setEditingDescription(false);
+  };
+
+  const editPriority = (taskPriority) => {
+    setEditedPriority(taskPriority);
+    setEditingPriority(true);
+  };
+
+  const confirmPriorityEdit = () => {
+    setEditingPriority(false);
+    setTaskUpdates({
+      priority: editedPriority,
+      updated_by: user,
+    });
+    setTaskUpdated({ counter: taskUpdated.counter + 1, update: true });
+  };
+
+  const cancelPriorityEdit = () => {
+    setEditingPriority(false);
+  };
+
+  const editProject = (taskProject) => {
+    setEditedProject(taskProject);
+    setEditingProject(true);
+  };
+
+  const confirmProjectEdit = () => {
+    setEditingProject(false);
+    setTaskUpdates({
+      project: editedProject !== "" ? editedProject : null,
+      updated_by: user,
+    });
+    setTaskUpdated({ counter: taskUpdated.counter + 1, update: true });
+  };
+
+  const cancelProjectEdit = () => {
+    setEditingProject(false);
   };
 
   let updated = new Date(taskObject.updated_on);
@@ -368,72 +434,142 @@ export default function Task({ user, setAuthentication }) {
                   </div>
                   <div className="priority poppins-regular">
                     <span className="priority-label">Priority</span>
-                    <div className="priority-value">
-                      <IconContext.Provider
-                        value={{
-                          style: {
-                            color:
-                              taskObject.priority === 1
-                                ? "rgb(245, 0, 45)"
-                                : taskObject.priority === 2
-                                  ? "rgb(245, 120, 0)"
-                                  : "rgb(0, 120, 245)",
-                          },
-                        }}
+                    {!editingPriority ? (
+                      <div
+                        className="priority-value"
+                        onClick={() => editPriority()}
                       >
-                        {taskObject.priority === 1 ? (
-                          <RiAlarmWarningFill className="priority-icon" />
-                        ) : taskObject.priority === 2 ? (
-                          <FaFire className="priority-icon" />
-                        ) : (
-                          <FaRegSnowflake className="priority-icon" />
-                        )}
-                      </IconContext.Provider>
-                      {taskObject.priority === 1
-                        ? " High"
-                        : taskObject.priority === 2
-                          ? " Medium"
-                          : " Low"}
-                    </div>
-                  </div>
-                  <div className="project poppins-regular">
-                    <span className="project-label">Project</span>
-                    {taskObject.project ? (
-                      <div className="project-value">
                         <IconContext.Provider
                           value={{
                             style: {
-                              color: "var(--primary-color)",
-                              fontSize: "18px",
+                              color:
+                                taskObject.priority === 1
+                                  ? "rgb(245, 0, 45)"
+                                  : taskObject.priority === 2
+                                    ? "rgb(245, 120, 0)"
+                                    : "rgb(0, 120, 245)",
                             },
                           }}
                         >
-                          <TbFolderFilled />
+                          {taskObject.priority === 1 ? (
+                            <RiAlarmWarningFill className="priority-icon" />
+                          ) : taskObject.priority === 2 ? (
+                            <FaFire className="priority-icon" />
+                          ) : (
+                            <FaRegSnowflake className="priority-icon" />
+                          )}
                         </IconContext.Provider>
-                        <Link
-                          to={
-                            view
-                              ? `/auth/${user}/project/${taskObject.project}?task=${taskObject.task_id}?view=${view}`
-                              : `/auth/${user}/project/${taskObject.project}?task=${taskObject.task_id}`
-                          }
-                          className="project-link"
-                        >
-                          {project.name ? project.name : "Loading ..."}
-                        </Link>
+                        {taskObject.priority === 1
+                          ? " High"
+                          : taskObject.priority === 2
+                            ? " Medium"
+                            : " Low"}
                       </div>
                     ) : (
-                      <div className="project-value">No project</div>
+                      <div className="editing-priority">
+                        <select
+                          className="editing-priority-select"
+                          onChange={(event) =>
+                            setEditedPriority(Number(event.target.value))
+                          }
+                          value={editedPriority}
+                        >
+                          <option value="1">High</option>
+                          <option value="2">Medium</option>
+                          <option value="3">Low</option>
+                        </select>
+                        <input
+                          type="button"
+                          value="Cancel"
+                          onClick={() => cancelPriorityEdit()}
+                          className="poppins-regular"
+                        />
+                        <input
+                          type="button"
+                          value="Confirm"
+                          onClick={() => confirmPriorityEdit()}
+                          className="poppins-regular"
+                        />
+                      </div>
                     )}
+                  </div>
+                  <div className="project poppins-regular">
+                    <span className="project-label">Project</span>
+                    {!editingProject ? (
+                      taskObject.project ? (
+                        <div className="project-value">
+                          <IconContext.Provider
+                            value={{
+                              style: {
+                                color: "var(--primary-color)",
+                                fontSize: "18px",
+                              },
+                            }}
+                          >
+                            <TbFolderFilled />
+                          </IconContext.Provider>
+                          <Link
+                            to={
+                              view
+                                ? `/auth/${user}/project/${taskObject.project}?task=${taskObject.task_id}?view=${view}`
+                                : `/auth/${user}/project/${taskObject.project}?task=${taskObject.task_id}`
+                            }
+                            className="project-link"
+                          >
+                            {project.name ? project.name : "Loading ..."}
+                          </Link>
+                        </div>
+                      ) : (
+                        <div className="project-value">No project</div>
+                      )
+                    ) : (
+                      <div className="editing-project">
+                        <select
+                          className="editing-project-select"
+                          onChange={(event) =>
+                            setEditedProject(event.target.value)
+                          }
+                          value={editedProject}
+                        >
+                          <option value="">-- No project --</option>
+                          {userProjects.map((project) => {
+                            return (
+                              <option value={project.project_id}>
+                                {project.name}
+                              </option>
+                            );
+                          })}
+                        </select>
+                        <input
+                          type="button"
+                          value="Cancel"
+                          onClick={() => cancelProjectEdit()}
+                        />
+                        <input
+                          type="button"
+                          value="Confirm"
+                          onClick={() => confirmProjectEdit()}
+                        />
+                      </div>
+                    )}
+                    <button
+                      className="edit-project"
+                      onClick={() => editProject(taskObject.project)}
+                    >
+                      <IconContext.Provider
+                        value={{ style: { fontSize: "16px" } }}
+                      >
+                        <MdOutlineModeEdit />
+                      </IconContext.Provider>
+                      Edit
+                    </button>
                   </div>
                 </div>
                 <div className="right">
                   <div className="updated poppins-regular">{updatedStatus}</div>
                 </div>
               </div>
-              <div
-                onMouseEnter={() => hoverOverShortDescription()}
-                onMouseLeave={() => hoverOverShortDescriptionEnd()}
-              >
+              <div>
                 <span className="short-description-label poppins-semibold">
                   Short description
                 </span>
@@ -471,10 +607,7 @@ export default function Task({ user, setAuthentication }) {
                 {!editingShortDesciprtion ? (
                   <div className="edit-short-description">
                     <button
-                      className={
-                        "edit poppins-regular" +
-                        (showEditingButton ? " visible" : "")
-                      }
+                      className="edit poppins-regular"
                       onClick={() =>
                         editShortDescription(taskObject.short_description)
                       }
@@ -495,14 +628,59 @@ export default function Task({ user, setAuthentication }) {
                 <span className="description-label poppins-semibold">
                   Description
                 </span>
-                <div
-                  className={
-                    "task-description poppins-regular" +
-                    (taskObject.description ? " visible" : "")
-                  }
-                >
-                  {taskObject.description}
-                </div>
+                {!editingDescription ? (
+                  <div
+                    className={
+                      "task-description poppins-regular" +
+                      (taskObject.description ? " visible" : "")
+                    }
+                  >
+                    {taskObject.description}
+                  </div>
+                ) : (
+                  <div className="editing-description">
+                    <input
+                      type="text"
+                      name="editing-description"
+                      className="editing-description-input poppins-regular"
+                      value={editedDescription}
+                      onChange={(event) => {
+                        setEditedDescription(event.target.value);
+                      }}
+                    />
+                    <div className="buttons">
+                      <input
+                        type="button"
+                        value="Update"
+                        className="update-task"
+                        onClick={() => confirmDescriptionEdit()}
+                      />
+                      <input
+                        type="button"
+                        value="Cancel"
+                        className="cancel-update-task"
+                        onClick={() => cancelDescriptionEdit()}
+                      />
+                    </div>
+                  </div>
+                )}
+                {!editingDescription ? (
+                  <div className="edit-description">
+                    <button
+                      className="edit poppins-regular"
+                      onClick={() => editDescription(taskObject.description)}
+                    >
+                      <IconContext.Provider
+                        value={{ style: { fontSize: "16px" } }}
+                      >
+                        <MdOutlineModeEdit />
+                      </IconContext.Provider>
+                      Edit
+                    </button>
+                  </div>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
             <div className="links poppins-semibold">

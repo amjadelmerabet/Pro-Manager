@@ -7,7 +7,8 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --experimental-modules index.js"
+    "dev": "nodemon --experimental-modules index.js",
+    "trace": "nodemon --trace-deprecation index.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
