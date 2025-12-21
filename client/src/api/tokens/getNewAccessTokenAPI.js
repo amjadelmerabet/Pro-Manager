@@ -1,6 +1,6 @@
 import apiConfig from "../config";
 
-export default async function getNewAccessTokenAPI(user, refreshToken) {
+export default async function getNewAccessTokenAPI(userId, refreshToken) {
   const response = await fetch(
     `${apiConfig.url}:${apiConfig.port}/api/tokens/access/new`,
     {
@@ -9,7 +9,7 @@ export default async function getNewAccessTokenAPI(user, refreshToken) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${refreshToken.value}`,
       },
-      body: JSON.stringify({ username: user }),
+      body: JSON.stringify({ user_id: userId }),
     }
   );
   // console.log("Received a token or something");
