@@ -29,7 +29,7 @@ import createNewProjectTaskUtil from "./utils/createNewProjectTaskUtil";
 // Styles
 import "./Project.css";
 
-export default function Project({ user, setAuthentication }) {
+export default function Project({ user, userId, setAuthentication }) {
   const [projectObject, setProjectObject] = useState({});
   const [projectUpdates, setProjectUpdates] = useState({});
   const [projectUpdated, setProjectUpdated] = useState({
@@ -108,6 +108,7 @@ export default function Project({ user, setAuthentication }) {
         tokenValidated,
         setTokenValidated,
         user,
+        userId,
         tries,
         setTries,
         newAccessToken,
@@ -121,6 +122,7 @@ export default function Project({ user, setAuthentication }) {
       // getAccessTokenAPI();
       getAccessTokenUtil(
         user,
+        userId,
         setTokenValidated,
         setTries,
         loadProject,
@@ -203,17 +205,17 @@ export default function Project({ user, setAuthentication }) {
   }, [newTaskToCreate]);
 
   const startProject = () => {
-    setProjectUpdates({ state: 2, updated_by: user });
+    setProjectUpdates({ state: 2, updated_by: userId });
     setProjectUpdated({ counter: projectUpdated.counter + 1, update: true });
   };
 
   const completeProject = () => {
-    setProjectUpdates({ state: 3, updated_by: user });
+    setProjectUpdates({ state: 3, updated_by: userId });
     setProjectUpdated({ counter: projectUpdated.counter + 1, update: true });
   };
 
   const resetProject = () => {
-    setProjectUpdates({ state: 1, updated_by: user });
+    setProjectUpdates({ state: 1, updated_by: userId });
     setProjectUpdated({ counter: projectUpdated.counter + 1, update: true });
   };
 
@@ -241,7 +243,7 @@ export default function Project({ user, setAuthentication }) {
   };
 
   const updateDescription = () => {
-    setProjectUpdates({ description: editedDescription, updated_by: user });
+    setProjectUpdates({ description: editedDescription, updated_by: userId });
     setProjectUpdated({ counter: projectUpdated.counter + 1, update: true });
     setEditDescriptionInput(false);
     setEditingDescription(false);
@@ -264,9 +266,9 @@ export default function Project({ user, setAuthentication }) {
     setNewTask({
       ...newTask,
       project: projectId,
-      assigned_to: user,
-      created_by: user,
-      updated_by: user,
+      assigned_to: userId,
+      created_by: userId,
+      updated_by: userId,
     });
     setNewTaskToCreate(newTaskToCreate + 1);
   };
@@ -405,7 +407,7 @@ export default function Project({ user, setAuthentication }) {
                 <div className="left">
                   <div className="project-owner poppins-regular">
                     Owned by
-                    {projectObject.owner === user
+                    {projectObject.owner === userId
                       ? " you"
                       : projectObject.owner}
                   </div>
@@ -563,7 +565,7 @@ export default function Project({ user, setAuthentication }) {
                                 Assigned to
                               </div>
                               <div className="value">
-                                {task.assigned_to === user
+                                {task.assigned_to === userId
                                   ? "You"
                                   : task.assigned_to}
                               </div>
@@ -649,6 +651,7 @@ export default function Project({ user, setAuthentication }) {
           popupDisplay={openNewTaskPopup}
           setPopupDisplay={setOpenNewTaskPopup}
           user={user}
+          userId={userId}
           parentProjectId={projectObject.project_id}
         />
       ) : (
