@@ -35,7 +35,7 @@ export async function usersRoute(req, res) {
         res.end(
           JSON.stringify({
             message: "The endpoint that you are trying to reach doesn't exist",
-          }),
+          })
         );
       }
     } else if (method === "PATCH") {
@@ -72,7 +72,7 @@ export async function usersRoute(req, res) {
                   res.end(
                     JSON.stringify({
                       message: "There was an error while updating the user",
-                    }),
+                    })
                   );
                 }
               }
@@ -84,7 +84,7 @@ export async function usersRoute(req, res) {
         res.end(
           JSON.stringify({
             message: "The endpoint that you are trying to reach doesn't exist",
-          }),
+          })
         );
       }
     } else if (method === "DELETE") {
@@ -92,14 +92,13 @@ export async function usersRoute(req, res) {
         res.writeHead(200, { "Content-Type": "application/json" });
         const username = pathname.replace("/api/users/delete/", "");
         const deletedUser = await deleteUser(username);
-        console.log(deletedUser);
         res.end(JSON.stringify({ message: "User deleted successfully" }));
       } else {
         res.writeHead(404, { "Content-Type": "application/json" });
         res.end(
           JSON.stringify({
             message: "The endpoint that you are trying to reach doesn't exist",
-          }),
+          })
         );
       }
     } else {
@@ -127,18 +126,19 @@ export async function usersRoute(req, res) {
                 token: auth.token,
                 refresh: auth.refresh,
                 name: user[0].name,
-              }),
+                userId: user[0].user_id,
+              })
             );
             // console.log("User successfully authenticated");
           } else if (auth.message === "User not authenticated") {
             res.writeHead(401, { "Content-Type": "application/json" });
             res.end(
-              JSON.stringify({ authenticated: false, message: auth.message }),
+              JSON.stringify({ authenticated: false, message: auth.message })
             );
           } else {
             res.writeHead(404, { "Content-Type": "application/json" });
             res.end(
-              JSON.stringify({ authenticated: false, message: auth.message }),
+              JSON.stringify({ authenticated: false, message: auth.message })
             );
             // console.log("User failed to authenticate or doesn't exist");
           }
@@ -148,7 +148,7 @@ export async function usersRoute(req, res) {
             JSON.stringify({
               authenticated: false,
               message: "Credentials are missing",
-            }),
+            })
           );
         }
       });
@@ -169,7 +169,7 @@ export async function usersRoute(req, res) {
         ) {
           res.writeHead(400, { "Content-Type": "application/json" });
           res.end(
-            JSON.stringify({ message: "Necessary user data is missing" }),
+            JSON.stringify({ message: "Necessary user data is missing" })
           );
         } else {
           const {
@@ -190,7 +190,7 @@ export async function usersRoute(req, res) {
             email,
             password,
             updated_by,
-            created_by,
+            created_by
           );
           if (newUser.error) {
             res.writeHead(500, { "Content-Type": "application/json" });
@@ -199,13 +199,13 @@ export async function usersRoute(req, res) {
                 res.end(
                   JSON.stringify({
                     error: "A user with the same username already exists.",
-                  }),
+                  })
                 );
               } else if (newUser.error.detail.includes("email")) {
                 res.end(
                   JSON.stringify({
                     error: "A user with the same email already exitts.",
-                  }),
+                  })
                 );
               } else {
                 res.end(JSON.stringify({ error: "Duplicate record detected" }));
@@ -218,7 +218,7 @@ export async function usersRoute(req, res) {
             res.end(
               JSON.stringify({
                 message: "User has been created",
-              }),
+              })
             );
           }
         }

@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import createAccessToken from "../controllers/tokens/createAccessToken.js";
 import getAccessTokenByUser from "../controllers/tokens/getAccessTokenByUser.js";
 import getRefreshTokenByUser from "../controllers/tokens/getRefreshTokenByUser.js";
-import getUserByUsername from "../controllers/users/getUserByUsername.js";
+import getUserById from "../controllers/users/getUserById.js"
 import checkAccessToken from "../controllers/tokens/checkAccessToken.js";
 import getValidRefreshTokenByUser from "../controllers/tokens/getValidRefreshTokenByUser.js";
 import dotenv from "dotenv";
@@ -25,8 +25,8 @@ export async function tokensRoute(req, res) {
   if (req.user) {
     if (method === "GET") {
       if (url.match(/^\/api\/tokens\/access\/.+/)) {
-        const username = pathname.replace("/api/tokens/access/", "");
-        const accessTokens = await getAccessTokenByUser(username);
+        const userId = pathname.replace("/api/tokens/access/", "");
+        const accessTokens = await getAccessTokenByUser(userId);
         if (accessTokens.length > 0) {
           res.writeHead(200, { "Content-Type": "application/json" });
           res.end(JSON.stringify({ result: accessTokens }));
@@ -35,8 +35,8 @@ export async function tokensRoute(req, res) {
           res.end(JSON.stringify({ result: accessTokens }));
         }
       } else if (url.match(/^\/api\/tokens\/refresh\/.+/)) {
-        const username = pathname.replace("/api/tokens/refresh/", "");
-        const refreshTokens = await getRefreshTokenByUser(username);
+        const userId = pathname.replace("/api/tokens/refresh/", "");
+        const refreshTokens = await getRefreshTokenByUser(userId);
         if (refreshTokens.length > 0) {
           res.writeHead(200, { "Content-Type": "application/json" });
           res.end(JSON.stringify({ result: refreshTokens }));
@@ -56,10 +56,10 @@ export async function tokensRoute(req, res) {
         const token = authHeader.split(" ")[1];
         req.on("end", async () => {
           const bodyObject = JSON.parse(body);
-          const { username } = bodyObject;
-          const user = await getUserByUsername(username);
+          const { user_id } = bodyObject;
+          const user = await getUserById(user_id);
           if (user.length > 0) {
-            const refreshTokens = await getValidRefreshTokenByUser(username);
+            const refreshTokens = await getValidRefreshTokenByUser(user_id);
             if (refreshTokens.length > 0) {
               if (isTokenValid(token, refreshTokens[0].token)) {
                 try {
@@ -79,19 +79,19 @@ export async function tokensRoute(req, res) {
                       expiresIn: "15m",
                     },
                   );
-                  const accessTokens = await getAccessTokenByUser(username);
+                  const accessTokens = await getAccessTokenByUser(user_id);
                   if (accessTokens.length !== 0) {
                     const updatedAccessToken = await updateToken(
                       accessTokens[0].token_id,
                       accessToken,
-                      username,
+                      user_id,
                       "access"
                     );
                   } else {
                     const newAccessToken = await createAccessToken(
                       accessToken,
-                      username,
-                      username,
+                      user_id,
+                      user_id,
                     );
                   }
                   res.writeHead(201, { "Content-Type": "application/json" });
