@@ -32,6 +32,7 @@ export default function ProjectsRoute({ isAuthenticated, setAuthentication }) {
       return (
         <ProjectsPage
           user={userAuthenticated.user}
+          userId={userAuthenticated.userId}
           setAuthentication={setAuthentication}
         />
       );

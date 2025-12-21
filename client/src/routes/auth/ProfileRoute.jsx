@@ -32,6 +32,7 @@ export default function ProfileRoute({ isAuthenticated, setAuthentication }) {
       return (
         <ProfilePage
           user={userAuthenticated.user}
+          userId={userAuthenticated.userId}
           setAuthentication={setAuthentication}
         />
       );

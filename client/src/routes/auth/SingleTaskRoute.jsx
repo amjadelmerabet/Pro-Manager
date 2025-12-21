@@ -34,6 +34,7 @@ export default function SingleTaskRoute({
       return (
         <Task
           user={userAuthenticated.user}
+          userId={userAuthenticated.userId}
           setAuthentication={setAuthentication}
         />
       );
