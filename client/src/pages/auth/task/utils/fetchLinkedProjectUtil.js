@@ -30,6 +30,7 @@ export default async function fetchLinkedProjectUtil(
   projectId,
   token,
   user,
+  userId,
   tokenValidated,
   setTokenValidated,
   tries,
@@ -42,7 +43,10 @@ export default async function fetchLinkedProjectUtil(
     if (!tokenValidated) {
       const refreshToken = await cookieStore.get(user);
       if (refreshToken) {
-        const validAccessToken = await getNewAccessTokenAPI(user, refreshToken);
+        const validAccessToken = await getNewAccessTokenAPI(
+          userId,
+          refreshToken
+        );
         if (validAccessToken.error === "Valid access token") {
           fetchLinkedProjectAction(
             projectId,
