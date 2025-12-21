@@ -33,6 +33,7 @@ export default async function fetchProjectTasksUtil(
   tokenValidated,
   setTokenValidated,
   user,
+  userId,
   tries,
   setTries,
   newAccessToken,
@@ -42,7 +43,10 @@ export default async function fetchProjectTasksUtil(
     if (!tokenValidated) {
       const refreshToken = await cookieStore.get(user);
       if (refreshToken) {
-        const validAccessToken = await getNewAccessTokenAPI(user, refreshToken);
+        const validAccessToken = await getNewAccessTokenAPI(
+          userId,
+          refreshToken
+        );
         if (validAccessToken.message === "Valid access token") {
           fetchProjectTasksAction(
             projectId,

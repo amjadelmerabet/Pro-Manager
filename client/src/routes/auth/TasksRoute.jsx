@@ -31,6 +31,7 @@ export default function TasksRoute({ isAuthenticated, setAuthentication }) {
       return (
         <TasksPage
           user={userAuthenticated.user}
+          userId={userAuthenticated.userId}
           setAuthentication={setAuthentication}
         />
       );

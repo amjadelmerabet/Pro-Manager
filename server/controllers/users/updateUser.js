@@ -40,6 +40,10 @@ export default async function updateUser(username, updates) {
               query += `email = $${count + 1}`;
             } else if (entry[0] === "password") {
               query += `password = $${count + 1}`;
+            } else if (entry[0] === "updated_by") {
+              query += `updated_by = $${count + 1}`;
+            } else if (entry[0] === "username") {
+              query += `username = $${count + 1}`;
             } else {
               return { status: "fail", message: "Column doesn't exist" };
             }

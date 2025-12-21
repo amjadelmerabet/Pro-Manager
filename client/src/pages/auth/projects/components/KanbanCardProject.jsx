@@ -7,6 +7,7 @@ import { IoCheckmark, IoClose } from "react-icons/io5";
 export default function KanbanCardProject({
   project,
   user,
+  userId,
   hoverOverProject,
   hoverOverProjectEnd,
   openProjectClass,
@@ -168,7 +169,7 @@ export default function KanbanCardProject({
           <tr>
             <td className="property poppins-bold">Created by</td>
             <td className="value poppins-regular">
-              {project.created_by === user ? "You" : project.created_by}
+              {project.created_by === userId ? "You" : project.created_by}
             </td>
           </tr>
         </tbody>

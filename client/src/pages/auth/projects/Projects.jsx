@@ -26,7 +26,7 @@ import countMatchingRecords from "../utils/countMatchingRecords";
 import GlobalSearch from "../components/GlobalSearch";
 import fetchUserTasksUtil from "../tasks/utils/fetchUserTasksUtil";
 
-export default function ProjectsPage({ user, setAuthentication }) {
+export default function ProjectsPage({ user, userId, setAuthentication }) {
   const [projects, setProjects] = useState([]);
   const [newProject, setNewProject] = useState({});
   const [createProject, setCreateProject] = useState(0);
@@ -94,6 +94,7 @@ export default function ProjectsPage({ user, setAuthentication }) {
     fetchUserProjectsUtil(
       tokenValidated,
       user,
+      userId,
       token,
       tries,
       setTries,
@@ -113,6 +114,7 @@ export default function ProjectsPage({ user, setAuthentication }) {
       fetchUserTasksUtil(
         tokenValidated,
         user,
+        userId,
         token,
         tries,
         setTries,
@@ -198,9 +200,9 @@ export default function ProjectsPage({ user, setAuthentication }) {
   const createNewProject = () => {
     setNewProject({
       ...newProject,
-      owner: user,
-      created_by: user,
-      updated_by: user,
+      owner: userId,
+      created_by: userId,
+      updated_by: userId,
     });
     setCreateProject(createProject + 1);
   };
@@ -227,17 +229,17 @@ export default function ProjectsPage({ user, setAuthentication }) {
   }, [updatedProjectId]);
 
   const startProject = (id) => {
-    setProjectUpdates({ state: 2, updated_by: user });
+    setProjectUpdates({ state: 2, updated_by: userId });
     setUpdatedProjectId({ projectId: id, update: true });
   };
 
   const resetProject = (id) => {
-    setProjectUpdates({ state: 1, updated_by: user });
+    setProjectUpdates({ state: 1, updated_by: userId });
     setUpdatedProjectId({ projectId: id, update: true });
   };
 
   const completeProject = (id) => {
-    setProjectUpdates({ state: 3, updated_by: user });
+    setProjectUpdates({ state: 3, updated_by: userId });
     setUpdatedProjectId({ projectId: id, update: true });
   };
 
@@ -383,6 +385,7 @@ export default function ProjectsPage({ user, setAuthentication }) {
                               key={project.project_id}
                               project={project}
                               user={user}
+                              userId={userId}
                               hoverOverProject={hoverOverProject}
                               hoverOverProjectEnd={hoverOverProjectEnd}
                               openProjectClass={openProjectClass}
@@ -405,6 +408,7 @@ export default function ProjectsPage({ user, setAuthentication }) {
                               key={project.project_id}
                               project={project}
                               user={user}
+                              userId={userId}
                               hoverOverProject={hoverOverProject}
                               hoverOverProjectEnd={hoverOverProjectEnd}
                               openProjectClass={openProjectClass}
@@ -436,6 +440,7 @@ export default function ProjectsPage({ user, setAuthentication }) {
                               key={project.project_id}
                               project={project}
                               user={user}
+                              userId={userId}
                               hoverOverProject={hoverOverProject}
                               hoverOverProjectEnd={hoverOverProjectEnd}
                               openProjectClass={openProjectClass}
@@ -458,6 +463,7 @@ export default function ProjectsPage({ user, setAuthentication }) {
                               key={project.project_id}
                               project={project}
                               user={user}
+                              userId={userId}
                               hoverOverProject={hoverOverProject}
                               hoverOverProjectEnd={hoverOverProjectEnd}
                               openProjectClass={openProjectClass}
@@ -489,6 +495,7 @@ export default function ProjectsPage({ user, setAuthentication }) {
                               key={project.project_id}
                               project={project}
                               user={user}
+                              userId={userId}
                               hoverOverProject={hoverOverProject}
                               hoverOverProjectEnd={hoverOverProjectEnd}
                               openProjectClass={openProjectClass}
@@ -511,6 +518,7 @@ export default function ProjectsPage({ user, setAuthentication }) {
                               key={project.project_id}
                               project={project}
                               user={user}
+                              userId={userId}
                               hoverOverProject={hoverOverProject}
                               hoverOverProjectEnd={hoverOverProjectEnd}
                               openProjectClass={openProjectClass}
@@ -529,7 +537,7 @@ export default function ProjectsPage({ user, setAuthentication }) {
           ) : search === "" && applyFilters === 0 ? (
             applySort === 0 ? (
               projects.map((project) => {
-                if (project.owner === user) {
+                if (project.owner === userId) {
                   const updated = new Date(project.updated_on);
                   let updatedStatus = updatedMessageUtil(updated);
                   if (deletedProjectId.projectId !== project.project_id) {
@@ -547,6 +555,7 @@ export default function ProjectsPage({ user, setAuthentication }) {
                           completeProject={completeProject}
                           deleteProject={deleteProject}
                           user={user}
+                          userId={userId}
                           updatedStatus={updatedStatus}
                         />
                       );
@@ -579,7 +588,7 @@ export default function ProjectsPage({ user, setAuthentication }) {
               })
             ) : (
               sortedList.map((project) => {
-                if (project.owner === user) {
+                if (project.owner === userId) {
                   const updated = new Date(project.updated_on);
                   let updatedStatus = updatedMessageUtil(updated);
                   if (deletedProjectId.projectId !== project.project_id) {
@@ -597,6 +606,7 @@ export default function ProjectsPage({ user, setAuthentication }) {
                           completeProject={completeProject}
                           deleteProject={deleteProject}
                           user={user}
+                          userId={userId}
                           updatedStatus={updatedStatus}
                         />
                       );
@@ -630,7 +640,7 @@ export default function ProjectsPage({ user, setAuthentication }) {
             )
           ) : (
             filteredList.map((project) => {
-              if (project.owner === user) {
+              if (project.owner === userId) {
                 const updated = new Date(project.updated_on);
                 let updatedStatus = updatedMessageUtil(updated);
                 if (deletedProjectId.projectId !== project.project_id) {
@@ -648,6 +658,7 @@ export default function ProjectsPage({ user, setAuthentication }) {
                         completeProject={completeProject}
                         deleteProject={deleteProject}
                         user={user}
+                        userId={userId}
                         updatedStatus={updatedStatus}
                       />
                     );

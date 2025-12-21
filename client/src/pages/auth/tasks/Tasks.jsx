@@ -26,7 +26,7 @@ import GlobalSearch from "../components/GlobalSearch";
 import countMatchingRecords from "../utils/countMatchingRecords";
 import KanbanCardTask from "./components/KanbanCardTask";
 
-export default function TasksPage({ user, setAuthentication }) {
+export default function TasksPage({ user, userId, setAuthentication }) {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState({});
   const [create, setCreate] = useState(0);
@@ -94,6 +94,7 @@ export default function TasksPage({ user, setAuthentication }) {
     fetchUserTasksUtil(
       tokenValidated,
       user,
+      userId,
       token,
       tries,
       setTries,
@@ -112,6 +113,7 @@ export default function TasksPage({ user, setAuthentication }) {
       fetchUserProjectsUtil(
         tokenValidated,
         user,
+        userId,
         token,
         tries,
         setTries,
@@ -131,6 +133,7 @@ export default function TasksPage({ user, setAuthentication }) {
       // getAccessTokenAPI();
       getAccessTokenUtil(
         user,
+        userId,
         setTokenValidated,
         setTries,
         newAccessToken,
@@ -202,18 +205,18 @@ export default function TasksPage({ user, setAuthentication }) {
         delete current.project;
         current = {
           ...current,
-          assigned_to: user,
-          created_by: user,
-          updated_by: user,
+          assigned_to: userId,
+          created_by: userId,
+          updated_by: userId,
         };
         return current;
       });
     } else {
       setNewTask({
         ...newTask,
-        assigned_to: user,
-        created_by: user,
-        updated_by: user,
+        assigned_to: userId,
+        created_by: userId,
+        updated_by: userId,
       });
     }
     setCreate(create + 1);
@@ -267,17 +270,17 @@ export default function TasksPage({ user, setAuthentication }) {
   }, [updatedTaskId]);
 
   const completeTask = (id) => {
-    setTaskUpdates({ state: 3, updated_by: user });
+    setTaskUpdates({ state: 3, updated_by: userId });
     setUpdatedTaskId({ taskId: id, update: true });
   };
 
   const startTask = (id) => {
-    setTaskUpdates({ state: 2, updated_by: user });
+    setTaskUpdates({ state: 2, updated_by: userId });
     setUpdatedTaskId({ taskId: id, update: true });
   };
 
   const resetTask = (id) => {
-    setTaskUpdates({ state: 1, updated_by: user });
+    setTaskUpdates({ state: 1, updated_by: userId });
     setUpdatedTaskId({ taskId: id, update: true });
   };
 
@@ -459,7 +462,7 @@ export default function TasksPage({ user, setAuthentication }) {
                                     completeTask={completeTask}
                                     resetTask={resetTask}
                                     deleteTask={deleteTask}
-                                    user={user}
+                                    userId={userId}
                                   />
                                 );
                               }
@@ -487,7 +490,7 @@ export default function TasksPage({ user, setAuthentication }) {
                                     completeTask={completeTask}
                                     resetTask={resetTask}
                                     deleteTask={deleteTask}
-                                    user={user}
+                                    userId={userId}
                                   />
                                 );
                               }
@@ -514,7 +517,7 @@ export default function TasksPage({ user, setAuthentication }) {
                                   completeTask={completeTask}
                                   resetTask={resetTask}
                                   deleteTask={deleteTask}
-                                  user={user}
+                                  userId={userId}
                                 />
                               );
                             }
@@ -527,7 +530,7 @@ export default function TasksPage({ user, setAuthentication }) {
           ) : search === "" && applyFilters === 0 ? (
             applySort === 0 ? (
               tasks.map((task) => {
-                if (task.assigned_to === user) {
+                if (task.assigned_to === userId) {
                   let updated = new Date(task.updated_on);
                   const updatedStatus = updatedMessageUtil(updated);
                   myTasks++;
@@ -536,7 +539,7 @@ export default function TasksPage({ user, setAuthentication }) {
                       <ListTaskItem
                         key={task.task_id}
                         task={task}
-                        user={user}
+                        userId={userId}
                         hoverOverTask={hoverOverTask}
                         hoverOverTaskEnd={hoverOverTaskEnd}
                         updatedStatus={updatedStatus}
@@ -562,7 +565,7 @@ export default function TasksPage({ user, setAuthentication }) {
                         completeTask={completeTask}
                         resetTask={resetTask}
                         deleteTask={deleteTask}
-                        user={user}
+                        userId={userId}
                       />
                     );
                   }
@@ -570,7 +573,7 @@ export default function TasksPage({ user, setAuthentication }) {
               })
             ) : (
               sortedList.map((task) => {
-                if (task.assigned_to === user) {
+                if (task.assigned_to === userId) {
                   let updated = new Date(task.updated_on);
                   const updatedStatus = updatedMessageUtil(updated);
                   myTasks++;
@@ -579,7 +582,7 @@ export default function TasksPage({ user, setAuthentication }) {
                       <ListTaskItem
                         key={task.task_id}
                         task={task}
-                        user={user}
+                        userId={userId}
                         hoverOverTask={hoverOverTask}
                         hoverOverTaskEnd={hoverOverTaskEnd}
                         updatedStatus={updatedStatus}
@@ -605,7 +608,7 @@ export default function TasksPage({ user, setAuthentication }) {
                         completeTask={completeTask}
                         resetTask={resetTask}
                         deleteTask={deleteTask}
-                        user={user}
+                        userId={userId}
                       />
                     );
                   }
@@ -614,7 +617,7 @@ export default function TasksPage({ user, setAuthentication }) {
             )
           ) : (
             filteredList.map((task) => {
-              if (task.assigned_to === user) {
+              if (task.assigned_to === userId) {
                 let updated = new Date(task.updated_on);
                 const updatedStatus = updatedMessageUtil(updated);
                 myTasks++;
@@ -623,7 +626,7 @@ export default function TasksPage({ user, setAuthentication }) {
                     <ListTaskItem
                       key={task.task_id}
                       task={task}
-                      user={user}
+                      userId={userId}
                       hoverOverTask={hoverOverTask}
                       hoverOverTaskEnd={hoverOverTaskEnd}
                       updatedStatus={updatedStatus}
@@ -649,7 +652,7 @@ export default function TasksPage({ user, setAuthentication }) {
                       completeTask={completeTask}
                       resetTask={resetTask}
                       deleteTask={deleteTask}
-                      user={user}
+                      userId={userId}
                     />
                   );
                 }
@@ -681,6 +684,7 @@ export default function TasksPage({ user, setAuthentication }) {
             popupDisplay={newTaskPopupDisplay}
             setPopupDisplay={setNewTaskPopupDisplay}
             user={user}
+            userId={userId}
           />
         ) : (
           ""

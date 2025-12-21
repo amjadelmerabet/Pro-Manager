@@ -12,8 +12,7 @@
   grid-template-columns: repeat(5, 1fr);
 }
 
-.profile-page main .profile-settings,
-.profile-page main .theme-settings {
+.profile-page main .settings {
   padding: 16px 32px;
   background-color: var(--accent-color);
   border-radius: 8px;
@@ -28,7 +27,11 @@
   position: relative;
 }
 
-.profile-page main .profile-settings tr > td:nth-child(2)::before {
+.profile-page main .profile-settings tr > .property {
+  font-size: 14px;
+}
+
+.profile-page main .profile-settings tr > td.readonly::before {
   content: "";
   position: absolute;
   width: 100%;
@@ -45,6 +48,17 @@
   width: 200px;
   justify-content: space-between;
   background-color: white;
+  font-size: 12px;
+}
+
+.profile-page main .profile-settings tr > td.value > input {
+  border: none;
+  width: 100%;
+  font-size: 12px;
+}
+
+.profile-page main .profile-settings tr > td.value > input:focus {
+  outline: none;
 }
 
 .profile-page main .country-flag {
@@ -57,6 +71,38 @@
   position: absolute;
   top: 12px;
   right: 24px;
+  color: var(--primary-color);
+  transform: scale(0);
+  visibility: hidden;
+  opacity: 0;
+  transition: transform 250ms ease-in-out, visibility 250ms ease-in-out, opacity 250ms ease-in-out;
+}
+
+.profile-settings:hover .edit,
+.theme-settings:hover .edit {
+  transform: scale(1);
+  visibility: visible;
+  opacity: 1;
+}
+
+.profile-settings .edit > .controls {
+  display: flex;
+  gap: 8px;
+}
+
+.profile-settings .edit > .controls > button {
+  border: none;
+  padding: 2px 8px;
+  background-color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 250ms ease-in-out, box-shadow 250ms ease-in-out;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, .25);
+}
+
+.profile-settings .edit > .controls > button:hover {
+  transform: scale(0.98);
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, .25);
 }
 
 .profile-settings .edit-button,
@@ -70,14 +116,14 @@
   cursor: pointer;
 }
 
-.themes-section .theme-picker .themes {
+.theme-settings .theme-picker .themes {
   list-style: none;
   display: flex;
   gap: 16px;
   margin-block: 12px;
 }
 
-.themes-section .theme-picker .themes > .theme {
+.theme-settings .theme-picker .themes > .theme {
   width: 100px;
   height: 48px;
   border-radius: 6px;
@@ -86,39 +132,39 @@
   align-items: center;
 }
 
-.themes-section .theme-picker .themes > .selected-theme {
+.theme-settings .theme-picker .themes > .selected-theme {
   border: 1px solid var(--primary-color);
 }
 
-.themes-section .themes > .theme:nth-child(1) {
+.theme-settings .themes > .theme:nth-child(1) {
   background-color: white;
 }
 
-.themes-section .themes > .theme:nth-child(2) {
+.theme-settings .themes > .theme:nth-child(2) {
   background-color: #2c3e50;
 }
 
-.themes-section .themes > .theme:nth-child(3) {
+.theme-settings .themes > .theme:nth-child(3) {
   background-color: #c10202;
 }
 
-.themes-section .themes > .theme:nth-child(4) {
+.theme-settings .themes > .theme:nth-child(4) {
   background-color: var(--primary-color);
 }
 
-.themes-section .themes > .theme:nth-child(5) {
+.theme-settings .themes > .theme:nth-child(5) {
   background-color: #ffae00;
 }
 
-.themes-section .themes > .theme:nth-child(6) {
+.theme-settings .themes > .theme:nth-child(6) {
   background-color: #bdbdbd;
 }
 
-.themes-section .customized-theme {
+.theme-settings .customized-theme {
   margin-block: 24px;
 }
 
-.themes-section .enable-custom-theme {
+.theme-settings .enable-custom-theme {
   display: flex;
   align-items: center;
 }
@@ -128,17 +174,17 @@
   aspect-ratio: 1 / 1;
 }
 
-.themes-section .customized-theme .customize-theme-label {
+.theme-settings .customized-theme .customize-theme-label {
   margin-left: 8px;
 }
 
-.themes-section .customized-theme table {
+.theme-settings .customized-theme table {
   margin-left: 28px;
   margin-top: 12px;
   position: relative;
 }
 
-.themes-section .customized-theme table::before {
+.theme-settings .customized-theme table::before {
   content: "";
   position: absolute;
   width: 100%;
@@ -147,15 +193,15 @@
   opacity: 40%;
 }
 
-.themes-section .customized-theme table tr > td {
+.theme-settings .customized-theme table tr > td {
   padding-block: 4px;
 }
 
-.themes-section .customized-theme table .value {
+.theme-settings .customized-theme table .value {
   padding-left: 24px;
 }
 
-.themes-section .customized-theme table .value > div {
+.theme-settings .customized-theme table .value > div {
   width: 100px;
   height: 24px;
   border-radius: 4px;
@@ -171,4 +217,170 @@
 
 .customized-theme table .header-color {
   background-color: white;
+}
+
+.profile-page main .module {
+  margin-block: 16px;
+}
+
+.profile-page main .module .module-title {
+  color: var(--primary-color);
+}
+
+.profile-page main .feature-coming-soon {
+  width: 100%;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile-page main .security-settings form {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-page main .security-settings form > div {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  margin-block: 8px;
+}
+
+.profile-page main .security-settings form label {
+  font-size: 14px;
+}
+
+.profile-page main .security-settings form .update-password-section {
+  grid-template-columns: repeat(3, 1fr);
+  grid-column-start: 2;
+  margin-bottom: 16px;
+  gap: 8px;
+}
+
+.profile-page main .security-settings form .update-password-section > div {
+  grid-column: 1 / 2;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.profile-page main .security-settings form input:not(.save-credentials-button) {
+  padding: 4px 8px;
+  margin-left: 8px;
+  border: none;
+  border-radius: 4px;
+}
+
+.profile-page main .security-settings form .save-credentials-button {
+  background-color: var(--primary-color);
+  padding: 4px 12px;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, .25);
+  cursor: pointer;
+  align-self: flex-end;
+  transition: transform 250ms ease-in-out, box-shadow 250ms ease-in-out;
+}
+
+.profile-page main .security-settings form .save-credentials-button:hover {
+  transform: scale(0.98);
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, .25);
+}
+
+.profile-page main .signin-required {
+  display: flex;
+  width: 100%;
+  height: 600px;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile-page main .signin-required form {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--accent-color);
+  padding: 48px;
+  border-radius: 8px;
+  visibility: hidden;
+  opacity: 0;
+  transform: scale(0);
+  transition: visibility 250ms ease-in-out, opacity 250ms ease-in-out, transform 250ms ease-in-out;
+}
+
+.profile-page main .signin-required form.visible {
+  visibility: visible;
+  opacity: 1;
+  transform: scale(1);
+}
+
+.profile-page main .signin-required form .invalid-credentials {
+  font-size: 13px;
+  text-align: center;
+  margin-block: 4px;
+  color: rgb(245, 20, 65);
+}
+
+.profile-page main .signin-required form > div {
+  display: grid;
+  margin-block: 8px;
+}
+
+.profile-page main .signin-required form > div label {
+  font-size: 14px;
+}
+
+.profile-page main .signin-required form label > .invalid-credentials-field-indicator {
+  color: rgb(245, 20, 65);
+  margin-left: 4px;
+}
+
+.profile-page main .signin-required form > div input {
+  padding: 4px 8px;
+  border: none;
+  border-radius: 4px;
+  width: 240px;
+}
+
+.profile-page main .signin-required form .sign-in-button {
+  padding: 3px 12px;
+  border: none;
+  border-radius: 4px;
+  background-color: var(--primary-color);
+  color: white;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, .25);
+  width: fit-content;
+  margin-top: 8px;
+}
+
+.profile-page main .signin-required form .lock-icon {
+  align-self: center;
+  margin: 8px;
+}
+
+.profile-page main .security-settings .credentials-saved {
+  position: fixed;
+  display: none;
+  bottom: 24px;
+  right: 24px;
+  font-size: 14px;
+  color: rgb(0, 245, 165);
+  background-color: rgba(0, 245, 165, .1);
+  border: 1px solid rgb(0, 245, 165);
+  border-radius: 4px;
+  padding: 8px 16px;
+  transform: translateX(200%);
+  transition: transform 500ms ease-in-out;
+}
+
+.profile-page main .security-settings .credentials-saved.visible {
+  display: flex;
+  align-items: center;
+}
+
+.profile-page main .security-settings .credentials-saved.popup {
+  transform: translateY(0);
+}
+
+.profile-page main .security-settings .credentials-saved span {
+  margin-left: 8px;
 }

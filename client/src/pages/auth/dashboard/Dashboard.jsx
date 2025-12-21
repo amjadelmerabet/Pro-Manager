@@ -37,7 +37,7 @@ import { IoClose } from "react-icons/io5";
 import GlobalSearch from "../components/GlobalSearch";
 import countMatchingRecords from "../utils/countMatchingRecords";
 
-export default function DashboardPage({ user, setAuthentication }) {
+export default function DashboardPage({ user, userId, setAuthentication }) {
   const [recentPages, setRecentPages] = useState([]);
   const [tries, setTries] = useState(0);
   const [tokenValidated, setTokenValidated] = useState(false);
@@ -110,9 +110,9 @@ export default function DashboardPage({ user, setAuthentication }) {
   const createNewProject = () => {
     setNewProject({
       ...newProject,
-      owner: user,
-      created_by: user,
-      updated_by: user,
+      owner: userId,
+      created_by: userId,
+      updated_by: userId,
     });
     setCreateProject(createProject + 1);
   };
@@ -121,6 +121,7 @@ export default function DashboardPage({ user, setAuthentication }) {
     if (newAccessToken.counter > 0) {
       getAccessTokenUtil(
         user,
+        userId,
         setTokenValidated,
         setTries,
         newAccessToken,
@@ -140,6 +141,7 @@ export default function DashboardPage({ user, setAuthentication }) {
     fetchUserProjectsUtil(
       tokenValidated,
       user,
+      userId,
       token,
       tries,
       setTries,
@@ -159,6 +161,7 @@ export default function DashboardPage({ user, setAuthentication }) {
       fetchUserTasksUtil(
         tokenValidated,
         user,
+        userId,
         token,
         tries,
         setTries,
@@ -228,9 +231,9 @@ export default function DashboardPage({ user, setAuthentication }) {
   const createNewTask = () => {
     setNewTask({
       ...newTask,
-      assigned_to: user,
-      created_by: user,
-      updated_by: user,
+      assigned_to: userId,
+      created_by: userId,
+      updated_by: userId,
     });
     setCreateTask(createTask + 1);
   };
@@ -359,6 +362,7 @@ export default function DashboardPage({ user, setAuthentication }) {
                           setSelectedPage={setSelectedPage}
                           createPageName={createPageName}
                           user={user}
+                          userId={userId}
                           updatedStatus={updatedStatus}
                           createdStatus={createdStatus}
                         />
@@ -375,6 +379,7 @@ export default function DashboardPage({ user, setAuthentication }) {
                           setSelectedPage={setSelectedPage}
                           createPageName={createPageName}
                           user={user}
+                          userId={userId}
                           updatedStatus={updatedStatus}
                           createdStatus={createdStatus}
                         />
@@ -457,7 +462,7 @@ export default function DashboardPage({ user, setAuthentication }) {
             ) : (
               <SelectedPage
                 selectedPage={selectedPage}
-                user={user}
+                userId={userId}
                 updatedMessageUtil={updatedMessageUtil}
               />
             )}
@@ -483,6 +488,7 @@ export default function DashboardPage({ user, setAuthentication }) {
             setNewTask={setNewTask}
             createNewTask={createNewTask}
             user={user}
+            userId={userId}
           />
         ) : (
           ""

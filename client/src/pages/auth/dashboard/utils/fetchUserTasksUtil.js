@@ -28,7 +28,7 @@ function updateTasksStats(tasks, tasksStats, setTasksStats) {
 }
 
 async function getUserTasksAction(
-  user,
+  userId,
   token,
   tries,
   setTries,
@@ -38,9 +38,9 @@ async function getUserTasksAction(
   setTasksStats,
   tempRecentPages,
   setTempRecentPages,
-  setTasksFetched,
+  setTasksFetched
 ) {
-  const tasksObject = await getTasksByAssignedToAPI(user, token);
+  const tasksObject = await getTasksByAssignedToAPI(userId, token);
   if (tasksObject.error === "Invalid access token" && tries < 3) {
     tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
   } else {
@@ -53,6 +53,7 @@ async function getUserTasksAction(
 export default async function fetchAllTasksUtil(
   tokenValidated,
   user,
+  userId,
   token,
   tries,
   setTries,
@@ -63,7 +64,7 @@ export default async function fetchAllTasksUtil(
   tempRecentPages,
   setTempRecentPages,
   setTasksFetched,
-  setTokenValidated,
+  setTokenValidated
 ) {
   if (!tokenValidated) {
     const refreshToken = await cookieStore.get(user);
@@ -71,7 +72,7 @@ export default async function fetchAllTasksUtil(
       const validAccessToken = await checkAccessTokenAPI(token, refreshToken);
       if (validAccessToken.message === "Valid access token") {
         getUserTasksAction(
-          user,
+          userId,
           token,
           tries,
           setTries,
@@ -81,7 +82,7 @@ export default async function fetchAllTasksUtil(
           setTasksStats,
           tempRecentPages,
           setTempRecentPages,
-          setTasksFetched,
+          setTasksFetched
         );
       } else {
         tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
@@ -94,7 +95,7 @@ export default async function fetchAllTasksUtil(
       setTokenValidated(false);
     }, 500);
     getUserTasksAction(
-      user,
+      userId,
       token,
       tries,
       setTries,
@@ -104,7 +105,7 @@ export default async function fetchAllTasksUtil(
       setTasksStats,
       tempRecentPages,
       setTempRecentPages,
-      setTasksFetched,
+      setTasksFetched
     );
   }
 }

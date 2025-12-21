@@ -1,50 +1,51 @@
-import getProjectsByOwnerAPI from "../../../../api/projects/getProjectsByOwnerAPI";
 import checkAccessTokenAPI from "../../../../api/tokens/checkAccessTokenAPI";
+import updateUserByUsernameAPI from "../../../../api/users/updateUserByUsernameAPI";
 
 function tryAgain(tries, setTries, newAccessToken, setNewAccessToken) {
   setTries(tries + 1);
   setNewAccessToken({
     counter: newAccessToken.counter + 1,
-    type: "load",
+    type: "update",
   });
 }
 
-async function getProjectsAction(
-  userId,
+async function updateUserAction(
+  user,
+  updates,
   token,
+  userUpdated,
+  setUserUpdated,
+  setEditingProfile,
   tries,
   setTries,
   newAccessToken,
-  setNewAccessToken,
-  setProjects,
-  globalSearchList,
-  setGlobalSearchList,
-  setProjectsFetched
+  setNewAccessToken
 ) {
-  const projectsObject = await getProjectsByOwnerAPI(userId, token);
-  if (projectsObject.error === "Invalid access token" && tries < 3) {
+  const updatedUser = await updateUserByUsernameAPI(user, updates, token);
+  if (updatedUser.error === "Invalid access token") {
     tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
   } else {
-    setProjects(projectsObject.result);
-    setGlobalSearchList([...globalSearchList, ...projectsObject.result]);
-    setProjectsFetched(true);
+    const authUser = JSON.parse(sessionStorage.getItem("authUser"));
+    authUser.name = updates.first_name + " " + updates.last_name;
+    sessionStorage.setItem("authUser", JSON.stringify(authUser));
+    setUserUpdated(userUpdated + 1);
+    setEditingProfile(false);
   }
 }
 
-export default async function fetchUserProjectsUtil(
-  tokenValidated,
+export default async function updateUserDetailsUtil(
   user,
-  userId,
+  updates,
   token,
+  userUpdated,
+  setUserUpdated,
+  setEditingProfile,
+  tokenValidated,
+  setTokenValidated,
   tries,
   setTries,
   newAccessToken,
-  setNewAccessToken,
-  setProjects,
-  setTokenValidated,
-  globalSearchList,
-  setGlobalSearchList,
-  setProjectsFetched
+  setNewAccessToken
 ) {
   try {
     if (!tokenValidated) {
@@ -52,17 +53,17 @@ export default async function fetchUserProjectsUtil(
       if (refreshToken) {
         const validAccessToken = await checkAccessTokenAPI(token, refreshToken);
         if (validAccessToken.message === "Valid access token") {
-          getProjectsAction(
-            userId,
+          updateUserAction(
+            user,
+            updates,
             token,
+            userUpdated,
+            setUserUpdated,
+            setEditingProfile,
             tries,
             setTries,
             newAccessToken,
-            setNewAccessToken,
-            setProjects,
-            globalSearchList,
-            setGlobalSearchList,
-            setProjectsFetched
+            setNewAccessToken
           );
         } else {
           tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
@@ -74,17 +75,17 @@ export default async function fetchUserProjectsUtil(
       setTimeout(() => {
         setTokenValidated(false);
       }, 500);
-      getProjectsAction(
-        userId,
+      updateUserAction(
+        user,
+        updates,
         token,
+        userUpdated,
+        setUserUpdated,
+        setEditingProfile,
         tries,
         setTries,
         newAccessToken,
-        setNewAccessToken,
-        setProjects,
-        globalSearchList,
-        setGlobalSearchList,
-        setProjectsFetched
+        setNewAccessToken
       );
     }
   } catch (error) {

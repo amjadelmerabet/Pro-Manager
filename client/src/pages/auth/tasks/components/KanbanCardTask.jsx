@@ -18,7 +18,7 @@ export default function KanbanCardTask({
   completeTask,
   resetTask,
   deleteTask,
-  user,
+  userId,
 }) {
   return (
     <div
@@ -141,7 +141,7 @@ export default function KanbanCardTask({
         <div className="assigned-to">
           <div className="property-name poppins-semibold">Assigned to</div>
           <div className="property-value">
-            {task.assigned_to === user ? "You" : task.assigned_to}
+            {task.assigned_to === userId ? "You" : task.assigned_to}
           </div>
         </div>
         <div className="status poppins-regular">

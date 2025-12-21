@@ -31,7 +31,7 @@ function updateProjectsStats(projects, projectsStats, setProjectsStats) {
 }
 
 async function updateProjectAction(
-  user,
+  userId,
   token,
   tries,
   setTries,
@@ -43,7 +43,7 @@ async function updateProjectAction(
   setTempRecentPages,
   setProjectsFetched,
 ) {
-  const projectsObject = await getProjectsByOwnerAPI(user, token);
+  const projectsObject = await getProjectsByOwnerAPI(userId, token);
   if (projectsObject.error === "Invalid access token") {
     tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
   } else {
@@ -56,6 +56,7 @@ async function updateProjectAction(
 export default async function fetchUserProjectsUtil(
   tokenValidated,
   user,
+  userId,
   token,
   tries,
   setTries,
@@ -74,7 +75,7 @@ export default async function fetchUserProjectsUtil(
       const validAccessToken = await checkAccessTokenAPI(token, refreshToken);
       if (validAccessToken.message === "Valid access token") {
         updateProjectAction(
-          user,
+          userId,
           token,
           tries,
           setTries,
@@ -97,7 +98,7 @@ export default async function fetchUserProjectsUtil(
       setTokenValidated(false);
     }, 500);
     updateProjectAction(
-      user,
+      userId,
       token,
       tries,
       setTries,

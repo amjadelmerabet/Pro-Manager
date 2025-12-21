@@ -17,7 +17,6 @@ export default async function createAccessToken(token, granted_by, granted_to) {
     const now = new Date();
     let expiresIn = new Date();
     expiresIn.setMinutes(now.getMinutes() + 15);
-    console.log(expiresIn);
     // For testing purposes only
     // expiresIn.setSeconds(expiresIn.getSeconds() + 30);
     // const hashToken = async (plainToken) => {

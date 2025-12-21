@@ -9,25 +9,17 @@ function updateToken(accessTokenObject) {
 
 function nextAction(
   newAccessToken,
-  loadTask,
-  setLoadTask,
-  taskUpdated,
-  setTaskUpdated,
-  setTaskDeleted,
-  setLoadProject,
-  setLoadProjects,
+  setUpdateProfile,
+  userUpdated,
+  setUserUpdated
 ) {
   if (newAccessToken.type === "load") {
-    setLoadTask(loadTask + 1);
-  }
-  if (newAccessToken.type === "update") {
-    setTaskUpdated({ counter: taskUpdated.counter + 1, update: true });
-  } else if (newAccessToken.type === "delete") {
-    setTaskDeleted(true);
-  } else if (newAccessToken.type === "load-project") {
-    setLoadProject(true)
-  } else if (newAccessToken.type === "load-projects") {
-    setLoadProjects(true);
+    setUserUpdated(userUpdated + 1);
+  } else if (newAccessToken.type === "update") {
+    setUpdateProfile(true);
+    setTimeout(() => {
+      setUpdateProfile(false);
+    }, 250);
   }
 }
 
@@ -37,13 +29,9 @@ export default async function getAccessTokenUtil(
   setTokenValidated,
   setTries,
   newAccessToken,
-  loadTask,
-  setLoadTask,
-  taskUpdated,
-  setTaskUpdated,
-  setTaskDeleted,
-  setLoadProject,
-  setLoadProjects,
+  setUpdateProfile,
+  userUpdated,
+  setUserUpdated
 ) {
   try {
     const refreshToken = await cookieStore.get(user);
@@ -55,14 +43,13 @@ export default async function getAccessTokenUtil(
         setTries(0);
         nextAction(
           newAccessToken,
-          loadTask,
-          setLoadTask,
-          taskUpdated,
-          setTaskUpdated,
-          setTaskDeleted,
-          setLoadProject,
-          setLoadProjects
+          setUpdateProfile,
+          userUpdated,
+          setUserUpdated
         );
+        setTimeout(() => {
+          setTokenValidated(false);
+        }, 500);
       }
     } else {
       console.log("No refresh token");

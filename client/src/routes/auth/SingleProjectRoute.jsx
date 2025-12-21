@@ -34,6 +34,7 @@ export default function SingleProjectRoute({
       return (
         <Project
           user={userAuthenticated.user}
+          userId={userAuthenticated.userId}
           setAuthentication={setAuthentication}
         />
       );

@@ -11,7 +11,7 @@ export default function updatedMessageUtil(update) {
   const updatedMinute = update.getUTCMinutes();
   const currentMinute = now.getUTCMinutes();
   const updatedSecond = update.getUTCSeconds();
-            const currentSecond = now.getUTCSeconds();
+  const currentSecond = now.getUTCSeconds();
   let yearDifference = currentYear - updatedYear;
   if (yearDifference > 0) {
     if (yearDifference === 1) {

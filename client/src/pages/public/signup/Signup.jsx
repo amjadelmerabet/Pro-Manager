@@ -21,7 +21,7 @@ export default function SignUpPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [noMatch, setNoMatch] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
-  
+
   let navigate = useNavigate();
 
   useEffect(() => {
@@ -55,8 +55,8 @@ export default function SignUpPage() {
     setUserBody({
       ...userBody,
       name: name,
-      created_by: "system",
-      updated_by: "system",
+      created_by: import.meta.env.VITE_SYSTEM_USER_ID,
+      updated_by: import.meta.env.VITE_SYSTEM_USER_ID,
     });
     if (noMatch) {
       setErrorMessage(true);

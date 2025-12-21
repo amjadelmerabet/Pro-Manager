@@ -32,6 +32,7 @@ export default function DashboardRoute({ isAuthenticated, setAuthentication }) {
       return (
         <DashboardPage
           user={userAuthenticated.user}
+          userId={userAuthenticated.userId}
           setAuthentication={setAuthentication}
         />
       );

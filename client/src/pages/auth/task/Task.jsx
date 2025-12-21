@@ -28,7 +28,7 @@ import fetchUserProjectsUtil from "./utils/fetchUserProjectsUtil";
 import "./Task.css";
 import { TbFolderFilled, TbSquareCheck } from "react-icons/tb";
 
-export default function Task({ user, setAuthentication }) {
+export default function Task({ user, userId, setAuthentication }) {
   const [taskObject, setTaskObject] = useState({});
   const [taskUpdates, setTaskUpdates] = useState({});
   const [taskUpdated, setTaskUpdated] = useState({ counter: 0, update: false });
@@ -71,6 +71,7 @@ export default function Task({ user, setAuthentication }) {
     fetchUserProjectsUtil(
       tokenValidated,
       user,
+      userId,
       token,
       tries,
       setTries,
@@ -105,6 +106,7 @@ export default function Task({ user, setAuthentication }) {
         projectId,
         token,
         user,
+        userId,
         tokenValidated,
         setTokenValidated,
         tries,
@@ -151,7 +153,6 @@ export default function Task({ user, setAuthentication }) {
   useEffect(() => {
     if (updatedSuccessfully) {
       setTimeout(() => {
-        console.log("success");
         setTaskUpdated({ counter: 0, update: false });
         setTaskUpdates({});
         setUpdatedSuccessfully(false);
@@ -185,6 +186,7 @@ export default function Task({ user, setAuthentication }) {
       // getAccessTokenAPI();
       getAccessTokenUtil(
         user,
+        userId,
         setTokenValidated,
         setTries,
         newAccessToken,
@@ -199,17 +201,17 @@ export default function Task({ user, setAuthentication }) {
   }, [newAccessToken]);
 
   const startTask = () => {
-    setTaskUpdates({ state: 2, updated_by: user });
+    setTaskUpdates({ state: 2, updated_by: userId });
     setTaskUpdated({ counter: taskUpdated.counter + 1, update: true });
   };
 
   const completeTask = () => {
-    setTaskUpdates({ state: 3, updated_by: user });
+    setTaskUpdates({ state: 3, updated_by: userId });
     setTaskUpdated({ counter: taskUpdated.counter + 1, update: true });
   };
 
   const resetTask = () => {
-    setTaskUpdates({ state: 1, updated_by: user });
+    setTaskUpdates({ state: 1, updated_by: userId });
     setTaskUpdated({ counter: taskUpdated.counter + 1, update: true });
   };
 
@@ -228,7 +230,7 @@ export default function Task({ user, setAuthentication }) {
     setEditingShortDescription(false);
     setTaskUpdates({
       short_description: editedShortDescription,
-      updated_by: user,
+      updated_by: userId,
     });
     setTaskUpdated({ counter: taskUpdated.counter + 1, update: true });
   };
@@ -246,7 +248,7 @@ export default function Task({ user, setAuthentication }) {
     setEditingDescription(false);
     setTaskUpdates({
       description: editedDescription,
-      updated_by: user,
+      updated_by: userId,
     });
     setTaskUpdated({ counter: taskUpdated.counter + 1, update: true });
   };
@@ -264,7 +266,7 @@ export default function Task({ user, setAuthentication }) {
     setEditingPriority(false);
     setTaskUpdates({
       priority: editedPriority,
-      updated_by: user,
+      updated_by: userId,
     });
     setTaskUpdated({ counter: taskUpdated.counter + 1, update: true });
   };
@@ -282,7 +284,7 @@ export default function Task({ user, setAuthentication }) {
     setEditingProject(false);
     setTaskUpdates({
       project: editedProject !== "" ? editedProject : null,
-      updated_by: user,
+      updated_by: userId,
     });
     setTaskUpdated({ counter: taskUpdated.counter + 1, update: true });
   };
@@ -428,7 +430,7 @@ export default function Task({ user, setAuthentication }) {
                 <div className="left">
                   <div className="assigned-to poppins-regular">
                     Assigned to
-                    {taskObject.assigned_to === user
+                    {taskObject.assigned_to === userId
                       ? " you"
                       : taskObject.assigned_to}
                   </div>

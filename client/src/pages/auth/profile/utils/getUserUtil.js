@@ -1,5 +1,5 @@
-import getProjectsByOwnerAPI from "../../../../api/projects/getProjectsByOwnerAPI";
 import checkAccessTokenAPI from "../../../../api/tokens/checkAccessTokenAPI";
+import getUserByUsernameAPI from "../../../../api/users/getUserByUsernameAPI";
 
 function tryAgain(tries, setTries, newAccessToken, setNewAccessToken) {
   setTries(tries + 1);
@@ -9,42 +9,36 @@ function tryAgain(tries, setTries, newAccessToken, setNewAccessToken) {
   });
 }
 
-async function getProjectsAction(
-  userId,
+async function getUserAction(
+  user,
   token,
+  setUserObject,
   tries,
   setTries,
   newAccessToken,
   setNewAccessToken,
-  setProjects,
-  globalSearchList,
-  setGlobalSearchList,
-  setProjectsFetched
+  setUserDetailsFetched
 ) {
-  const projectsObject = await getProjectsByOwnerAPI(userId, token);
-  if (projectsObject.error === "Invalid access token" && tries < 3) {
+  const userObject = await getUserByUsernameAPI(user, token);
+  if (userObject.error === "Invalid access token") {
     tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
   } else {
-    setProjects(projectsObject.result);
-    setGlobalSearchList([...globalSearchList, ...projectsObject.result]);
-    setProjectsFetched(true);
+    setUserObject(userObject.result[0]);
+    setUserDetailsFetched(true);
   }
 }
 
-export default async function fetchUserProjectsUtil(
-  tokenValidated,
+export default async function getUserUtil(
   user,
-  userId,
   token,
+  setUserObject,
+  tokenValidated,
+  setTokenValidated,
   tries,
   setTries,
   newAccessToken,
   setNewAccessToken,
-  setProjects,
-  setTokenValidated,
-  globalSearchList,
-  setGlobalSearchList,
-  setProjectsFetched
+  setUserDetailsFetched
 ) {
   try {
     if (!tokenValidated) {
@@ -52,17 +46,15 @@ export default async function fetchUserProjectsUtil(
       if (refreshToken) {
         const validAccessToken = await checkAccessTokenAPI(token, refreshToken);
         if (validAccessToken.message === "Valid access token") {
-          getProjectsAction(
-            userId,
+          getUserAction(
+            user,
             token,
+            setUserObject,
             tries,
             setTries,
             newAccessToken,
             setNewAccessToken,
-            setProjects,
-            globalSearchList,
-            setGlobalSearchList,
-            setProjectsFetched
+            setUserDetailsFetched
           );
         } else {
           tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
@@ -74,17 +66,15 @@ export default async function fetchUserProjectsUtil(
       setTimeout(() => {
         setTokenValidated(false);
       }, 500);
-      getProjectsAction(
-        userId,
+      getUserAction(
+        user,
         token,
+        setUserObject,
         tries,
         setTries,
         newAccessToken,
         setNewAccessToken,
-        setProjects,
-        globalSearchList,
-        setGlobalSearchList,
-        setProjectsFetched
+        setUserDetailsFetched
       );
     }
   } catch (error) {
