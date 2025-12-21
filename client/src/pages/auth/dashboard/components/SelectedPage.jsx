@@ -5,7 +5,7 @@ import "./SelectedPage.css";
 
 export default function SelectedPage({
   selectedPage,
-  user,
+  userId,
   updatedMessageUtil,
 }) {
   return (
@@ -44,10 +44,10 @@ export default function SelectedPage({
             <td className="property poppins-semibold">Assigned to</td>
             <td className="value poppins-regular">
               {selectedPage.type === "project"
-                ? selectedPage.owner === user
+                ? selectedPage.owner === userId
                   ? "You"
                   : selectedPage.owner
-                : selectedPage.assigned_to === user
+                : selectedPage.assigned_to === userId
                   ? "You"
                   : selectedPage.assigned_to}
             </td>
@@ -61,7 +61,7 @@ export default function SelectedPage({
           <tr>
             <td className="property poppins-semibold">Updated by</td>
             <td className="value poppins-regular">
-              {selectedPage.updated_by === user
+              {selectedPage.updated_by === userId
                 ? "You"
                 : selectedPage.updated_by}
             </td>
@@ -75,7 +75,7 @@ export default function SelectedPage({
           <tr>
             <td className="property poppins-semibold">Created by</td>
             <td className="value poppins-regular">
-              {selectedPage.created_by === user
+              {selectedPage.created_by === userId
                 ? "You"
                 : selectedPage.created_by}
             </td>

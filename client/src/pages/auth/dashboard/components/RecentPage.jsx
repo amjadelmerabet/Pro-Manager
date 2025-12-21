@@ -20,6 +20,7 @@ export default function RecentPage({
   setSelectedPage,
   createPageName,
   user,
+  userId,
   updatedStatus,
   createdStatus,
 }) {
@@ -60,7 +61,7 @@ export default function RecentPage({
             <tr>
               <td className="property poppins-semibold">Owner</td>
               <td className="value">
-                {recentPage.owner === user ? "You" : recentPage.owner}
+                {recentPage.owner === userId ? "You" : recentPage.owner}
               </td>
             </tr>
             <tr>
@@ -70,7 +71,7 @@ export default function RecentPage({
             <tr>
               <td className="property poppins-semibold">Updated by</td>
               <td className="value">
-                {recentPage.updated_by === user ? "You" : recentPage.updated_by}
+                {recentPage.updated_by === userId ? "You" : recentPage.updated_by}
               </td>
             </tr>
             <tr>
@@ -128,7 +129,7 @@ export default function RecentPage({
             <tr>
               <td className="property poppins-semibold">Assigned to</td>
               <td className="value">
-                {recentPage.assigned_to === user
+                {recentPage.assigned_to === userId
                   ? "You"
                   : recentPage.assigned_to}
               </td>
@@ -140,7 +141,7 @@ export default function RecentPage({
             <tr>
               <td className="property poppins-semibold">Updated by</td>
               <td className="value">
-                {recentPage.updated_by === user ? "You" : recentPage.updated_by}
+                {recentPage.updated_by === userId ? "You" : recentPage.updated_by}
               </td>
             </tr>
             <tr>
