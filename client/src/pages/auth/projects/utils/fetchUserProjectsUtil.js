@@ -10,7 +10,7 @@ function tryAgain(tries, setTries, newAccessToken, setNewAccessToken) {
 }
 
 async function getProjectsAction(
-  user,
+  userId,
   token,
   tries,
   setTries,
@@ -21,7 +21,7 @@ async function getProjectsAction(
   setGlobalSearchList,
   setProjectsFetched
 ) {
-  const projectsObject = await getProjectsByOwnerAPI(user, token);
+  const projectsObject = await getProjectsByOwnerAPI(userId, token);
   if (projectsObject.error === "Invalid access token" && tries < 3) {
     tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
   } else {
@@ -34,6 +34,7 @@ async function getProjectsAction(
 export default async function fetchUserProjectsUtil(
   tokenValidated,
   user,
+  userId,
   token,
   tries,
   setTries,
@@ -52,7 +53,7 @@ export default async function fetchUserProjectsUtil(
         const validAccessToken = await checkAccessTokenAPI(token, refreshToken);
         if (validAccessToken.message === "Valid access token") {
           getProjectsAction(
-            user,
+            userId,
             token,
             tries,
             setTries,
@@ -74,7 +75,7 @@ export default async function fetchUserProjectsUtil(
         setTokenValidated(false);
       }, 500);
       getProjectsAction(
-        user,
+        userId,
         token,
         tries,
         setTries,

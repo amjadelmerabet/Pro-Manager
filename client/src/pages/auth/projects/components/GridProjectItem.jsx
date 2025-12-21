@@ -18,7 +18,7 @@ export default function GridProjectItem({
   resetProject,
   completeProject,
   deleteProject,
-  user,
+  userId,
   updatedStatus,
 }) {
   let projectDeadline = new Date(project.deadline);
@@ -172,7 +172,7 @@ export default function GridProjectItem({
           <tr>
             <td className="property poppins-bold">Created by</td>
             <td className="value poppins-regular">
-              {project.created_by === user ? "You" : project.created_by}
+              {project.created_by === userId ? "You" : project.created_by}
             </td>
           </tr>
         </tbody>
