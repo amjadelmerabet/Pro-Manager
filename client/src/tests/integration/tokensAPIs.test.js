@@ -4,7 +4,10 @@ import checkAccessTokenAPI from "../../api/tokens/checkAccessTokenAPI";
 import getNewAccessTokenAPI from "../../api/tokens/getNewAccessTokenAPI";
 
 describe("Tokens APIs", async () => {
-  const auth = await authUserAPI("test.user", "test1234");
+  const auth = await authUserAPI(
+    import.meta.env.VITE_TEST_USERNAME,
+    import.meta.env.VITE_TEST_PASSWORD
+  );
   const accessToken = auth.token;
   const refreshToken = {};
   refreshToken.value = auth.refresh;
@@ -30,7 +33,7 @@ describe("Tokens APIs", async () => {
 
   it("Getting a new access token", async () => {
     const newAccessToken = await getNewAccessTokenAPI(
-      "test.user",
+      import.meta.env.VITE_TEST_USER_ID,
       refreshToken
     );
     expect(newAccessToken).toHaveProperty("token");

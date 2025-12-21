@@ -7,11 +7,14 @@ import updateTaskByIdAPI from "../../api/tasks/updateTaskByIdAPI";
 import deleteTaskByIdAPI from "../../api/tasks/deleteTaskByIdAPI";
 
 describe("Tasks APIs", async () => {
-  const auth = await authUserAPI("test.user", "test1234");
+  const auth = await authUserAPI(
+    import.meta.env.VITE_TEST_USERNAME,
+    import.meta.env.VITE_TEST_PASSWORD
+  );
   const accessToken = auth?.token;
 
   it("Get a tasks by assigned to", async () => {
-    const tasks = await getTasksByAssignedToAPI("test.user", accessToken);
+    const tasks = await getTasksByAssignedToAPI(auth.userId, accessToken);
     expect(tasks).toHaveProperty("result");
     expect(tasks.result.length).toBeDefined();
   });
@@ -23,15 +26,15 @@ describe("Tasks APIs", async () => {
       name: "Integration Test",
       short_description: "This is just a an integration test",
       description: "Testing the create new task API",
-      assigned_to: "test.user",
+      assigned_to: import.meta.env.VITE_TEST_USER_ID,
       state: 1,
-      priority: 2
-    }
+      priority: 2,
+    };
     const task = await createTaskAPI(payload, accessToken);
     taskId = task.task_id;
     expect(task).toHaveProperty("message", "Task created successfully");
     expect(task).toHaveProperty("task_id");
-  })
+  });
 
   it("Get a task by ID", async () => {
     const task = await getTaskByIdAPI(taskId, accessToken);
@@ -43,10 +46,10 @@ describe("Tasks APIs", async () => {
     const updates = { name: "Integration Test Updated" };
     const task = await updateTaskByIdAPI(taskId, accessToken, updates);
     expect(task).toHaveProperty("message", "Task updated successfully");
-  })
+  });
 
   it("Delete a task by ID", async () => {
     const task = await deleteTaskByIdAPI(taskId, accessToken);
     expect(task).toHaveProperty("message", "Task deleted successfully");
-  })
-})
+  });
+});

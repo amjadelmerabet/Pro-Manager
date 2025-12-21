@@ -7,11 +7,17 @@ import updateProjectByIdAPI from "../../api/projects/updateProjectByIdAPI";
 import deleteProjectByIdAPI from "../../api/projects/deleteProjectByIdAPI";
 
 describe("Projects APIs", async () => {
-  const auth = await authUserAPI("test.user", "test1234");
+  const auth = await authUserAPI(
+    import.meta.env.VITE_TEST_USERNAME,
+    import.meta.env.VITE_TEST_PASSWORD
+  );
   const accessToken = auth?.token;
 
   it("Get a projects by owner", async () => {
-    const projects = await getProjectsByOwnerAPI("test.user", accessToken);
+    const projects = await getProjectsByOwnerAPI(
+      import.meta.env.VITE_TEST_USER_ID,
+      accessToken
+    );
     expect(projects).toHaveProperty("result");
     expect(projects.result.length).toBeDefined();
   });
@@ -24,7 +30,7 @@ describe("Projects APIs", async () => {
       description: "Testing the create new project API",
       state: 1,
       deadline: new Date(),
-      owner: "test.user",
+      owner: import.meta.env.VITE_TEST_USER_ID,
     };
     const project = await createProjectAPI(payload, accessToken);
     projectId = project?.project_id;
@@ -42,10 +48,10 @@ describe("Projects APIs", async () => {
     const updates = { name: "Integration Test Updated" };
     const project = await updateProjectByIdAPI(projectId, accessToken, updates);
     expect(project).toHaveProperty("message", "Project updated successfully");
-  })
+  });
 
   it("Delete a project by ID", async () => {
     const project = await deleteProjectByIdAPI(projectId, accessToken);
     expect(project).toHaveProperty("message", "Project deleted successfully");
-  })
+  });
 });
