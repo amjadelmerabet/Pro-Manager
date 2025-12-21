@@ -32,6 +32,7 @@ export default async function authUserUtil(
         authenticated: true,
         token: auth.token,
         name: auth.name,
+        userId: auth.userId
       }),
     );
     if (!refreshToken) {
