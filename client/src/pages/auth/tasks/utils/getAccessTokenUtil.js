@@ -31,6 +31,7 @@ function nextAction(
 
 export default async function getAccessTokenUtil(
   user,
+  userId,
   setTokenValidated,
   setTries,
   newAccessToken,
@@ -46,7 +47,7 @@ export default async function getAccessTokenUtil(
   try {
     const refreshToken = await cookieStore.get(user);
     if (refreshToken) {
-      const accessTokenObject = await getNewAccessTokenAPI(user, refreshToken);
+      const accessTokenObject = await getNewAccessTokenAPI(userId, refreshToken);
       if (!accessTokenObject.error) {
         updateToken(accessTokenObject);
         setTokenValidated(true);

@@ -11,7 +11,7 @@ import "./ListTaskItem.css";
 
 export default function ListTaskItem({
   task,
-  user,
+  userId,
   hoverOverTask,
   hoverOverTaskEnd,
   updatedStatus,
@@ -58,7 +58,7 @@ export default function ListTaskItem({
           <div className="assignee">
             <div className="property-name poppins-semibold">Assigned to</div>
             <div className="property-value poppins-regular">
-              {task.assigned_to === user ? "You" : task.assigned_to}
+              {task.assigned_to === userId ? "You" : task.assigned_to}
             </div>
           </div>
           <div className="status">

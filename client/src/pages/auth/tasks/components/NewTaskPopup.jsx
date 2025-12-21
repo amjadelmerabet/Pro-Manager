@@ -20,6 +20,7 @@ export default function NewTaskPopup({
   setPopupDisplay,
   parent,
   user,
+  userId,
   parentProjectId,
 }) {
   const [newTaskClass, setNewTaskClass] = useState("");
@@ -39,7 +40,7 @@ export default function NewTaskPopup({
 
   useEffect(() => {
     const getUserProjects = async () => {
-      const projects = await getProjectsByOwnerAPI(user, token);
+      const projects = await getProjectsByOwnerAPI(userId, token);
       if (projects.error === "Invalid access token") {
         setNewAccessToken(newAccessToken + 1);
       }
@@ -51,7 +52,7 @@ export default function NewTaskPopup({
   useEffect(() => {
     const getNewAccessToken = async () => {
       const cookie = await cookieStore.get(user);
-      const response = await getNewAccessTokenAPI(user, cookie);
+      const response = await getNewAccessTokenAPI(userId, cookie);
       const accessToken = response.token;
       const authUser = JSON.parse(sessionStorage.getItem("authUser"));
       authUser.token = accessToken;
