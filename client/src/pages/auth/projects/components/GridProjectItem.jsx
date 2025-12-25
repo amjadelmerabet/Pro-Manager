@@ -105,7 +105,7 @@ export default function GridProjectItem({
           <IconContext.Provider
             value={{
               style: {
-                color: theme === "light" || theme === "" ? "rgb(225, 0, 45)" : "rgb(255, 0, 25)",
+                color: theme === "light" || theme === "" ? "rgb(225, 0, 45)" : "rgb(255, 20, 65)",
                 fontSize: "24px",
               },
             }}
