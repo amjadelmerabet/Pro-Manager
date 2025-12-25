@@ -6,6 +6,7 @@ import { IconContext } from "react-icons/lib";
 import { RiAlarmWarningFill } from "react-icons/ri";
 
 import "./KanbanCardTask.css";
+import { TbCheck, TbClock } from "react-icons/tb";
 
 export default function KanbanCardTask({
   task,
@@ -19,6 +20,7 @@ export default function KanbanCardTask({
   resetTask,
   deleteTask,
   userId,
+  theme,
 }) {
   return (
     <div
@@ -46,12 +48,15 @@ export default function KanbanCardTask({
             <IconContext.Provider
               value={{
                 style: {
-                  color: "rgb(245, 200, 45)",
-                  fontSize: "24px",
+                  color:
+                    theme === "light" || theme === ""
+                      ? "rgb(245, 200, 45)"
+                      : "rgb(255, 215, 45)",
+                  fontSize: "20px",
                 },
               }}
             >
-              <GrFormClock />
+              <TbClock />
             </IconContext.Provider>
           </button>
         ) : (
@@ -65,8 +70,11 @@ export default function KanbanCardTask({
             <IconContext.Provider
               value={{
                 style: {
-                  color: "rgb(45, 180, 245)",
-                  fontSize: "24px",
+                  color:
+                    theme === "light" || theme === ""
+                      ? "rgb(45, 180, 245)"
+                      : "rgb(45, 200, 255)",
+                  fontSize: "20px",
                 },
               }}
             >
@@ -84,12 +92,15 @@ export default function KanbanCardTask({
             <IconContext.Provider
               value={{
                 style: {
-                  color: "rgb(0, 200, 45)",
-                  fontSize: "24px",
+                  color:
+                    theme === "light" || theme === ""
+                      ? "rgb(0, 200, 45)"
+                      : "rgb(25, 255, 65)",
+                  fontSize: "22px",
                 },
               }}
             >
-              <IoCheckmark />
+              <TbCheck />
             </IconContext.Provider>
           </button>
         ) : (
@@ -103,7 +114,10 @@ export default function KanbanCardTask({
           <IconContext.Provider
             value={{
               style: {
-                color: "rgb(225, 0, 45)",
+                color:
+                  theme === "light" || theme === ""
+                    ? "rgb(225, 0, 45)"
+                    : "rgb(255, 20, 65)",
                 fontSize: "24px",
               },
             }}

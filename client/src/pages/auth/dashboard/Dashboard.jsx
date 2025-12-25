@@ -79,6 +79,7 @@ export default function DashboardPage({ user, userId, setAuthentication }) {
   const [globalSearchList, setGlobalSearchList] = useState([]);
   const [globalSearchInputFocus, setGlobalSearchInputFocus] = useState(false);
   const [globalSearchClosed, setGlobalSearchClosed] = useState(false);
+  const [theme, setTheme] = useState("");
 
   const { token } = JSON.parse(sessionStorage.getItem("authUser"));
 
@@ -89,6 +90,16 @@ export default function DashboardPage({ user, userId, setAuthentication }) {
   const openNewTaskPopup = () => {
     setPopupVisible({ visible: true, type: "task" });
   };
+
+  useEffect(() => {
+    const getUserTheme = async () => {
+      const userTheme = await cookieStore.get("userTheme-" + userId);
+      if (userTheme) {
+        setTheme(userTheme.value);
+      }
+    };
+    getUserTheme();
+  }, []);
 
   useEffect(() => {
     if (Object.keys(newProject).length > 0 && createProject > 0) {
@@ -300,7 +311,12 @@ export default function DashboardPage({ user, userId, setAuthentication }) {
 
   return (
     <div className="dashboard-page">
-      <div className="auth-header-container">
+      <div
+        className={
+          "auth-header-container" +
+          (theme === "light" || theme === "" ? " light" : " dark")
+        }
+      >
         <AuthHeader
           user={user}
           setAuthentication={setAuthentication}
@@ -330,8 +346,8 @@ export default function DashboardPage({ user, userId, setAuthentication }) {
         ) : (
           ""
         )}
-        <AllMenu user={user} setPopupDisplay={setPopupVisible} />
-        <main>
+        <AllMenu user={user} setPopupDisplay={setPopupVisible} theme={theme} />
+        <main className={theme === "light" || theme === "" ? "light" : "dark"}>
           <div className="column-1">
             <div className="recent-pages">
               <h4 className="section-title poppins-bold">Recent pages</h4>
@@ -401,6 +417,7 @@ export default function DashboardPage({ user, userId, setAuthentication }) {
                     user={user}
                     value={report.value}
                     state={report.state}
+                    theme={theme}
                   />
                 );
               })}
@@ -413,6 +430,7 @@ export default function DashboardPage({ user, userId, setAuthentication }) {
                     user={user}
                     value={report.value}
                     state={report.state}
+                    theme={theme}
                   />
                 );
               })}
@@ -452,6 +470,7 @@ export default function DashboardPage({ user, userId, setAuthentication }) {
             <QuickActions
               openNewTaskPopup={openNewTaskPopup}
               openNewProjectPopup={openNewProjectPopup}
+              theme={theme}
             />
           </div>
           <div className="column-2">
@@ -478,6 +497,7 @@ export default function DashboardPage({ user, userId, setAuthentication }) {
             newProject={newProject}
             setNewProject={setNewProject}
             createNewProject={createNewProject}
+            theme={theme}
           />
         ) : popupVisible.type === "task" ? (
           <NewTaskPopup
@@ -489,6 +509,7 @@ export default function DashboardPage({ user, userId, setAuthentication }) {
             createNewTask={createNewTask}
             user={user}
             userId={userId}
+            theme={theme}
           />
         ) : (
           ""

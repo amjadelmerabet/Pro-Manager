@@ -10,6 +10,10 @@
   background-color: rgba(45, 45, 45, 0.25);
 }
 
+.new-task-popup.dark {
+  background-color: rgba(45, 45, 45, .5);
+}
+
 .new-task-popup .new-task {
   visibility: hidden;
   opacity: 0;
@@ -25,6 +29,11 @@
     opacity 250ms ease-in-out,
     visibility 250ms ease-in-out,
     transform 250ms ease-in-out;
+}
+
+.new-task-popup.dark .new-task {
+  background-color: rgb(35, 35, 35);
+  color: rgb(225, 225, 225);
 }
 
 .new-task-popup .open {
@@ -47,6 +56,14 @@
   padding: 8px;
   border: 1px solid black;
   border-radius: 4px;
+}
+
+.new-task-popup.dark .new-task > div > input,
+.new-task-popup.dark .new-task > div > textarea,
+.new-task-popup.dark .new-task > div > select {
+  background-color: rgb(45, 45, 45);
+  color: rgb(225, 225, 225);
+  border: 1px solid rgb(225, 225, 225);
 }
 
 .new-task-popup .new-task > .priority > div {
@@ -76,8 +93,16 @@
   transition: background-color 250ms ease-in-out;
 }
 
+.new-task-popup.dark .new-task > .create-task {
+  background-color: var(--primary-color-dark);
+}
+
 .new-task-popup .new-task > .create-task:hover {
   background-color: var(--primary-color-hover);
+}
+
+.new-task-popup.dark .new-task > .create-task:hover {
+  background-color: var(--primary-color-dark-hover);
 }
 
 .new-task-popup .new-task > .close-popup {
@@ -98,6 +123,7 @@
 .new-task-popup .new-task .new-task-project-select {
   padding: 4px 8px;
   border-radius: 4px;
+  border: 1px solid black;
 }
 
 .new-task-popup .new-task .required-field {

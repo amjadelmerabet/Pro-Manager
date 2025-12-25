@@ -3,6 +3,10 @@
   padding-inline: 200px;
 }
 
+.auth-header-container.dark {
+  background-color: var(--primary-color-dark);
+}
+
 .auth-header {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -17,6 +21,10 @@
   color: black;
 }
 
+.auth-header-container.dark .application-name a {
+  color: rgb(225, 225, 225);
+}
+
 .auth-header .auth-menu {
   list-style: none;
   display: flex;
@@ -29,6 +37,10 @@
 .auth-header .auth-menu-item a {
   color: black;
   text-decoration: none;
+}
+
+.auth-header-container.dark .auth-header .auth-menu-item a {
+  color: rgb(225, 225, 225);
 }
 
 .auth-header .search {
@@ -55,6 +67,10 @@
   border-radius: 25px;
   color: var(--primary-color);
   transition: padding-inline 250ms ease-in-out;
+}
+
+.auth-header-container.dark .auth-header .global-search {
+  background-color: rgb(225, 225, 225);
 }
 
 .auth-header .global-search:focus {

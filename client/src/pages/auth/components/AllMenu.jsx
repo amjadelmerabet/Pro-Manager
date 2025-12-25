@@ -23,11 +23,15 @@ import "./AllMenu.css";
 import { Link } from "react-router";
 import { IconContext } from "react-icons/lib";
 
-export default function AllMenu({ user, setPopupDisplay }) {
+export default function AllMenu({ user, setPopupDisplay, theme }) {
   const { name } = JSON.parse(sessionStorage.getItem("authUser"));
 
   return (
-    <div className="all-menu">
+    <div
+      className={
+        "all-menu" + (theme === "light" || theme === "" ? " light" : " dark")
+      }
+    >
       <p className="welcome poppins-regular">
         Welcome back <span className="poppins-semibold">{name}</span>
       </p>
@@ -43,7 +47,14 @@ export default function AllMenu({ user, setPopupDisplay }) {
           <li className="module">
             <Link to={`/auth/${user}/projects`}>
               <IconContext.Provider
-                value={{ style: { color: "var(--primary-color)" } }}
+                value={{
+                  style: {
+                    color:
+                      theme === "light" || theme === ""
+                        ? "var(--primary-color)"
+                        : "var(--primary-color-dark)",
+                  },
+                }}
               >
                 <TbFolderFilled className="module-icon" />
               </IconContext.Provider>
@@ -53,7 +64,14 @@ export default function AllMenu({ user, setPopupDisplay }) {
           <li className="module">
             <Link to={`/auth/${user}/tasks`}>
               <IconContext.Provider
-                value={{ style: { color: "var(--primary-color)" } }}
+                value={{
+                  style: {
+                    color:
+                      theme === "light" || theme === ""
+                        ? "var(--primary-color)"
+                        : "var(--primary-color-dark)",
+                  },
+                }}
               >
                 <TbSquareCheckFilled className="module-icon" />
               </IconContext.Provider>
@@ -62,7 +80,14 @@ export default function AllMenu({ user, setPopupDisplay }) {
           </li>
           <li className="module feature-disabled">
             <IconContext.Provider
-              value={{ style: { color: "var(--primary-color)" } }}
+              value={{
+                style: {
+                  color:
+                    theme === "light" || theme === ""
+                      ? "var(--primary-color)"
+                      : "var(--primary-color-dark)",
+                },
+              }}
             >
               <TbCopyCheckFilled className="module-icon" />
             </IconContext.Provider>
@@ -70,7 +95,14 @@ export default function AllMenu({ user, setPopupDisplay }) {
           </li>
           <li className="module feature-disabled">
             <IconContext.Provider
-              value={{ style: { color: "var(--primary-color)" } }}
+              value={{
+                style: {
+                  color:
+                    theme === "light" || theme === ""
+                      ? "var(--primary-color)"
+                      : "var(--primary-color-dark)",
+                },
+              }}
             >
               <TbFoldersFilled className="module-icon" />
             </IconContext.Provider>
@@ -95,7 +127,14 @@ export default function AllMenu({ user, setPopupDisplay }) {
               }}
             >
               <IconContext.Provider
-                value={{ style: { color: "var(--primary-color)" } }}
+                value={{
+                  style: {
+                    color:
+                      theme === "light" || theme === ""
+                        ? "var(--primary-color)"
+                        : "var(--primary-color-dark)",
+                  },
+                }}
               >
                 <TbFolderPlus className="module-icon" />
               </IconContext.Provider>
@@ -105,7 +144,14 @@ export default function AllMenu({ user, setPopupDisplay }) {
           <li className="module">
             <Link to={`/auth/${user}/projects`}>
               <IconContext.Provider
-                value={{ style: { color: "var(--primary-color)" } }}
+                value={{
+                  style: {
+                    color:
+                      theme === "light" || theme === ""
+                        ? "var(--primary-color)"
+                        : "var(--primary-color-dark)",
+                  },
+                }}
               >
                 <TbListDetails className="module-icon" />
               </IconContext.Provider>
@@ -115,7 +161,14 @@ export default function AllMenu({ user, setPopupDisplay }) {
           <li className="module">
             <Link to={`/auth/${user}/projects?filter=state=1`}>
               <IconContext.Provider
-                value={{ style: { color: "var(--primary-color)" } }}
+                value={{
+                  style: {
+                    color:
+                      theme === "light" || theme === ""
+                        ? "var(--primary-color)"
+                        : "var(--primary-color-dark)",
+                  },
+                }}
               >
                 <TbFolderBolt className="module-icon" />
               </IconContext.Provider>
@@ -125,7 +178,14 @@ export default function AllMenu({ user, setPopupDisplay }) {
           <li className="module">
             <Link to={`/auth/${user}/projects?filter=state=2`}>
               <IconContext.Provider
-                value={{ style: { color: "var(--primary-color)" } }}
+                value={{
+                  style: {
+                    color:
+                      theme === "light" || theme === ""
+                        ? "var(--primary-color)"
+                        : "var(--primary-color-dark)",
+                  },
+                }}
               >
                 <TbFolderCog className="module-icon" />
               </IconContext.Provider>
@@ -135,7 +195,14 @@ export default function AllMenu({ user, setPopupDisplay }) {
           <li className="module">
             <Link to={`/auth/${user}/projects?filter=state=3`}>
               <IconContext.Provider
-                value={{ style: { color: "var(--primary-color)" } }}
+                value={{
+                  style: {
+                    color:
+                      theme === "light" || theme === ""
+                        ? "var(--primary-color)"
+                        : "var(--primary-color-dark)",
+                  },
+                }}
               >
                 <TbFolderCheck className="module-icon" />
               </IconContext.Provider>
@@ -162,7 +229,14 @@ export default function AllMenu({ user, setPopupDisplay }) {
               }}
             >
               <IconContext.Provider
-                value={{ style: { color: "var(--primary-color)" } }}
+                value={{
+                  style: {
+                    color:
+                      theme === "light" || theme === ""
+                        ? "var(--primary-color)"
+                        : "var(--primary-color-dark)",
+                  },
+                }}
               >
                 <TbSquarePlus className="module-icon" />
               </IconContext.Provider>
@@ -172,7 +246,14 @@ export default function AllMenu({ user, setPopupDisplay }) {
           <li className="module">
             <Link to={`/auth/${user}/tasks`}>
               <IconContext.Provider
-                value={{ style: { color: "var(--primary-color)" } }}
+                value={{
+                  style: {
+                    color:
+                      theme === "light" || theme === ""
+                        ? "var(--primary-color)"
+                        : "var(--primary-color-dark)",
+                  },
+                }}
               >
                 <TbList className="module-icon" />
               </IconContext.Provider>
@@ -182,7 +263,14 @@ export default function AllMenu({ user, setPopupDisplay }) {
           <li className="module">
             <Link to={`/auth/${user}/tasks?filter=state=1`}>
               <IconContext.Provider
-                value={{ style: { color: "var(--primary-color)" } }}
+                value={{
+                  style: {
+                    color:
+                      theme === "light" || theme === ""
+                        ? "var(--primary-color)"
+                        : "var(--primary-color-dark)",
+                  },
+                }}
               >
                 <TbSquare className="module-icon" />
               </IconContext.Provider>
@@ -192,7 +280,14 @@ export default function AllMenu({ user, setPopupDisplay }) {
           <li className="module">
             <Link to={`/auth/${user}/tasks?filter=state=2`}>
               <IconContext.Provider
-                value={{ style: { color: "var(--primary-color)" } }}
+                value={{
+                  style: {
+                    color:
+                      theme === "light" || theme === ""
+                        ? "var(--primary-color)"
+                        : "var(--primary-color-dark)",
+                  },
+                }}
               >
                 <TbSquareArrowRight className="module-icon" />
               </IconContext.Provider>
@@ -202,7 +297,14 @@ export default function AllMenu({ user, setPopupDisplay }) {
           <li className="module">
             <Link to={`/auth/${user}/tasks?filter=state=3`}>
               <IconContext.Provider
-                value={{ style: { color: "var(--primary-color)" } }}
+                value={{
+                  style: {
+                    color:
+                      theme === "light" || theme === ""
+                        ? "var(--primary-color)"
+                        : "var(--primary-color-dark)",
+                  },
+                }}
               >
                 <TbSquareCheck className="module-icon" />
               </IconContext.Provider>

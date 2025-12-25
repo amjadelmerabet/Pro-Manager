@@ -10,6 +10,10 @@
   background-color: rgba(45, 45, 45, 0.25);
 }
 
+.new-project-popup.dark {
+  background-color: rgba(45, 45, 45, .5)
+}
+
 .new-project-popup .new-project {
   visibility: hidden;
   opacity: 0;
@@ -25,6 +29,11 @@
     opacity 250ms ease-in-out,
     visibility 250ms ease-in-out,
     transform 250ms ease-in-out;
+}
+
+.new-project-popup.dark .new-project {
+  background-color: rgb(35, 35, 35);
+  color: rgb(225, 225, 225);
 }
 
 .new-project-popup .open {
@@ -49,6 +58,17 @@
   border-radius: 4px;
 }
 
+.new-project-popup.dark .new-project > div > input, 
+.new-project-popup.dark .new-project > div > textarea {
+  background-color: rgb(40, 40, 40);
+  border: 1px solid rgb(225, 225, 225);
+  color: rgb(225, 225, 225);
+}
+
+.new-project-popup.dark .new-project > div > input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
 .new-project-popup .new-project > .create-project {
   margin: 8px auto;
   background-color: var(--primary-color);
@@ -60,8 +80,16 @@
   transition: background-color 250ms ease-in-out;
 }
 
+.new-project-popup.dark .new-project > .create-project {
+  background-color: var(--primary-color-dark);
+}
+
 .new-project-popup .new-project > .create-project:hover {
   background-color: var(--primary-color-hover);
+}
+
+.new-project-popup.dark .new-project > .create-project:hover {
+  background-color: var(--primary-color-dark-hover);
 }
 
 .new-project-popup .new-project > .create-project.error {

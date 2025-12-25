@@ -220,31 +220,46 @@ export default function SectionHeader(props) {
               <HiViewGrid />
             </IconContext.Provider>
           </button>
-          <button
-            className={
-              "kanban-view" +
-              (props.selectedView === "kanban" ? " selected" : "")
-            }
-            onClick={() => setKanbanView()}
-            onDoubleClick={() => openKanbanSelect()}
-            onMouseEnter={() => showToolTip()}
-            onMouseLeave={() => hideToolTip()}
-          >
-            {toolTipShown ? (
-              <div
-                className={
-                  "tooltip poppins-regular" + (toolTipVisible ? " visible" : "")
-                }
-              >
-                Double click
-              </div>
-            ) : (
-              ""
-            )}
-            <IconContext.Provider value={{ style: { fontSize: "28px" } }}>
-              <LuKanban />
-            </IconContext.Provider>
-          </button>
+          {props.page === "tasks" ? (
+            <button
+              className={
+                "kanban-view" +
+                (props.selectedView === "kanban" ? " selected" : "")
+              }
+              onClick={() => setKanbanView()}
+              onDoubleClick={() => openKanbanSelect()}
+              onMouseEnter={() => showToolTip()}
+              onMouseLeave={() => hideToolTip()}
+            >
+              {toolTipShown ? (
+                <div
+                  className={
+                    "tooltip poppins-regular" +
+                    (toolTipVisible ? " visible" : "")
+                  }
+                >
+                  Double click
+                </div>
+              ) : (
+                ""
+              )}
+              <IconContext.Provider value={{ style: { fontSize: "28px" } }}>
+                <LuKanban />
+              </IconContext.Provider>
+            </button>
+          ) : (
+            <button
+              className={
+                "kanban-view" +
+                (props.selectedView === "kanban" ? " selected" : "")
+              }
+              onClick={() => setKanbanView()}
+            >
+              <IconContext.Provider value={{ style: { fontSize: "28px" } }}>
+                <LuKanban />
+              </IconContext.Provider>
+            </button>
+          )}
           {kanbanSelectOpen ? (
             <div
               className={

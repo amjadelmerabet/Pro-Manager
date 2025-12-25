@@ -1,7 +1,11 @@
 .section-header {
   display: flex;
   justify-content: space-between;
-  margin-block: 40px;
+  padding-block: 40px;
+}
+
+.dark .section-header {
+  color: rgb(225, 225, 225);
 }
 
 .section-header .page-buttons {
@@ -25,6 +29,12 @@
   border: 1px solid var(--primary-color);
 }
 
+.dark .section-header .search > .search-input {
+  background-color: rgb(45, 45, 45);
+  border: 1px solid var(--primary-color-dark);
+  color: rgb(225, 225, 225);
+}
+
 .section-header .page-buttons > .select-view {
   display: flex;
   align-items: center;
@@ -40,8 +50,17 @@
   border-radius: 4px;
 }
 
+.dark .section-header .page-buttons .select-view > button {
+  background-color: rgb(45, 45, 45);
+}
+
 .section-header .page-buttons .select-view > button > svg {
   display: flex;
+}
+
+.dark .section-header .page-buttons .select-view > button > svg {
+  /* color: rgb(225, 225, 225); */
+  color: var(--accent-color-dark);
 }
 
 .section-header .page-buttons .grid-view {
@@ -79,6 +98,11 @@
   background-color: var(--accent-color);
 }
 
+.dark .section-header .page-buttons .select-view > .selected {
+  /* background-color: var(--primary-color-dark); */
+  background-color: rgb(85, 85, 85);
+}
+
 .section-header .page-buttons {
   position: relative;
 }
@@ -91,6 +115,10 @@
   margin-right: 8px;
   display: flex;
   align-items: center;
+}
+
+.dark .page-buttons .sort-button {
+  color: var(--secondary-color-dark);
 }
 
 .page-buttons .sort-button::before {
@@ -234,6 +262,10 @@
   display: flex;
 }
 
+.dark .page-buttons > .filter-button {
+  color: var(--secondary-color-dark);
+}
+
 .page-buttons > .filter-disabled {
   pointer-events: none;
 }
@@ -295,6 +327,10 @@
   cursor: pointer;
 }
 
+.dark .page-buttons .actions > button {
+  color: var(--secondary-color-dark);
+}
+
 .page-buttons .filter {
   position: absolute;
   bottom: -128px;
@@ -318,6 +354,11 @@
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
 }
 
+.dark .page-buttons .filter {
+  background-color: var(--primary-color-dark);
+  color: rgb(225, 225, 225);
+}
+
 .page-buttons .filter.visible {
   visibility: visible;
   opacity: 1;
@@ -330,6 +371,10 @@
   border-radius: 4px;
   border: 1px solid black;
   cursor: pointer;
+}
+
+.dark .page-buttons .filter select {
+  background-color: rgb(225, 225, 225);
 }
 
 .page-buttons .filter .filters {
@@ -366,6 +411,10 @@
   background-color: var(--accent-color);
 }
 
+.dark .page-buttons .filter .filter-section-buttons .apply-filters-button {
+  background-color: var(--accent-color-dark);
+}
+
 .page-buttons .filter .filter-section-buttons .apply-filters-button:hover {
   background-color: var(--secondary-color);
 }
@@ -373,6 +422,11 @@
 .page-buttons .filter .filter-section-buttons .cancel-filters-button,
 .page-buttons .filter .filter-section-buttons .clear-filters-button {
   background-color: white;
+}
+
+.dark .page-buttons .filter .filter-section-buttons .cancel-filters-button,
+.dark .page-buttons .filter .filter-section-buttons .clear-filters-button {
+  background-color: rgb(225, 225, 225);
 }
 
 .page-buttons .filter .filter-section-buttons .cancel-filters-button:hover,
