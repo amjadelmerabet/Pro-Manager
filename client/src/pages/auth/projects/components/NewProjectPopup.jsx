@@ -15,6 +15,7 @@ export default function NewProjectPopup({
   setPopupDisplay,
   createNewProject,
   parent,
+  theme,
 }) {
   const [newProjectClass, setNewProjectClass] = useState("");
   const [deadlineInPast, setDeadlineInPast] = useState(false);
@@ -60,7 +61,12 @@ export default function NewProjectPopup({
   };
 
   return (
-    <div className="new-project-popup">
+    <div
+      className={
+        "new-project-popup" +
+        (theme === "light" || theme === "" ? " light" : " dark")
+      }
+    >
       <div className={"new-project" + newProjectClass}>
         <h3 className="title poppins-bold">New Project</h3>
         <button className="close-popup" onClick={() => closePopupDialog()}>

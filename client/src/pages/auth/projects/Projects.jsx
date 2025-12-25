@@ -66,12 +66,23 @@ export default function ProjectsPage({ user, userId, setAuthentication }) {
   const [globalSearchClosed, setGlobalSearchClosed] = useState(false);
   // const [notStartedProjects, setNotStartedProjects] = useState(0);
   // const [projectsFetched, setProjectsFetched] = useState(false);
+  const [theme, setTheme] = useState("");
 
   const [searchParams] = useSearchParams();
   const view = searchParams.get("view");
   const filterInURL = searchParams.get("filter");
 
   const { token } = JSON.parse(sessionStorage.getItem("authUser"));
+
+  useEffect(() => {
+    const getUserTheme = async () => {
+      const userTheme = await cookieStore.get("userTheme-" + userId);
+      if (userTheme) {
+        setTheme(userTheme.value);
+      }
+    };
+    getUserTheme();
+  }, []);
 
   useEffect(() => {
     if (view) {
@@ -133,6 +144,7 @@ export default function ProjectsPage({ user, userId, setAuthentication }) {
     if (newAccessToken.counter > 0) {
       getAccessTokenUtil(
         user,
+        userId,
         setTokenValidated,
         setTries,
         newAccessToken,
@@ -314,8 +326,18 @@ export default function ProjectsPage({ user, userId, setAuthentication }) {
   };
 
   return (
-    <div className="projects-page">
-      <div className="auth-header-container">
+    <div
+      className={
+        "projects-page" +
+        (theme === "light" || theme === "" ? " light" : " dark")
+      }
+    >
+      <div
+        className={
+          "auth-header-container" +
+          (theme === "light" || theme === "" ? " light" : " dark")
+        }
+      >
         <AuthHeader
           user={user}
           setAuthentication={setAuthentication}
@@ -395,6 +417,7 @@ export default function ProjectsPage({ user, userId, setAuthentication }) {
                               resetProject={resetProject}
                               deleteProject={deleteProject}
                               updatedStatus={updatedStatus}
+                              theme={theme}
                             />
                           );
                         })
@@ -418,6 +441,7 @@ export default function ProjectsPage({ user, userId, setAuthentication }) {
                               resetProject={resetProject}
                               deleteProject={deleteProject}
                               updatedStatus={updatedStatus}
+                              theme={theme}
                             />
                           );
                         })}
@@ -450,6 +474,7 @@ export default function ProjectsPage({ user, userId, setAuthentication }) {
                               resetProject={resetProject}
                               deleteProject={deleteProject}
                               updatedStatus={updatedStatus}
+                              theme={theme}
                             />
                           );
                         })
@@ -473,6 +498,7 @@ export default function ProjectsPage({ user, userId, setAuthentication }) {
                               resetProject={resetProject}
                               deleteProject={deleteProject}
                               updatedStatus={updatedStatus}
+                              theme={theme}
                             />
                           );
                         })}
@@ -505,6 +531,7 @@ export default function ProjectsPage({ user, userId, setAuthentication }) {
                               resetProject={resetProject}
                               deleteProject={deleteProject}
                               updatedStatus={updatedStatus}
+                              theme={theme}
                             />
                           );
                         })
@@ -528,6 +555,7 @@ export default function ProjectsPage({ user, userId, setAuthentication }) {
                               resetProject={resetProject}
                               deleteProject={deleteProject}
                               updatedStatus={updatedStatus}
+                              theme={theme}
                             />
                           );
                         })}
@@ -557,6 +585,7 @@ export default function ProjectsPage({ user, userId, setAuthentication }) {
                           user={user}
                           userId={userId}
                           updatedStatus={updatedStatus}
+                          theme={theme}
                         />
                       );
                     } else {
@@ -574,6 +603,7 @@ export default function ProjectsPage({ user, userId, setAuthentication }) {
                           hoverOverProject={hoverOverProject}
                           hoverOverProjectEnd={hoverOverProjectEnd}
                           updatedStatus={updatedStatus}
+                          theme={theme}
                         />
                       );
                     }
@@ -608,6 +638,7 @@ export default function ProjectsPage({ user, userId, setAuthentication }) {
                           user={user}
                           userId={userId}
                           updatedStatus={updatedStatus}
+                          theme={theme}
                         />
                       );
                     } else {
@@ -625,6 +656,7 @@ export default function ProjectsPage({ user, userId, setAuthentication }) {
                           hoverOverProject={hoverOverProject}
                           hoverOverProjectEnd={hoverOverProjectEnd}
                           updatedStatus={updatedStatus}
+                          theme={theme}
                         />
                       );
                     }
@@ -660,6 +692,7 @@ export default function ProjectsPage({ user, userId, setAuthentication }) {
                         user={user}
                         userId={userId}
                         updatedStatus={updatedStatus}
+                        theme={theme}
                       />
                     );
                   } else {
@@ -677,6 +710,7 @@ export default function ProjectsPage({ user, userId, setAuthentication }) {
                         hoverOverProject={hoverOverProject}
                         hoverOverProjectEnd={hoverOverProjectEnd}
                         updatedStatus={updatedStatus}
+                        theme={theme}
                       />
                     );
                   }

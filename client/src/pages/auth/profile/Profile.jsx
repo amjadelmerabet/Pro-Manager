@@ -54,6 +54,8 @@ export default function ProfilePage({ user, userId, setAuthentication }) {
   const [usernameUpdated, setUsernameUpdated] = useState(false);
   const [showCredentialsSavedPopup, setShowCredentialsSavedPopup] =
     useState(false);
+  const [themeUpdated, setThemeUpdated] = useState(0);
+  const [selectedTheme, setSelectedTheme] = useState("");
 
   const { token } = JSON.parse(sessionStorage.getItem("authUser"));
 
@@ -231,6 +233,34 @@ export default function ProfilePage({ user, userId, setAuthentication }) {
     navigate(`/auth/${username}/profile`);
   };
 
+  useEffect(() => {
+    const changeTheme = async (theme) => {
+      const themeStored = await cookieStore.get("userTheme");
+      if (themeStored) {
+        if (themeStored.value !== theme) {
+          cookieStore.delete("userTheme");
+        } else {
+          return;
+        }
+      }
+      await cookieStore.set({
+        name: "userTheme-" + userId,
+        value: theme,
+        path: "/",
+        secure: true,
+        sameSite: "strict",
+      });
+    };
+    if (themeUpdated > 0) {
+      changeTheme(selectedTheme);
+    }
+  }, [themeUpdated]);
+
+  const updateSelectedTheme = (theme) => {
+    setSelectedTheme(theme);
+    setThemeUpdated(themeUpdated + 1);
+  };
+
   return (
     <div className="profile-page">
       <div className="auth-header-container">
@@ -397,17 +427,21 @@ export default function ProfilePage({ user, userId, setAuthentication }) {
                   <div className="theme-picker">
                     <div className="title poppins-bold">Theme picker</div>
                     <ul className="themes">
-                      <li className="theme poppins-bold selected-theme">
-                        Default
+                      <li
+                        className="theme poppins-semibold light-theme"
+                        onClick={() => updateSelectedTheme("light")}
+                      >
+                        Light
                       </li>
-                      <li className="theme"></li>
-                      <li className="theme"></li>
-                      <li className="theme"></li>
-                      <li className="theme"></li>
-                      <li className="theme"></li>
+                      <li
+                        className="theme poppins-semibold dark-theme"
+                        onClick={() => updateSelectedTheme("dark")}
+                      >
+                        Dark
+                      </li>
                     </ul>
                   </div>
-                  <div className="customized-theme">
+                  <div className="customized-theme feature-disabled">
                     <div className="enable-custom-theme">
                       <input
                         type="checkbox"

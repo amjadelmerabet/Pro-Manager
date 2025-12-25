@@ -125,39 +125,25 @@
 
 .theme-settings .theme-picker .themes > .theme {
   width: 100px;
-  height: 48px;
+  padding-block: 6px;
   border-radius: 6px;
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }
 
 .theme-settings .theme-picker .themes > .selected-theme {
   border: 1px solid var(--primary-color);
 }
 
-.theme-settings .themes > .theme:nth-child(1) {
+.theme-settings .themes > .light-theme {
   background-color: white;
 }
 
-.theme-settings .themes > .theme:nth-child(2) {
-  background-color: #2c3e50;
-}
-
-.theme-settings .themes > .theme:nth-child(3) {
-  background-color: #c10202;
-}
-
-.theme-settings .themes > .theme:nth-child(4) {
-  background-color: var(--primary-color);
-}
-
-.theme-settings .themes > .theme:nth-child(5) {
-  background-color: #ffae00;
-}
-
-.theme-settings .themes > .theme:nth-child(6) {
-  background-color: #bdbdbd;
+.theme-settings .themes > .dark-theme {
+  background-color: rgb(35, 35, 35);
+  color: white;
 }
 
 .theme-settings .customized-theme {

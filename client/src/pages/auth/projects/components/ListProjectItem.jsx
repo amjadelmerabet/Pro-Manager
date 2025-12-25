@@ -1,5 +1,5 @@
 // Icons
-import { TbFolder } from "react-icons/tb";
+import { TbCheck, TbClock, TbFolder } from "react-icons/tb";
 import { IconContext } from "react-icons/lib";
 import { GrFormClock } from "react-icons/gr";
 import { BiReset } from "react-icons/bi";
@@ -20,6 +20,7 @@ export default function ListProjectItem({
   hoverOverProject,
   hoverOverProjectEnd,
   updatedStatus,
+  theme,
 }) {
   let projectDeadline = new Date(project.deadline);
 
@@ -49,12 +50,15 @@ export default function ListProjectItem({
             <IconContext.Provider
               value={{
                 style: {
-                  color: "rgb(245, 200, 45)",
-                  fontSize: "24px",
+                  color:
+                    theme === "light" || theme === ""
+                      ? "rgb(245, 200, 45)"
+                      : "rgb(255, 215, 45)",
+                  fontSize: "20px",
                 },
               }}
             >
-              <GrFormClock />
+              <TbClock />
             </IconContext.Provider>
           </button>
         ) : (
@@ -68,8 +72,11 @@ export default function ListProjectItem({
             <IconContext.Provider
               value={{
                 style: {
-                  color: "rgb(45, 180, 245)",
-                  fontSize: "24px",
+                  color:
+                    theme === "light" || theme === ""
+                      ? "rgb(45, 180, 245)"
+                      : "rgb(45, 200, 255)",
+                  fontSize: "20px",
                 },
               }}
             >
@@ -87,12 +94,15 @@ export default function ListProjectItem({
             <IconContext.Provider
               value={{
                 style: {
-                  color: "rgb(0, 200, 45)",
-                  fontSize: "24px",
+                  color:
+                    theme === "light" || theme === ""
+                      ? "rgb(0, 200, 45)"
+                      : "rgb(25, 255, 65)",
+                  fontSize: "22px",
                 },
               }}
             >
-              <IoCheckmark />
+              <TbCheck />
             </IconContext.Provider>
           </button>
         ) : (
@@ -105,7 +115,10 @@ export default function ListProjectItem({
           <IconContext.Provider
             value={{
               style: {
-                color: "rgb(225, 0, 45)",
+                color:
+                  theme === "light" || theme === ""
+                    ? "rgb(225, 0, 45)"
+                    : "rgb(255, 0, 25)",
                 fontSize: "24px",
               },
             }}
