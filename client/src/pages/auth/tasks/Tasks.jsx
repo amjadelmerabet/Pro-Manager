@@ -714,6 +714,7 @@ export default function TasksPage({ user, userId, setAuthentication }) {
             setPopupDisplay={setNewTaskPopupDisplay}
             user={user}
             userId={userId}
+            theme={theme}
           />
         ) : (
           ""

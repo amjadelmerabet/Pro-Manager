@@ -748,6 +748,7 @@ export default function ProjectsPage({ user, userId, setAuthentication }) {
             createNewProject={createNewProject}
             popupDisplay={newProjectPopupDisplay}
             setPopupDisplay={setNewProjectPopupDisplay}
+            theme={theme}
           />
         ) : (
           ""
