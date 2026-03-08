@@ -60,6 +60,7 @@ export default function Project({ user, userId, setAuthentication }) {
   });
   const [newTask, setNewTask] = useState({});
   const [newTaskToCreate, setNewTaskToCreate] = useState(0);
+  const [theme, setTheme] = useState("");
 
   const location = useLocation();
   const pathname = location.pathname;
@@ -75,6 +76,16 @@ export default function Project({ user, userId, setAuthentication }) {
   const view = searchParams.get("view");
 
   const { token } = JSON.parse(sessionStorage.getItem("authUser"));
+
+  useEffect(() => {
+    const getUserTheme = async () => {
+      const userTheme = await cookieStore.get("userTheme-" + userId);
+      if (userTheme) {
+        setTheme(userTheme.value);
+      }
+    };
+    getUserTheme();
+  }, []);
 
   useEffect(() => {
     if (
@@ -94,7 +105,7 @@ export default function Project({ user, userId, setAuthentication }) {
         setProjectObject,
         setProjectNotFound,
         setTokenValidated,
-        setProjectFetched
+        setProjectFetched,
       );
     }
   }, [updatedsuccessfully, loadProject]);
@@ -112,7 +123,7 @@ export default function Project({ user, userId, setAuthentication }) {
         tries,
         setTries,
         newAccessToken,
-        setNewAccessToken
+        setNewAccessToken,
       );
     }
   }, [loadTasks, projectFetched]);
@@ -131,7 +142,7 @@ export default function Project({ user, userId, setAuthentication }) {
         projectUpdated,
         setProjectUpdated,
         setProjectDeleted,
-        setLoadTasks
+        setLoadTasks,
       );
     }
   }, [newAccessToken]);
@@ -150,7 +161,7 @@ export default function Project({ user, userId, setAuthentication }) {
         newAccessToken,
         setNewAccessToken,
         setUpdatedsuccessfully,
-        setTokenValidated
+        setTokenValidated,
       );
     }
   }, [projectUpdated]);
@@ -170,7 +181,7 @@ export default function Project({ user, userId, setAuthentication }) {
         newAccessToken,
         setNewAccessToken,
         setTokenValidated,
-        navigate
+        navigate,
       );
     }
   }, [projectDeleted]);
@@ -199,7 +210,7 @@ export default function Project({ user, userId, setAuthentication }) {
         newAccessToken,
         setNewAccessToken,
         openNewTaskPopup,
-        setOpenNewTaskPopup
+        setOpenNewTaskPopup,
       );
     }
   }, [newTaskToCreate]);
@@ -274,8 +285,18 @@ export default function Project({ user, userId, setAuthentication }) {
   };
 
   return (
-    <div className="project-page">
-      <div className="auth-header-container">
+    <div
+      className={
+        "project-page" +
+        (theme === "light" || theme === "" ? " light" : " dark")
+      }
+    >
+      <div
+        className={
+          "auth-header-container" +
+          (theme === "light" || theme === "" ? " light" : " dark")
+        }
+      >
         <AuthHeader user={user} setAuthentication={setAuthentication} />
       </div>
       <div className="container">
@@ -291,7 +312,10 @@ export default function Project({ user, userId, setAuthentication }) {
                   <IconContext.Provider
                     value={{
                       style: {
-                        color: "var(--primary-color)",
+                        color:
+                          theme === "light" || theme === ""
+                            ? "var(--primary-color)"
+                            : "var(--primary-color-dark)",
                         fontSize: "28px",
                       },
                     }}
@@ -337,7 +361,10 @@ export default function Project({ user, userId, setAuthentication }) {
                       <IconContext.Provider
                         value={{
                           style: {
-                            color: "rgb(45, 180, 245)",
+                            color:
+                              theme === "light" || theme === ""
+                                ? "rgb(45, 180, 245)"
+                                : "rgb(35, 165, 225)",
                             fontSize: "24px",
                           },
                         }}
@@ -357,7 +384,10 @@ export default function Project({ user, userId, setAuthentication }) {
                       <IconContext.Provider
                         value={{
                           style: {
-                            color: "rgb(245, 200, 45)",
+                            color:
+                              theme === "light" || theme === ""
+                                ? "rgb(245, 200, 45)"
+                                : "rgb(235, 180, 35)",
                             fontSize: "24px",
                           },
                         }}
@@ -376,7 +406,13 @@ export default function Project({ user, userId, setAuthentication }) {
                     >
                       <IconContext.Provider
                         value={{
-                          style: { color: "rgb(0, 200, 45)", fontSize: "24px" },
+                          style: {
+                            color:
+                              theme === "light" || theme === ""
+                                ? "rgb(0, 200, 45)"
+                                : "rgb(0, 180, 35)",
+                            fontSize: "24px",
+                          },
                         }}
                       >
                         <IoCheckmark />
@@ -392,7 +428,13 @@ export default function Project({ user, userId, setAuthentication }) {
                   >
                     <IconContext.Provider
                       value={{
-                        style: { color: "rgb(225, 0, 45)", fontSize: "24px" },
+                        style: {
+                          color:
+                            theme === "light" || theme === ""
+                              ? "rgb(225, 0, 45)"
+                              : "rgb(200, 0, 35)",
+                          fontSize: "24px",
+                        },
                       }}
                     >
                       <IoClose />
@@ -483,7 +525,14 @@ export default function Project({ user, userId, setAuthentication }) {
             <div className="project-tasks-header poppins-regular">
               <h3 className="project-tasks-title poppins-bold">
                 <IconContext.Provider
-                  value={{ style: { color: "var(--primary-color)" } }}
+                  value={{
+                    style: {
+                      color:
+                        theme === "light" || theme === ""
+                          ? "var(--primary-color)"
+                          : "var(--primary-color-dark)",
+                    },
+                  }}
                 >
                   <TbSquareCheck />
                 </IconContext.Provider>
@@ -496,7 +545,14 @@ export default function Project({ user, userId, setAuthentication }) {
                 }
               >
                 <IconContext.Provider
-                  value={{ style: { color: "var(--primary-color)" } }}
+                  value={{
+                    style: {
+                      color:
+                        theme === "light" || theme === ""
+                          ? "var(--primary-color)"
+                          : "var(--primary-color-dark)",
+                    },
+                  }}
                 >
                   <TbSquarePlus className="create-new-task-icon" />
                 </IconContext.Provider>
@@ -540,10 +596,16 @@ export default function Project({ user, userId, setAuthentication }) {
                                 style: {
                                   color:
                                     task.priority === 1
-                                      ? "rgb(245, 0, 45)"
+                                      ? theme === "light" || theme === ""
+                                        ? "rgb(245, 0, 45)"
+                                        : "rgb(225, 0, 35)"
                                       : task.priority === 2
-                                        ? "rgb(245, 120, 0)"
-                                        : "rgb(0, 120, 245)",
+                                        ? theme === "light" || theme === ""
+                                          ? "rgb(245, 120, 0)"
+                                          : "rgb(235, 100, 0)"
+                                        : theme === "light" || theme === ""
+                                          ? "rgb(0, 120, 245)"
+                                          : "rgb(0, 100, 235)",
                                 },
                               }}
                             >
@@ -629,7 +691,14 @@ export default function Project({ user, userId, setAuthentication }) {
                 }
               >
                 <IconContext.Provider
-                  value={{ style: { color: "var(--primary-color)" } }}
+                  value={{
+                    style: {
+                      color:
+                        theme === "light" || theme === ""
+                          ? "var(--primary-color)"
+                          : "var(--primary-color-dark)",
+                    },
+                  }}
                 >
                   <FaArrowLeft />
                 </IconContext.Provider>
@@ -653,6 +722,7 @@ export default function Project({ user, userId, setAuthentication }) {
           user={user}
           userId={userId}
           parentProjectId={projectObject.project_id}
+          theme={theme}
         />
       ) : (
         ""
