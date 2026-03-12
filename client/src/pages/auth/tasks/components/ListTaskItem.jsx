@@ -37,10 +37,16 @@ export default function ListTaskItem({
               style: {
                 color:
                   task.priority === 1
-                    ? "rgb(245, 0, 45)"
+                    ? theme === "light" || theme === ""
+                      ? "rgb(245, 0, 45)"
+                      : "rgb(255, 20, 65)"
                     : task.priority === 2
-                      ? "rgb(245, 120, 0)"
-                      : "rgb(0, 120, 245)",
+                      ? theme === "light" || theme === ""
+                        ? "rgb(245, 120, 0)"
+                        : "rgb(255, 145, 20)"
+                      : theme === "light" || theme === ""
+                        ? "rgb(0, 120, 245)"
+                        : "rgb(0, 145, 255)",
               },
             }}
           >
@@ -114,7 +120,7 @@ export default function ListTaskItem({
                   color:
                     theme === "light" || theme === ""
                       ? "rgb(245, 200, 45)"
-                      : "rgb(255, 215, 45)",
+                      : "rgb(255, 215, 65)",
                   fontSize: "20px",
                 },
               }}

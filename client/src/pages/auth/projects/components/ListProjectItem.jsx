@@ -53,7 +53,7 @@ export default function ListProjectItem({
                   color:
                     theme === "light" || theme === ""
                       ? "rgb(245, 200, 45)"
-                      : "rgb(255, 215, 45)",
+                      : "rgb(255, 215, 65)",
                   fontSize: "20px",
                 },
               }}

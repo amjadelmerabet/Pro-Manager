@@ -20,7 +20,7 @@ export default function GridProjectItem({
   deleteProject,
   userId,
   updatedStatus,
-  theme
+  theme,
 }) {
   let projectDeadline = new Date(project.deadline);
   return (
@@ -49,7 +49,10 @@ export default function GridProjectItem({
             <IconContext.Provider
               value={{
                 style: {
-                  color: theme === "light" || theme === "" ? "rgb(245, 200, 45)" : "rgb(255, 215, 45)",
+                  color:
+                    theme === "light" || theme === ""
+                      ? "rgb(245, 200, 45)"
+                      : "rgb(255, 215, 65)",
                   fontSize: "20px",
                 },
               }}
@@ -68,7 +71,10 @@ export default function GridProjectItem({
             <IconContext.Provider
               value={{
                 style: {
-                  color: theme === "light" || theme === "" ? "rgb(45, 180, 245)" : "rgb(45, 200, 255)",
+                  color:
+                    theme === "light" || theme === ""
+                      ? "rgb(45, 180, 245)"
+                      : "rgb(45, 200, 255)",
                   fontSize: "20px",
                 },
               }}
@@ -87,7 +93,10 @@ export default function GridProjectItem({
             <IconContext.Provider
               value={{
                 style: {
-                  color: theme === "light" || theme === "" ? "rgb(0, 200, 45)" : "rgb(25, 255, 65)",
+                  color:
+                    theme === "light" || theme === ""
+                      ? "rgb(0, 200, 45)"
+                      : "rgb(25, 255, 65)",
                   fontSize: "22px",
                 },
               }}
@@ -105,7 +114,10 @@ export default function GridProjectItem({
           <IconContext.Provider
             value={{
               style: {
-                color: theme === "light" || theme === "" ? "rgb(225, 0, 45)" : "rgb(255, 20, 65)",
+                color:
+                  theme === "light" || theme === ""
+                    ? "rgb(225, 0, 45)"
+                    : "rgb(255, 20, 65)",
                 fontSize: "24px",
               },
             }}
@@ -119,7 +131,10 @@ export default function GridProjectItem({
           <IconContext.Provider
             value={{
               style: {
-                color: theme === "light" || theme === "" ? "var(--primary-color)" : "var(--secondary-color-dark)",
+                color:
+                  theme === "light" || theme === ""
+                    ? "var(--primary-color)"
+                    : "var(--secondary-color-dark)",
                 fontSize: "125%",
               },
             }}

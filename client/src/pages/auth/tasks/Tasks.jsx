@@ -421,6 +421,7 @@ export default function TasksPage({ user, userId, setAuthentication }) {
           setApplySort={setApplySort}
           groupBy={groupBy}
           setGroupBy={setGroupBy}
+          theme={theme}
         />
         <ul className={"tasks " + selectedView}>
           {selectedView === "kanban" ? (

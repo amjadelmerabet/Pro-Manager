@@ -171,6 +171,11 @@
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
 }
 
+.dark .page-buttons .sort-popup {
+  background-color: var(--primary-color-dark);
+  color: rgb(225, 225, 225);
+}
+
 .page-buttons .sort-popup.visible {
   visibility: visible;
   opacity: 1;
@@ -203,6 +208,10 @@
   cursor: pointer;
 }
 
+.dark .page-buttons .sort-popup select {
+  background-color: rgb(225, 225, 225);
+}
+
 .page-buttons .sort-popup .sort-actions {
   display: flex;
   justify-content: space-around;
@@ -224,8 +233,16 @@
   background-color: var(--accent-color);
 }
 
+.dark .page-buttons .sort-popup .sort-actions > .apply-sort-button {
+  background-color: var(--accent-color-dark);
+}
+
 .page-buttons .sort-popup .sort-actions > .apply-sort-button:hover {
   background-color: var(--secondary-color);
+}
+
+.dark .page-buttons .sort-popup .sort-actions > .apply-sort-button:hover {
+  background-color: var(--secondary-color-dark);
 }
 
 /* .page-buttons .sort-popup .sort-actions .feature-disabled {
@@ -236,6 +253,11 @@
 .page-buttons .sort-popup .sort-actions > .cancel-sort-button,
 .page-buttons .sort-popup .sort-actions > .clear-sort-button {
   background-color: white;
+}
+
+.dark .page-buttons .sort-popup .sort-actions > .cancel-sort-button,
+.dark .page-buttons .sort-popup .sort-actions > .clear-sort-button {
+  background-color: rgb(225, 225, 225);
 }
 
 .page-buttons .sort-popup .close-sort-popup {
@@ -252,6 +274,11 @@
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
   cursor: pointer;
   transition: background-color 250ms ease-in-out;
+}
+
+.dark .page-buttons .sort-popup .close-sort-popup {
+  background-color: rgb(45, 45, 45);
+  box-shadow: 2px 2px 4px rgba(225, 225, 225, 0.25);
 }
 
 .page-buttons > .filter-button {
@@ -450,8 +477,17 @@
   transition: background-color 250ms ease-in-out;
 }
 
+.dark .page-buttons .filter > .close-filter-popup {
+  background-color: rgb(45, 45, 45);
+  box-shadow: 2px 2px 4px rgba(225, 225, 225, 0.25);
+}
+
 .page-buttons .filter > .close-filter-popup:hover {
   background-color: rgb(245, 245, 245);
+}
+
+.dark .page-buttons .filter > .close-filter-popup:hover {
+  background-color: rgb(65, 65, 65);
 }
 
 .kanban-select {

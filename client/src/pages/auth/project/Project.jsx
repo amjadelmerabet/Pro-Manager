@@ -387,7 +387,7 @@ export default function Project({ user, userId, setAuthentication }) {
                             color:
                               theme === "light" || theme === ""
                                 ? "rgb(245, 200, 45)"
-                                : "rgb(235, 180, 35)",
+                                : "rgb(225, 180, 35)",
                             fontSize: "24px",
                           },
                         }}
