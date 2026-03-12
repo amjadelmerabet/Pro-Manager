@@ -132,6 +132,12 @@
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
 }
 
+.dark .auth-header .settings {
+  background-color: var(--secondary-color-dark);
+  box-shadow: 2px 2px 4px rgba(225, 225, 225, 0.25);
+  color: rgb(225, 225, 225);
+}
+
 .auth-header .settings.visible {
   visibility: visible;
   opacity: 1;
@@ -171,8 +177,14 @@
   align-items: center;
 }
 
+.dark .auth-header .settings > .settings-list > .setting-item {
+  background-color: var(--primary-color-dark);
+}
+
 .auth-header .settings > .settings-list > .setting-item > .logout-button {
   cursor: pointer;
+  display: flex;
+  align-items: center;
 }
 
 .auth-header .settings > .settings-list > .setting-item span {
@@ -184,4 +196,8 @@
   color: black;
   display: flex;
   align-items: center;
+}
+
+.dark .auth-header .settings > .settings-list > .setting-item a {
+  color: rgb(225, 225, 225);
 }

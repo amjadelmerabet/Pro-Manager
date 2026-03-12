@@ -16,6 +16,7 @@ export default function AuthHeader({
   setAuthentication,
   globalSearch,
   setGlobalSearch,
+  theme,
 }) {
   const [settingsPopup, setSettingsPopup] = useState(false);
 
@@ -74,7 +75,14 @@ export default function AuthHeader({
         />
         <div className={"settings" + (settingsPopup ? " visible" : "")}>
           <IconContext.Provider
-            value={{ style: { color: "var(--primary-color)" } }}
+            value={{
+              style: {
+                color:
+                  theme === "light" || theme === ""
+                    ? "var(--primary-color)"
+                    : "var(--secondary-color-dark)",
+              },
+            }}
           >
             <BsFillTriangleFill className="triangle" />
           </IconContext.Provider>

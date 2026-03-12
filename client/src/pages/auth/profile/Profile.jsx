@@ -72,7 +72,7 @@ export default function ProfilePage({ user, userId, setAuthentication }) {
       setTries,
       newAccessToken,
       setNewAccessToken,
-      setUserDetailsFetched
+      setUserDetailsFetched,
     );
   }, [userUpdated]);
 
@@ -90,7 +90,7 @@ export default function ProfilePage({ user, userId, setAuthentication }) {
         tries,
         setTries,
         newAccessToken,
-        setNewAccessToken
+        setNewAccessToken,
       );
     }
   }, [updateProfile]);
@@ -105,7 +105,7 @@ export default function ProfilePage({ user, userId, setAuthentication }) {
         newAccessToken,
         setUpdateProfile,
         userUpdated,
-        setUserUpdated
+        setUserUpdated,
       );
     }
   }, [newAccessToken]);
@@ -190,7 +190,7 @@ export default function ProfilePage({ user, userId, setAuthentication }) {
         setNewAccessToken,
         userUpdated,
         setUserUpdated,
-        setUsernameUpdated
+        setUsernameUpdated,
       );
       setCurrentPassword("");
       setNewPassword("");
@@ -251,8 +251,16 @@ export default function ProfilePage({ user, userId, setAuthentication }) {
         sameSite: "strict",
       });
     };
+    const getUserTheme = async () => {
+      const userTheme = await cookieStore.get("userTheme-" + userId);
+      if (userTheme) {
+        setSelectedTheme(userTheme.value);
+      }
+    };
     if (themeUpdated > 0) {
       changeTheme(selectedTheme);
+    } else {
+      getUserTheme();
     }
   }, [themeUpdated]);
 
@@ -262,9 +270,25 @@ export default function ProfilePage({ user, userId, setAuthentication }) {
   };
 
   return (
-    <div className="profile-page">
-      <div className="auth-header-container">
-        <AuthHeader user={user} setAuthentication={setAuthentication} />
+    <div
+      className={
+        "profile-page" +
+        (selectedTheme === "light" || selectedTheme === "" ? " light" : " dark")
+      }
+    >
+      <div
+        className={
+          "auth-header-container" +
+          (selectedTheme === "light" || selectedTheme === ""
+            ? " light"
+            : " dark")
+        }
+      >
+        <AuthHeader
+          user={user}
+          setAuthentication={setAuthentication}
+          theme={selectedTheme}
+        />
       </div>
       <div className="profile-page-container">
         <ProfileMenu
@@ -628,7 +652,10 @@ export default function ProfilePage({ user, userId, setAuthentication }) {
                     <IconContext.Provider
                       value={{
                         style: {
-                          color: "var(--primary-color)",
+                          color:
+                            selectedTheme === "light" || selectedTheme === ""
+                              ? "var(--primary-color)"
+                              : "var(--primary-color-dark)",
                           fontSize: "32px",
                         },
                       }}
