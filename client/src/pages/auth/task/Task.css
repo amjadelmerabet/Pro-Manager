@@ -1,3 +1,12 @@
+.task-page {
+  height: 100vh;
+}
+
+.task-page.dark {
+  background-color: rgb(35, 35, 35);
+  color: rgb(225, 225, 225);
+}
+
 .task-page .task > .task-header {
   display: flex;
   align-items: center;
@@ -20,12 +29,27 @@
   background-color: rgb(245, 160, 180);
 }
 
+.task-page.dark .task > .task-header .to-do-state {
+  background-color: rgb(225, 145, 160);
+  color: rgb(35, 35, 35);
+}
+
 .task-page .task > .task-header .doing-state {
   background-color: rgb(120, 200, 245);
 }
 
+.task-page.dark .task > .task-header .doing-state {
+  background-color: rgb(100, 180, 230);
+  color: rgb(35, 35, 35);
+}
+
 .task-page .task > .task-header .done-state {
   background-color: rgb(80, 245, 165);
+}
+
+.task-page.dark .task > .task-header .done-state {
+  background-color: rgb(65, 225, 145);
+  color: rgb(35, 35, 35);
 }
 
 .task-page .task .task-header .state {
@@ -64,6 +88,12 @@
   border-radius: 4px;
 }
 
+.task-page.dark .task-body .task-short-description,
+.task-page.dark .task-body .task-description.visible {
+  background-color: var(--accent-color-dark);
+  color: rgb(35, 35, 35);
+}
+
 .task-page .task-body .editing-short-description,
 .task-page .task-body .editing-description {
   margin-top: 4px;
@@ -74,10 +104,7 @@
   .task-body
   .editing-short-description
   > .editing-short-description-input,
-.task-page
-  .task-body
-  .editing-description
-  > .editing-description-input {
+.task-page .task-body .editing-description > .editing-description-input {
   padding: 8px 16px;
   background-color: var(--accent-color);
   border-radius: 4px;
@@ -138,6 +165,12 @@
   transform: scale(0);
 }
 
+.task-page.dark .task-body > div:not(.task-info) > div > .edit {
+  border: 1px solid var(--primary-color-dark);
+  background-color: rgb(45, 45, 45);
+  color: rgb(225, 225, 225);
+}
+
 .task-page .task-body > div:not(.task-info):hover > div > .edit {
   visibility: visible;
   opacity: 1;
@@ -161,6 +194,12 @@
   visibility: hidden;
   opacity: 0;
   transform: scale(0);
+}
+
+.task-page.dark .task-body > .task-info .edit-project {
+  background-color: rgb(45, 45, 45);
+  color: rgb(225, 225, 225);
+  border: 1px solid var(--primary-color-dark);
 }
 
 .task-page .task-body > .task-info .project-value:hover + .edit-project,
@@ -189,9 +228,19 @@
     transform 250ms ease-in-out;
 }
 
+.task-page.dark .task > .task-header .task-actions > button {
+  border: 1px solid var(--primary-color-dark);
+  background-color: rgb(45, 45, 45);
+  color: rgb(225, 225, 225);
+}
+
 .task-page .task > .task-header .task-actions > button:hover {
   background-color: rgb(235, 235, 235);
   transform: scale(0.98);
+}
+
+.task-page .task > .task-header .task-actions > button:hover {
+  background-color: rgb(65, 65, 65);
 }
 
 .task-page .task > .task-header .task-actions button > span {
@@ -213,6 +262,10 @@
   color: var(--primary-color);
   transition: transform 250ms ease-in-out;
   margin-left: 8px;
+}
+
+.task-page.dark .task .links a {
+  color: var(--primary-color-dark);
 }
 
 .task-page .task .links a:hover {
@@ -261,6 +314,10 @@
   border-radius: 10px;
 }
 
+.task-page.dark .task .task-info .priority > .priority-value {
+  background-color: rgba(65, 65, 65, 0.65);
+}
+
 .task-page .task .task-info .editing-priority,
 .task-page .task .task-info .editing-project {
   display: flex;
@@ -275,6 +332,16 @@
   border-radius: 10px;
 }
 
+.task-page.dark .task .task-info .editing-priority-select,
+.task-page.dark .task .task-info .editing-project-select {
+  color: rgb(225, 225, 225);
+}
+
+.task-page.dark .task .task-info .editing-priority-select > option,
+.task-page.dark .task .task-info .editing-project-select > option {
+  background-color: rgb(45, 45, 45);
+}
+
 .task-page .task .task-info .editing-priority > input,
 .task-page .task .task-info .editing-project > input {
   padding: 0 4px;
@@ -284,6 +351,13 @@
   border-radius: 4px;
   font-size: 12px;
   transition: transform 250ms ease-in-out;
+}
+
+.task-page.dark .task .task-info .editing-priority > input,
+.task-page.dark .task .task-info .editing-project > input {
+  background-color: rgb(45, 45, 45);
+  color: rgb(225, 225, 225);
+  border: 1px solid var(--primary-color-dark);
 }
 
 .task-page .task .task-info .editing-priority > input:hover,
@@ -310,6 +384,14 @@
   border-radius: 10px;
 }
 
+.task-page.dark .task .task-info .project > .project-value {
+  background-color: rgba(65, 65, 65, 0.65);
+}
+
 .task-page .task .task-info .project .project-link {
   color: black;
+}
+
+.task-page.dark .task .task-info .project .project-link {
+  color: rgb(225, 225, 225);
 }
