@@ -322,6 +322,7 @@ export default function TasksPage({ user, userId, setAuthentication }) {
   let mediumTasks = 0;
   let lowTasks = 0;
   tasks.forEach((task) => {
+    myTasks++;
     if (task.state === 1) {
       toDoTasks++;
     } else if (task.state === 2) {
@@ -461,7 +462,6 @@ export default function TasksPage({ user, userId, setAuthentication }) {
                       {search === "" && applyFilters === 0
                         ? applySort === 0
                           ? tasks.map((task) => {
-                              myTasks++;
                               const updated = new Date(task.updated_on);
                               const updatedStatus = updatedMessageUtil(updated);
                               if (
@@ -496,7 +496,6 @@ export default function TasksPage({ user, userId, setAuthentication }) {
                                 (groupBy === "priority" &&
                                   task.priority === column.priority)
                               ) {
-                                myTasks++;
                                 const updated = new Date(task.updated_on);
                                 const updatedStatus =
                                   updatedMessageUtil(updated);
@@ -525,7 +524,6 @@ export default function TasksPage({ user, userId, setAuthentication }) {
                               (groupBy === "priority" &&
                                 task.priority === column.priority)
                             ) {
-                              myTasks++;
                               const updated = new Date(task.updated_on);
                               const updatedStatus = updatedMessageUtil(updated);
                               return (
@@ -557,7 +555,6 @@ export default function TasksPage({ user, userId, setAuthentication }) {
                 if (task.assigned_to === userId) {
                   let updated = new Date(task.updated_on);
                   const updatedStatus = updatedMessageUtil(updated);
-                  myTasks++;
                   if (selectedView === "list") {
                     return (
                       <ListTaskItem
@@ -602,7 +599,6 @@ export default function TasksPage({ user, userId, setAuthentication }) {
                 if (task.assigned_to === userId) {
                   let updated = new Date(task.updated_on);
                   const updatedStatus = updatedMessageUtil(updated);
-                  myTasks++;
                   if (selectedView === "list") {
                     return (
                       <ListTaskItem
@@ -648,7 +644,6 @@ export default function TasksPage({ user, userId, setAuthentication }) {
               if (task.assigned_to === userId) {
                 let updated = new Date(task.updated_on);
                 const updatedStatus = updatedMessageUtil(updated);
-                myTasks++;
                 if (selectedView === "list") {
                   return (
                     <ListTaskItem
