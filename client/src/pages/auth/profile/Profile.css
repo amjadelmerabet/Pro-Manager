@@ -153,11 +153,21 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  transition: transform 250ms ease-in-out;
+}
+
+.theme-settings .theme-picker .themes > .theme:hover {
+  transform: scale(0.9);
 }
 
 .theme-settings .theme-picker .themes > .selected-theme {
-  border: 1px solid var(--primary-color);
+  border: 2px solid rgb(255, 45, 85);
+  transform: scale(0.9);
 }
+
+/* .dark .theme-settings .theme-picker .themes > .selected-theme {
+  border: 2px solid var(--primary-color-dark)
+} */
 
 .theme-settings .themes > .light-theme {
   background-color: white;

@@ -452,13 +452,21 @@ export default function ProfilePage({ user, userId, setAuthentication }) {
                     <div className="title poppins-bold">Theme picker</div>
                     <ul className="themes">
                       <li
-                        className="theme poppins-semibold light-theme"
+                        className={
+                          "theme poppins-semibold light-theme" +
+                          (selectedTheme === "light" || selectedTheme === ""
+                            ? " selected-theme"
+                            : "")
+                        }
                         onClick={() => updateSelectedTheme("light")}
                       >
                         Light
                       </li>
                       <li
-                        className="theme poppins-semibold dark-theme"
+                        className={
+                          "theme poppins-semibold dark-theme" +
+                          (selectedTheme === "dark" ? " selected-theme" : "")
+                        }
                         onClick={() => updateSelectedTheme("dark")}
                       >
                         Dark
