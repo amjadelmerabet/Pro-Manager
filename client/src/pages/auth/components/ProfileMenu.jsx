@@ -44,7 +44,7 @@ export default function ProfileMenu({
           </div>
           <li
             className={
-              "module feature-disabled" +
+              "module" +
               (selectedModule === "themes" ? " selected-module" : "")
             }
           >

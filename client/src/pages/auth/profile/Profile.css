@@ -7,6 +7,11 @@
   padding: 40px 80px;
 }
 
+.profile-page.dark main {
+  background-color: rgb(35, 35, 35);
+  color: rgb(225, 225, 225);
+}
+
 .profile-page-container {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -18,6 +23,11 @@
   border-radius: 8px;
   margin-block: 12px;
   position: relative;
+}
+
+.profile-page.dark main .settings {
+  background-color: var(--accent-color-dark);
+  color: rgb(35, 35, 35);
 }
 
 .profile-page main .profile-settings tr > td {
@@ -51,10 +61,18 @@
   font-size: 12px;
 }
 
+.profile-page.dark main .profile-settings tr > td.value {
+  background-color: rgb(225, 225, 225);
+}
+
 .profile-page main .profile-settings tr > td.value > input {
   border: none;
   width: 100%;
   font-size: 12px;
+}
+
+.profile-page.dark main .profile-settings tr > td.value > input {
+  background-color: rgb(225, 225, 225);
 }
 
 .profile-page main .profile-settings tr > td.value > input:focus {
@@ -62,7 +80,7 @@
 }
 
 .profile-page main .country-flag {
-  width: 36px;
+  width: 28px;
   border-radius: 4px;
 }
 
@@ -100,6 +118,10 @@
   box-shadow: 2px 2px 4px rgba(0, 0, 0, .25);
 }
 
+.profile-page.dark .profile-settings .edit > .controls > button {
+  background-color: rgb(225, 225, 225);
+}
+
 .profile-settings .edit > .controls > button:hover {
   transform: scale(0.98);
   box-shadow: 1px 1px 2px rgba(0, 0, 0, .25);
@@ -125,39 +147,25 @@
 
 .theme-settings .theme-picker .themes > .theme {
   width: 100px;
-  height: 48px;
+  padding-block: 6px;
   border-radius: 6px;
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }
 
 .theme-settings .theme-picker .themes > .selected-theme {
   border: 1px solid var(--primary-color);
 }
 
-.theme-settings .themes > .theme:nth-child(1) {
+.theme-settings .themes > .light-theme {
   background-color: white;
 }
 
-.theme-settings .themes > .theme:nth-child(2) {
-  background-color: #2c3e50;
-}
-
-.theme-settings .themes > .theme:nth-child(3) {
-  background-color: #c10202;
-}
-
-.theme-settings .themes > .theme:nth-child(4) {
-  background-color: var(--primary-color);
-}
-
-.theme-settings .themes > .theme:nth-child(5) {
-  background-color: #ffae00;
-}
-
-.theme-settings .themes > .theme:nth-child(6) {
-  background-color: #bdbdbd;
+.theme-settings .themes > .dark-theme {
+  background-color: rgb(35, 35, 35);
+  color: white;
 }
 
 .theme-settings .customized-theme {
@@ -193,6 +201,10 @@
   opacity: 40%;
 }
 
+.profile-page.dark .theme-settings .customized-theme table::before {
+  background-color: var(--accent-color-dark);
+}
+
 .theme-settings .customized-theme table tr > td {
   padding-block: 4px;
 }
@@ -225,6 +237,10 @@
 
 .profile-page main .module .module-title {
   color: var(--primary-color);
+}
+
+.profile-page.dark main .module .module-title {
+  color: var(--primary-color-dark);
 }
 
 .profile-page main .feature-coming-soon {
@@ -282,6 +298,10 @@
   transition: transform 250ms ease-in-out, box-shadow 250ms ease-in-out;
 }
 
+.profile-page.dark main .security-settings form .save-credentials-button {
+  background-color: var(--primary-color-dark);
+}
+
 .profile-page main .security-settings form .save-credentials-button:hover {
   transform: scale(0.98);
   box-shadow: 1px 1px 2px rgba(0, 0, 0, .25);
@@ -305,6 +325,10 @@
   opacity: 0;
   transform: scale(0);
   transition: visibility 250ms ease-in-out, opacity 250ms ease-in-out, transform 250ms ease-in-out;
+}
+
+.profile-page.dark main .signin-required form {
+  color: rgb(35, 35, 35);
 }
 
 .profile-page main .signin-required form.visible {
@@ -350,6 +374,10 @@
   box-shadow: 2px 2px 4px rgba(0, 0, 0, .25);
   width: fit-content;
   margin-top: 8px;
+}
+
+.profile-page.dark main .signin-required form .sign-in-button {
+  background-color: var(--primary-color-dark);
 }
 
 .profile-page main .signin-required form .lock-icon {

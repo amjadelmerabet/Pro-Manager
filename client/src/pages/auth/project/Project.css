@@ -1,8 +1,21 @@
+.project-page {
+  height: 100vh;
+}
+
+.project-page.dark {
+  background-color: rgb(35, 35, 35);
+  color: rgb(225, 225, 225);
+}
+
 .project-page .project-header {
   display: flex;
   align-items: center;
   margin-block: 24px;
   justify-content: space-between;
+}
+
+.project-page.dark .project-header {
+  background-color: rgb(35, 35, 35);
 }
 
 .project-page .project .project-header > div {
@@ -20,12 +33,24 @@
   background-color: rgba(245, 0, 45, 0.25);
 }
 
+.project-page.dark .project-header .not-started {
+  background-color: rgba(245, 0, 45, 0.5);
+}
+
 .project-page .project-header .in-progress {
   background-color: rgba(245, 120, 45, 0.25);
 }
 
+.project-page.dark .project-header .in-progress {
+  background-color: rgba(245, 120, 45, 0.5);
+}
+
 .project-page .project-header .completed {
   background-color: rgba(0, 200, 120, 0.25);
+}
+
+.project-page.dark .project-header .completed {
+  background-color: rgba(0, 200, 120, 0.5);
 }
 
 .project-page .project-header .state {
@@ -79,6 +104,12 @@
     transform 250ms ease-in-out;
 }
 
+.project-page.dark .project > .project-header > .right button {
+  border: 1px solid var(--primary-color-dark);
+  background-color: rgb(45, 45, 45);
+  color: rgb(225, 225, 225);
+}
+
 .project-page .project > .project-header > .right button:hover {
   background-color: rgb(235, 235, 235);
   transform: scale(0.98);
@@ -101,6 +132,11 @@
   margin-bottom: 32px;
 }
 
+.project-page.dark .project .project-description {
+  background-color: var(--accent-color-dark);
+  color: rgb(25, 25, 25);
+}
+
 .project-page .project .links a {
   display: flex;
   align-items: center;
@@ -109,6 +145,10 @@
   color: var(--primary-color);
   transition: transform 250ms ease-in-out;
   margin-left: 8px;
+}
+
+.project-page.dark .project .links a {
+  color: var(--primary-color-dark);
 }
 
 .project-page .project .links a:hover {
@@ -246,6 +286,10 @@
   cursor: pointer;
 }
 
+.project-page.dark .project .project-tasks-header .create-new-task {
+  color: rgb(225, 225, 225);
+}
+
 .project-page .project .project-tasks-header .create-new-task-icon {
   margin-right: 4px;
 }
@@ -270,6 +314,11 @@
   display: flex;
   justify-content: space-between;
   position: relative;
+}
+
+.project-page.dark .project .project-tasks-section .task {
+  background-color: rgb(45, 45, 45);
+  border: 1px solid var(--primary-color-dark);
 }
 
 .project-page .project .project-tasks-section .task > div {
@@ -309,12 +358,27 @@
   background-color: rgba(245, 0, 45, 0.25);
 }
 
+.project-page.dark .project .task .to-do-state {
+  background-color: rgb(200, 140, 150);
+  color: rgb(25, 25, 25);
+}
+
 .project-page .project .task .doing-state {
   background-color: rgba(65, 145, 245, 0.25);
 }
 
+.project-page.dark .project .task .doing-state {
+  background-color: rgb(100, 165, 200);
+  color: rgb(25, 25, 25);
+}
+
 .project-page .project .task .done-state {
   background-color: rgba(0, 200, 120, 0.25);
+}
+
+.project-page.dark .project .task .done-state {
+  background-color: rgb(65, 200, 145);
+  color: rgb(25, 25, 25);
 }
 
 .project-page .project .task .task-state > .value > span {
@@ -329,12 +393,24 @@
   background-color: rgb(245, 0, 45);
 }
 
+.project-page.dark .project .task .task-state .to-do {
+  background-color: rgb(220, 0, 35);
+}
+
 .project-page .project .task .task-state .doing {
   background-color: rgb(45, 160, 245);
 }
 
+.project-page.dark .project .task .task-state .doing {
+  background-color: rgb(45, 145, 220);
+}
+
 .project-page .project .task .task-state .done {
   background-color: rgb(0, 200, 120);
+}
+
+.project-page.dark .project .task .task-state .done {
+  background-color: rgb(0, 165, 100);
 }
 
 .project-page .project .task .open-task {

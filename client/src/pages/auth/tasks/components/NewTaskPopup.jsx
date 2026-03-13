@@ -22,6 +22,7 @@ export default function NewTaskPopup({
   user,
   userId,
   parentProjectId,
+  theme,
 }) {
   const [newTaskClass, setNewTaskClass] = useState("");
   const [projects, setProjects] = useState([]);
@@ -99,7 +100,12 @@ export default function NewTaskPopup({
   };
 
   return (
-    <div className="new-task-popup">
+    <div
+      className={
+        "new-task-popup" +
+        (theme === "light" || theme === "" ? " light" : " dark")
+      }
+    >
       <div className={"new-task" + newTaskClass}>
         <h3 className="title poppins-bold">New Task</h3>
         <button className="close-popup" onClick={() => closePopupDialog()}>

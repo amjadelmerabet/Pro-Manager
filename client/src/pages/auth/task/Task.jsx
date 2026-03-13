@@ -54,6 +54,7 @@ export default function Task({ user, userId, setAuthentication }) {
   const [editedProject, setEditedProject] = useState("");
   const [userProjects, setUserProjects] = useState([]);
   const [loadProjects, setLoadProjects] = useState(false);
+  const [theme, setTheme] = useState("");
 
   const location = useLocation();
   const pathname = location.pathname;
@@ -68,6 +69,16 @@ export default function Task({ user, userId, setAuthentication }) {
   const { token } = JSON.parse(sessionStorage.getItem("authUser"));
 
   useEffect(() => {
+    const getUserTheme = async () => {
+      const userTheme = await cookieStore.get("userTheme-" + userId);
+      if (userTheme) {
+        setTheme(userTheme.value);
+      }
+    };
+    getUserTheme();
+  }, []);
+
+  useEffect(() => {
     fetchUserProjectsUtil(
       tokenValidated,
       user,
@@ -77,7 +88,7 @@ export default function Task({ user, userId, setAuthentication }) {
       setTries,
       newAccessToken,
       setNewAccessToken,
-      setUserProjects
+      setUserProjects,
     );
   }, [loadProjects]);
 
@@ -95,7 +106,7 @@ export default function Task({ user, userId, setAuthentication }) {
         setNewAccessToken,
         setTaskObject,
         setTokenValidated,
-        setTasksFetched
+        setTasksFetched,
       );
     }
   }, [taskUpdated, loadTask]);
@@ -113,7 +124,7 @@ export default function Task({ user, userId, setAuthentication }) {
         setTries,
         newAccessToken,
         setNewAccessToken,
-        setProject
+        setProject,
       );
     } else if (Object.keys(taskObject).indexOf("project") !== -1) {
       fetchLinkedProjectUtil(
@@ -126,7 +137,7 @@ export default function Task({ user, userId, setAuthentication }) {
         setTries,
         newAccessToken,
         setNewAccessToken,
-        setProject
+        setProject,
       );
     }
   }, [taskFetched, loadProject, taskUpdated]);
@@ -145,7 +156,7 @@ export default function Task({ user, userId, setAuthentication }) {
         newAccessToken,
         setNewAccessToken,
         setUpdatedSuccessfully,
-        setTokenValidated
+        setTokenValidated,
       );
     }
   }, [taskUpdated]);
@@ -176,7 +187,7 @@ export default function Task({ user, userId, setAuthentication }) {
         setNewAccessToken,
         setTaskDeleted,
         setTokenValidated,
-        navigate
+        navigate,
       );
     }
   }, [taskDeleted]);
@@ -195,7 +206,7 @@ export default function Task({ user, userId, setAuthentication }) {
         taskUpdated,
         setTaskUpdated,
         setTaskDeleted,
-        setLoadProject
+        setLoadProject,
       );
     }
   }, [newAccessToken]);
@@ -297,8 +308,17 @@ export default function Task({ user, userId, setAuthentication }) {
   let updatedStatus = updatedMessageUtil(updated);
 
   return (
-    <div className="task-page">
-      <div className="auth-header-container">
+    <div
+      className={
+        "task-page" + (theme === "light" || theme === "" ? " light" : " dark")
+      }
+    >
+      <div
+        className={
+          "auth-header-container" +
+          (theme === "light" || theme === "" ? " light" : " dark")
+        }
+      >
         <AuthHeader user={user} setAuthentication={setAuthentication} />
       </div>
       <div className="container">
@@ -314,7 +334,10 @@ export default function Task({ user, userId, setAuthentication }) {
                   <IconContext.Provider
                     value={{
                       style: {
-                        color: "var(--primary-color)",
+                        color:
+                          theme === "light" || theme === ""
+                            ? "var(--primary-color)"
+                            : "var(--primary-color-dark)",
                         fontSize: "28px",
                       },
                     }}
@@ -360,7 +383,10 @@ export default function Task({ user, userId, setAuthentication }) {
                       <IconContext.Provider
                         value={{
                           style: {
-                            color: "rgb(45, 180, 245)",
+                            color:
+                              theme === "light" || theme === ""
+                                ? "rgb(45, 180, 245)"
+                                : "rgb(45, 200, 255)",
                             fontSize: "24px",
                           },
                         }}
@@ -380,7 +406,10 @@ export default function Task({ user, userId, setAuthentication }) {
                       <IconContext.Provider
                         value={{
                           style: {
-                            color: "rgb(245, 200, 45)",
+                            color:
+                              theme === "light" || theme === ""
+                                ? "rgb(245, 200, 45)"
+                                : "rgb(255, 215, 65)",
                             fontSize: "24px",
                           },
                         }}
@@ -399,7 +428,13 @@ export default function Task({ user, userId, setAuthentication }) {
                     >
                       <IconContext.Provider
                         value={{
-                          style: { color: "rgb(0, 200, 45)", fontSize: "24px" },
+                          style: {
+                            color:
+                              theme === "light" || theme === ""
+                                ? "rgb(0, 200, 45)"
+                                : "rgb(25, 255, 65)",
+                            fontSize: "24px",
+                          },
                         }}
                       >
                         <IoCheckmark />
@@ -415,7 +450,13 @@ export default function Task({ user, userId, setAuthentication }) {
                   >
                     <IconContext.Provider
                       value={{
-                        style: { color: "rgb(225, 0, 45)", fontSize: "24px" },
+                        style: {
+                          color:
+                            theme === "" || theme === ""
+                              ? "rgb(225, 0, 45)"
+                              : "rgb(255, 20, 65)",
+                          fontSize: "24px",
+                        },
                       }}
                     >
                       <IoClose />
@@ -446,10 +487,16 @@ export default function Task({ user, userId, setAuthentication }) {
                             style: {
                               color:
                                 taskObject.priority === 1
-                                  ? "rgb(245, 0, 45)"
+                                  ? theme === "light" || theme === ""
+                                    ? "rgb(245, 0, 45)"
+                                    : "rgb(255, 20, 65)"
                                   : taskObject.priority === 2
-                                    ? "rgb(245, 120, 0)"
-                                    : "rgb(0, 120, 245)",
+                                    ? theme === "light" || theme === ""
+                                      ? "rgb(245, 120, 0)"
+                                      : "rgb(255, 145, 20)"
+                                    : theme === "light" || theme === ""
+                                      ? "rgb(0, 120, 245)"
+                                      : "rgb(0, 145, 255)",
                             },
                           }}
                         >
@@ -503,7 +550,10 @@ export default function Task({ user, userId, setAuthentication }) {
                           <IconContext.Provider
                             value={{
                               style: {
-                                color: "var(--primary-color)",
+                                color:
+                                  theme === "light" || theme === ""
+                                    ? "var(--primary-color)"
+                                    : "var(--primary-color-dark)",
                                 fontSize: "18px",
                               },
                             }}
@@ -546,11 +596,13 @@ export default function Task({ user, userId, setAuthentication }) {
                           type="button"
                           value="Cancel"
                           onClick={() => cancelProjectEdit()}
+                          className="poppins-regular"
                         />
                         <input
                           type="button"
                           value="Confirm"
                           onClick={() => confirmProjectEdit()}
+                          className="poppins-regular"
                         />
                       </div>
                     )}
@@ -699,7 +751,12 @@ export default function Task({ user, userId, setAuthentication }) {
               >
                 <IconContext.Provider
                   value={{
-                    style: { color: "var(--primary-color)" },
+                    style: {
+                      color:
+                        theme === "light" || theme === ""
+                          ? "var(--primary-color)"
+                          : "var(--primary-color-dark)",
+                    },
                   }}
                 >
                   <FaArrowLeft />

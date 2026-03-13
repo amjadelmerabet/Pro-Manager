@@ -14,9 +14,18 @@
     transform 250ms ease-in-out;
 }
 
+.dashboard-container .reports > .report.dark {
+  background-color: var(--primary-color-dark);
+  color: rgb(225, 225, 225);
+}
+
 .dashboard-container .reports > .report:hover {
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.45);
   transform: scale(1.05);
+}
+
+.dashboard-container main.dark .reports > .report:hover {
+  box-shadow: 0 0 12px white;
 }
 
 .dashboard-container .reports > .report > .report-value {

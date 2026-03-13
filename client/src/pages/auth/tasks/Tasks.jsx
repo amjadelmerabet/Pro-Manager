@@ -65,12 +65,23 @@ export default function TasksPage({ user, userId, setAuthentication }) {
   const [projects, setProjects] = useState([]);
   const [globalSearchClosed, setGlobalSearchClosed] = useState(false);
   const [groupBy, setGroupBy] = useState("");
+  const [theme, setTheme] = useState("");
 
   const [searchParams] = useSearchParams();
   const view = searchParams.get("view");
   const filterInURL = searchParams.get("filter");
 
   const { token } = JSON.parse(sessionStorage.getItem("authUser"));
+
+  useEffect(() => {
+    const getUserTheme = async () => {
+      const userTheme = await cookieStore.get("userTheme-" + userId);
+      if (userTheme) {
+        setTheme(userTheme.value);
+      }
+    };
+    getUserTheme();
+  }, []);
 
   useEffect(() => {
     if (view) {
@@ -351,8 +362,17 @@ export default function TasksPage({ user, userId, setAuthentication }) {
   ];
 
   return (
-    <div className="tasks-page">
-      <div className="auth-header-container">
+    <div
+      className={
+        "tasks-page" + (theme === "light" || theme === "" ? " light" : " dark")
+      }
+    >
+      <div
+        className={
+          "auth-header-container" +
+          (theme === "light" || theme === "" ? " light" : " dark")
+        }
+      >
         <AuthHeader
           user={user}
           setAuthentication={setAuthentication}
@@ -401,6 +421,7 @@ export default function TasksPage({ user, userId, setAuthentication }) {
           setApplySort={setApplySort}
           groupBy={groupBy}
           setGroupBy={setGroupBy}
+          theme={theme}
         />
         <ul className={"tasks " + selectedView}>
           {selectedView === "kanban" ? (
@@ -463,6 +484,7 @@ export default function TasksPage({ user, userId, setAuthentication }) {
                                     resetTask={resetTask}
                                     deleteTask={deleteTask}
                                     userId={userId}
+                                    theme={theme}
                                   />
                                 );
                               }
@@ -491,6 +513,7 @@ export default function TasksPage({ user, userId, setAuthentication }) {
                                     resetTask={resetTask}
                                     deleteTask={deleteTask}
                                     userId={userId}
+                                    theme={theme}
                                   />
                                 );
                               }
@@ -518,6 +541,7 @@ export default function TasksPage({ user, userId, setAuthentication }) {
                                   resetTask={resetTask}
                                   deleteTask={deleteTask}
                                   userId={userId}
+                                  theme={theme}
                                 />
                               );
                             }
@@ -549,6 +573,7 @@ export default function TasksPage({ user, userId, setAuthentication }) {
                         completeTask={completeTask}
                         resetTask={resetTask}
                         deleteTask={deleteTask}
+                        theme={theme}
                       />
                     );
                   } else {
@@ -566,6 +591,7 @@ export default function TasksPage({ user, userId, setAuthentication }) {
                         resetTask={resetTask}
                         deleteTask={deleteTask}
                         userId={userId}
+                        theme={theme}
                       />
                     );
                   }
@@ -592,6 +618,7 @@ export default function TasksPage({ user, userId, setAuthentication }) {
                         completeTask={completeTask}
                         resetTask={resetTask}
                         deleteTask={deleteTask}
+                        theme={theme}
                       />
                     );
                   } else {
@@ -609,6 +636,7 @@ export default function TasksPage({ user, userId, setAuthentication }) {
                         resetTask={resetTask}
                         deleteTask={deleteTask}
                         userId={userId}
+                        theme={theme}
                       />
                     );
                   }
@@ -636,6 +664,7 @@ export default function TasksPage({ user, userId, setAuthentication }) {
                       completeTask={completeTask}
                       resetTask={resetTask}
                       deleteTask={deleteTask}
+                      theme={theme}
                     />
                   );
                 } else {
@@ -653,6 +682,7 @@ export default function TasksPage({ user, userId, setAuthentication }) {
                       resetTask={resetTask}
                       deleteTask={deleteTask}
                       userId={userId}
+                      theme={theme}
                     />
                   );
                 }
@@ -685,6 +715,7 @@ export default function TasksPage({ user, userId, setAuthentication }) {
             setPopupDisplay={setNewTaskPopupDisplay}
             user={user}
             userId={userId}
+            theme={theme}
           />
         ) : (
           ""

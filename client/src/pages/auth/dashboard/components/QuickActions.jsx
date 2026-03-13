@@ -3,9 +3,15 @@ import "./QuickActions.css";
 export default function QuickActions({
   openNewTaskPopup,
   openNewProjectPopup,
+  theme,
 }) {
   return (
-    <div className="quick-actions">
+    <div
+      className={
+        "quick-actions" +
+        (theme === "light" || theme === "" ? " light" : " dark")
+      }
+    >
       <h4 className="title poppins-bold">Quick actions</h4>
       <ul className="actions poppins-regular">
         <li className="action">

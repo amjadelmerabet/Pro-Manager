@@ -1,3 +1,11 @@
+.projects-page.dark {
+  background-color: rgb(35, 35, 35);
+}
+
+.projects-page.dark .container {
+  height: 88vh;
+}
+
 .projects-page .projects.grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -26,6 +34,13 @@
     box-shadow 250ms ease-in-out;
 }
 
+.projects-page.dark .projects.grid > .project {
+  background-color: rgb(45, 45, 45);
+  color: rgb(225, 225, 225);
+  box-shadow: 2px 2px 4px rgba(245, 245, 245, 0.25);
+  border: 2px solid var(--secondary-color-dark)
+}
+
 .projects-page .projects.list > .project {
   border: 2px solid var(--primary-color);
   border-radius: 8px;
@@ -34,11 +49,18 @@
   justify-content: space-between;
   align-items: center;
   position: relative;
-  box-shadow: rgba(0, 0, 0, 0.25);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
   transition:
     transform 250ms ease-in-out,
     box-shadow 250ms ease-in-out;
   margin-block: 8px;
+}
+
+.projects-page.dark .projects.list > .project {
+  background-color: rgb(45, 45, 45);
+  border: 2px solid var(--secondary-color-dark);
+  color: rgb(225, 225, 225);
+  box-shadow: 2px 2px 4px rgba(245, 245, 245, 0.25);
 }
 
 /* .projects-page .projects.list > .project .project-properties {
@@ -58,10 +80,18 @@
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.25);
 }
 
+.projects-page.dark .projects.grid > .project:hover {
+  box-shadow: 4px 4px 8px rgba(245, 245, 245, 0.25);
+}
+
 .projects-page .projects.list > .project:hover,
 .projects-page .projects .kanban-board .project:hover {
   transform: scale(1.025);
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.25);
+}
+
+.projects-page.dark .projects.list > .project:hover {
+  box-shadow: 4px 4px 8px rgba(245, 245, 245, 0.25);
 }
 
 .projects-page .projects.grid > .deleting-project {
@@ -158,6 +188,27 @@
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
 }
 
+.projects-page .project .project-actions > .start-project {
+  padding: 2px;
+}
+
+.projects-page .project .project-actions > .reset-project {
+  padding: 2px
+}
+
+.projects-page .project .project-actions > .start-project {
+  padding: 2px
+}
+
+.projects-page .project .project-actions > .complete-project {
+  padding: 1px
+}
+
+.projects-page.dark .project .project-actions > button:not(.open) {
+  background-color: rgb(35, 35, 35);
+  box-shadow: 1px 1px 4px rgba(225, 225, 225, .25);
+}
+
 .projects-page .projects .project:hover button:not(.open) {
   visibility: visible;
   opacity: 1;
@@ -167,6 +218,10 @@
 .projects-page .projects .project:hover button:not(.open):hover {
   transform: scale(0.98);
   background-color: rgb(245, 245, 245);
+}
+
+.projects-page.dark .projects .project:hover button:not(.open):hover {
+  background-color: rgb(45, 45, 45);
 }
 
 .no-projects {
@@ -201,6 +256,10 @@
   align-items: center; */
   border-radius: 8px;
   background-color: rgba(45, 45, 45, 0.1);
+}
+
+.projects-page.dark .projects .project > .open-project {
+  background-color: rgba(245, 245, 245, .1);
 }
 
 .projects .project:hover > .open-project {
@@ -247,12 +306,24 @@
   background-color: rgba(245, 0, 45, 0.25);
 }
 
+.projects-page.dark .projects .project .not-started-value {
+  background-color: rgba(245, 0, 45, 0.5);
+}
+
 .projects-page .projects .project .in-progress-value {
   background-color: rgba(245, 120, 45, 0.25);
 }
 
+.projects-page.dark .projects .project .in-progress-value {
+  background-color: rgba(245, 120, 45, 0.5);
+}
+
 .projects-page .projects .project .completed-value {
   background-color: rgba(0, 200, 120, 0.25);
+}
+
+.projects-page.dark .projects .project .completed-value {
+  background-color: rgba(0, 200, 120, 0.5);
 }
 
 .projects-page .projects .project span.state {
@@ -292,12 +363,24 @@
   background-color: rgba(245, 0, 45, 0.2);
 }
 
+.projects-page.dark .kanban-board > div:nth-child(1) {
+  background-color: rgba(245, 0, 45, 0.45);
+}
+
 .projects-page .kanban-board > div:nth-child(2) {
   background-color: rgba(245, 120, 45, 0.2);
 }
 
+.projects-page.dark .kanban-board > div:nth-child(2) {
+  background-color: rgba(245, 120, 45, 0.45);
+}
+
 .projects-page .kanban-board > div:nth-child(3) {
   background-color: rgba(0, 200, 120, 0.2)
+}
+
+.projects-page.dark .kanban-board > div:nth-child(3) {
+  background-color: rgba(0, 200, 120, 0.45)
 }
 
 .projects-page .kanban-board .projects-cards {
@@ -338,12 +421,24 @@
   background-color: rgb(245, 45, 80);
 }
 
+.projects-page.dark .kanban-board .not-started {
+  background-color: rgb(220, 25, 65);
+}
+
 .projects-page .kanban-board .in-progress {
   background-color: rgb(255, 125, 80);
 }
 
+.projects-page.dark .kanban-board .in-progress {
+  background-color: rgb(225, 110, 65);
+}
+
 .projects-page .kanban-board .completed {
   background-color: rgb(45, 200, 120);
+}
+
+.projects-page .kanban-board .completed {
+  background-color: rgb(35, 185, 100);
 }
 
 .projects-page .kanban-board .project {
@@ -358,6 +453,11 @@
   transition:
     transform 250ms ease-in-out,
     box-shadow 250ms ease-in-out;
+}
+
+.projects-page.dark .kanban-board .project {
+  background-color: rgb(45, 45, 45);
+  color: rgb(225, 225, 225);
 }
 
 .projects-page .kanban-board .project > .project-header {

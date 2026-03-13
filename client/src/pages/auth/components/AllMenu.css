@@ -5,6 +5,11 @@
   padding: 32px;
 }
 
+.all-menu.dark {
+  background-color: rgb(40, 40, 40);
+  color: rgb(225, 225, 225);
+}
+
 .all-menu .welcome {
   margin-bottom: 24px;
 }
@@ -16,6 +21,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.all-menu.dark .application-menu .app-menu-header {
+  background-color: var(--accent-color-dark);
+  color: rgb(35, 35, 35);
 }
 
 .app-menu-header > div {
@@ -55,6 +65,10 @@
   align-items: center;
 }
 
+.all-menu.dark .application-menu .module > a {
+  color: rgb(225, 225, 225);
+}
+
 .application-menu .module > button {
   background: transparent;
   border: none;
@@ -62,4 +76,8 @@
   cursor: pointer;
   display: flex;
   align-items: center;
+}
+
+.all-menu.dark .application-menu .module > button {
+  color: rgb(225, 225, 225);
 }

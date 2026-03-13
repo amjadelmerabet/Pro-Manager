@@ -2,6 +2,10 @@
   margin: 24px 48px;
 }
 
+.dashboard-container .quick-actions.dark .title {
+  color: rgb(225, 225, 225);
+}
+
 .dashboard-container .quick-actions .actions {
   list-style: none;
   display: inline-flex;
@@ -10,6 +14,10 @@
   padding: 8px 20px;
   margin-block: 4px;
   border-radius: 8px;
+}
+
+.dashboard-container .quick-actions.dark .actions {
+  background-color: var(--secondary-color-dark);
 }
 
 .dashboard-container .quick-actions .actions > .action {

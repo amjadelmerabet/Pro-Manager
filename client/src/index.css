@@ -5,6 +5,10 @@
   --secondary-color: #90e0ef;
   --accent-color: #caf0f8;
   --primary-color-hover: #03679d;
+  --primary-color-dark: #034d75;
+  --secondary-color-dark: #6bbdcc;
+  --accent-color-dark: #7fb9c4;
+  --primary-color-dark-hover: #033a58;
 }
 
 .poppins-thin {

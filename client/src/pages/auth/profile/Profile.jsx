@@ -54,6 +54,8 @@ export default function ProfilePage({ user, userId, setAuthentication }) {
   const [usernameUpdated, setUsernameUpdated] = useState(false);
   const [showCredentialsSavedPopup, setShowCredentialsSavedPopup] =
     useState(false);
+  const [themeUpdated, setThemeUpdated] = useState(0);
+  const [selectedTheme, setSelectedTheme] = useState("");
 
   const { token } = JSON.parse(sessionStorage.getItem("authUser"));
 
@@ -70,7 +72,7 @@ export default function ProfilePage({ user, userId, setAuthentication }) {
       setTries,
       newAccessToken,
       setNewAccessToken,
-      setUserDetailsFetched
+      setUserDetailsFetched,
     );
   }, [userUpdated]);
 
@@ -88,7 +90,7 @@ export default function ProfilePage({ user, userId, setAuthentication }) {
         tries,
         setTries,
         newAccessToken,
-        setNewAccessToken
+        setNewAccessToken,
       );
     }
   }, [updateProfile]);
@@ -103,7 +105,7 @@ export default function ProfilePage({ user, userId, setAuthentication }) {
         newAccessToken,
         setUpdateProfile,
         userUpdated,
-        setUserUpdated
+        setUserUpdated,
       );
     }
   }, [newAccessToken]);
@@ -188,7 +190,7 @@ export default function ProfilePage({ user, userId, setAuthentication }) {
         setNewAccessToken,
         userUpdated,
         setUserUpdated,
-        setUsernameUpdated
+        setUsernameUpdated,
       );
       setCurrentPassword("");
       setNewPassword("");
@@ -231,10 +233,62 @@ export default function ProfilePage({ user, userId, setAuthentication }) {
     navigate(`/auth/${username}/profile`);
   };
 
+  useEffect(() => {
+    const changeTheme = async (theme) => {
+      const themeStored = await cookieStore.get("userTheme");
+      if (themeStored) {
+        if (themeStored.value !== theme) {
+          cookieStore.delete("userTheme");
+        } else {
+          return;
+        }
+      }
+      await cookieStore.set({
+        name: "userTheme-" + userId,
+        value: theme,
+        path: "/",
+        secure: true,
+        sameSite: "strict",
+      });
+    };
+    const getUserTheme = async () => {
+      const userTheme = await cookieStore.get("userTheme-" + userId);
+      if (userTheme) {
+        setSelectedTheme(userTheme.value);
+      }
+    };
+    if (themeUpdated > 0) {
+      changeTheme(selectedTheme);
+    } else {
+      getUserTheme();
+    }
+  }, [themeUpdated]);
+
+  const updateSelectedTheme = (theme) => {
+    setSelectedTheme(theme);
+    setThemeUpdated(themeUpdated + 1);
+  };
+
   return (
-    <div className="profile-page">
-      <div className="auth-header-container">
-        <AuthHeader user={user} setAuthentication={setAuthentication} />
+    <div
+      className={
+        "profile-page" +
+        (selectedTheme === "light" || selectedTheme === "" ? " light" : " dark")
+      }
+    >
+      <div
+        className={
+          "auth-header-container" +
+          (selectedTheme === "light" || selectedTheme === ""
+            ? " light"
+            : " dark")
+        }
+      >
+        <AuthHeader
+          user={user}
+          setAuthentication={setAuthentication}
+          theme={selectedTheme}
+        />
       </div>
       <div className="profile-page-container">
         <ProfileMenu
@@ -397,17 +451,21 @@ export default function ProfilePage({ user, userId, setAuthentication }) {
                   <div className="theme-picker">
                     <div className="title poppins-bold">Theme picker</div>
                     <ul className="themes">
-                      <li className="theme poppins-bold selected-theme">
-                        Default
+                      <li
+                        className="theme poppins-semibold light-theme"
+                        onClick={() => updateSelectedTheme("light")}
+                      >
+                        Light
                       </li>
-                      <li className="theme"></li>
-                      <li className="theme"></li>
-                      <li className="theme"></li>
-                      <li className="theme"></li>
-                      <li className="theme"></li>
+                      <li
+                        className="theme poppins-semibold dark-theme"
+                        onClick={() => updateSelectedTheme("dark")}
+                      >
+                        Dark
+                      </li>
                     </ul>
                   </div>
-                  <div className="customized-theme">
+                  <div className="customized-theme feature-disabled">
                     <div className="enable-custom-theme">
                       <input
                         type="checkbox"
@@ -594,7 +652,10 @@ export default function ProfilePage({ user, userId, setAuthentication }) {
                     <IconContext.Provider
                       value={{
                         style: {
-                          color: "var(--primary-color)",
+                          color:
+                            selectedTheme === "light" || selectedTheme === ""
+                              ? "var(--primary-color)"
+                              : "var(--primary-color-dark)",
                           fontSize: "32px",
                         },
                       }}
