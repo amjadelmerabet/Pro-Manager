@@ -131,6 +131,7 @@ export default function Task({ user, userId, setAuthentication }) {
         taskObject.project,
         token,
         user,
+        userId,
         tokenValidated,
         setTokenValidated,
         tries,
