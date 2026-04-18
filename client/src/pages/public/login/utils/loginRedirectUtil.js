@@ -11,7 +11,6 @@ export default function loginRedirectUtil(
       const userRedirectURL = redirectURL.replace("user", authUser);
       navigate(userRedirectURL);
     } else {
-      console.log("User not authenticated");
       navigate("/signin");
     }
   } else {

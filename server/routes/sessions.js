@@ -24,7 +24,7 @@ export async function sessionsRoute(req, res) {
         });
       } else {
         res.writeHead(400, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ message: "Wrong endpoint" }));
+        res.end(JSON.stringify({ message: "The endpoint that you are trying to reach doesn't exist" }));
       }
     } else if (method === "DELETE") {
       if (url === "/api/sessions/delete") {
@@ -49,10 +49,13 @@ export async function sessionsRoute(req, res) {
             );
           }
         });
+      } else {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ message: "The endpoint that you are trying to reach doesn't exist" }));
       }
     } else {
-      res.writeHead(500, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ message: "Bad request" }));
+      res.writeHead(405, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ message: "The HTTP method used is not supported with this endpoint" }));
     }
   } else if (method === "OPTIONS") {
     res.writeHead(204);
@@ -60,6 +63,6 @@ export async function sessionsRoute(req, res) {
     return;
   } else {
     res.writeHead(401, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ message: "User not authorized" }));
+    res.end(JSON.stringify({ message: "User not authenticated" }));
   }
 }
