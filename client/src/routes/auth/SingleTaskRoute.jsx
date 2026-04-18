@@ -1,12 +1,15 @@
 import { useLocation, useNavigate } from "react-router";
 import Task from "../../pages/auth/task/Task";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import WrongRoute from "../public/WrongRoute";
+import bcrypt from "bcryptjs";
 
 export default function SingleTaskRoute({
   isAuthenticated,
   setAuthentication,
 }) {
+  const [session, setSession] = useState("");
+  
   let navigate = useNavigate();
   let userAuthenticated = JSON.parse(sessionStorage.getItem("authUser"));
   let userLoggedOut = JSON.parse(sessionStorage.getItem("userLoggedOut"));
@@ -17,7 +20,42 @@ export default function SingleTaskRoute({
 
   const index = slicedPathname.indexOf("/");
 
-  const user = slicedPathname.slice(0, index);
+  const username = slicedPathname.slice(0, index);
+
+  const logoutUser = () => {
+    sessionStorage.setItem("userLoggedOut", true);
+    sessionStorage.removeItem("authUser");
+    setAuthentication(false);
+    navigate("/signin");
+  };
+  
+  useEffect(() => {
+    const getUserSession = async () => {
+      const { userId } = JSON.parse(sessionStorage.getItem("authUser"));
+      const userSession = await cookieStore.get("session-" + userId);
+      if (userSession) {
+        setSession(userSession.value);
+      } else {
+        logoutUser();
+      }
+    };
+    if (userAuthenticated) {
+      getUserSession();
+    }
+  }, []);
+  
+  useEffect(() => {
+    const checkSession = async () => {
+      const { user, userId } = JSON.parse(sessionStorage.getItem("authUser"));
+      const validSession = await bcrypt.compare(user + "-" + userId, session);
+      if (!validSession) {
+        logoutUser();
+      }
+    };
+    if (userAuthenticated && session !== "") {
+      checkSession();
+    }
+  }, [session]);
 
   useEffect(() => {
     if (!isAuthenticated && !userAuthenticated) {
@@ -30,7 +68,7 @@ export default function SingleTaskRoute({
   }, []);
 
   if (isAuthenticated || userAuthenticated) {
-    if (user === userAuthenticated.user) {
+    if (username === userAuthenticated.user) {
       return (
         <Task
           user={userAuthenticated.user}

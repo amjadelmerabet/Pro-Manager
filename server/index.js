@@ -3,6 +3,8 @@ import { usersRoute } from "./routes/users.js";
 import { projectsRoute } from "./routes/projects.js";
 import { tasksRoute } from "./routes/tasks.js";
 import { tokensRoute } from "./routes/tokens.js";
+import { sessionsRoute } from "./routes/sessions.js";
+
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 
@@ -60,7 +62,6 @@ const server = createServer(async (req, res) => {
               req.user = decoded;
             }
           } catch (error) {
-            // console.log(error);
             res.writeHead(401, { "Content-Type": "application/json" });
             return res.end(JSON.stringify({ error: "Invalid access token" }));
           }
@@ -73,6 +74,8 @@ const server = createServer(async (req, res) => {
           await tasksRoute(req, res);
         } else if (url.startsWith("/api/tokens")) {
           await tokensRoute(req, res);
+        } else if (url.startsWith("/api/sessions")) {
+          await sessionsRoute(req, res);
         } else {
           res.writeHead(404, { "Content-Type": "application/json" });
           res.end(

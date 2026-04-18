@@ -9,6 +9,7 @@ import NewProjectPopup from "./components/NewProjectPopup";
 import GridProjectItem from "./components/GridProjectItem";
 import ListProjectItem from "./components/ListProjectItem";
 import KanbanCardProject from "./components/KanbanCardProject";
+import GlobalSearch from "../components/GlobalSearch";
 
 // Utils
 import updatedMessageUtil from "../../../utils/updatedMessageUtil";
@@ -19,12 +20,11 @@ import updateProjectUtil from "./utils/updateProjectUtil";
 import deleteProjectUtil from "./utils/deleteProjectUtil";
 import filterProjectsUtil from "./utils/filterProjectsUtil";
 import sortProjectsUtil from "./utils/sortProjectsUtil";
+import fetchUserTasksUtil from "../tasks/utils/fetchUserTasksUtil";
+import countMatchingRecords from "../utils/countMatchingRecords";
 
 // Styles
 import "./Projects.css";
-import countMatchingRecords from "../utils/countMatchingRecords";
-import GlobalSearch from "../components/GlobalSearch";
-import fetchUserTasksUtil from "../tasks/utils/fetchUserTasksUtil";
 
 export default function ProjectsPage({ user, userId, setAuthentication }) {
   const [projects, setProjects] = useState([]);
@@ -115,7 +115,7 @@ export default function ProjectsPage({ user, userId, setAuthentication }) {
       setTokenValidated,
       globalSearchList,
       setGlobalSearchList,
-      setProjectsFetched
+      setProjectsFetched,
     );
     // setProjectsFetched(true);
   }, [newProjectCreated, projectDeleted, projectUpdated, loadProjects]);
@@ -135,7 +135,7 @@ export default function ProjectsPage({ user, userId, setAuthentication }) {
         setTokenValidated,
         globalSearchList,
         setGlobalSearchList,
-        setTasksFetched
+        setTasksFetched,
       );
     }
   }, [projectsFetched]);
@@ -155,7 +155,7 @@ export default function ProjectsPage({ user, userId, setAuthentication }) {
         updatedProjectId,
         setUpdatedProjectId,
         deletedProjectId,
-        setDeletedProjectId
+        setDeletedProjectId,
       );
     }
   }, [newAccessToken]);
@@ -166,7 +166,7 @@ export default function ProjectsPage({ user, userId, setAuthentication }) {
         filter,
         search,
         applySort === 0 ? projects : sortedList,
-        setFilteredList
+        setFilteredList,
       );
     }
   }, [search, applyFilters, projects, applySort]);
@@ -198,7 +198,7 @@ export default function ProjectsPage({ user, userId, setAuthentication }) {
         setLoadingNewProject,
         newProjectPopupDisplay,
         setNewProjectPopupDisplay,
-        setTokenValidated
+        setTokenValidated,
       );
     }
   }, [createProject]);
@@ -235,7 +235,7 @@ export default function ProjectsPage({ user, userId, setAuthentication }) {
         projectUpdated,
         setProjectUpdated,
         setProjectUpdates,
-        setTokenValidated
+        setTokenValidated,
       );
     }
   }, [updatedProjectId]);
@@ -269,7 +269,7 @@ export default function ProjectsPage({ user, userId, setAuthentication }) {
         setNewAccessToken,
         projectDeleted,
         setProjectDeleted,
-        setTokenValidated
+        setTokenValidated,
       );
     }
   }, [deletedProjectId]);
@@ -313,7 +313,7 @@ export default function ProjectsPage({ user, userId, setAuthentication }) {
 
   let { projectsMatchingSearch, tasksMatchingSearch } = countMatchingRecords(
     globalSearchList,
-    globalSearch
+    globalSearch,
   );
 
   const closeGlobalSearch = () => {
@@ -343,6 +343,7 @@ export default function ProjectsPage({ user, userId, setAuthentication }) {
           setAuthentication={setAuthentication}
           globalSearch={globalSearch}
           setGlobalSearch={setGlobalSearch}
+          token={token}
         />
       </div>
       <div className="container">

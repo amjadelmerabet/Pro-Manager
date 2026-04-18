@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router";
 import { IoIosSearch } from "react-icons/io";
 import ProfilePicture from "../../../assets/profile-picture.jpg";
 import { IconContext } from "react-icons/lib";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BsFillTriangleFill } from "react-icons/bs";
 import { CgProfile } from "react-icons/cg";
 import { GoGear } from "react-icons/go";
@@ -10,6 +10,8 @@ import { LuPaintbrush } from "react-icons/lu";
 
 import "./AuthHeader.css";
 import { IoLogOutOutline } from "react-icons/io5";
+import deleteSessionUtil from "../utils/deleteSessionUtil";
+import getAccessTokenUtil from "../utils/getAccessTokenUtil";
 
 export default function AuthHeader({
   user,
@@ -17,17 +19,72 @@ export default function AuthHeader({
   globalSearch,
   setGlobalSearch,
   theme,
+  tokenValidated,
+  setTokenValidated,
 }) {
   const [settingsPopup, setSettingsPopup] = useState(false);
+  const [tries, setTries] = useState(0);
+  const [newAccessToken, setNewAccessToken] = useState({
+    counter: 0,
+    type: "",
+  });
+  const [deleteSession, setDeleteSession] = useState(0);
+  const [sessionDeleted, setSessionDeleted] = useState(false);
+
 
   let navigate = useNavigate();
 
+  const { userId, sessionId, token } = JSON.parse(
+    sessionStorage.getItem("authUser"),
+  );
+
   const logout = () => {
-    sessionStorage.setItem("userLoggedOut", true);
-    sessionStorage.removeItem("authUser");
-    setAuthentication(false);
-    navigate("/signin");
+    setDeleteSession(deleteSession + 1);
   };
+
+  useEffect(() => {
+    const deleteSessionCookie = async () => {
+      await cookieStore.delete("session-" + userId);
+    }
+    if (sessionDeleted) {
+      deleteSessionCookie();
+      sessionStorage.setItem("userLoggedOut", true);
+      sessionStorage.removeItem("authUser");
+      setAuthentication(false);
+      navigate("/signin");
+    }
+  }, [sessionDeleted]);
+
+  useEffect(() => {
+    if (deleteSession > 0) {
+      deleteSessionUtil(
+        sessionId,
+        user,
+        token,
+        tokenValidated,
+        setTokenValidated,
+        tries,
+        setTries,
+        newAccessToken,
+        setNewAccessToken,
+        setSessionDeleted,
+      );
+    }
+  }, [deleteSession]);
+
+  useEffect(() => {
+    if (newAccessToken.counter > 0) {
+      getAccessTokenUtil(
+        user,
+        userId,
+        setTokenValidated,
+        setTries,
+        newAccessToken,
+        deleteSession,
+        setDeleteSession,
+      );
+    }
+  }, [newAccessToken]);
 
   return (
     <header className="auth-header">

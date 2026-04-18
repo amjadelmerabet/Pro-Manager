@@ -40,42 +40,44 @@ export default async function fetchLinkedProjectUtil(
   setProject
 ) {
   try {
-    if (!tokenValidated) {
-      const refreshToken = await cookieStore.get(user);
-      if (refreshToken) {
-        const validAccessToken = await getNewAccessTokenAPI(
-          userId,
-          refreshToken
-        );
-        if (validAccessToken.error === "Valid access token") {
-          fetchLinkedProjectAction(
-            projectId,
-            token,
-            setProject,
-            tries,
-            setTries,
-            newAccessToken,
-            setNewAccessToken
+    if (projectId) {
+      if (!tokenValidated) {
+        const refreshToken = await cookieStore.get(user);
+        if (refreshToken) {
+          const validAccessToken = await getNewAccessTokenAPI(
+            userId,
+            refreshToken
           );
+          if (validAccessToken.error === "Valid access token") {
+            fetchLinkedProjectAction(
+              projectId,
+              token,
+              setProject,
+              tries,
+              setTries,
+              newAccessToken,
+              setNewAccessToken
+            );
+          } else {
+            tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
+          }
         } else {
-          tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
+          console.log("No refresh token");
         }
       } else {
-        console.log("No refresh token");
+        setTimeout(() => {
+          setTokenValidated(false);
+        }, 500);
+        fetchLinkedProjectAction(
+          projectId,
+          token,
+          setProject,
+          tries,
+          setTries,
+          newAccessToken,
+          setNewAccessToken
+        );
       }
-    } else {
-      setTimeout(() => {
-        setTokenValidated(false);
-      }, 500);
-      fetchLinkedProjectAction(
-        projectId,
-        token,
-        setProject,
-        tries,
-        setTries,
-        newAccessToken,
-        setNewAccessToken
-      );
     }
   } catch (error) {
     console.log(error);
