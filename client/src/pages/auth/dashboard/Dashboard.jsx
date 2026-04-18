@@ -322,6 +322,9 @@ export default function DashboardPage({ user, userId, setAuthentication }) {
           setAuthentication={setAuthentication}
           globalSearch={globalSearch}
           setGlobalSearch={setGlobalSearch}
+          theme={theme}
+          tokenValidated={tokenValidated}
+          setTokenValidated={setTokenValidated}
         />
       </div>
       <div className="dashboard-container">

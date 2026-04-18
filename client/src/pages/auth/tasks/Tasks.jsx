@@ -379,6 +379,7 @@ export default function TasksPage({ user, userId, setAuthentication }) {
           setAuthentication={setAuthentication}
           globalSearch={globalSearch}
           setGlobalSearch={setGlobalSearch}
+          token={token}
         />
       </div>
       <div className="container">
