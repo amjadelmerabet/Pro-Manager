@@ -24,7 +24,7 @@ export default async function authUserUtil(
   const auth = await authUserAPI(username, password);
   setLogin("LoginEnded");
   if (auth.authenticated && auth.token) {
-    sessionStorage.clear();
+    sessionStorage.removeItem("userLoggedOut");
     sessionStorage.setItem(
       "authUser",
       JSON.stringify({

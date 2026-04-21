@@ -11,7 +11,7 @@ import {
 import { IconContext } from "react-icons/lib";
 
 // Components
-import AllMenu from "../components/AllMenu";
+import AllMenu from "./components/AllMenu";
 import AuthHeader from "../components/AuthHeader";
 import { Link } from "react-router";
 import NewProjectPopup from "../projects/components/NewProjectPopup";
