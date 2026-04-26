@@ -19,7 +19,7 @@ async function createNewProjectTaskAction(
   setLoadTasks,
   setTokenValidated,
   newProjectTaskPopupDisplay,
-  setNewProjectTaskPopupDisplay
+  setNewProjectTaskPopupDisplay,
 ) {
   const newTaskCreated = await createTaskAPI(newTask, token);
   if (newTaskCreated.error === "Invalid access token" && tries < 3) {
@@ -50,7 +50,7 @@ export default async function createNewProjectTaskUtil(
   newAccessToken,
   setNewAccessToken,
   newProjectTaskPopupDisplay,
-  setNewProjectTaskPopupDisplay
+  setNewProjectTaskPopupDisplay,
 ) {
   try {
     if (!tokenValidated) {
@@ -69,7 +69,7 @@ export default async function createNewProjectTaskUtil(
             setLoadTasks,
             setTokenValidated,
             newProjectTaskPopupDisplay,
-            setNewProjectTaskPopupDisplay
+            setNewProjectTaskPopupDisplay,
           );
         }
       }
@@ -87,7 +87,7 @@ export default async function createNewProjectTaskUtil(
         setLoadTasks,
         setTokenValidated,
         newProjectTaskPopupDisplay,
-        setNewProjectTaskPopupDisplay
+        setNewProjectTaskPopupDisplay,
       );
     }
   } catch (error) {

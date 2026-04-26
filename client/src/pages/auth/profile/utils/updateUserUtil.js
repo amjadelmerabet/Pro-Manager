@@ -19,7 +19,7 @@ async function updateUserAction(
   tries,
   setTries,
   newAccessToken,
-  setNewAccessToken
+  setNewAccessToken,
 ) {
   const updatedUser = await updateUserByUsernameAPI(user, updates, token);
   if (updatedUser.error === "Invalid access token") {
@@ -45,7 +45,7 @@ export default async function updateUserDetailsUtil(
   tries,
   setTries,
   newAccessToken,
-  setNewAccessToken
+  setNewAccessToken,
 ) {
   try {
     if (!tokenValidated) {
@@ -63,7 +63,7 @@ export default async function updateUserDetailsUtil(
             tries,
             setTries,
             newAccessToken,
-            setNewAccessToken
+            setNewAccessToken,
           );
         } else {
           tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
@@ -85,7 +85,7 @@ export default async function updateUserDetailsUtil(
         tries,
         setTries,
         newAccessToken,
-        setNewAccessToken
+        setNewAccessToken,
       );
     }
   } catch (error) {

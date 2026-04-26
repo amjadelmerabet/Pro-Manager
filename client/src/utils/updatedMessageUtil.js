@@ -35,7 +35,7 @@ export default function updatedMessageUtil(update) {
           let daysOfMonth = new Date(
             updatedYear,
             updatedMonth + 1,
-            0
+            0,
           ).getDate();
           return `${daysOfMonth + dateDifference} day${daysOfMonth + dateDifference > 1 ? "s" : ""} ago`;
         }

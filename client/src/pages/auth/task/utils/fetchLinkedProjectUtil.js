@@ -16,7 +16,7 @@ async function fetchLinkedProjectAction(
   tries,
   setTries,
   newAccessToken,
-  setNewAccessToken
+  setNewAccessToken,
 ) {
   const response = await getProjectByIdAPI(projectId, token);
   if (response.error === "Invalid access token") {
@@ -37,7 +37,7 @@ export default async function fetchLinkedProjectUtil(
   setTries,
   newAccessToken,
   setNewAccessToken,
-  setProject
+  setProject,
 ) {
   try {
     if (projectId) {
@@ -46,7 +46,7 @@ export default async function fetchLinkedProjectUtil(
         if (refreshToken) {
           const validAccessToken = await getNewAccessTokenAPI(
             userId,
-            refreshToken
+            refreshToken,
           );
           if (validAccessToken.error === "Valid access token") {
             fetchLinkedProjectAction(
@@ -56,7 +56,7 @@ export default async function fetchLinkedProjectUtil(
               tries,
               setTries,
               newAccessToken,
-              setNewAccessToken
+              setNewAccessToken,
             );
           } else {
             tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
@@ -75,7 +75,7 @@ export default async function fetchLinkedProjectUtil(
           tries,
           setTries,
           newAccessToken,
-          setNewAccessToken
+          setNewAccessToken,
         );
       }
     }

@@ -25,7 +25,7 @@ function nextAction(
   } else if (newAccessToken.type === "delete") {
     setTaskDeleted(true);
   } else if (newAccessToken.type === "load-project") {
-    setLoadProject(true)
+    setLoadProject(true);
   } else if (newAccessToken.type === "load-projects") {
     setLoadProjects(true);
   }
@@ -48,7 +48,10 @@ export default async function getAccessTokenUtil(
   try {
     const refreshToken = await cookieStore.get(user);
     if (refreshToken) {
-      const accessTokenObject = await getNewAccessTokenAPI(userId, refreshToken);
+      const accessTokenObject = await getNewAccessTokenAPI(
+        userId,
+        refreshToken,
+      );
       if (!accessTokenObject.error) {
         updateToken(accessTokenObject);
         setTokenValidated(true);
@@ -61,7 +64,7 @@ export default async function getAccessTokenUtil(
           setTaskUpdated,
           setTaskDeleted,
           setLoadProject,
-          setLoadProjects
+          setLoadProjects,
         );
       }
     } else {

@@ -10,7 +10,7 @@ export default async function updateProjectByIdAPI(id, token, updates) {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(updates),
-    }
+    },
   );
   const project = await response.json();
   return project;

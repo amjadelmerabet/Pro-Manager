@@ -7,7 +7,7 @@ export default async function createNewUserAPI(userBody) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(userBody),
-    }
+    },
   );
   const newUser = await response.json();
   return newUser;

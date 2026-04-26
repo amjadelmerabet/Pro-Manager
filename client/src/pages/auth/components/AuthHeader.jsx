@@ -31,7 +31,6 @@ export default function AuthHeader({
   const [deleteSession, setDeleteSession] = useState(0);
   const [sessionDeleted, setSessionDeleted] = useState(false);
 
-
   let navigate = useNavigate();
 
   const { userId, sessionId, token } = JSON.parse(
@@ -45,7 +44,7 @@ export default function AuthHeader({
   useEffect(() => {
     const deleteSessionCookie = async () => {
       await cookieStore.delete("session-" + userId);
-    }
+    };
     if (sessionDeleted) {
       deleteSessionCookie();
       sessionStorage.setItem("userLoggedOut", true);

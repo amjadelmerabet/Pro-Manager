@@ -10,7 +10,7 @@ export default async function createTaskAPI(payload, token) {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(payload),
-    }
+    },
   );
   const task = await response.json();
   return task;

@@ -18,7 +18,7 @@ const server = createServer(async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Methods",
-    "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+    "GET, POST, PUT, PATCH, DELETE, OPTIONS",
   );
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   if (url.startsWith("/api")) {
@@ -54,7 +54,7 @@ const server = createServer(async (req, res) => {
               } catch (error) {
                 res.writeHead(401, { "Content-Type": "application/json" });
                 return res.end(
-                  JSON.stringify({ error: "Invalid refresh token" })
+                  JSON.stringify({ error: "Invalid refresh token" }),
                 );
               }
             } else {
@@ -82,7 +82,7 @@ const server = createServer(async (req, res) => {
             JSON.stringify({
               message:
                 "The endpoint that you are trying to reach doesn't exist",
-            })
+            }),
           );
         }
       }
@@ -92,7 +92,7 @@ const server = createServer(async (req, res) => {
     res.end(
       JSON.stringify({
         message: "The endpoint that you're trying to reach doesn't exist",
-      })
+      }),
     );
   }
 });

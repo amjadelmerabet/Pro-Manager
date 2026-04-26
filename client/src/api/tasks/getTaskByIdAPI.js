@@ -9,7 +9,7 @@ export default async function getTaskByIdAPI(id, token) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
   const task = await response.json();
   return task;

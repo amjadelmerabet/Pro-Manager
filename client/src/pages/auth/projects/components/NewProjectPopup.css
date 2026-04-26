@@ -11,7 +11,7 @@
 }
 
 .new-project-popup.dark {
-  background-color: rgba(45, 45, 45, .5)
+  background-color: rgba(45, 45, 45, 0.5);
 }
 
 .new-project-popup .new-project {
@@ -58,14 +58,17 @@
   border-radius: 4px;
 }
 
-.new-project-popup.dark .new-project > div > input, 
+.new-project-popup.dark .new-project > div > input,
 .new-project-popup.dark .new-project > div > textarea {
   background-color: rgb(40, 40, 40);
   border: 1px solid rgb(225, 225, 225);
   color: rgb(225, 225, 225);
 }
 
-.new-project-popup.dark .new-project > div > input[type="date"]::-webkit-calendar-picker-indicator {
+.new-project-popup.dark
+  .new-project
+  > div
+  > input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(1);
 }
 

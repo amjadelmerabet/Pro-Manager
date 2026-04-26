@@ -38,7 +38,7 @@
   background-color: rgb(45, 45, 45);
   color: rgb(225, 225, 225);
   box-shadow: 2px 2px 4px rgba(245, 245, 245, 0.25);
-  border: 2px solid var(--secondary-color-dark)
+  border: 2px solid var(--secondary-color-dark);
 }
 
 .projects-page .projects.list > .project {
@@ -193,20 +193,20 @@
 }
 
 .projects-page .project .project-actions > .reset-project {
-  padding: 2px
+  padding: 2px;
 }
 
 .projects-page .project .project-actions > .start-project {
-  padding: 2px
+  padding: 2px;
 }
 
 .projects-page .project .project-actions > .complete-project {
-  padding: 1px
+  padding: 1px;
 }
 
 .projects-page.dark .project .project-actions > button:not(.open) {
   background-color: rgb(35, 35, 35);
-  box-shadow: 1px 1px 4px rgba(225, 225, 225, .25);
+  box-shadow: 1px 1px 4px rgba(225, 225, 225, 0.25);
 }
 
 .projects-page .projects .project:hover button:not(.open) {
@@ -259,7 +259,7 @@
 }
 
 .projects-page.dark .projects .project > .open-project {
-  background-color: rgba(245, 245, 245, .1);
+  background-color: rgba(245, 245, 245, 0.1);
 }
 
 .projects .project:hover > .open-project {
@@ -376,11 +376,11 @@
 }
 
 .projects-page .kanban-board > div:nth-child(3) {
-  background-color: rgba(0, 200, 120, 0.2)
+  background-color: rgba(0, 200, 120, 0.2);
 }
 
 .projects-page.dark .kanban-board > div:nth-child(3) {
-  background-color: rgba(0, 200, 120, 0.45)
+  background-color: rgba(0, 200, 120, 0.45);
 }
 
 .projects-page .kanban-board .projects-cards {

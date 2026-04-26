@@ -2,7 +2,7 @@ export default function updateTasksListUtil(
   filter,
   search,
   tasks,
-  setFilteredList
+  setFilteredList,
 ) {
   if (Object.keys(filter).length !== 0) {
     if (Number(filter.state) !== 0 || Number(filter.priority) !== 0) {

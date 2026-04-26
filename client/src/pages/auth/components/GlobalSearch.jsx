@@ -232,7 +232,8 @@ export default function GlobalSearch({
           </div>
         ) : (
           <div className="empty-body poppins-regular">
-            Type something you are looking for to see if there are matching records ...
+            Type something you are looking for to see if there are matching
+            records ...
           </div>
         )}
       </div>

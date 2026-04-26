@@ -9,7 +9,7 @@ export default function SingleTaskRoute({
   setAuthentication,
 }) {
   const [session, setSession] = useState("");
-  
+
   let navigate = useNavigate();
   let userAuthenticated = JSON.parse(sessionStorage.getItem("authUser"));
   let userLoggedOut = JSON.parse(sessionStorage.getItem("userLoggedOut"));
@@ -28,7 +28,7 @@ export default function SingleTaskRoute({
     setAuthentication(false);
     navigate("/signin");
   };
-  
+
   useEffect(() => {
     const getUserSession = async () => {
       const { userId } = JSON.parse(sessionStorage.getItem("authUser"));
@@ -43,7 +43,7 @@ export default function SingleTaskRoute({
       getUserSession();
     }
   }, []);
-  
+
   useEffect(() => {
     const checkSession = async () => {
       const { user, userId } = JSON.parse(sessionStorage.getItem("authUser"));

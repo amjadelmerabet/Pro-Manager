@@ -95,7 +95,7 @@ export default function SelectedPage({
                     ? "0"
                     : ""
                 }${new Date(selectedPage.deadline).getMonth()}/${new Date(
-                  selectedPage.deadline
+                  selectedPage.deadline,
                 ).getFullYear()}`}
               </td>
             </tr>

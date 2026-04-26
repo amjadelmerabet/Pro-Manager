@@ -9,7 +9,7 @@ export default async function deleteProjectByIdAPI(id, token) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
   const deleted = await response.json();
   return deleted;

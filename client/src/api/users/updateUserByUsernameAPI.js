@@ -10,7 +10,7 @@ export default async function updateUserDetailsAPI(username, updates, token) {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(updates),
-    }
+    },
   );
   const updatedUser = await response.json();
   return updatedUser;

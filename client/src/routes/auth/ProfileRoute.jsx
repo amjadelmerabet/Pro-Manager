@@ -26,7 +26,7 @@ export default function ProfileRoute({ isAuthenticated, setAuthentication }) {
     setAuthentication(false);
     navigate("/signin");
   };
-  
+
   useEffect(() => {
     const getUserSession = async () => {
       const { userId } = JSON.parse(sessionStorage.getItem("authUser"));
@@ -39,7 +39,7 @@ export default function ProfileRoute({ isAuthenticated, setAuthentication }) {
     };
     getUserSession();
   }, []);
-  
+
   useEffect(() => {
     const checkSession = async () => {
       const { user, userId } = JSON.parse(sessionStorage.getItem("authUser"));

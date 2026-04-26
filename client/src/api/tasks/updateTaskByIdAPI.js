@@ -10,7 +10,7 @@ export default async function updateTaskByIdAPI(id, token, updates) {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(updates),
-    }
+    },
   );
   const task = await response.json();
   return task;

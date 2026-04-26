@@ -8,7 +8,7 @@ import bcrypt from "bcryptjs";
 
 export default function ProjectsRoute({ isAuthenticated, setAuthentication }) {
   const [session, setSession] = useState("");
-  
+
   let navigate = useNavigate();
   let userAuthenticated = JSON.parse(sessionStorage.getItem("authUser"));
   let userLoggedOut = JSON.parse(sessionStorage.getItem("userLoggedOut"));

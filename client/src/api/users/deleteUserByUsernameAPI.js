@@ -9,7 +9,7 @@ export default async function deleteUserByUsernameAPI(username, token) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
   const deletedUser = await response.json();
   return deletedUser;

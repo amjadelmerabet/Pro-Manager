@@ -6,7 +6,7 @@ import getNewAccessTokenAPI from "../../api/tokens/getNewAccessTokenAPI";
 describe("Tokens APIs", async () => {
   const auth = await authUserAPI(
     import.meta.env.VITE_TEST_USERNAME,
-    import.meta.env.VITE_TEST_PASSWORD
+    import.meta.env.VITE_TEST_PASSWORD,
   );
   const accessToken = auth.token;
   const refreshToken = {};
@@ -15,7 +15,7 @@ describe("Tokens APIs", async () => {
   it("Checking a valid access token", async () => {
     const validAccessToken = await checkAccessTokenAPI(
       accessToken,
-      refreshToken
+      refreshToken,
     );
     expect(validAccessToken).toHaveProperty("message", "Valid access token");
   });
@@ -23,18 +23,18 @@ describe("Tokens APIs", async () => {
   it("Checking an invalid accessToken", async () => {
     const invalidAccessToken = await checkAccessTokenAPI(
       "Invalid access token",
-      refreshToken
+      refreshToken,
     );
     expect(invalidAccessToken).toHaveProperty(
       "message",
-      "Invalid access token"
+      "Invalid access token",
     );
   });
 
   it("Getting a new access token", async () => {
     const newAccessToken = await getNewAccessTokenAPI(
       import.meta.env.VITE_TEST_USER_ID,
-      refreshToken
+      refreshToken,
     );
     expect(newAccessToken).toHaveProperty("token");
   });

@@ -15,16 +15,29 @@ export async function sessionsRoute(req, res) {
           const newSession = await createSession(session, user);
           if (newSession.error) {
             res.writeHead(500, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: "Something went wrong while creating a new session" }));
+            res.end(
+              JSON.stringify({
+                message: "Something went wrong while creating a new session",
+              }),
+            );
           } else {
             const sessionId = newSession?.rows[0].session_id;
             res.writeHead(201, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: "New session created", session_id: sessionId }));
+            res.end(
+              JSON.stringify({
+                message: "New session created",
+                session_id: sessionId,
+              }),
+            );
           }
         });
       } else {
         res.writeHead(400, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ message: "The endpoint that you are trying to reach doesn't exist" }));
+        res.end(
+          JSON.stringify({
+            message: "The endpoint that you are trying to reach doesn't exist",
+          }),
+        );
       }
     } else if (method === "DELETE") {
       if (url === "/api/sessions/delete") {
@@ -51,11 +64,19 @@ export async function sessionsRoute(req, res) {
         });
       } else {
         res.writeHead(400, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ message: "The endpoint that you are trying to reach doesn't exist" }));
+        res.end(
+          JSON.stringify({
+            message: "The endpoint that you are trying to reach doesn't exist",
+          }),
+        );
       }
     } else {
       res.writeHead(405, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ message: "The HTTP method used is not supported with this endpoint" }));
+      res.end(
+        JSON.stringify({
+          message: "The HTTP method used is not supported with this endpoint",
+        }),
+      );
     }
   } else if (method === "OPTIONS") {
     res.writeHead(204);

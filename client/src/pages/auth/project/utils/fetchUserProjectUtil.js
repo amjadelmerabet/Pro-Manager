@@ -19,7 +19,7 @@ async function fetchProjectAction(
   setProjectObject,
   setProjectNotFound,
   setProjectFetched,
-  setTokenValidated
+  setTokenValidated,
 ) {
   const project = await getProjectByIdAPI(projectId, token);
   if (project.error === "Invalid access token") {
@@ -50,7 +50,7 @@ export default async function fetchUserProjectUtil(
   setProjectObject,
   setProjectNotFound,
   setTokenValidated,
-  setProjectFetched
+  setProjectFetched,
 ) {
   try {
     if (!tokenValidated) {
@@ -69,7 +69,7 @@ export default async function fetchUserProjectUtil(
             setProjectObject,
             setProjectNotFound,
             setProjectFetched,
-            setTokenValidated
+            setTokenValidated,
           );
         } else {
           tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
@@ -91,7 +91,7 @@ export default async function fetchUserProjectUtil(
         setProjectObject,
         setProjectNotFound,
         setProjectFetched,
-        setTokenValidated
+        setTokenValidated,
       );
     }
   } catch (error) {

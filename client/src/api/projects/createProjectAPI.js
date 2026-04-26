@@ -10,7 +10,7 @@ export default async function createProjectAPI(payload, token) {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(payload),
-    }
+    },
   );
   const project = await response.json();
   return project;

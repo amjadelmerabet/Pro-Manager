@@ -17,7 +17,7 @@ describe("Testing updated status util", () => {
       expect(updatedMessageUtil(secondsAgo)).toBe("1 minute ago");
     } else {
       expect(updatedMessageUtil(secondsAgo)).toBe(
-        `${seconds} second${seconds > 1 ? "s" : ""} ago`
+        `${seconds} second${seconds > 1 ? "s" : ""} ago`,
       );
     }
   });
@@ -31,7 +31,7 @@ describe("Testing updated status util", () => {
       expect(updatedMessageUtil(minutesAgo)).toBe("1 hour ago");
     } else {
       expect(updatedMessageUtil(minutesAgo)).toBe(
-        `${minutes} minute${minutes > 1 ? "s" : ""} ago`
+        `${minutes} minute${minutes > 1 ? "s" : ""} ago`,
       );
     }
   });
@@ -45,7 +45,7 @@ describe("Testing updated status util", () => {
       expect(updatedMessageUtil(hoursAgo)).toBe("1 day ago");
     } else {
       expect(updatedMessageUtil(hoursAgo)).toBe(
-        `${hours} hour${hours > 1 ? "s" : ""} ago`
+        `${hours} hour${hours > 1 ? "s" : ""} ago`,
       );
     }
   });
@@ -59,7 +59,7 @@ describe("Testing updated status util", () => {
       expect(updatedMessageUtil(daysAgo)).toBe("1 month ago");
     } else {
       expect(updatedMessageUtil(daysAgo)).toBe(
-        `${days} day${days > 1 ? "s" : ""} ago`
+        `${days} day${days > 1 ? "s" : ""} ago`,
       );
     }
   });
@@ -73,7 +73,7 @@ describe("Testing updated status util", () => {
       expect(updatedMessageUtil(monthsAgo)).toBe("1 year ago");
     } else {
       expect(updatedMessageUtil(monthsAgo)).toBe(
-        `${months} month${months > 1 ? "s" : ""} ago`
+        `${months} month${months > 1 ? "s" : ""} ago`,
       );
     }
   });

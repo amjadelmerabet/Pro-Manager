@@ -11,7 +11,7 @@ function nextAction(
   newAccessToken,
   setUpdateProfile,
   userUpdated,
-  setUserUpdated
+  setUserUpdated,
 ) {
   if (newAccessToken.type === "load") {
     setUserUpdated(userUpdated + 1);
@@ -31,12 +31,15 @@ export default async function getAccessTokenUtil(
   newAccessToken,
   setUpdateProfile,
   userUpdated,
-  setUserUpdated
+  setUserUpdated,
 ) {
   try {
     const refreshToken = await cookieStore.get(user);
     if (refreshToken) {
-      const accessTokenObject = await getNewAccessTokenAPI(userId, refreshToken);
+      const accessTokenObject = await getNewAccessTokenAPI(
+        userId,
+        refreshToken,
+      );
       if (!accessTokenObject.error) {
         updateToken(accessTokenObject);
         setTokenValidated(true);
@@ -45,7 +48,7 @@ export default async function getAccessTokenUtil(
           newAccessToken,
           setUpdateProfile,
           userUpdated,
-          setUserUpdated
+          setUserUpdated,
         );
         setTimeout(() => {
           setTokenValidated(false);

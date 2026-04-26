@@ -24,7 +24,7 @@ async function updateUserAction(
   setTries,
   newAccessToken,
   setNewAccessToken,
-  setUsernameUpdated
+  setUsernameUpdated,
 ) {
   if (updatePassword) {
     const authUser = await authUserAPI(userObject.username, currentPassword);
@@ -41,7 +41,7 @@ async function updateUserAction(
         const updateUserCredentials = await updateUserDetailsAPI(
           userObject.username,
           updates,
-          token
+          token,
         );
         if (updateUserCredentials.error === "Invalid access token") {
           tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
@@ -66,7 +66,7 @@ async function updateUserAction(
       const updateUserCredentials = await updateUserDetailsAPI(
         userObject.username,
         updates,
-        token
+        token,
       );
       if (updateUserCredentials.error === "Invalid access token") {
         tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
@@ -102,7 +102,7 @@ export default async function saveUserCredentialsUtil(
   setNewAccessToken,
   userUpdated,
   setUserUpdated,
-  setUsernameUpdated
+  setUsernameUpdated,
 ) {
   try {
     if (!tokenValidated) {
@@ -124,7 +124,7 @@ export default async function saveUserCredentialsUtil(
             setTries,
             newAccessToken,
             setNewAccessToken,
-            setUsernameUpdated
+            setUsernameUpdated,
           );
         } else {
           tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
@@ -150,7 +150,7 @@ export default async function saveUserCredentialsUtil(
         setTries,
         newAccessToken,
         setNewAccessToken,
-        setUsernameUpdated
+        setUsernameUpdated,
       );
     }
   } catch (error) {

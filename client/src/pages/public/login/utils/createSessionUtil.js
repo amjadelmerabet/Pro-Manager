@@ -22,7 +22,7 @@ async function createNewSessionAction(
   setTries,
   newAccessToken,
   setNewAccessToken,
-  setRedirect
+  setRedirect,
 ) {
   const hashedSession = await hashSession(user + "-" + userId);
   const newSession = await createSessionAPI(hashedSession, userId, token);
@@ -57,7 +57,7 @@ export default async function createSessionUtil(
   setTries,
   newAccessToken,
   setNewAccessToken,
-  setRedirect
+  setRedirect,
 ) {
   if (!tokenValidated) {
     const refreshToken = await cookieStore.get(user);
@@ -72,7 +72,7 @@ export default async function createSessionUtil(
           setTries,
           newAccessToken,
           setNewAccessToken,
-          setRedirect
+          setRedirect,
         );
       } else {
         tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
@@ -92,7 +92,7 @@ export default async function createSessionUtil(
       setTries,
       newAccessToken,
       setNewAccessToken,
-      setRedirect
+      setRedirect,
     );
   }
 }

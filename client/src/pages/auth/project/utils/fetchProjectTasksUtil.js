@@ -16,7 +16,7 @@ async function fetchProjectTasksAction(
   setTries,
   newAccessToken,
   setNewAccessToken,
-  setTasks
+  setTasks,
 ) {
   const tasks = await getTasksByProjectAPI(projectId, token);
   if (tasks.error === "Invalid access token") {
@@ -37,7 +37,7 @@ export default async function fetchProjectTasksUtil(
   tries,
   setTries,
   newAccessToken,
-  setNewAccessToken
+  setNewAccessToken,
 ) {
   try {
     if (!tokenValidated) {
@@ -45,7 +45,7 @@ export default async function fetchProjectTasksUtil(
       if (refreshToken) {
         const validAccessToken = await getNewAccessTokenAPI(
           userId,
-          refreshToken
+          refreshToken,
         );
         if (validAccessToken.message === "Valid access token") {
           fetchProjectTasksAction(
@@ -55,7 +55,7 @@ export default async function fetchProjectTasksUtil(
             setTries,
             newAccessToken,
             setNewAccessToken,
-            setTasks
+            setTasks,
           );
         } else {
           tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
@@ -74,7 +74,7 @@ export default async function fetchProjectTasksUtil(
         setTries,
         newAccessToken,
         setNewAccessToken,
-        setTasks
+        setTasks,
       );
     }
   } catch (error) {

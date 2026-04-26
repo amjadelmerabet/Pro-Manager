@@ -7,7 +7,7 @@ import deleteUserByUsernameAPI from "../../api/users/deleteUserByUsernameAPI";
 describe("Users APIs", async () => {
   const auth = await authUserAPI(
     import.meta.env.VITE_TEST_USERNAME,
-    import.meta.env.VITE_TEST_PASSWORD
+    import.meta.env.VITE_TEST_PASSWORD,
   );
   const accessToken = auth?.token;
 
@@ -33,7 +33,7 @@ describe("Users APIs", async () => {
           first_name: "NEW",
           last_name: "USER",
         },
-        "invalid access token"
+        "invalid access token",
       );
       expect(userUpdate).toHaveProperty("error", "Invalid access token");
     });
@@ -44,7 +44,7 @@ describe("Users APIs", async () => {
           first_name: "NEW",
           last_name: "USER",
         },
-        accessToken
+        accessToken,
       );
       expect(userUpdate).toHaveProperty("message", "User has been updated");
     });
@@ -54,7 +54,7 @@ describe("Users APIs", async () => {
     it("Delete a user using an invalid token", async () => {
       const userDelete = await deleteUserByUsernameAPI(
         "new.user",
-        "invalid access token"
+        "invalid access token",
       );
       expect(userDelete).toHaveProperty("error", "Invalid access token");
     });
@@ -68,7 +68,7 @@ describe("Users APIs", async () => {
     it("Case 1: Authenticate a user with a valid username and password", async () => {
       const auth = await authUserAPI(
         import.meta.env.VITE_TEST_USERNAME,
-        import.meta.env.VITE_TEST_PASSWORD
+        import.meta.env.VITE_TEST_PASSWORD,
       );
       expect(auth).toHaveProperty("authenticated", true);
       expect(auth).toHaveProperty("message", "User authenticated");

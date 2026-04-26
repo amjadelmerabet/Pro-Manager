@@ -19,7 +19,7 @@ async function fetchTasksAction(
   setTasks,
   globalSearchList,
   setGlobalSearchList,
-  setTasksFetched
+  setTasksFetched,
 ) {
   const tasksObject = await getTasksByAssignedToAPI(userId, token);
   if (tasksObject.error === "Invalid access token" && tries < 3) {
@@ -44,7 +44,7 @@ export default async function fetchUserTasksUtil(
   setTokenValidated,
   globalSearchList,
   setGlobalSearchList,
-  setTasksFetched
+  setTasksFetched,
 ) {
   try {
     if (!tokenValidated) {
@@ -62,7 +62,7 @@ export default async function fetchUserTasksUtil(
             setTasks,
             globalSearchList,
             setGlobalSearchList,
-            setTasksFetched
+            setTasksFetched,
           );
         } else {
           tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
@@ -84,7 +84,7 @@ export default async function fetchUserTasksUtil(
         setTasks,
         globalSearchList,
         setGlobalSearchList,
-        setTasksFetched
+        setTasksFetched,
       );
     }
   } catch (error) {

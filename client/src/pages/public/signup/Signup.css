@@ -156,5 +156,5 @@
 
 .signup-page input.no-match {
   border: 1px solid rgb(245, 0, 45);
-  background-color: rgba(245, 120, 165, .25)
+  background-color: rgba(245, 120, 165, 0.25);
 }

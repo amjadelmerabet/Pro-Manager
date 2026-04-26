@@ -76,7 +76,7 @@ export default function LoginPage({ isAuthenticated, setAuthentication }) {
         setTries,
         newAccessToken,
         setNewAccessToken,
-        setRedirect
+        setRedirect,
       );
     }
   }, [newSession]);

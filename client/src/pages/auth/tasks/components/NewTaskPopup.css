@@ -11,7 +11,7 @@
 }
 
 .new-task-popup.dark {
-  background-color: rgba(45, 45, 45, .5);
+  background-color: rgba(45, 45, 45, 0.5);
 }
 
 .new-task-popup .new-task {

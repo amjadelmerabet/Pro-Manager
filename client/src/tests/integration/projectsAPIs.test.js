@@ -9,14 +9,14 @@ import deleteProjectByIdAPI from "../../api/projects/deleteProjectByIdAPI";
 describe("Projects APIs", async () => {
   const auth = await authUserAPI(
     import.meta.env.VITE_TEST_USERNAME,
-    import.meta.env.VITE_TEST_PASSWORD
+    import.meta.env.VITE_TEST_PASSWORD,
   );
   const accessToken = auth?.token;
 
   it("Get a projects by owner", async () => {
     const projects = await getProjectsByOwnerAPI(
       import.meta.env.VITE_TEST_USER_ID,
-      accessToken
+      accessToken,
     );
     expect(projects).toHaveProperty("result");
     expect(projects.result.length).toBeDefined();

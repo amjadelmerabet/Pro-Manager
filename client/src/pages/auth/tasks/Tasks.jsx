@@ -115,7 +115,7 @@ export default function TasksPage({ user, userId, setAuthentication }) {
       setTokenValidated,
       globalSearchList,
       setGlobalSearchList,
-      setTasksFetched
+      setTasksFetched,
     );
   }, [newTaskCreated, taskDeleted, taskUpdated, loadTasks]);
 
@@ -134,7 +134,7 @@ export default function TasksPage({ user, userId, setAuthentication }) {
         setTokenValidated,
         globalSearchList,
         setGlobalSearchList,
-        setProjectsFetched
+        setProjectsFetched,
       );
     }
   }, [tasksFetched]);
@@ -155,7 +155,7 @@ export default function TasksPage({ user, userId, setAuthentication }) {
         updatedTaskId,
         setUpdatedTaskId,
         deletedTaskId,
-        setDeletedTaskId
+        setDeletedTaskId,
       );
     }
   }, [newAccessToken]);
@@ -166,7 +166,7 @@ export default function TasksPage({ user, userId, setAuthentication }) {
         filter,
         search,
         applySort === 0 ? tasks : sortedList,
-        setFilteredList
+        setFilteredList,
       );
     }
   }, [search, applyFilters, tasks, applySort]);
@@ -199,7 +199,7 @@ export default function TasksPage({ user, userId, setAuthentication }) {
         setLoadingNewTask,
         newTaskPopupDisplay,
         setNewTaskPopupDisplay,
-        setTokenValidated
+        setTokenValidated,
       );
     }
   }, [create]);
@@ -249,7 +249,7 @@ export default function TasksPage({ user, userId, setAuthentication }) {
         setNewAccessToken,
         taskDeleted,
         setTaskDeleted,
-        setTokenValidated
+        setTokenValidated,
       );
     }
   }, [deletedTaskId]);
@@ -275,7 +275,7 @@ export default function TasksPage({ user, userId, setAuthentication }) {
         taskUpdated,
         setTaskUpdated,
         setTaskUpdates,
-        setTokenValidated
+        setTokenValidated,
       );
     }
   }, [updatedTaskId]);
@@ -341,7 +341,7 @@ export default function TasksPage({ user, userId, setAuthentication }) {
 
   let { projectsMatchingSearch, tasksMatchingSearch } = countMatchingRecords(
     globalSearchList,
-    globalSearch
+    globalSearch,
   );
 
   const closeGlobalSearch = () => {

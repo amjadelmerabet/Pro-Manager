@@ -17,7 +17,7 @@ async function getProjectsAction(
   setTries,
   newAccessToken,
   setNewAccessToken,
-  setProjects
+  setProjects,
 ) {
   const projects = await getProjectsByOwnerAPI(userId, token);
   if (projects.error === "Invalid access token") {
@@ -36,7 +36,7 @@ export default async function fetchUserProjectsUtil(
   setTries,
   newAccessToken,
   setNewAccessToken,
-  setProjects
+  setProjects,
 ) {
   if (!tokenValidated) {
     const refreshToken = await cookieStore.get(user);
@@ -51,7 +51,7 @@ export default async function fetchUserProjectsUtil(
           setTries,
           newAccessToken,
           setNewAccessToken,
-          setProjects
+          setProjects,
         );
       }
     }

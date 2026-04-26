@@ -15,7 +15,9 @@
   border-radius: 10px;
   margin-block: 16px;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
-  transition: transform 250ms ease-in-out, box-shadow 250ms ease-in-out;
+  transition:
+    transform 250ms ease-in-out,
+    box-shadow 250ms ease-in-out;
 }
 
 .tasks-page .tasks.list > .task > .left {
@@ -25,11 +27,11 @@
 
 .tasks-page .tasks.list > .task:hover {
   transform: scale(1.025);
-  box-shadow: 4px 4px 8px rgba(0, 0, 0, .25);
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.25);
 }
 
 .tasks-page.dark .tasks > .task:hover {
-  box-shadow: 4px 4px 8px rgba(245, 245, 245, .25);
+  box-shadow: 4px 4px 8px rgba(245, 245, 245, 0.25);
 }
 
 .tasks-page .tasks.grid {
@@ -71,7 +73,7 @@
 .tasks-page.dark .tasks > .task,
 .tasks-page.dark .kanban-board .task {
   color: rgb(225, 225, 225);
-  box-shadow: 2px 2px 4px rgba(245, 245, 245, .25);
+  box-shadow: 2px 2px 4px rgba(245, 245, 245, 0.25);
 }
 
 .tasks-page.dark .tasks > .task:nth-child(odd),
@@ -110,7 +112,7 @@
   height: 100%;
   display: none;
   transition: background 250ms ease-in-out;
-  background-color: rgba(0, 0, 0, .25);
+  background-color: rgba(0, 0, 0, 0.25);
 }
 
 .tasks-page .tasks > .task:hover .open-task,
@@ -123,7 +125,7 @@
 
 .tasks-page.dark .tasks > .task:hover .open-task,
 .tasks-page.dark .kanban-board .task:hover .open-task {
-  background-color: rgba(245, 245, 245, .1);
+  background-color: rgba(245, 245, 245, 0.1);
 }
 
 .tasks-page .tasks > .task > .open-task > .open,
@@ -198,7 +200,7 @@
 .tasks-page.dark .tasks > .task > .task-actions button,
 .tasks-page.dark .kanban-board .task > .task-actions button {
   background-color: rgb(35, 35, 35);
-  box-shadow: 1px 1px 4px rgba(245, 245, 245, .25);
+  box-shadow: 1px 1px 4px rgba(245, 245, 245, 0.25);
 }
 
 .tasks-page .tasks > .task > .task-actions .start-task,
@@ -246,7 +248,7 @@
 }
 
 .tasks-page.dark .no-tasks {
-  color: rgb(225, 225, 225);  
+  color: rgb(225, 225, 225);
 }
 
 .tasks-page .tasks.list > .task .updated {

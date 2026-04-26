@@ -10,7 +10,7 @@ export default async function getNewAccessTokenAPI(userId, refreshToken) {
         Authorization: `Bearer ${refreshToken.value}`,
       },
       body: JSON.stringify({ user_id: userId }),
-    }
+    },
   );
   // console.log("Received a token or something");
   const accessTokenObject = await response.json();

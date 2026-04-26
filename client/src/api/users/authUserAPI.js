@@ -7,7 +7,7 @@ export default async function authUserAPI(username, password) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
-    }
+    },
   );
   const auth = await response.json();
   return auth;

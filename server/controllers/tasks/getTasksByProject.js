@@ -4,7 +4,7 @@ export default async function getTasksByProject(project) {
   try {
     const result = await pool.query(
       "SELECT * FROM tasks WHERE project = $1 ORDER BY updated_on DESC",
-      [project]
+      [project],
     );
     const tasks = result.rows;
     return tasks;

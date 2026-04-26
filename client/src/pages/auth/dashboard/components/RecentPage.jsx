@@ -71,7 +71,9 @@ export default function RecentPage({
             <tr>
               <td className="property poppins-semibold">Updated by</td>
               <td className="value">
-                {recentPage.updated_by === userId ? "You" : recentPage.updated_by}
+                {recentPage.updated_by === userId
+                  ? "You"
+                  : recentPage.updated_by}
               </td>
             </tr>
             <tr>
@@ -141,7 +143,9 @@ export default function RecentPage({
             <tr>
               <td className="property poppins-semibold">Updated by</td>
               <td className="value">
-                {recentPage.updated_by === userId ? "You" : recentPage.updated_by}
+                {recentPage.updated_by === userId
+                  ? "You"
+                  : recentPage.updated_by}
               </td>
             </tr>
             <tr>

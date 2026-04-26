@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import createAccessToken from "../controllers/tokens/createAccessToken.js";
 import getAccessTokenByUser from "../controllers/tokens/getAccessTokenByUser.js";
 import getRefreshTokenByUser from "../controllers/tokens/getRefreshTokenByUser.js";
-import getUserById from "../controllers/users/getUserById.js"
+import getUserById from "../controllers/users/getUserById.js";
 import checkAccessToken from "../controllers/tokens/checkAccessToken.js";
 import getValidRefreshTokenByUser from "../controllers/tokens/getValidRefreshTokenByUser.js";
 import dotenv from "dotenv";
@@ -85,7 +85,7 @@ export async function tokensRoute(req, res) {
                       accessTokens[0].token_id,
                       accessToken,
                       user_id,
-                      "access"
+                      "access",
                     );
                   } else {
                     const newAccessToken = await createAccessToken(

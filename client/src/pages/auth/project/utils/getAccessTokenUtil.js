@@ -16,7 +16,7 @@ function nextAction(
   setProjectDeleted,
   setLoadTasks,
   newTaskToCreate,
-  setNewTaskToCreate
+  setNewTaskToCreate,
 ) {
   if (newAccessToken.type === "load") {
     setLoadProject(loadProject + 1);
@@ -53,12 +53,15 @@ export default async function getAccessTokenUtil(
   setProjectDeleted,
   setLoadTasks,
   newTaskToCreate,
-  setNewTaskToCreate
+  setNewTaskToCreate,
 ) {
   try {
     const refreshToken = await cookieStore.get(user);
     if (refreshToken) {
-      const accessTokenObject = await getNewAccessTokenAPI(userId, refreshToken);
+      const accessTokenObject = await getNewAccessTokenAPI(
+        userId,
+        refreshToken,
+      );
       if (!accessTokenObject.error) {
         updateToken(accessTokenObject);
         setTokenValidated(true);
@@ -72,7 +75,7 @@ export default async function getAccessTokenUtil(
           setProjectDeleted,
           setLoadTasks,
           newTaskToCreate,
-          setNewTaskToCreate
+          setNewTaskToCreate,
         );
         setTimeout(() => {
           setTokenValidated(false);

@@ -10,7 +10,7 @@ export default async function checkAccessTokenAPI(token, refreshToken) {
         Authorization: `Bearer ${refreshToken.value}`,
       },
       body: JSON.stringify({ token: token }),
-    }
+    },
   );
   const validAccessToken = await response.json();
   return validAccessToken;

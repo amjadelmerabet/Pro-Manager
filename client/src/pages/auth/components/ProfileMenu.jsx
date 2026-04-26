@@ -44,8 +44,7 @@ export default function ProfileMenu({
           </div>
           <li
             className={
-              "module" +
-              (selectedModule === "themes" ? " selected-module" : "")
+              "module" + (selectedModule === "themes" ? " selected-module" : "")
             }
           >
             <span onClick={() => setSelectedModule("themes")}>Themes</span>

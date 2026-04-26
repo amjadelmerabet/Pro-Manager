@@ -40,7 +40,10 @@ export default async function getAccessTokenUtil(
   try {
     const refreshToken = await cookieStore.get(user);
     if (refreshToken) {
-      const accessTokenObject = await getNewAccessTokenAPI(userId, refreshToken);
+      const accessTokenObject = await getNewAccessTokenAPI(
+        userId,
+        refreshToken,
+      );
       if (!accessTokenObject.error) {
         const authUser = JSON.parse(sessionStorage.getItem("authUser"));
         authUser.token = accessTokenObject.token;

@@ -17,7 +17,7 @@ async function getUserAction(
   setTries,
   newAccessToken,
   setNewAccessToken,
-  setUserDetailsFetched
+  setUserDetailsFetched,
 ) {
   const userObject = await getUserByUsernameAPI(user, token);
   if (userObject.error === "Invalid access token") {
@@ -38,7 +38,7 @@ export default async function getUserUtil(
   setTries,
   newAccessToken,
   setNewAccessToken,
-  setUserDetailsFetched
+  setUserDetailsFetched,
 ) {
   try {
     if (!tokenValidated) {
@@ -54,7 +54,7 @@ export default async function getUserUtil(
             setTries,
             newAccessToken,
             setNewAccessToken,
-            setUserDetailsFetched
+            setUserDetailsFetched,
           );
         } else {
           tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
@@ -74,7 +74,7 @@ export default async function getUserUtil(
         setTries,
         newAccessToken,
         setNewAccessToken,
-        setUserDetailsFetched
+        setUserDetailsFetched,
       );
     }
   } catch (error) {

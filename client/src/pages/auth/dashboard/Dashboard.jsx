@@ -113,7 +113,7 @@ export default function DashboardPage({ user, userId, setAuthentication }) {
         newAccessToken,
         setNewAccessToken,
         setProjectCreatedSuccessfully,
-        setTokenValidated
+        setTokenValidated,
       );
     }
   }, [createProject]);
@@ -143,7 +143,7 @@ export default function DashboardPage({ user, userId, setAuthentication }) {
         createProject,
         setCreateProject,
         createTask,
-        setCreateTask
+        setCreateTask,
       );
     }
   }, [newAccessToken]);
@@ -163,7 +163,7 @@ export default function DashboardPage({ user, userId, setAuthentication }) {
       tempRecentPages,
       setTempRecentPages,
       setProjectsFetched,
-      setTokenValidated
+      setTokenValidated,
     );
   }, [loadProjects, newProjectCreated, newTaskCreated]);
 
@@ -183,7 +183,7 @@ export default function DashboardPage({ user, userId, setAuthentication }) {
         tempRecentPages,
         setTempRecentPages,
         setTasksFetched,
-        setTokenValidated
+        setTokenValidated,
       );
     }
   }, [projectsFetched, loadTasks]);
@@ -207,7 +207,7 @@ export default function DashboardPage({ user, userId, setAuthentication }) {
             new Date(page2.updated_on).getTime() -
             new Date(page1.updated_on).getTime()
           );
-        })
+        }),
       );
       setTasksFetched(false);
     } else {
@@ -234,7 +234,7 @@ export default function DashboardPage({ user, userId, setAuthentication }) {
         newAccessToken,
         setNewAccessToken,
         setTaskCreatedSuccessfully,
-        setTokenValidated
+        setTokenValidated,
       );
     }
   }, [createTask]);
@@ -297,7 +297,7 @@ export default function DashboardPage({ user, userId, setAuthentication }) {
 
   let { projectsMatchingSearch, tasksMatchingSearch } = countMatchingRecords(
     globalSearchList,
-    globalSearch
+    globalSearch,
   );
 
   const closeGlobalSearch = () => {
@@ -366,10 +366,10 @@ export default function DashboardPage({ user, userId, setAuthentication }) {
                 <div className="pages poppins-regular">
                   {recentPages.map((recentPage) => {
                     const updatedStatus = updatedMessageUtil(
-                      new Date(recentPage.updated_on)
+                      new Date(recentPage.updated_on),
                     );
                     const createdStatus = updatedMessageUtil(
-                      new Date(recentPage.created_on)
+                      new Date(recentPage.created_on),
                     );
                     if (Object.keys(recentPage).indexOf("project_id") !== -1) {
                       return (

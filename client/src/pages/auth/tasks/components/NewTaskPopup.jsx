@@ -30,7 +30,7 @@ export default function NewTaskPopup({
   const [getProjects, setGetProjects] = useState(0);
   const [dataIsMissing, setDataIsMissing] = useState(false);
   const [projectValue, setProjectValue] = useState(
-    parentProjectId ? parentProjectId : "none"
+    parentProjectId ? parentProjectId : "none",
   );
 
   const { token } = JSON.parse(sessionStorage.getItem("authUser"));

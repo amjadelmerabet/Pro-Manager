@@ -9,7 +9,7 @@ import deleteTaskByIdAPI from "../../api/tasks/deleteTaskByIdAPI";
 describe("Tasks APIs", async () => {
   const auth = await authUserAPI(
     import.meta.env.VITE_TEST_USERNAME,
-    import.meta.env.VITE_TEST_PASSWORD
+    import.meta.env.VITE_TEST_PASSWORD,
   );
   const accessToken = auth?.token;
 

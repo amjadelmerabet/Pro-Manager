@@ -9,7 +9,7 @@ export default async function getUserDetailsAPI(username, token) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
   const user = await response.json();
   return user;

@@ -93,7 +93,10 @@
   transform: scale(0);
   visibility: hidden;
   opacity: 0;
-  transition: transform 250ms ease-in-out, visibility 250ms ease-in-out, opacity 250ms ease-in-out;
+  transition:
+    transform 250ms ease-in-out,
+    visibility 250ms ease-in-out,
+    opacity 250ms ease-in-out;
 }
 
 .profile-settings:hover .edit,
@@ -114,8 +117,10 @@
   background-color: white;
   border-radius: 4px;
   cursor: pointer;
-  transition: transform 250ms ease-in-out, box-shadow 250ms ease-in-out;
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, .25);
+  transition:
+    transform 250ms ease-in-out,
+    box-shadow 250ms ease-in-out;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
 }
 
 .profile-page.dark .profile-settings .edit > .controls > button {
@@ -124,7 +129,7 @@
 
 .profile-settings .edit > .controls > button:hover {
   transform: scale(0.98);
-  box-shadow: 1px 1px 2px rgba(0, 0, 0, .25);
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
 }
 
 .profile-settings .edit-button,
@@ -302,10 +307,12 @@
   border: none;
   border-radius: 4px;
   color: white;
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, .25);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
   cursor: pointer;
   align-self: flex-end;
-  transition: transform 250ms ease-in-out, box-shadow 250ms ease-in-out;
+  transition:
+    transform 250ms ease-in-out,
+    box-shadow 250ms ease-in-out;
 }
 
 .profile-page.dark main .security-settings form .save-credentials-button {
@@ -314,7 +321,7 @@
 
 .profile-page main .security-settings form .save-credentials-button:hover {
   transform: scale(0.98);
-  box-shadow: 1px 1px 2px rgba(0, 0, 0, .25);
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
 }
 
 .profile-page main .signin-required {
@@ -334,7 +341,10 @@
   visibility: hidden;
   opacity: 0;
   transform: scale(0);
-  transition: visibility 250ms ease-in-out, opacity 250ms ease-in-out, transform 250ms ease-in-out;
+  transition:
+    visibility 250ms ease-in-out,
+    opacity 250ms ease-in-out,
+    transform 250ms ease-in-out;
 }
 
 .profile-page.dark main .signin-required form {
@@ -363,7 +373,12 @@
   font-size: 14px;
 }
 
-.profile-page main .signin-required form label > .invalid-credentials-field-indicator {
+.profile-page
+  main
+  .signin-required
+  form
+  label
+  > .invalid-credentials-field-indicator {
   color: rgb(245, 20, 65);
   margin-left: 4px;
 }
@@ -381,7 +396,7 @@
   border-radius: 4px;
   background-color: var(--primary-color);
   color: white;
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, .25);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
   width: fit-content;
   margin-top: 8px;
 }
@@ -402,7 +417,7 @@
   right: 24px;
   font-size: 14px;
   color: rgb(0, 245, 165);
-  background-color: rgba(0, 245, 165, .1);
+  background-color: rgba(0, 245, 165, 0.1);
   border: 1px solid rgb(0, 245, 165);
   border-radius: 4px;
   padding: 8px 16px;
