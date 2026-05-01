@@ -6,6 +6,7 @@ import deleteProject from "../controllers/projects/deleteProject.js";
 import getProjectsByOwner from "../controllers/projects/getProjectsByOwner.js";
 
 import { parse } from "url";
+import canRead from "../authorization/canRead.js";
 
 export async function projectsRoute(req, res) {
   const { method, url } = req;
@@ -15,25 +16,90 @@ export async function projectsRoute(req, res) {
 
   if (req.user) {
     if (method === "GET") {
-      if (url === "/api/projects") {
-        res.writeHead(200, { "Content-Type": "application/json" });
-        const projects = await getProjects();
-        res.end(JSON.stringify({ result: projects }));
-      } else if (url.match(/^\/api\/projects\/id\/.+/)) {
-        res.writeHead(200, { "Content-Type": "application/json" });
-        const projectId = pathname.replace("/api/projects/id/", "");
-        const project = await getProjectById(projectId);
-        res.end(JSON.stringify({ result: project }));
-      } else if (url.match(/^\/api\/projects\/owner\/.+/)) {
-        res.writeHead(200, { "Content-Type": "application/json" });
-        const projectOwner = pathname.replace("/api/projects/owner/", "");
-        const projects = await getProjectsByOwner(projectOwner);
-        res.end(JSON.stringify({ result: projects }));
+      const { readAllowed, readAllRecords } = await canRead(
+        req.user.user_id,
+        "projects",
+      );
+      if (readAllowed) {
+        if (url === "/api/projects") {
+          res.writeHead(200, { "Content-Type": "application/json" });
+          let projects = [];
+          if (readAllRecords) {
+            projects = await getProjects();
+          } else {
+            projects = await getProjectsByOwner(req.user.user_id);
+          }
+          res.end(JSON.stringify({ result: projects }));
+        } else if (url.match(/^\/api\/projects\/id\/.+/)) {
+          const projectId = pathname.replace("/api/projects/id/", "");
+          const project = await getProjectById(projectId);
+          let allowedToRead = false;
+          let projectNotFound = false;
+          if (readAllRecords) {
+            allowedToRead = true;
+          } else {
+            if (project.length > 0) {
+              if (project[0].owner === req.user.user_id) {
+                allowedToRead = true;
+              }
+            } else {
+              projectNotFound = true;
+              res.writeHead(404, { "Content-Type": "application/json" });
+              res.end(
+                JSON.stringify({
+                  message: "No project was found with id: " + projectId,
+                }),
+              );
+            }
+          }
+          if (allowedToRead) {
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ result: project }));
+          } else if (!projectNotFound) {
+            res.writeHead(403, { "Content-Type": "application/json" });
+            res.end(
+              JSON.stringify({
+                message: "User not authorized to access the requested data",
+              }),
+            );
+          }
+        } else if (url.match(/^\/api\/projects\/owner\/.+/)) {
+          const projectOwner = pathname.replace("/api/projects/owner/", "");
+          let allowedToRead = false;
+          if (readAllRecords) {
+            allowedToRead = true;
+          } else {
+            console.log(projectOwner);
+            if (projectOwner === req.user.user_id) {
+              allowedToRead = true;
+            }
+          }
+          if (allowedToRead) {
+            res.writeHead(200, { "Content-Type": "application/json" });
+            const projects = await getProjectsByOwner(projectOwner);
+            res.end(JSON.stringify({ result: projects }));
+          } else {
+            res.writeHead(403, { "Content-Type": "application/json" });
+            res.end(
+              JSON.stringify({
+                message: "User not authorized to access the requested data",
+              }),
+            );
+          }
+        } else {
+          res.writeHead(404, { "Content-Type": "application/json" });
+          res.end(
+            JSON.stringify({
+              message:
+                "The endpoint that you are trying to reach doesn't exist",
+            }),
+          );
+        }
       } else {
-        res.writeHead(404, { "Content-Type": "application/json" });
+        res.writeHead(403, { "Content-Type": "application/json" });
         res.end(
           JSON.stringify({
-            message: "The endpoint that you are trying to reach doesn't exist",
+            message: "User not authorized to access the requested data",
           }),
         );
       }

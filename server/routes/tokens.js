@@ -9,6 +9,7 @@ import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import { parse } from "url";
 import updateToken from "../controllers/tokens/updateToken.js";
+import canRead from "../authorization/canRead.js";
 
 dotenv.config();
 
@@ -24,26 +25,39 @@ export async function tokensRoute(req, res) {
 
   if (req.user) {
     if (method === "GET") {
-      if (url.match(/^\/api\/tokens\/access\/.+/)) {
-        const userId = pathname.replace("/api/tokens/access/", "");
-        const accessTokens = await getAccessTokenByUser(userId);
-        if (accessTokens.length > 0) {
-          res.writeHead(200, { "Content-Type": "application/json" });
-          res.end(JSON.stringify({ result: accessTokens }));
-        } else {
-          res.writeHead(404, { "Content-Type": "application/json" });
-          res.end(JSON.stringify({ result: accessTokens }));
+      const { readAllowed, readAllRecords } = await canRead(
+        req.user.user_id,
+        "tokens",
+      );
+      if (readAllowed) {
+        if (url.match(/^\/api\/tokens\/access\/.+/)) {
+          const userId = pathname.replace("/api/tokens/access/", "");
+          const accessTokens = await getAccessTokenByUser(userId);
+          if (accessTokens.length > 0) {
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ result: accessTokens }));
+          } else {
+            res.writeHead(404, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ result: accessTokens }));
+          }
+        } else if (url.match(/^\/api\/tokens\/refresh\/.+/)) {
+          const userId = pathname.replace("/api/tokens/refresh/", "");
+          const refreshTokens = await getRefreshTokenByUser(userId);
+          if (refreshTokens.length > 0) {
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ result: refreshTokens }));
+          } else {
+            res.writeHead(404, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ result: refreshTokens }));
+          }
         }
-      } else if (url.match(/^\/api\/tokens\/refresh\/.+/)) {
-        const userId = pathname.replace("/api/tokens/refresh/", "");
-        const refreshTokens = await getRefreshTokenByUser(userId);
-        if (refreshTokens.length > 0) {
-          res.writeHead(200, { "Content-Type": "application/json" });
-          res.end(JSON.stringify({ result: refreshTokens }));
-        } else {
-          res.writeHead(404, { "Content-Type": "application/json" });
-          res.end(JSON.stringify({ result: refreshTokens }));
-        }
+      } else {
+        res.writeHead(403, { "Content-Type": "application/json" });
+        res.end(
+          JSON.stringify({
+            message: "User not authorized to access the requested data",
+          }),
+        );
       }
     } else if (method === "POST") {
       // console.log("Requesting a new access token");

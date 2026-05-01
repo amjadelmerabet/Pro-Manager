@@ -90,7 +90,7 @@ export default async function authUser(username, password) {
         };
       }
     } else {
-      return { status: "fail", message: "User not authenticated" };
+      return { status: "fail", message: "Invalid credentials" };
     }
   } else {
     return { status: "fail", message: "User doesn't exist" };

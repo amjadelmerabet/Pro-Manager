@@ -7,6 +7,8 @@ import deleteTask from "../controllers/tasks/deleteTask.js";
 import { parse } from "url";
 import getTasksByAssignedTo from "../controllers/tasks/getTasksByAssignedTo.js";
 import getTasksByProject from "../controllers/tasks/getTasksByProject.js";
+import canRead from "../authorization/canRead.js";
+import getProjectById from "../controllers/projects/getProjectById.js";
 
 export async function tasksRoute(req, res) {
   const { method, url } = req;
@@ -16,35 +18,122 @@ export async function tasksRoute(req, res) {
 
   if (req.user) {
     if (method === "GET") {
-      if (url === "/api/tasks") {
-        res.writeHead(200, { "Content-Type": "application/json" });
-        const tasks = await getTasks();
-        res.end(JSON.stringify({ result: tasks }));
-      } else {
-        if (url.match(/^\/api\/tasks\/id\/.+/)) {
-          const taskId = url.replace("/api/tasks/id/", "");
-          const task = await getTaskById(taskId);
+      const { readAllowed, readAllRecords } = await canRead(
+        req.user.user_id,
+        "tasks",
+      );
+      if (readAllowed) {
+        if (url === "/api/tasks") {
           res.writeHead(200, { "Content-Type": "application/json" });
-          res.end(JSON.stringify({ result: task }));
-        } else if (url.match(/^\/api\/tasks\/assigned-to\/.+/)) {
-          res.writeHead(200, { "Content-Type": "application/json" });
-          const assignedTo = pathname.replace("/api/tasks/assigned-to/", "");
-          const tasks = await getTasksByAssignedTo(assignedTo);
-          res.end(JSON.stringify({ result: tasks }));
-        } else if (url.match(/^\/api\/tasks\/project\/.+/)) {
-          res.writeHead(200, { "Content-Type": "application/json" });
-          const project = pathname.replace("/api/tasks/project/", "");
-          const tasks = await getTasksByProject(project);
+          let tasks = [];
+          if (readAllRecords) {
+            tasks = await getTasks();
+          } else {
+            tasks = await getTasksByAssignedTo(req.user.user_id);
+          }
           res.end(JSON.stringify({ result: tasks }));
         } else {
-          res.writeHead(404, { "Content-Type": "application/json" });
-          res.end(
-            JSON.stringify({
-              message:
-                "The endpoint that you are trying to reach doesn't exist",
-            }),
-          );
+          if (url.match(/^\/api\/tasks\/id\/.+/)) {
+            const taskId = url.replace("/api/tasks/id/", "");
+            const task = await getTaskById(taskId);
+            let allowedToRead = false;
+            let taskNodeFound = false;
+            if (readAllRecords) {
+              allowedToRead = true;
+            } else if (task.length > 0) {
+              if (task[0].assigned_to === req.user.user_id) {
+                allowedToRead = true;
+              }
+            } else {
+              taskNodeFound = true;
+              res.writeHead(404, { "Content-Type": "application/json" });
+              res.end(
+                JSON.stringify({
+                  message: "No task was found with id: " + taskId,
+                }),
+              );
+            }
+            if (allowedToRead) {
+              res.writeHead(200, { "Content-Type": "application/json" });
+              res.end(JSON.stringify({ result: task }));
+            } else if (!taskNodeFound) {
+              res.writeHead(403, { "Content-Type": "application/json" });
+              res.end(
+                JSON.stringify({
+                  message: "User not authorized to access the requested data",
+                }),
+              );
+            }
+          } else if (url.match(/^\/api\/tasks\/assigned-to\/.+/)) {
+            const assignedTo = pathname.replace("/api/tasks/assigned-to/", "");
+            let allowedToRead = false;
+            if (readAllRecords) {
+              allowedToRead = true;
+            } else if (assignedTo === req.user.user_id) {
+              allowedToRead = true;
+            }
+            if (allowedToRead) {
+              res.writeHead(200, { "Content-Type": "application/json" });
+              const tasks = await getTasksByAssignedTo(assignedTo);
+              res.end(JSON.stringify({ result: tasks }));
+            } else {
+              res.writeHead(403, { "Content-Type": "application/json" });
+              res.end(
+                JSON.stringify({
+                  message: "User not authorized to access the requested data",
+                }),
+              );
+            }
+          } else if (url.match(/^\/api\/tasks\/project\/.+/)) {
+            const project = pathname.replace("/api/tasks/project/", "");
+            const projectData = await getProjectById(project);
+            let allowedToRead = false;
+            if (projectData.length > 0) {
+              if (readAllRecords) {
+                allowedToRead = true;
+              } else {
+                if (projectData[0].owner === req.user.user_id) {
+                  allowedToRead = true;
+                } else {
+                  res.writeHead(403, { "Content-Type": "application/json" });
+                  res.end(
+                    JSON.stringify({
+                      message:
+                        "User not authorized to access the requested data",
+                    }),
+                  );
+                }
+              }
+            } else {
+              res.writeHead(404, { "Content-Type": "application/json" });
+              res.end(
+                JSON.stringify({
+                  message: "No project exist with id: " + project,
+                }),
+              );
+            }
+            if (allowedToRead) {
+              res.writeHead(200, { "Content-Type": "application/json" });
+              const tasks = await getTasksByProject(project);
+              res.end(JSON.stringify({ result: tasks }));
+            }
+          } else {
+            res.writeHead(404, { "Content-Type": "application/json" });
+            res.end(
+              JSON.stringify({
+                message:
+                  "The endpoint that you are trying to reach doesn't exist",
+              }),
+            );
+          }
         }
+      } else {
+        res.writeHead(403, { "Content-Type": "application/json" });
+        res.end(
+          JSON.stringify({
+            message: "User not authorized to access the requested data",
+          }),
+        );
       }
     } else if (method === "POST") {
       if (url === "/api/tasks/new") {
