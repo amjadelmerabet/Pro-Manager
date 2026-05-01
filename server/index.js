@@ -34,7 +34,7 @@ const server = createServer(async (req, res) => {
         url !== "/api/users/new"
       ) {
         res.writeHead(401, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ message: "User not authorized" }));
+        res.end(JSON.stringify({ message: "User not authenticated" }));
       } else {
         if (
           method !== "OPTIONS" &&

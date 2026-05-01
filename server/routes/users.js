@@ -7,6 +7,7 @@ import updateUser from "../controllers/users/updateUser.js";
 import deleteUser from "../controllers/users/deleteUser.js";
 
 import { parse } from "url";
+import canRead from "../authorization/canRead.js";
 
 export async function usersRoute(req, res) {
   const { method, url } = req;
@@ -16,25 +17,97 @@ export async function usersRoute(req, res) {
 
   if (req.user) {
     if (method === "GET") {
-      if (url === "/api/users") {
-        res.writeHead(200, { "Content-Type": "application/json" });
-        const users = await getUsers();
-        res.end(JSON.stringify({ result: users }));
-      } else if (url.match(/^\/api\/users\/id\/.+/)) {
-        res.writeHead(200, { "Content-Type": "application/json b" });
-        const userId = pathname.replace("/api/users/id/", "");
-        const user = await getUserById(userId);
-        res.end(JSON.stringify({ result: user }));
-      } else if (url.match(/^\/api\/users\/username\/.*/)) {
-        res.writeHead(200, { "Content-Type": "application/json" });
-        const username = pathname.replace("/api/users/username/", "");
-        const user = await getUserByUsername(username);
-        res.end(JSON.stringify({ result: user }));
+      const { readAllowed, readAllRecords } = await canRead(
+        req.user.user_id,
+        "users",
+      );
+      if (readAllowed) {
+        if (url === "/api/users") {
+          res.writeHead(200, { "Content-Type": "application/json" });
+          let users = [];
+          if (readAllRecords) {
+            users = await getUsers();
+          } else {
+            users = await getUserById(req.user.user_id);
+          }
+          res.end(JSON.stringify({ result: users }));
+        } else if (url.match(/^\/api\/users\/id\/.+/)) {
+          const userId = pathname.replace("/api/users/id/", "");
+          let allowedToRead = false;
+          if (readAllRecords) {
+            allowedToRead = true;
+          } else {
+            if (req.user.user_id === userId) {
+              allowedToRead = true;
+            }
+          }
+          if (allowedToRead) {
+            const user = await getUserById(userId);
+            if (user.length > 0) {
+              res.writeHead(200, { "Content-Type": "application/json b" });
+              res.end(JSON.stringify({ result: user }));
+            } else {
+              res.writeHead(404, { "Content-Type": "application/json b" });
+              res.end(
+                JSON.stringify({
+                  message: "No user found with id: " + userId,
+                }),
+              );
+            }
+          } else {
+            res.writeHead(403, { "Content-Type": "application/json" });
+            res.end(
+              JSON.stringify({
+                message: "User not authorized to access the requested data",
+              }),
+            );
+          }
+        } else if (url.match(/^\/api\/users\/username\/.*/)) {
+          const username = pathname.replace("/api/users/username/", "");
+          const loggedInUser = await getUserById(req.user.user_id);
+          let allowedToRead = false;
+          if (readAllRecords) {
+            allowedToRead = true;
+          } else {
+            if (loggedInUser[0].username === username) {
+              allowedToRead = true;
+            }
+          }
+          if (allowedToRead) {
+            const user = await getUserByUsername(username);
+            if (user.length > 0) {
+              res.writeHead(200, { "Content-Type": "application/json" });
+              res.end(JSON.stringify({ result: user }));
+            } else {
+              res.writeHead(404, { "Content-Type": "application/json" });
+              res.end(
+                JSON.stringify({
+                  message: "No user found with username: " + username,
+                }),
+              );
+            }
+          } else {
+            res.writeHead(403, { "Content-Type": "application/json" });
+            res.end(
+              JSON.stringify({
+                message: "User not authorized to access the requested data",
+              }),
+            );
+          }
+        } else {
+          res.writeHead(404, { "Content-Type": "application/json" });
+          res.end(
+            JSON.stringify({
+              message:
+                "The endpoint that you are trying to reach doesn't exist",
+            }),
+          );
+        }
       } else {
-        res.writeHead(404, { "Content-Type": "application/json" });
+        res.writeHead(403, { "Content-Type": "application/json" });
         res.end(
           JSON.stringify({
-            message: "The endpoint that you are trying to reach doesn't exist",
+            message: "User not authorized to access the requested data",
           }),
         );
       }
