@@ -9,6 +9,9 @@ import getTasksByAssignedTo from "../controllers/tasks/getTasksByAssignedTo.js";
 import getTasksByProject from "../controllers/tasks/getTasksByProject.js";
 import canRead from "../authorization/canRead.js";
 import getProjectById from "../controllers/projects/getProjectById.js";
+import canCreate from "../authorization/canCreate.js";
+import canEdit from "../authorization/canEdit.js";
+import canDelete from "../authorization/canDelete.js";
 
 export async function tasksRoute(req, res) {
   const { method, url } = req;
@@ -136,133 +139,254 @@ export async function tasksRoute(req, res) {
         );
       }
     } else if (method === "POST") {
-      if (url === "/api/tasks/new") {
-        let body = "";
-        req.on("data", (chunk) => {
-          body += chunk;
-        });
-        req.on("end", async () => {
-          if (body === "") {
-            res.writeHead(400, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: "No data" }));
-          } else {
-            const newTaskFields = JSON.parse(body);
-            if (Object.keys(newTaskFields).length === 0) {
+      const { createAllowed, createAllRecords } = await canCreate(
+        req.user.user_id,
+        "tasks",
+      );
+      if (createAllowed) {
+        if (url === "/api/tasks/new") {
+          let body = "";
+          req.on("data", (chunk) => {
+            body += chunk;
+          });
+          req.on("end", async () => {
+            if (body === "") {
               res.writeHead(400, { "Content-Type": "application/json" });
               res.end(JSON.stringify({ message: "No data" }));
             } else {
-              const { name, short_description, assigned_to } = newTaskFields;
-              if (!name || !short_description || !assigned_to) {
+              const newTaskFields = JSON.parse(body);
+              if (Object.keys(newTaskFields).length === 0) {
                 res.writeHead(400, { "Content-Type": "application/json" });
-                res.end(
-                  JSON.stringify({ message: "Necessary data is missing" }),
-                );
+                res.end(JSON.stringify({ message: "No data" }));
               } else {
-                const newTask = await createTask(newTaskFields);
-                if (newTask.error) {
+                const { name, short_description, assigned_to } = newTaskFields;
+                if (!name || !short_description || !assigned_to) {
                   res.writeHead(400, { "Content-Type": "application/json" });
                   res.end(
-                    JSON.stringify({
-                      message: "There was an error while creating a new task",
-                    }),
+                    JSON.stringify({ message: "Necessary data is missing" }),
                   );
                 } else {
-                  res.writeHead(201, { "Content-Type": "application/json" });
-                  const taskId = newTask?.rows[0].task_id;
-                  res.end(
-                    JSON.stringify({
-                      message: "Task created successfully",
-                      task_id: taskId,
-                    }),
-                  );
+                  let allowedToCreate = false;
+                  if (createAllRecords) {
+                    allowedToCreate = true;
+                  } else {
+                    if (assigned_to === req.user.user_id) {
+                      allowedToCreate = true;
+                    }
+                  }
+                  if (allowedToCreate) {
+                    const newTask = await createTask(newTaskFields);
+                    if (!newTask.error) {
+                      res.writeHead(201, {
+                        "Content-Type": "application/json",
+                      });
+                      const taskId = newTask?.rows[0].task_id;
+                      res.end(
+                        JSON.stringify({
+                          message: "Task created successfully",
+                          task_id: taskId,
+                        }),
+                      );
+                    } else {
+                      if (newTask.errorMessage === "Bad Request") {
+                        res.writeHead(400, {
+                          "Content-Type": "application/json",
+                        });
+                      } else {
+                        res.writeHead(500, {
+                          "Content-Type": "application/json",
+                        });
+                      }
+                      res.end(
+                        JSON.stringify({
+                          message:
+                            "There was an error while creating a new task",
+                          error: newTask.error,
+                        }),
+                      );
+                    }
+                  } else {
+                    res.writeHead(403, { "Content-Type": "application/json" });
+                    res.end(
+                      JSON.stringify({
+                        message:
+                          "User not authorized to create tasks for other users",
+                      }),
+                    );
+                  }
                 }
               }
             }
-          }
-        });
+          });
+        } else {
+          res.writeHead(404, { "Content-Type": "application/json" });
+          res.end(
+            JSON.stringify({
+              message:
+                "The endpoint that you are trying to reach doesn't exist",
+            }),
+          );
+        }
       } else {
-        res.writeHead(404, { "Content-Type": "application/json" });
+        res.writeHead(403, { "Content-Type": "application/json" });
         res.end(
-          JSON.stringify({
-            message: "The endpoint that you are trying to reach doesn't exist",
-          }),
+          JSON.stringify({ message: "User not authorized to create tasks" }),
         );
       }
     } else if (method === "PATCH") {
-      if (url.match(/^\/api\/tasks\/update\/.+/)) {
-        const taskId = pathname.replace("/api/tasks/update/", "");
-        let body = "";
-        req.on("data", (chunk) => {
-          body += chunk;
-        });
-        req.on("end", async () => {
-          if (body === "") {
-            res.writeHead(400, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: "No updates" }));
-          } else {
-            const updates = JSON.parse(body);
-            if (Object.keys(updates).length === 0) {
-              res.writeHead(400, { "Content-Type": "application/json" });
-              res.end(JSON.stringify({ message: "No updates" }));
+      const { editAllowed, editAllRecords } = await canEdit(
+        req.user.user_id,
+        "tasks",
+      );
+      if (editAllowed) {
+        if (url.match(/^\/api\/tasks\/update\/.+/)) {
+          const taskId = pathname.replace("/api/tasks/update/", "");
+          const task = await getTaskById(taskId);
+          if (task.length > 0) {
+            let allowedToEdit = false;
+            if (editAllRecords) {
+              allowedToEdit = true;
             } else {
-              if (updates.task_id) {
-                res.writeHead(400, { "Content-Type": "application/json" });
-                res.end(JSON.stringify({ message: "Update not allowed" }));
-              } else {
-                const updatedTask = await updateTask(taskId, updates);
-                if (updatedTask.status === "success") {
-                  res.writeHead(200, { "Content-Type": "application/json" });
-                  res.end(
-                    JSON.stringify({ message: "Task updated successfully" }),
-                  );
-                } else if (updatedTask.message === "404 Task not found") {
-                  res.writeHead(404, { "Content-Type": "application/json" });
-                  res.end(JSON.stringify({ message: updatedTask.message }));
-                } else {
-                  res.writeHead(500, { "Content-Type": "application/json" });
-                  res.end(
-                    JSON.stringify({
-                      message: "There was an error while updating a task",
-                    }),
-                  );
-                }
+              if (task[0].assigned_to === req.user.user_id) {
+                allowedToEdit = true;
               }
             }
+            if (allowedToEdit) {
+              let body = "";
+              req.on("data", (chunk) => {
+                body += chunk;
+              });
+              req.on("end", async () => {
+                if (body === "") {
+                  res.writeHead(400, { "Content-Type": "application/json" });
+                  res.end(JSON.stringify({ message: "No updates" }));
+                } else {
+                  const updates = JSON.parse(body);
+                  if (Object.keys(updates).length === 0) {
+                    res.writeHead(400, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: "No updates" }));
+                  } else {
+                    if (updates.task_id) {
+                      res.writeHead(400, {
+                        "Content-Type": "application/json",
+                      });
+                      res.end(
+                        JSON.stringify({ message: "Update not allowed" }),
+                      );
+                    } else {
+                      const updatedTask = await updateTask(taskId, updates);
+                      if (!updatedTask.error) {
+                        res.writeHead(200, {
+                          "Content-Type": "application/json",
+                        });
+                        res.end(
+                          JSON.stringify({
+                            message: "Task updated successfully",
+                          }),
+                        );
+                      } else {
+                        if (updatedTask.errorMessage === "Bad Request") {
+                          res.writeHead(400, {
+                            "Content-Type": "application/json",
+                          });
+                        } else {
+                          res.writeHead(500, {
+                            "Content-Type": "application/json",
+                          });
+                        }
+                        res.end(
+                          JSON.stringify({
+                            message: "There was an error while updating a task",
+                            error: updatedTask.error,
+                          }),
+                        );
+                      }
+                    }
+                  }
+                }
+              });
+            } else {
+              res.writeHead(403, { "Content-Type": "application/json" });
+              res.end(
+                JSON.stringify({
+                  message: "User not authorized to update this record",
+                }),
+              );
+            }
+          } else {
+            res.writeHead(404, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "Task not found" }));
           }
-        });
+        } else {
+          res.writeHead(404, { "Content-Type": "application/json" });
+          res.end(
+            JSON.stringify({
+              message:
+                "The endpoint that you are trying to reach doesn't exist",
+            }),
+          );
+        }
       } else {
-        res.writeHead(404, { "Content-Type": "application/json" });
+        res.writeHead(403, { "Content-Type": "application/json" });
         res.end(
           JSON.stringify({
-            message: "The endpoint that you are trying to reach doesn't exist",
+            message: "User not authorized to update this record",
           }),
         );
       }
     } else if (method === "DELETE") {
-      if (url.match(/^\/api\/tasks\/delete\/.+/)) {
-        const taskId = pathname.replace("/api/tasks/delete/", "");
-        const deletedTask = await deleteTask(taskId);
-        if (deletedTask.status === "success") {
-          res.writeHead(200, { "Content-Type": "application/json" });
-          res.end(JSON.stringify({ message: deletedTask.message }));
-        } else {
-          if (deletedTask.message === "404 Task not found") {
-            res.writeHead(404, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: deletedTask.message }));
+      const { deleteAllowed, deleteAllRecords } = await canDelete(
+        req.user.user_id,
+        "tasks",
+      );
+      if (deleteAllowed) {
+        if (url.match(/^\/api\/tasks\/delete\/.+/)) {
+          const taskId = pathname.replace("/api/tasks/delete/", "");
+          const task = await getTaskById(taskId);
+          if (task.length > 0) {
+            let allowedToDelete = false;
+            if (deleteAllRecords) {
+              allowedToDelete = true;
+            } else {
+              if (task[0].assigned_to === req.user.user_id) {
+                allowedToDelete = true;
+              }
+            }
+            if (allowedToDelete) {
+              const deletedTask = await deleteTask(taskId);
+              if (!deletedTask.error) {
+                res.writeHead(200, { "Content-Type": "application/json" });
+                res.end(
+                  JSON.stringify({ message: "Task deleted successfuly" }),
+                );
+              } else {
+                res.writeHead(500, { "Content-Type": "application/json" });
+                res.end(
+                  JSON.stringify({
+                    message: "There was an error while deleting a task",
+                    error: deletedTask.error,
+                  }),
+                );
+              }
+            }
           } else {
-            res.writeHead(500, { "Content-Type": "application/json" });
-            res.end(
-              JSON.stringify({
-                message: "There was an error while deleting a task",
-              }),
-            );
+            res.writeHead(404, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "Task not found" }));
           }
+        } else {
+          res.writeHead(404, { "Content-Type": "application/json" });
+          res.end(
+            JSON.stringify({
+              message:
+                "The endpoint that you are trying to reach doesn't exist",
+            }),
+          );
         }
       } else {
-        res.writeHead(404, { "Content-Type": "application/json" });
+        res.writeHead(403, { "Content-Type": "application/json" });
         res.end(
           JSON.stringify({
-            message: "The endpoint that you are trying to reach doesn't exist",
+            message: "User not authorized to update this record",
           }),
         );
       }
