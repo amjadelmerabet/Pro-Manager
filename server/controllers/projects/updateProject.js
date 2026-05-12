@@ -2,12 +2,14 @@ import pool from "../../db/connection.js";
 import getProjectById from "./getProjectById.js";
 
 export default async function updateProject(id, updates) {
-  const project = await getProjectById(id);
-  if (project) {
+  try {
+    const project = await getProjectById(id);
     let query = "UPDATE projects SET updated_on = $1, ";
     const now = new Date();
     let propertiesToUpdate = [now];
     let count = 1;
+    let updateError = false;
+    let errorObject = {};
     Object.entries(updates).forEach((update, index) => {
       if (update[0] === "name") {
         count++;
@@ -36,20 +38,22 @@ export default async function updateProject(id, updates) {
         query += `updated_by = $${count}`;
         propertiesToUpdate.push(update[1]);
       } else {
-        return {
-          status: "fail",
-          message: "There is no column with the name " + update[0],
-        };
+        updateError = true;
+        errorObject.errorMessage = "Bad Request";
+        errorObject.error = "Invalid field " + update[0];
       }
       if (index < Object.keys(updates).length - 1) {
         query += ", ";
       }
     });
-    query += " WHERE project_id = '" + id + "'";
-    const updatedProject = await pool.query(query, propertiesToUpdate);
-    // console.log(updatedProject);
-    return { status: "success" };
-  } else {
-    return { status: "failt", message: "404 Project not found" };
+    if (updateError) {
+      return errorObject;
+    } else {
+      query += " WHERE project_id = '" + id + "'";
+      const updatedProject = await pool.query(query, propertiesToUpdate);
+      return updatedProject;
+    }
+  } catch (error) {
+    return { errorMessage: "Internal Server Error", error };
   }
 }

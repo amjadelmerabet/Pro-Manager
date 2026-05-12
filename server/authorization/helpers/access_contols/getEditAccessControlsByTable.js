@@ -1,9 +1,9 @@
 import pool from "../../../db/connection.js";
 
-export default async function getReadAccessControlsByTable(table) {
+export default async function getEditAccessControlsByTable(table) {
   try {
     const result = await pool.query(
-      "SELECT access_control_id, my_records, all_records FROM access_controls WHERE table_name = $1 AND action = 'read'",
+      "SELECT access_control_id, my_records, all_records FROM access_controls WHERE table_name = $1 AND action = 'edit'",
       [table],
     );
     const accessControls = result.rows;
