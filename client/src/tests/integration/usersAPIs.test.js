@@ -76,7 +76,7 @@ describe("Users APIs", async () => {
     it("Case 2: Authenticate a user with a valid username but and an invalid password", async () => {
       const auth = await authUserAPI("admin", "test1234");
       expect(auth).toHaveProperty("authenticated", false);
-      expect(auth).toHaveProperty("message", "User not authenticated");
+      expect(auth).toHaveProperty("message", "Invalid credentials");
     });
     it("Case 3: Authenticate a user with an invalid username and a password", async () => {
       const auth = await authUserAPI("Test.User", "test1234");
