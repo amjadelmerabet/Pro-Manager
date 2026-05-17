@@ -310,7 +310,7 @@ export async function projectsRoute(req, res) {
               if (!deletedProject.error) {
                 res.writeHead(200, { "Content-Type": "application/json" });
                 res.end(
-                  JSON.stringify({ message: "Project deleted successfuly" }),
+                  JSON.stringify({ message: "Project deleted successfully" }),
                 );
               } else {
                 res.writeHead(500, { "Content-Type": "application/json" });

@@ -6,8 +6,14 @@ import createUser from "../controllers/users/createUser.js";
 import updateUser from "../controllers/users/updateUser.js";
 import deleteUser from "../controllers/users/deleteUser.js";
 
+import dotenv from "dotenv";
+
+dotenv.config();
+
 import { parse } from "url";
 import canRead from "../authorization/canRead.js";
+import getRoleByName from "../controllers/roles/getRoleByName.js";
+import createUserRole from "../controllers/userRoles/createUserRole.js";
 
 export async function usersRoute(req, res) {
   const { method, url } = req;
@@ -293,6 +299,23 @@ export async function usersRoute(req, res) {
                 message: "User has been created",
               }),
             );
+            const userId = newUser.rows[0].user_id;
+            const basicRoles = [
+              process.env.BASIC_APP_ROLE,
+              process.env.BASIC_PROJECTS_ROLE,
+              process.env.BASIC_TASKS_ROLE,
+              process.env.BASIC_USERS_ROLE,
+              process.env.BASIC_TOKENS_ROLE
+            ];
+            basicRoles.forEach(async (basicRole) => {
+              const role = await getRoleByName(basicRole);
+              if (!role.error) {
+                const userRole = await createUserRole(userId, role[0].role_id);
+                if (userRole.error) {
+                  console.log(userRole.error);
+                }
+              }
+            })
           }
         }
       });

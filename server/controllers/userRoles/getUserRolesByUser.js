@@ -1,4 +1,4 @@
-import pool from "../../../db/connection.js";
+import pool from "../../db/connection.js";
 
 export default async function getUserRolesByUser(user) {
   try {
@@ -9,6 +9,6 @@ export default async function getUserRolesByUser(user) {
     const userRoles = result.rows;
     return userRoles;
   } catch (error) {
-    console.log("Query error: " + error);
+    return { error };
   }
 }

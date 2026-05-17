@@ -11,6 +11,7 @@ export default async function updateTask(id, updates) {
       "assigned_to",
       "priority",
       "project",
+      "updated_by"
     ];
     let query = "UPDATE tasks SET ";
     let propertiesToUpdate = [];

@@ -357,7 +357,7 @@ export async function tasksRoute(req, res) {
               if (!deletedTask.error) {
                 res.writeHead(200, { "Content-Type": "application/json" });
                 res.end(
-                  JSON.stringify({ message: "Task deleted successfuly" }),
+                  JSON.stringify({ message: "Task deleted successfully" }),
                 );
               } else {
                 res.writeHead(500, { "Content-Type": "application/json" });
