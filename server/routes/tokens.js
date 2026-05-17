@@ -44,6 +44,14 @@ export async function tokensRoute(req, res) {
           res.writeHead(404, { "Content-Type": "application/json" });
           res.end(JSON.stringify({ result: refreshTokens }));
         }
+      } else {
+        res.writeHead(404, { "Content-Type": "application/json" });
+        res.end(
+          JSON.stringify({
+            message:
+              "The endpoint that you are trying to reach doesn't exist.",
+          }),
+        );
       }
     } else if (method === "POST") {
       // console.log("Requesting a new access token");
@@ -140,6 +148,14 @@ export async function tokensRoute(req, res) {
             res.end(JSON.stringify({ message: "Invalid access token" }));
           }
         });
+      } else {
+        res.writeHead(404, { "Content-Type": "application/json" });
+        res.end(
+          JSON.stringify({
+            message:
+              "The endpoint that you are trying to reach doesn't exist.",
+          }),
+        );
       }
     }
   } else {
