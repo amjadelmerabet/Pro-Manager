@@ -20,7 +20,7 @@ export default async function createUser(
     const userHashedPassword = await hashPassword(password);
     let now = new Date();
     const newUser = await pool.query(
-      "INSERT INTO users (first_name, last_name, name, username, email, password, updated_on, updated_by, created_on, created_by) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
+      "INSERT INTO users (first_name, last_name, name, username, email, password, updated_on, updated_by, created_on, created_by) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING user_id",
       [
         firstName,
         lastName,

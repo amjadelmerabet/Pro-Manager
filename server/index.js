@@ -7,6 +7,7 @@ import { sessionsRoute } from "./routes/sessions.js";
 
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { userRolesRoute } from "./routes/userRoles.js";
 
 dotenv.config();
 
@@ -34,7 +35,7 @@ const server = createServer(async (req, res) => {
         url !== "/api/users/new"
       ) {
         res.writeHead(401, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ message: "User not authorized" }));
+        res.end(JSON.stringify({ message: "User not authenticated" }));
       } else {
         if (
           method !== "OPTIONS" &&
@@ -76,6 +77,8 @@ const server = createServer(async (req, res) => {
           await tokensRoute(req, res);
         } else if (url.startsWith("/api/sessions")) {
           await sessionsRoute(req, res);
+        } else if (url.startsWith("/api/user_roles")) {
+          await userRolesRoute(req, res);
         } else {
           res.writeHead(404, { "Content-Type": "application/json" });
           res.end(
