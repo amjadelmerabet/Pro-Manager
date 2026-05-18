@@ -81,6 +81,14 @@ export async function tokensRoute(req, res) {
             res.writeHead(403, { "Content-Type": "application/json" });
             res.end(JSON.stringify({ message: "User not authorized to access the requested data"}));
           }
+        } else {
+          res.writeHead(404, { "Content-Type": "application/json" });
+          res.end(
+            JSON.stringify({
+              message:
+                "The endpoint that you are trying to reach doesn't exist.",
+            })
+          );
         }
       } else {
         res.writeHead(403, { "Content-Type": "application/json" });
@@ -249,6 +257,14 @@ export async function tokensRoute(req, res) {
               }),
             );
           }
+        } else {
+          res.writeHead(404, { "Content-Type": "application/json" });
+          res.end(
+            JSON.stringify({
+              message:
+                "The endpoint that you are trying to reach doesn't exist.",
+            }),
+          });
         }
       } else {
         res.writeHead(403, { "Content-Type": "application/json" });
