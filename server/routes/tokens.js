@@ -264,7 +264,7 @@ export async function tokensRoute(req, res) {
               message:
                 "The endpoint that you are trying to reach doesn't exist.",
             }),
-          });
+          );
         }
       } else {
         res.writeHead(403, { "Content-Type": "application/json" });
