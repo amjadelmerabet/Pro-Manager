@@ -12,6 +12,7 @@ import "./AuthHeader.css";
 import { IoLogOutOutline } from "react-icons/io5";
 import deleteSessionUtil from "../utils/deleteSessionUtil";
 import getAccessTokenUtil from "../utils/getAccessTokenUtil";
+import { TbBell } from "react-icons/tb";
 
 export default function AuthHeader({
   user,
@@ -123,47 +124,58 @@ export default function AuthHeader({
         </IconContext.Provider>
       </div>
       <div className="profile-section poppins-regular">
-        <img
-          src={ProfilePicture}
-          alt="Profile picture"
-          className="profile-picture"
-          onClick={() => setSettingsPopup(!settingsPopup)}
-        />
-        <div className={"settings" + (settingsPopup ? " visible" : "")}>
+        <div className="notification-container">
           <IconContext.Provider
             value={{
-              style: {
-                color:
-                  theme === "light" || theme === ""
-                    ? "var(--primary-color)"
-                    : "var(--secondary-color-dark)",
-              },
+              style: { color: "var(--primary-color)", fontSize: "32px" },
             }}
           >
-            <BsFillTriangleFill className="triangle" />
+            <TbBell className="notification-bell" />
           </IconContext.Provider>
-          <ul className="settings-list poppins-regular">
-            <li className="setting-item">
-              <Link to={"/auth/" + user + "/profile"}>
-                <CgProfile />
-                <span>Profile</span>
-              </Link>
-            </li>
-            <li className="setting-item feature-disabled">
-              <GoGear />
-              <span>Settings</span>
-            </li>
-            <li className="setting-item feature-disabled">
-              <LuPaintbrush />
-              <span>Themes</span>
-            </li>
-            <li className="setting-item">
-              <div className="logout-button" onClick={() => logout()}>
-                <IoLogOutOutline />
-                <span>Log out</span>
-              </div>
-            </li>
-          </ul>
+        </div>
+        <div className="profile-picture-container">
+          <img
+            src={ProfilePicture}
+            alt="Profile picture"
+            className="profile-picture"
+            onClick={() => setSettingsPopup(!settingsPopup)}
+          />
+          <div className={"settings" + (settingsPopup ? " visible" : "")}>
+            <IconContext.Provider
+              value={{
+                style: {
+                  color:
+                    theme === "light" || theme === ""
+                      ? "var(--primary-color)"
+                      : "var(--secondary-color-dark)",
+                },
+              }}
+            >
+              <BsFillTriangleFill className="triangle" />
+            </IconContext.Provider>
+            <ul className="settings-list poppins-regular">
+              <li className="setting-item">
+                <Link to={"/auth/" + user + "/profile"}>
+                  <CgProfile />
+                  <span>Profile</span>
+                </Link>
+              </li>
+              <li className="setting-item feature-disabled">
+                <GoGear />
+                <span>Settings</span>
+              </li>
+              <li className="setting-item feature-disabled">
+                <LuPaintbrush />
+                <span>Themes</span>
+              </li>
+              <li className="setting-item">
+                <div className="logout-button" onClick={() => logout()}>
+                  <IoLogOutOutline />
+                  <span>Log out</span>
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </header>
