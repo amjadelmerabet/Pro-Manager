@@ -1,6 +1,6 @@
 import apiConfig from "../config";
 
-export default async function getUserDetailsAPI(username, token) {
+export default async function getUserByUsernameAPI(username, token) {
   const response = await fetch(
     `${apiConfig.url}:${apiConfig.port}/api/users/username/${username}`,
     {
