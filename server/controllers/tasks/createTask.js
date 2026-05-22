@@ -9,6 +9,7 @@ export default async function createTask(fields) {
       "short_description",
       "description",
       "assigned_to",
+      "project",
       "updated_on",
       "updated_by",
       "created_on",
