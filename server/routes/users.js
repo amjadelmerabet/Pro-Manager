@@ -1,7 +1,7 @@
 import getUsers from "../controllers/users/getUsers.js";
 import getUserById from "../controllers/users/getUserById.js";
 import getUserByUsername from "../controllers/users/getUserByUsername.js";
-import authUser from "../controllers/users/authUser.js";
+import loginUser from "../controllers/users/loginUser.js";
 import createUser from "../controllers/users/createUser.js";
 import updateUser from "../controllers/users/updateUser.js";
 import deleteUser from "../controllers/users/deleteUser.js";
@@ -14,6 +14,8 @@ import { parse } from "url";
 import canRead from "../authorization/canRead.js";
 import getRoleByName from "../controllers/roles/getRoleByName.js";
 import createUserRole from "../controllers/userRoles/createUserRole.js";
+import getSessionById from "../controllers/sessions/getSessionById.js";
+import deleteSession from "../controllers/sessions/deleteSession.js";
 
 export async function usersRoute(req, res) {
   const { method, url } = req;
@@ -117,6 +119,46 @@ export async function usersRoute(req, res) {
           }),
         );
       }
+    } else if (method === "POST") {
+      if (url.startsWith("/api/users/auth/logout/")) {
+        const sessionId = url.replace("/api/users/auth/logout/", "");
+        const session = await getSessionById(sessionId);
+        if (session.length > 0) {
+          if (req.user.user_id === session[0].session_for_user) {
+            const deletedSession = await deleteSession(sessionId);
+            if (deletedSession.error) {
+              res.writeHead(500, { "Content-Type": "application/json" });
+              res.end(
+                JSON.stringify({
+                  message:
+                    "Error occured while trying to delete a user session",
+                  error: deletedSession.error,
+                }),
+              );
+            } else {
+              res.writeHead(200, { "Content-Type": "application/json" });
+              res.end(
+                JSON.stringify({ message: "User logged out successfully" }),
+              );
+            }
+          } else {
+            res.writeHead(403, { "Content-Type": "application/json" });
+            res.end(
+              JSON.stringify({ message: "User not allowed to do this action" }),
+            );
+          }
+        } else {
+          res.writeHead(404, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ message: "Session was not found" }));
+        }
+      } else {
+        res.writeHead(404, { "Content-Type": "application/json" });
+        res.end(
+          JSON.stringify({
+            message: "The endpoint that you are trying to reach doesn't exist",
+          }),
+        );
+      }
     } else if (method === "PATCH") {
       if (url.match(/^\/api\/users\/update\/.+/)) {
         let body = "";
@@ -185,7 +227,7 @@ export async function usersRoute(req, res) {
       res.end(JSON.stringify({ messsage: "Method Not Allowed" }));
     }
   } else {
-    if (method === "POST" && url === "/api/users/auth") {
+    if (method === "POST" && url === "/api/users/auth/login") {
       // console.log("A user is trying to login");
       let body = "";
       req.on("data", (chunk) => {
@@ -194,7 +236,10 @@ export async function usersRoute(req, res) {
       req.on("end", async () => {
         const bodyObject = JSON.parse(body);
         if (bodyObject.username && bodyObject.password) {
-          const auth = await authUser(bodyObject.username, bodyObject.password);
+          const auth = await loginUser(
+            bodyObject.username,
+            bodyObject.password,
+          );
           if (auth.status === "success") {
             const user = await getUserByUsername(bodyObject.username);
             res.writeHead(200, { "Content-Type": "application/json" });
@@ -204,6 +249,8 @@ export async function usersRoute(req, res) {
                 message: auth.message,
                 token: auth.token,
                 refresh: auth.refresh,
+                sessionId: auth.sessionId,
+                session: auth.session,
                 name: user[0].name,
                 userId: user[0].user_id,
               }),
@@ -305,7 +352,7 @@ export async function usersRoute(req, res) {
               process.env.BASIC_PROJECTS_ROLE,
               process.env.BASIC_TASKS_ROLE,
               process.env.BASIC_USERS_ROLE,
-              process.env.BASIC_TOKENS_ROLE
+              process.env.BASIC_TOKENS_ROLE,
             ];
             basicRoles.forEach(async (basicRole) => {
               const role = await getRoleByName(basicRole);
@@ -315,7 +362,7 @@ export async function usersRoute(req, res) {
                   console.log(userRole.error);
                 }
               }
-            })
+            });
           }
         }
       });

@@ -56,6 +56,7 @@ async function updateTaskAction(
 export default async function updateTaskUtil(
   tokenValidated,
   user,
+  session,
   token,
   updatedTaskId,
   taskUpdates,
@@ -73,7 +74,11 @@ export default async function updateTaskUtil(
     if (!tokenValidated) {
       const refreshToken = await cookieStore.get(user);
       if (refreshToken) {
-        const validAccessToken = await checkAccessTokenAPI(token, refreshToken);
+        const validAccessToken = await checkAccessTokenAPI(
+          token,
+          session,
+          refreshToken,
+        );
         if (validAccessToken.message === "Valid access token") {
           updateTaskAction(
             updatedTaskId,

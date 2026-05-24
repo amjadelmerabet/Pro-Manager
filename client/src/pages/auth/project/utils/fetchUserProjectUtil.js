@@ -41,6 +41,7 @@ async function fetchProjectAction(
 export default async function fetchUserProjectUtil(
   tokenValidated,
   user,
+  session,
   token,
   projectId,
   tries,
@@ -56,7 +57,11 @@ export default async function fetchUserProjectUtil(
     if (!tokenValidated) {
       const refreshToken = await cookieStore.get(user);
       if (refreshToken) {
-        const validAccessToken = await checkAccessTokenAPI(token, refreshToken);
+        const validAccessToken = await checkAccessTokenAPI(
+          token,
+          session,
+          refreshToken,
+        );
         if (validAccessToken.message === "Valid access token") {
           setTokenValidated(true);
           fetchProjectAction(

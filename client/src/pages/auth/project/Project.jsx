@@ -75,7 +75,7 @@ export default function Project({ user, userId, setAuthentication }) {
   const taskId = searchParams.get("task");
   const view = searchParams.get("view");
 
-  const { token } = JSON.parse(sessionStorage.getItem("authUser"));
+  const { token, sessionId } = JSON.parse(sessionStorage.getItem("authUser"));
 
   useEffect(() => {
     const getUserTheme = async () => {
@@ -96,6 +96,7 @@ export default function Project({ user, userId, setAuthentication }) {
       fetchUserProjectUtil(
         tokenValidated,
         user,
+        sessionId,
         token,
         projectId,
         tries,
@@ -114,12 +115,12 @@ export default function Project({ user, userId, setAuthentication }) {
     if (loadTasks || projectFetched) {
       fetchProjectTasksUtil(
         projectId,
+        sessionId,
         token,
         setTasks,
         tokenValidated,
         setTokenValidated,
         user,
-        userId,
         tries,
         setTries,
         newAccessToken,
@@ -134,6 +135,7 @@ export default function Project({ user, userId, setAuthentication }) {
       getAccessTokenUtil(
         user,
         userId,
+        sessionId,
         setTokenValidated,
         setTries,
         loadProject,
@@ -153,6 +155,7 @@ export default function Project({ user, userId, setAuthentication }) {
       updateProjectUtil(
         tokenValidated,
         user,
+        sessionId,
         token,
         projectId,
         projectUpdates,
@@ -174,6 +177,7 @@ export default function Project({ user, userId, setAuthentication }) {
       deleteProjectUtil(
         tokenValidated,
         user,
+        sessionId,
         token,
         projectId,
         tries,
@@ -202,6 +206,7 @@ export default function Project({ user, userId, setAuthentication }) {
         tokenValidated,
         setTokenValidated,
         user,
+        sessionId,
         token,
         newTask,
         setLoadTasks,

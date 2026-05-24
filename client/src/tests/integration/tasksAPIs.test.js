@@ -1,17 +1,19 @@
 import { describe, expect, it } from "vitest";
-import authUserAPI from "../../api/users/authUserAPI";
+import loginUserAPI from "../../api/users/loginUserAPI";
 import getTasksByAssignedToAPI from "../../api/tasks/getTasksByAssignedToAPI";
 import createTaskAPI from "../../api/tasks/createTaskAPI";
 import getTaskByIdAPI from "../../api/tasks/getTaskByIdAPI";
 import updateTaskByIdAPI from "../../api/tasks/updateTaskByIdAPI";
 import deleteTaskByIdAPI from "../../api/tasks/deleteTaskByIdAPI";
+import logoutUserAPI from "../../api/users/logoutUserAPI";
 
 describe("Tasks APIs", async () => {
-  const auth = await authUserAPI(
+  const auth = await loginUserAPI(
     import.meta.env.VITE_TEST_USERNAME,
     import.meta.env.VITE_TEST_PASSWORD,
   );
   const accessToken = auth?.token;
+  const session = auth?.sessionId;
 
   it("Get a tasks by assigned to", async () => {
     const tasks = await getTasksByAssignedToAPI(auth.userId, accessToken);
@@ -52,4 +54,6 @@ describe("Tasks APIs", async () => {
     const task = await deleteTaskByIdAPI(taskId, accessToken);
     expect(task).toHaveProperty("message", "Task deleted successfully");
   });
+
+  const loggedoutUser = await logoutUserAPI(session, accessToken);
 });

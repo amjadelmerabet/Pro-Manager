@@ -1,5 +1,5 @@
 import checkAccessTokenAPI from "../../../../api/tokens/checkAccessTokenAPI";
-import authUserAPI from "../../../../api/users/authUserAPI";
+import loginUserAPI from "../../../../api/users/loginUserAPI";
 import updateUserDetailsAPI from "../../../../api/users/updateUserByUsernameAPI";
 
 function tryAgain(tries, setTries, newAccessToken, setNewAccessToken) {
@@ -27,7 +27,7 @@ async function updateUserAction(
   setUsernameUpdated,
 ) {
   if (updatePassword) {
-    const authUser = await authUserAPI(userObject.username, currentPassword);
+    const authUser = await loginUserAPI(userObject.username, currentPassword);
     if (authUser.authenticated) {
       const updates = {
         username: username,
@@ -96,6 +96,7 @@ export default async function saveUserCredentialsUtil(
   setTokenValidated,
   user,
   userId,
+  session,
   tries,
   setTries,
   newAccessToken,
@@ -108,7 +109,11 @@ export default async function saveUserCredentialsUtil(
     if (!tokenValidated) {
       const refreshToken = await cookieStore.get(user);
       if (refreshToken) {
-        const validAccessToken = await checkAccessTokenAPI(token, refreshToken);
+        const validAccessToken = await checkAccessTokenAPI(
+          token,
+          session,
+          refreshToken,
+        );
         if (validAccessToken.message === "Valid access token") {
           updateUserAction(
             updatePassword,

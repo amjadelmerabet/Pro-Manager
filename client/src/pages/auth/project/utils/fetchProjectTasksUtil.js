@@ -1,5 +1,5 @@
 import getTasksByProjectAPI from "../../../../api/tasks/getTasksByProjectAPI";
-import getNewAccessTokenAPI from "../../../../api/tokens/getNewAccessTokenAPI";
+import checkAccessTokenAPI from "../../../../api/tokens/checkAccessTokenAPI";
 
 function tryAgain(tries, setTries, newAccessToken, setNewAccessToken) {
   setTries(tries + 1);
@@ -28,12 +28,12 @@ async function fetchProjectTasksAction(
 
 export default async function fetchProjectTasksUtil(
   projectId,
+  session,
   token,
   setTasks,
   tokenValidated,
   setTokenValidated,
   user,
-  userId,
   tries,
   setTries,
   newAccessToken,
@@ -43,8 +43,9 @@ export default async function fetchProjectTasksUtil(
     if (!tokenValidated) {
       const refreshToken = await cookieStore.get(user);
       if (refreshToken) {
-        const validAccessToken = await getNewAccessTokenAPI(
-          userId,
+        const validAccessToken = await checkAccessTokenAPI(
+          token,
+          session,
           refreshToken,
         );
         if (validAccessToken.message === "Valid access token") {

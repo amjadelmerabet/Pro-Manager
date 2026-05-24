@@ -1,8 +1,8 @@
 import apiConfig from "../config";
 
-export default async function authUserAPI(username, password) {
+export default async function loginUserAPI(username, password) {
   const response = await fetch(
-    `${apiConfig.url}:${apiConfig.port}/api/users/auth`,
+    `${apiConfig.url}:${apiConfig.port}/api/users/auth/login`,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },

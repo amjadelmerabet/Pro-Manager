@@ -1,18 +1,27 @@
-import { Link, useNavigate } from "react-router";
-import { IoIosSearch } from "react-icons/io";
-import ProfilePicture from "../../../assets/profile-picture.jpg";
-import { IconContext } from "react-icons/lib";
+// Hooks
 import { useEffect, useState } from "react";
-import { BsFillTriangleFill } from "react-icons/bs";
+import { useNavigate } from "react-router";
+
+// Icons
+import { IoIosSearch } from "react-icons/io";
 import { CgProfile } from "react-icons/cg";
 import { GoGear } from "react-icons/go";
 import { LuPaintbrush } from "react-icons/lu";
-
-import "./AuthHeader.css";
+import { BsFillTriangleFill } from "react-icons/bs";
 import { IoLogOutOutline } from "react-icons/io5";
-import deleteSessionUtil from "../utils/deleteSessionUtil";
-import getAccessTokenUtil from "../utils/getAccessTokenUtil";
 import { TbBell } from "react-icons/tb";
+import { IconContext } from "react-icons/lib";
+
+// Components
+import { Link } from "react-router";
+import ProfilePicture from "../../../assets/profile-picture.jpg";
+
+// Utils
+import logoutUserUtil from "../profile/utils/logoutUserUtil";
+import getAccessTokenUtil from "../utils/getAccessTokenUtil";
+
+// Styles
+import "./AuthHeader.css";
 
 export default function AuthHeader({
   user,
@@ -29,8 +38,8 @@ export default function AuthHeader({
     counter: 0,
     type: "",
   });
-  const [deleteSession, setDeleteSession] = useState(0);
-  const [sessionDeleted, setSessionDeleted] = useState(false);
+  const [logoutUser, setLogoutUser] = useState(0);
+  const [successfulLogout, setSuccessfulLogout] = useState(false);
 
   let navigate = useNavigate();
 
@@ -39,49 +48,50 @@ export default function AuthHeader({
   );
 
   const logout = () => {
-    setDeleteSession(deleteSession + 1);
+    setLogoutUser(logoutUser + 1);
   };
 
   useEffect(() => {
     const deleteSessionCookie = async () => {
       await cookieStore.delete("session-" + userId);
     };
-    if (sessionDeleted) {
+    if (successfulLogout) {
       deleteSessionCookie();
       sessionStorage.setItem("userLoggedOut", true);
       sessionStorage.removeItem("authUser");
       setAuthentication(false);
       navigate("/signin");
     }
-  }, [sessionDeleted]);
+  }, [successfulLogout]);
 
   useEffect(() => {
-    if (deleteSession > 0) {
-      deleteSessionUtil(
+    if (logoutUser > 0) {
+      logoutUserUtil(
         sessionId,
         user,
         token,
-        tokenValidated,
-        setTokenValidated,
         tries,
         setTries,
+        tokenValidated,
+        setTokenValidated,
         newAccessToken,
         setNewAccessToken,
-        setSessionDeleted,
+        setSuccessfulLogout,
       );
     }
-  }, [deleteSession]);
+  }, [logoutUser]);
 
   useEffect(() => {
     if (newAccessToken.counter > 0) {
       getAccessTokenUtil(
         user,
         userId,
+        sessionId,
         setTokenValidated,
         setTries,
         newAccessToken,
-        deleteSession,
-        setDeleteSession,
+        logoutUser,
+        setLogoutUser,
       );
     }
   }, [newAccessToken]);

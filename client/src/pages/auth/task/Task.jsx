@@ -66,7 +66,7 @@ export default function Task({ user, userId, setAuthentication }) {
   const view = searchParams.get("view");
   const projectId = searchParams.get("project");
 
-  const { token } = JSON.parse(sessionStorage.getItem("authUser"));
+  const { token, sessionId } = JSON.parse(sessionStorage.getItem("authUser"));
 
   useEffect(() => {
     const getUserTheme = async () => {
@@ -81,7 +81,9 @@ export default function Task({ user, userId, setAuthentication }) {
   useEffect(() => {
     fetchUserProjectsUtil(
       tokenValidated,
+      setTokenValidated,
       user,
+      sessionId,
       userId,
       token,
       tries,
@@ -98,6 +100,7 @@ export default function Task({ user, userId, setAuthentication }) {
       fetchUserTaskUtil(
         tokenValidated,
         user,
+        sessionId,
         token,
         taskId,
         tries,
@@ -115,9 +118,9 @@ export default function Task({ user, userId, setAuthentication }) {
     if (projectId) {
       fetchLinkedProjectUtil(
         projectId,
+        sessionId,
         token,
         user,
-        userId,
         tokenValidated,
         setTokenValidated,
         tries,
@@ -129,9 +132,9 @@ export default function Task({ user, userId, setAuthentication }) {
     } else if (Object.keys(taskObject).indexOf("project") !== -1) {
       fetchLinkedProjectUtil(
         taskObject.project,
+        sessionId,
         token,
         user,
-        userId,
         tokenValidated,
         setTokenValidated,
         tries,
@@ -149,6 +152,7 @@ export default function Task({ user, userId, setAuthentication }) {
       updateTaskUtil(
         tokenValidated,
         user,
+        sessionId,
         token,
         taskId,
         taskUpdates,
@@ -180,6 +184,7 @@ export default function Task({ user, userId, setAuthentication }) {
       deleteTaskUtil(
         tokenValidated,
         user,
+        sessionId,
         token,
         taskId,
         tries,
@@ -199,6 +204,7 @@ export default function Task({ user, userId, setAuthentication }) {
       getAccessTokenUtil(
         user,
         userId,
+        sessionId,
         setTokenValidated,
         setTries,
         newAccessToken,

@@ -71,7 +71,7 @@ export default function TasksPage({ user, userId, setAuthentication }) {
   const view = searchParams.get("view");
   const filterInURL = searchParams.get("filter");
 
-  const { token } = JSON.parse(sessionStorage.getItem("authUser"));
+  const { token, sessionId } = JSON.parse(sessionStorage.getItem("authUser"));
 
   useEffect(() => {
     const getUserTheme = async () => {
@@ -106,6 +106,7 @@ export default function TasksPage({ user, userId, setAuthentication }) {
       tokenValidated,
       user,
       userId,
+      sessionId,
       token,
       tries,
       setTries,
@@ -125,6 +126,7 @@ export default function TasksPage({ user, userId, setAuthentication }) {
         tokenValidated,
         user,
         userId,
+        sessionId,
         token,
         tries,
         setTries,
@@ -145,6 +147,7 @@ export default function TasksPage({ user, userId, setAuthentication }) {
       getAccessTokenUtil(
         user,
         userId,
+        sessionId,
         setTokenValidated,
         setTries,
         newAccessToken,
@@ -186,6 +189,7 @@ export default function TasksPage({ user, userId, setAuthentication }) {
       createTaskUtil(
         tokenValidated,
         user,
+        sessionId,
         token,
         newTask,
         tries,
@@ -240,6 +244,7 @@ export default function TasksPage({ user, userId, setAuthentication }) {
       deleteTaskUtil(
         tokenValidated,
         user,
+        sessionId,
         token,
         deletedTaskId,
         tries,
@@ -264,6 +269,7 @@ export default function TasksPage({ user, userId, setAuthentication }) {
       updateTaskUtil(
         tokenValidated,
         user,
+        sessionId,
         token,
         updatedTaskId,
         taskUpdates,

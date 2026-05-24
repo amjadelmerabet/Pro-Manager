@@ -35,6 +35,7 @@ async function updateUserAction(
 
 export default async function updateUserDetailsUtil(
   user,
+  session,
   updates,
   token,
   userUpdated,
@@ -51,7 +52,11 @@ export default async function updateUserDetailsUtil(
     if (!tokenValidated) {
       const refreshToken = await cookieStore.get(user);
       if (refreshToken) {
-        const validAccessToken = await checkAccessTokenAPI(token, refreshToken);
+        const validAccessToken = await checkAccessTokenAPI(
+          token,
+          session,
+          refreshToken,
+        );
         if (validAccessToken.message === "Valid access token") {
           updateUserAction(
             user,
