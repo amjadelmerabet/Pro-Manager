@@ -42,6 +42,7 @@ export default async function createNewProjectTaskUtil(
   tokenValidated,
   setTokenValidated,
   user,
+  session,
   token,
   newTask,
   setLoadTasks,
@@ -56,7 +57,11 @@ export default async function createNewProjectTaskUtil(
     if (!tokenValidated) {
       const refreshToken = await cookieStore.get(user);
       if (refreshToken) {
-        const validAccessToken = await checkAccessTokenAPI(token, refreshToken);
+        const validAccessToken = await checkAccessTokenAPI(
+          token,
+          session,
+          refreshToken,
+        );
         if (validAccessToken.message === "Valid access token") {
           setTokenValidated(true);
           createNewProjectTaskAction(

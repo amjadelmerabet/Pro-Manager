@@ -32,6 +32,7 @@ async function deleteProjectAction(
 export default async function deleteProjectUtil(
   tokenValidated,
   user,
+  session,
   token,
   projectId,
   tries,
@@ -45,7 +46,11 @@ export default async function deleteProjectUtil(
     if (!tokenValidated) {
       const refreshToken = await cookieStore.get(user);
       if (refreshToken) {
-        const validAccessToken = await checkAccessTokenAPI(token, refreshToken);
+        const validAccessToken = await checkAccessTokenAPI(
+          token,
+          session,
+          refreshToken,
+        );
         if (validAccessToken.message === "Valid access token") {
           deleteProjectAction(
             projectId,

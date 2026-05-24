@@ -10,7 +10,6 @@ function tryAgain(tries, setTries, newAccessToken, setNewAccessToken) {
 }
 
 async function getProjectsAction(
-  user,
   userId,
   token,
   tries,
@@ -29,7 +28,9 @@ async function getProjectsAction(
 
 export default async function fetchUserProjectsUtil(
   tokenValidated,
+  setTokenValidated,
   user,
+  session,
   userId,
   token,
   tries,
@@ -41,10 +42,13 @@ export default async function fetchUserProjectsUtil(
   if (!tokenValidated) {
     const refreshToken = await cookieStore.get(user);
     if (refreshToken) {
-      const validAccessToken = await checkAccessTokenAPI(token, refreshToken);
+      const validAccessToken = await checkAccessTokenAPI(
+        token,
+        session,
+        refreshToken,
+      );
       if (validAccessToken.message === "Valid access token") {
         getProjectsAction(
-          user,
           userId,
           token,
           tries,
@@ -54,6 +58,21 @@ export default async function fetchUserProjectsUtil(
           setProjects,
         );
       }
+    } else {
+      console.log("No refresh token");
     }
+  } else {
+    setTimeout(() => {
+      setTokenValidated(false);
+    }, 500);
+    getProjectsAction(
+      userId,
+      token,
+      tries,
+      setTries,
+      newAccessToken,
+      setNewAccessToken,
+      setProjects,
+    );
   }
 }

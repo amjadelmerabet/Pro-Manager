@@ -1,5 +1,5 @@
 import getProjectByIdAPI from "../../../../api/projects/getProjectByIdAPI";
-import getNewAccessTokenAPI from "../../../../api/tokens/getNewAccessTokenAPI";
+import checkAccessTokenAPI from "../../../../api/tokens/checkAccessTokenAPI";
 
 function tryAgain(tries, setTries, newAccessToken, setNewAccessToken) {
   setTries(tries + 1);
@@ -28,9 +28,9 @@ async function fetchLinkedProjectAction(
 
 export default async function fetchLinkedProjectUtil(
   projectId,
+  session,
   token,
   user,
-  userId,
   tokenValidated,
   setTokenValidated,
   tries,
@@ -44,11 +44,12 @@ export default async function fetchLinkedProjectUtil(
       if (!tokenValidated) {
         const refreshToken = await cookieStore.get(user);
         if (refreshToken) {
-          const validAccessToken = await getNewAccessTokenAPI(
-            userId,
+          const validAccessToken = await checkAccessTokenAPI(
+            token,
+            session,
             refreshToken,
           );
-          if (validAccessToken.error === "Valid access token") {
+          if (validAccessToken.message === "Valid access token") {
             fetchLinkedProjectAction(
               projectId,
               token,

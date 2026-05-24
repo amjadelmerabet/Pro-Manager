@@ -81,7 +81,7 @@ export default function DashboardPage({ user, userId, setAuthentication }) {
   const [globalSearchClosed, setGlobalSearchClosed] = useState(false);
   const [theme, setTheme] = useState("");
 
-  const { token } = JSON.parse(sessionStorage.getItem("authUser"));
+  const { token, sessionId } = JSON.parse(sessionStorage.getItem("authUser"));
 
   const openNewProjectPopup = () => {
     setPopupVisible({ visible: true, type: "project" });
@@ -106,6 +106,7 @@ export default function DashboardPage({ user, userId, setAuthentication }) {
       createProjectUtil(
         tokenValidated,
         user,
+        sessionId,
         token,
         newProject,
         tries,
@@ -133,6 +134,7 @@ export default function DashboardPage({ user, userId, setAuthentication }) {
       getAccessTokenUtil(
         user,
         userId,
+        sessionId,
         setTokenValidated,
         setTries,
         newAccessToken,
@@ -153,6 +155,7 @@ export default function DashboardPage({ user, userId, setAuthentication }) {
       tokenValidated,
       user,
       userId,
+      sessionId,
       token,
       tries,
       setTries,
@@ -173,6 +176,7 @@ export default function DashboardPage({ user, userId, setAuthentication }) {
         tokenValidated,
         user,
         userId,
+        sessionId,
         token,
         tries,
         setTries,
@@ -227,6 +231,7 @@ export default function DashboardPage({ user, userId, setAuthentication }) {
       createTaskUtil(
         tokenValidated,
         user,
+        sessionId,
         token,
         newTask,
         tries,

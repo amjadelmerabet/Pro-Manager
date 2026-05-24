@@ -1,5 +1,6 @@
 import createSession from "../controllers/sessions/createSession.js";
 import deleteSession from "../controllers/sessions/deleteSession.js";
+import linkSessionWithToken from "../controllers/tokens/linkSessionWithToken.js";
 
 export async function sessionsRoute(req, res) {
   const { method, url } = req;
@@ -11,7 +12,7 @@ export async function sessionsRoute(req, res) {
           body += chunk.toString();
         });
         req.on("end", async () => {
-          const { session, user } = JSON.parse(body);
+          const { session, user, tokenId } = JSON.parse(body);
           const newSession = await createSession(session, user);
           if (newSession.error) {
             res.writeHead(500, { "Content-Type": "application/json" });
@@ -22,13 +23,24 @@ export async function sessionsRoute(req, res) {
             );
           } else {
             const sessionId = newSession?.rows[0].session_id;
-            res.writeHead(201, { "Content-Type": "application/json" });
-            res.end(
-              JSON.stringify({
-                message: "New session created",
-                session_id: sessionId,
-              }),
-            );
+            const linkedToken = await linkSessionWithToken(sessionId, tokenId);
+            if (linkedToken.error) {
+              res.writeHead(500, { "Content-Type": "application/json" });
+              res.end(
+                JSON.stringify({
+                  message:
+                    "Something went wrong while linking the user session with the access token",
+                }),
+              );
+            } else {
+              res.writeHead(201, { "Content-Type": "application/json" });
+              res.end(
+                JSON.stringify({
+                  message: "New session created",
+                  session_id: sessionId,
+                }),
+              );
+            }
           }
         });
       } else {

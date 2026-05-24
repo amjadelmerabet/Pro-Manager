@@ -7,33 +7,35 @@ function updateToken(accessTokenObject) {
   sessionStorage.setItem("authUser", JSON.stringify(authUser));
 }
 
-function nextAction(newAccessToken, deleteSession, setDeleteSession) {
-  if (newAccessToken.type === "delete") {
-    setDeleteSession(deleteSession + 1);
+function nextAction(newAccessToken, logoutUser, setLogoutUser) {
+  if (newAccessToken.action === "logout") {
+    setLogoutUser(logoutUser + 1);
   }
 }
 
 export default async function getAccessTokenUtil(
   user,
   userId,
+  session,
   setTokenValidated,
   setTries,
   newAccessToken,
-  deleteSession,
-  setDeleteSession,
+  logoutUser,
+  setLogoutUser,
 ) {
   try {
     const refreshToken = await cookieStore.get(user);
     if (refreshToken) {
       const accessTokenObject = await getNewAccessTokenAPI(
         userId,
+        session,
         refreshToken,
       );
       if (!accessTokenObject.error) {
         updateToken(accessTokenObject);
         setTokenValidated(true);
         setTries(0);
-        nextAction(newAccessToken, deleteSession, setDeleteSession);
+        nextAction(newAccessToken, logoutUser, setLogoutUser);
       }
     } else {
       console.log("No refresh token");

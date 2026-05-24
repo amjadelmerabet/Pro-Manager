@@ -20,7 +20,7 @@ import getUserUtil from "./utils/getUserUtil";
 import updateUserUtil from "./utils/updateUserUtil";
 import getAccessTokenUtil from "./utils/getAccessTokenUtil";
 import saveUserCredentialsUtil from "./utils/saveUserCredentialsUtil";
-import authUserAPI from "../../../api/users/authUserAPI";
+import loginUserAPI from "../../../api/users/loginUserAPI";
 
 // Styles
 import "./Profile.css";
@@ -57,13 +57,14 @@ export default function ProfilePage({ user, userId, setAuthentication }) {
   const [themeUpdated, setThemeUpdated] = useState(0);
   const [selectedTheme, setSelectedTheme] = useState("");
 
-  const { token } = JSON.parse(sessionStorage.getItem("authUser"));
+  const { token, sessionId } = JSON.parse(sessionStorage.getItem("authUser"));
 
   let navigate = useNavigate();
 
   useEffect(() => {
     getUserUtil(
       usernameUpdated ? username : user,
+      sessionId,
       token,
       setUserObject,
       tokenValidated,
@@ -100,6 +101,7 @@ export default function ProfilePage({ user, userId, setAuthentication }) {
       getAccessTokenUtil(
         user,
         userId,
+        sessionId,
         setTokenValidated,
         setTries,
         newAccessToken,
@@ -151,7 +153,7 @@ export default function ProfilePage({ user, userId, setAuthentication }) {
 
   const handleSignIn = async (username, password) => {
     if (userObject.username === username) {
-      const authUser = await authUserAPI(username, password);
+      const authUser = await loginUserAPI(username, password);
       if (authUser.authenticated) {
         setSecuritySectionVisible(true);
         setSignInFormVisible(false);

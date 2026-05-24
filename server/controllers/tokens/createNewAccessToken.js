@@ -11,7 +11,11 @@ function randomString(length) {
   return result;
 }
 
-export default async function createAccessToken(token, granted_by, granted_to) {
+export default async function createNewAccessToken(
+  token,
+  granted_by,
+  granted_to,
+) {
   try {
     const randomStr = randomString(10);
     const now = new Date();
@@ -25,8 +29,8 @@ export default async function createAccessToken(token, granted_by, granted_to) {
     //   return hashedToken;
     // }
     // const hashedToken = await hashToken(token);
-    const accessToken = await pool.query(
-      "INSERT INTO tokens (name, token, granted_by, granted_for, created_on, created_by, updated_on, updated_by, expires) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)",
+    const result = await pool.query(
+      "INSERT INTO tokens (name, token, granted_by, granted_for, created_on, created_by, updated_on, updated_by, expires) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING token_id",
       [
         `token_${randomStr}`,
         token,
@@ -39,6 +43,7 @@ export default async function createAccessToken(token, granted_by, granted_to) {
         expiresIn,
       ],
     );
+    const accessToken = result.rows;
     return accessToken;
   } catch (error) {
     console.log("Query error: " + error);

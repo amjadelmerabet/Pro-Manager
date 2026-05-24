@@ -61,7 +61,9 @@ export default function NewTaskPopup({
       sessionStorage.setItem("authUser", JSON.stringify(authUser));
       setGetProjects(getProjects + 1);
     };
-    getNewAccessToken();
+    if (newAccessToken > 0) {
+      getNewAccessToken();
+    }
   }, [newAccessToken]);
 
   useEffect(() => {

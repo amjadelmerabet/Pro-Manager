@@ -30,7 +30,7 @@ const server = createServer(async (req, res) => {
       const authHeader = req.headers["authorization"];
       if (
         !authHeader &&
-        url !== "/api/users/auth" &&
+        url !== "/api/users/auth/login" &&
         method !== "OPTIONS" &&
         url !== "/api/users/new"
       ) {
@@ -39,7 +39,7 @@ const server = createServer(async (req, res) => {
       } else {
         if (
           method !== "OPTIONS" &&
-          url !== "/api/users/auth" &&
+          url !== "/api/users/auth/login" &&
           url !== "/api/users/new"
         ) {
           const token = authHeader.split(" ")[1];

@@ -35,6 +35,7 @@ export default async function fetchUserTasksUtil(
   tokenValidated,
   user,
   userId,
+  session,
   token,
   tries,
   setTries,
@@ -50,7 +51,11 @@ export default async function fetchUserTasksUtil(
     if (!tokenValidated) {
       const refreshToken = await cookieStore.get(user);
       if (refreshToken) {
-        const validAccessToken = await checkAccessTokenAPI(token, refreshToken);
+        const validAccessToken = await checkAccessTokenAPI(
+          token,
+          session,
+          refreshToken,
+        );
         if (validAccessToken.message === "Valid access token") {
           fetchTasksAction(
             userId,

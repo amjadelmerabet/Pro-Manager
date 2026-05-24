@@ -72,7 +72,7 @@ export default function ProjectsPage({ user, userId, setAuthentication }) {
   const view = searchParams.get("view");
   const filterInURL = searchParams.get("filter");
 
-  const { token } = JSON.parse(sessionStorage.getItem("authUser"));
+  const { token, sessionId } = JSON.parse(sessionStorage.getItem("authUser"));
 
   useEffect(() => {
     const getUserTheme = async () => {
@@ -106,6 +106,7 @@ export default function ProjectsPage({ user, userId, setAuthentication }) {
       tokenValidated,
       user,
       userId,
+      sessionId,
       token,
       tries,
       setTries,
@@ -126,6 +127,7 @@ export default function ProjectsPage({ user, userId, setAuthentication }) {
         tokenValidated,
         user,
         userId,
+        sessionId,
         token,
         tries,
         setTries,
@@ -145,6 +147,7 @@ export default function ProjectsPage({ user, userId, setAuthentication }) {
       getAccessTokenUtil(
         user,
         userId,
+        sessionId,
         setTokenValidated,
         setTries,
         newAccessToken,
@@ -185,6 +188,7 @@ export default function ProjectsPage({ user, userId, setAuthentication }) {
       createProjectUtil(
         tokenValidated,
         user,
+        sessionId,
         token,
         newProject,
         tries,
@@ -224,6 +228,7 @@ export default function ProjectsPage({ user, userId, setAuthentication }) {
       updateProjectUtil(
         tokenValidated,
         user,
+        sessionId,
         token,
         projectUpdates,
         tries,
@@ -260,6 +265,7 @@ export default function ProjectsPage({ user, userId, setAuthentication }) {
       deleteProjectUtil(
         tokenValidated,
         user,
+        sessionId,
         token,
         tries,
         setTries,

@@ -1,17 +1,19 @@
 import { describe, expect, it } from "vitest";
 import getProjectsByOwnerAPI from "../../api/projects/getProjectsByOwnerAPI";
-import authUserAPI from "../../api/users/authUserAPI";
+import loginUserAPI from "../../api/users/loginUserAPI";
 import createProjectAPI from "../../api/projects/createProjectAPI";
 import getProjectByIdAPI from "../../api/projects/getProjectByIdAPI";
 import updateProjectByIdAPI from "../../api/projects/updateProjectByIdAPI";
 import deleteProjectByIdAPI from "../../api/projects/deleteProjectByIdAPI";
+import logoutUserAPI from "../../api/users/logoutUserAPI";
 
 describe("Projects APIs", async () => {
-  const auth = await authUserAPI(
+  const auth = await loginUserAPI(
     import.meta.env.VITE_TEST_USERNAME,
     import.meta.env.VITE_TEST_PASSWORD,
   );
   const accessToken = auth?.token;
+  const session = auth?.sessionId;
 
   it("Get a projects by owner", async () => {
     const projects = await getProjectsByOwnerAPI(
@@ -54,4 +56,6 @@ describe("Projects APIs", async () => {
     const project = await deleteProjectByIdAPI(projectId, accessToken);
     expect(project).toHaveProperty("message", "Project deleted successfully");
   });
+
+  const loggedOutUser = await logoutUserAPI(session, accessToken);
 });

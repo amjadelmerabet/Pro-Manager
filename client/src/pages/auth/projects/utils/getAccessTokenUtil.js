@@ -25,6 +25,7 @@ function nextAction(
 export default async function getAccessTokenUtil(
   user,
   userId,
+  session,
   setTokenValidated,
   setTries,
   newAccessToken,
@@ -42,6 +43,7 @@ export default async function getAccessTokenUtil(
     if (refreshToken) {
       const accessTokenObject = await getNewAccessTokenAPI(
         userId,
+        session,
         refreshToken,
       );
       if (!accessTokenObject.error) {

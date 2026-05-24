@@ -1,6 +1,6 @@
 import pool from "../../db/connection.js";
 
-export default async function getAccessTokenByUser(userId) {
+export default async function getAccessTokensByUser(userId, sessionId) {
   try {
     // const now = new Date();
     const result = await pool.query(

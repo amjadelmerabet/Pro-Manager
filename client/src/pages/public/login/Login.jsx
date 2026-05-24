@@ -11,8 +11,6 @@ import { Link } from "react-router";
 // Utils
 import authUserUtil from "./utils/authUserUtil";
 import loginRedirectUtil from "./utils/loginRedirectUtil";
-import createSessionUtil from "./utils/createSessionUtil";
-import getAccessTokenUtil from "./utils/getAccessTokenUtil";
 
 // Styles
 import "./Login.css";
@@ -24,13 +22,6 @@ export default function LoginPage({ isAuthenticated, setAuthentication }) {
   const [incorrectCredentials, setIncorrectCredentials] = useState(false);
   const [loginStart, setLoginStart] = useState(false);
   const [goBackLink, setGoBackLink] = useState(false);
-  const [tokenValidated, setTokenValidated] = useState(false);
-  const [newAccessToken, setNewAccessToken] = useState({
-    counter: 0,
-    type: "",
-  });
-  const [tries, setTries] = useState(0);
-  const [newSession, setNewSession] = useState(0);
   const [redirect, setRedirect] = useState(false);
 
   const [searchParams] = useSearchParams();
@@ -42,12 +33,8 @@ export default function LoginPage({ isAuthenticated, setAuthentication }) {
   const logout = sessionStorage.getItem("userLoggedOut");
 
   useEffect(() => {
-    setTimeout(() => {
-      setTokenValidated(false);
-    }, 2500);
     if (isAuthenticated) {
-      setTokenValidated(true);
-      setNewSession(newSession + 1);
+      setRedirect(true);
     }
   }, [isAuthenticated]);
 
@@ -62,38 +49,6 @@ export default function LoginPage({ isAuthenticated, setAuthentication }) {
       );
     }
   }, [redirect]);
-
-  useEffect(() => {
-    if (newSession > 0) {
-      const { user, userId, token } = JSON.parse(userAuthenticated);
-      createSessionUtil(
-        user,
-        userId,
-        token,
-        tokenValidated,
-        setTokenValidated,
-        tries,
-        setTries,
-        newAccessToken,
-        setNewAccessToken,
-        setRedirect,
-      );
-    }
-  }, [newSession]);
-
-  useEffect(() => {
-    if (newAccessToken.counter > 0) {
-      getAccessTokenUtil(
-        userAuthenticated.user,
-        userAuthenticated.userId,
-        setTokenValidated,
-        setTries,
-        newAccessToken,
-        newSession,
-        setNewSession,
-      );
-    }
-  }, [newAccessToken]);
 
   useEffect(() => {
     if (login === "login") {

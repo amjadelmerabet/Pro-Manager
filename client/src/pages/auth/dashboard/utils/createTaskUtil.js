@@ -30,6 +30,7 @@ async function createTaskAction(
 export default async function createTaskUtil(
   tokenValidated,
   user,
+  session,
   token,
   newTask,
   tries,
@@ -43,7 +44,11 @@ export default async function createTaskUtil(
     if (!tokenValidated) {
       const refreshToken = await cookieStore.get(user);
       if (refreshToken) {
-        const validAccessToken = await checkAccessTokenAPI(token, refreshToken);
+        const validAccessToken = await checkAccessTokenAPI(
+          token,
+          session,
+          refreshToken,
+        );
         if (validAccessToken.message === "Valid access token") {
           createTaskAction(
             newTask,
