@@ -1,4 +1,7 @@
 import { useNavigate } from "react-router";
+
+import { RiWindow2Fill } from "react-icons/ri";
+
 import "./SideMenu.css";
 
 export default function SideMenu({
@@ -64,6 +67,7 @@ export default function SideMenu({
           className="switch-to-classic-ui poppins-medium"
           onClick={() => switchUI()}
         >
+          <RiWindow2Fill />
           Go back to Classic
         </button>
         {/* <div className="switch-ui poppins-regular">
