@@ -159,7 +159,7 @@ export default function AllMenu({ user, setPopupDisplay, theme }) {
           }}
         >
           <li className="module">
-            <Link to={`/auth/${user}/projects`}>
+            <Link to={`/auth/${user}/classic/projects`}>
               <IconContext.Provider
                 value={{
                   style: {
@@ -176,7 +176,7 @@ export default function AllMenu({ user, setPopupDisplay, theme }) {
             </Link>
           </li>
           <li className="module">
-            <Link to={`/auth/${user}/tasks`}>
+            <Link to={`/auth/${user}/classic/tasks`}>
               <IconContext.Provider
                 value={{
                   style: {
@@ -264,7 +264,7 @@ export default function AllMenu({ user, setPopupDisplay, theme }) {
             </button>
           </li>
           <li className="module">
-            <Link to={`/auth/${user}/projects`}>
+            <Link to={`/auth/${user}/classic/classic/projects`}>
               <IconContext.Provider
                 value={{
                   style: {
@@ -281,7 +281,7 @@ export default function AllMenu({ user, setPopupDisplay, theme }) {
             </Link>
           </li>
           <li className="module">
-            <Link to={`/auth/${user}/projects?filter=state=1`}>
+            <Link to={`/auth/${user}/classic/classic/projects?filter=state=1`}>
               <IconContext.Provider
                 value={{
                   style: {
@@ -298,7 +298,7 @@ export default function AllMenu({ user, setPopupDisplay, theme }) {
             </Link>
           </li>
           <li className="module">
-            <Link to={`/auth/${user}/projects?filter=state=2`}>
+            <Link to={`/auth/${user}/classic/projects?filter=state=2`}>
               <IconContext.Provider
                 value={{
                   style: {
@@ -315,7 +315,7 @@ export default function AllMenu({ user, setPopupDisplay, theme }) {
             </Link>
           </li>
           <li className="module">
-            <Link to={`/auth/${user}/projects?filter=state=3`}>
+            <Link to={`/auth/${user}/classic/projects?filter=state=3`}>
               <IconContext.Provider
                 value={{
                   style: {
@@ -374,7 +374,7 @@ export default function AllMenu({ user, setPopupDisplay, theme }) {
             </button>
           </li>
           <li className="module">
-            <Link to={`/auth/${user}/tasks`}>
+            <Link to={`/auth/${user}/classic/tasks`}>
               <IconContext.Provider
                 value={{
                   style: {
@@ -391,7 +391,7 @@ export default function AllMenu({ user, setPopupDisplay, theme }) {
             </Link>
           </li>
           <li className="module">
-            <Link to={`/auth/${user}/tasks?filter=state=1`}>
+            <Link to={`/auth/${user}/classic/tasks?filter=state=1`}>
               <IconContext.Provider
                 value={{
                   style: {
@@ -408,7 +408,7 @@ export default function AllMenu({ user, setPopupDisplay, theme }) {
             </Link>
           </li>
           <li className="module">
-            <Link to={`/auth/${user}/tasks?filter=state=2`}>
+            <Link to={`/auth/${user}/classic/tasks?filter=state=2`}>
               <IconContext.Provider
                 value={{
                   style: {
@@ -425,7 +425,7 @@ export default function AllMenu({ user, setPopupDisplay, theme }) {
             </Link>
           </li>
           <li className="module">
-            <Link to={`/auth/${user}/tasks?filter=state=3`}>
+            <Link to={`/auth/${user}/classic/tasks?filter=state=3`}>
               <IconContext.Provider
                 value={{
                   style: {

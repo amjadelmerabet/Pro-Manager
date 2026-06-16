@@ -4,6 +4,7 @@ export default function loginRedirectUtil(
   navigate,
   logout,
   username,
+  modernUI,
 ) {
   if (redirectURL) {
     if (userAuthenticated) {
@@ -16,11 +17,17 @@ export default function loginRedirectUtil(
   } else {
     if (userAuthenticated && !logout) {
       const authUser = JSON.parse(userAuthenticated).user;
-      navigate("/auth/" + authUser + "/dashboard");
+      navigate(
+        `/auth/${authUser}/${modernUI && modernUI === "true" ? "modern" : "classic"}/dashboard`,
+      );
     } else if (username) {
-      navigate("/auth/" + username + "/dashboard");
+      navigate(
+        `/auth/${username}/${modernUI && modernUI === "true" ? "modern" : "classic"}/dashboard`,
+      );
     } else {
-      navigate("/auth/user/dashboard");
+      navigate(
+        `/auth/user/${modernUI && modernUI === "true" ? "modern" : "classic"}/dashboard`,
+      );
     }
   }
 }

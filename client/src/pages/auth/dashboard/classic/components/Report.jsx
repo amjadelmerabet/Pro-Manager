@@ -13,7 +13,7 @@ export default function Report({ name, type, user, value, state, theme }) {
         <div className="report-title poppins-bold">{name}</div>
         <div className="report-value poppins-bold">{value}</div>
         <div className="report-link poppins-regular-italic">
-          <Link to={`/auth/${user}/projects?filter=state=${state}`}>
+          <Link to={`/auth/${user}/classic/projects?filter=state=${state}`}>
             Show the list
           </Link>
         </div>
@@ -29,7 +29,7 @@ export default function Report({ name, type, user, value, state, theme }) {
         <div className="report-title poppins-bold">{name}</div>
         <div className="report-value poppins-bold">{value}</div>
         <div className="report-link poppins-regular-italic">
-          <Link to={`/auth/${user}/tasks?filter=state=${state}`}>
+          <Link to={`/auth/${user}/classic/tasks?filter=state=${state}`}>
             Show the list
           </Link>
         </div>

@@ -26,7 +26,7 @@ import countMatchingRecords from "../utils/countMatchingRecords";
 // Styles
 import "./Projects.css";
 
-export default function ProjectsPage({ user, userId, setAuthentication }) {
+export default function ProjectsPage({ user, userId, setAuthentication, setPreviewModernUI }) {
   const [projects, setProjects] = useState([]);
   const [newProject, setNewProject] = useState({});
   const [createProject, setCreateProject] = useState(0);
@@ -287,7 +287,7 @@ export default function ProjectsPage({ user, userId, setAuthentication }) {
   let navigate = useNavigate();
 
   const openProject = (id) => {
-    navigate("/auth/" + user + "/project/" + id + "?view=" + selectedView);
+    navigate("/auth/" + user + "/classic/project/" + id + "?view=" + selectedView);
   };
 
   const hoverOverProject = (id) => {
@@ -350,6 +350,7 @@ export default function ProjectsPage({ user, userId, setAuthentication }) {
           globalSearch={globalSearch}
           setGlobalSearch={setGlobalSearch}
           token={token}
+          setPreviewModernUI={setPreviewModernUI}
         />
       </div>
       <div className="container">

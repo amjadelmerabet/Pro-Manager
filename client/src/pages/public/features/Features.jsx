@@ -6,7 +6,7 @@ import "./Features.css";
 
 export default function FeaturesPage() {
   return (
-    <div className="features-page">
+    <div className="features-page public">
       <div className="container">
         <Header />
         <h2 className="poppins-bold">Features Page</h2>

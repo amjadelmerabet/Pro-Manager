@@ -214,3 +214,17 @@
 .dark .auth-header .settings > .settings-list > .setting-item a {
   color: rgb(225, 225, 225);
 }
+
+.auth-header .switch-to-modern-ui {
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  padding: 2px 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}

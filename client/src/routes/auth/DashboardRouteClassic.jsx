@@ -1,10 +1,15 @@
-import { useLocation, useNavigate } from "react-router";
-import TasksPage from "../../pages/auth/tasks/Tasks";
-import { useEffect, useState } from "react";
+import DashboardPage from "../../pages/auth/dashboard/classic/Dashboard";
 import WrongRoute from "../public/WrongRoute";
+
+import { useLocation, useNavigate } from "react-router";
+import { useEffect, useState } from "react";
 import bcrypt from "bcryptjs";
 
-export default function TasksRoute({ isAuthenticated, setAuthentication, setPreviewModernUI }) {
+export default function DashboardRouteClassic({
+  isAuthenticated,
+  setAuthentication,
+  setPreviewModernUI,
+}) {
   const [session, setSession] = useState("");
 
   let navigate = useNavigate();
@@ -59,15 +64,15 @@ export default function TasksRoute({ isAuthenticated, setAuthentication, setPrev
       if (userLoggedOut) {
         navigate("/signin");
       } else {
-        navigate("/signin?redirect=/auth/user/classic/tasks");
+        navigate("/signin?redirect=/auth/user/dashboard");
       }
     }
-  });
+  }, []);
 
-  if (isAuthenticated || userAuthenticated) {
+  if ((isAuthenticated || userAuthenticated) && !userLoggedOut) {
     if (username === userAuthenticated.user) {
       return (
-        <TasksPage
+        <DashboardPage
           user={userAuthenticated.user}
           userId={userAuthenticated.userId}
           setAuthentication={setAuthentication}

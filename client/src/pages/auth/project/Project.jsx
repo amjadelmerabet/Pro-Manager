@@ -29,7 +29,12 @@ import createNewProjectTaskUtil from "./utils/createNewProjectTaskUtil";
 // Styles
 import "./Project.css";
 
-export default function Project({ user, userId, setAuthentication }) {
+export default function Project({
+  user,
+  userId,
+  setAuthentication,
+  setPreviewModernUI,
+}) {
   const [projectObject, setProjectObject] = useState({});
   const [projectUpdates, setProjectUpdates] = useState({});
   const [projectUpdated, setProjectUpdated] = useState({
@@ -66,7 +71,7 @@ export default function Project({ user, userId, setAuthentication }) {
   const pathname = location.pathname;
   const array = pathname
     .replace("/auth/", "")
-    .replace("/project", "")
+    .replace("/classic/project", "")
     .split("/");
   // const userId = array[0];
   const projectId = array[1];
@@ -302,7 +307,11 @@ export default function Project({ user, userId, setAuthentication }) {
           (theme === "light" || theme === "" ? " light" : " dark")
         }
       >
-        <AuthHeader user={user} setAuthentication={setAuthentication} />
+        <AuthHeader
+          user={user}
+          setAuthentication={setAuthentication}
+          setPreviewModernUI={setPreviewModernUI}
+        />
       </div>
       <div className="container">
         {Object.keys(projectObject).length === 0 && !projectNotFound ? (
@@ -586,8 +595,8 @@ export default function Project({ user, userId, setAuthentication }) {
                           <Link
                             to={
                               view
-                                ? `/auth/${user}/task/${task.task_id}?project=${projectId}?view=${view}`
-                                : `/auth/${user}/task/${task.task_id}?project=${projectId}`
+                                ? `/auth/${user}/classic/task/${task.task_id}?project=${projectId}?view=${view}`
+                                : `/auth/${user}/classic/task/${task.task_id}?project=${projectId}`
                             }
                             className="open-button"
                           >
@@ -688,11 +697,11 @@ export default function Project({ user, userId, setAuthentication }) {
                 to={
                   view
                     ? view === "dashboard"
-                      ? `/auth/${user}/dashboard`
-                      : `/auth/${user}/projects?view=${view}`
+                      ? `/auth/${user}/classic/dashboard`
+                      : `/auth/${user}/classic/projects?view=${view}`
                     : taskId
-                      ? `/auth/${user}/task/${taskId}`
-                      : `/auth/${user}/dashboard`
+                      ? `/auth/${user}/classic/task/${taskId}`
+                      : `/auth/${user}/classic/dashboard`
                 }
               >
                 <IconContext.Provider

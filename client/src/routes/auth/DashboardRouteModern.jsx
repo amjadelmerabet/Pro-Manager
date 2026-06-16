@@ -1,11 +1,15 @@
-import DashboardPage from "../../pages/auth/dashboard/Dashboard";
-import WrongRoute from "../public/WrongRoute";
-
-import { useLocation, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router";
+import DashboardPageModern from "../../pages/auth/dashboard/modern/Dashboard";
+import WrongRoute from "../public/WrongRoute";
 import bcrypt from "bcryptjs";
 
-export default function DashboardRoute({ isAuthenticated, setAuthentication }) {
+export default function DashboardRouteModern({
+  isAuthenticated,
+  setAuthentication,
+  previewModernUI,
+  setPreviewModernUI,
+}) {
   const [session, setSession] = useState("");
 
   let navigate = useNavigate();
@@ -60,7 +64,7 @@ export default function DashboardRoute({ isAuthenticated, setAuthentication }) {
       if (userLoggedOut) {
         navigate("/signin");
       } else {
-        navigate("/signin?redirect=/auth/user/dashboard");
+        navigate("/signin?redirect=/auth/user/modern/dashboard");
       }
     }
   }, []);
@@ -68,14 +72,15 @@ export default function DashboardRoute({ isAuthenticated, setAuthentication }) {
   if ((isAuthenticated || userAuthenticated) && !userLoggedOut) {
     if (username === userAuthenticated.user) {
       return (
-        <DashboardPage
+        <DashboardPageModern
           user={userAuthenticated.user}
           userId={userAuthenticated.userId}
-          setAuthentication={setAuthentication}
+          previewModernUI={previewModernUI}
+          setPreviewModernUI={setPreviewModernUI}
         />
       );
     } else {
-      return <WrongRoute />;
+      <WrongRoute />
     }
   }
 }

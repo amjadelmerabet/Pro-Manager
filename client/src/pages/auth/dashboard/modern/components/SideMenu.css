@@ -1,0 +1,102 @@
+.side-menu {
+  width: 15%;
+  height: 100vh;
+  background-color: var(--default-light-theme-primary-color);
+  padding: 12px 20px;
+  position: relative;
+}
+
+.side-menu .app-title {
+  font-size: 20px;
+  color: white;
+}
+
+.side-menu .search-box {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--default-light-theme-secondary-color);
+  padding: 4px 8px;
+  margin-top: 20px;
+  width: 100%;
+  font-weight: 200;
+  color: var(--default-light-theme-secondary-color);
+}
+
+.side-menu .search-box::placeholder {
+  color: var(--default-light-theme-secondary-color);
+}
+
+.side-menu .search-box:focus {
+  outline: none;
+}
+
+.side-menu .sections .section {
+  margin-top: 8px;
+  margin-bottom: 24px;
+  color: white;
+}
+
+.side-menu .sections .section:not(.section:first-child) {
+  border-top: 1px solid var(--default-light-theme-secondary-color);
+}
+
+.side-menu .sections .section .section-title {
+  text-transform: uppercase;
+  font-size: 16px;
+  color: var(--default-light-theme-accent-color);
+}
+
+.side-menu .sections .section .section-menu {
+  list-style: none;
+}
+
+.side-menu .sections .section .section-menu .section-menu-item {
+  font-size: 14px;
+  font-weight: 300;
+  transition: background 50ms ease-in-out;
+  padding: 4px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.side-menu .sections .section .section-menu .section-menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.side-menu .switch-ui {
+  position: absolute;
+  color: white;
+  bottom: 8px;
+}
+
+.side-menu .switch-ui input {
+  margin-right: 4px;
+}
+
+.side-menu button {
+  font-size: 14px;
+  padding: 2px 8px;
+  border: none;
+  border-radius: 4px;
+  transition: transform 250ms ease-in-out, box-shadow 250ms ease-in-out;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, .25);
+  cursor: pointer;
+}
+
+.side-menu button:hover {
+  transform: scale(0.98);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, .25);
+}
+
+.side-menu .switch-to-classic-ui {
+  background-color: var(--default-light-theme-accent-color);
+  color: white;
+}
+
+.side-menu .logout {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background-color: rgb(255, 0, 65);
+  color: white;
+}

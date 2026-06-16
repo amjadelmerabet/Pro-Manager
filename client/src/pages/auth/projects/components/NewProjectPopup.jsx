@@ -43,9 +43,7 @@ export default function NewProjectPopup({
     today.setHours(0);
     today.setMinutes(0);
     today.setSeconds(0);
-    console.log(today);
     const deadlineDate = new Date(deadline);
-    console.log(deadlineDate);
     if (deadlineDate >= today) {
       setNewProject({ ...newProject, deadline: event.target.value });
       setShowWarningMessage(false);
