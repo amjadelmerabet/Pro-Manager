@@ -6,7 +6,7 @@ import "./Contact.css";
 
 export default function ContactPage() {
   return (
-    <div className="contact-page">
+    <div className="contact-page public">
       <div className="container">
         <Header />
         <h2 className="poppins-bold">Contact Page</h2>

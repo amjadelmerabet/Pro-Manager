@@ -28,7 +28,12 @@ import fetchUserProjectsUtil from "./utils/fetchUserProjectsUtil";
 import "./Task.css";
 import { TbFolderFilled, TbSquareCheck } from "react-icons/tb";
 
-export default function Task({ user, userId, setAuthentication }) {
+export default function Task({
+  user,
+  userId,
+  setAuthentication,
+  setPreviewModernUI,
+}) {
   const [taskObject, setTaskObject] = useState({});
   const [taskUpdates, setTaskUpdates] = useState({});
   const [taskUpdated, setTaskUpdated] = useState({ counter: 0, update: false });
@@ -58,7 +63,10 @@ export default function Task({ user, userId, setAuthentication }) {
 
   const location = useLocation();
   const pathname = location.pathname;
-  const array = pathname.replace("/auth/", "").replace("/task", "").split("/");
+  const array = pathname
+    .replace("/auth/", "")
+    .replace("/classic/task", "")
+    .split("/");
 
   const taskId = array[1];
 
@@ -326,7 +334,11 @@ export default function Task({ user, userId, setAuthentication }) {
           (theme === "light" || theme === "" ? " light" : " dark")
         }
       >
-        <AuthHeader user={user} setAuthentication={setAuthentication} />
+        <AuthHeader
+          user={user}
+          setAuthentication={setAuthentication}
+          setPreviewModernUI={setPreviewModernUI}
+        />
       </div>
       <div className="container">
         {Object.keys(taskObject).length === 0 ? (
@@ -570,8 +582,8 @@ export default function Task({ user, userId, setAuthentication }) {
                           <Link
                             to={
                               view
-                                ? `/auth/${user}/project/${taskObject.project}?task=${taskObject.task_id}?view=${view}`
-                                : `/auth/${user}/project/${taskObject.project}?task=${taskObject.task_id}`
+                                ? `/auth/${user}/classic/project/${taskObject.project}?task=${taskObject.task_id}?view=${view}`
+                                : `/auth/${user}/classic/project/${taskObject.project}?task=${taskObject.task_id}`
                             }
                             className="project-link"
                           >
@@ -749,11 +761,11 @@ export default function Task({ user, userId, setAuthentication }) {
                 to={
                   view
                     ? view === "dashboard"
-                      ? `/auth/${user}/dashboard`
-                      : `/auth/${user}/tasks?view=${view}`
+                      ? `/auth/${user}/classic/dashboard`
+                      : `/auth/${user}/classic/tasks?view=${view}`
                     : projectId
-                      ? `/auth/${user}/project/${projectId}`
-                      : `/auth/${user}/dashboard`
+                      ? `/auth/${user}/classic/project/${projectId}`
+                      : `/auth/${user}/classic/dashboard`
                 }
               >
                 <IconContext.Provider

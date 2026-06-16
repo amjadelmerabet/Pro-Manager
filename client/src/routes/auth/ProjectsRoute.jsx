@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 
 import bcrypt from "bcryptjs";
 
-export default function ProjectsRoute({ isAuthenticated, setAuthentication }) {
+export default function ProjectsRoute({ isAuthenticated, setAuthentication, setPreviewModernUI }) {
   const [session, setSession] = useState("");
 
   let navigate = useNavigate();
@@ -73,6 +73,7 @@ export default function ProjectsRoute({ isAuthenticated, setAuthentication }) {
           user={userAuthenticated.user}
           userId={userAuthenticated.userId}
           setAuthentication={setAuthentication}
+          setPreviewModernUI={setPreviewModernUI}
         />
       );
     } else {

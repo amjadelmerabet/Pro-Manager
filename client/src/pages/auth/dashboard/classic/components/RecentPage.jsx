@@ -84,7 +84,7 @@ export default function RecentPage({
         </table>
         <div className="links">
           <Link
-            to={`/auth/${user}/project/${recentPage.project_id}?view=dashboard`}
+            to={`/auth/${user}/classic/project/${recentPage.project_id}?view=dashboard`}
             className="open-link poppins-regular-italic"
           >
             Click to open
@@ -156,7 +156,7 @@ export default function RecentPage({
         </table>
         <div className="links">
           <Link
-            to={`/auth/${user}/task/${recentPage.task_id}?view=dashboard`}
+            to={`/auth/${user}/classic/task/${recentPage.task_id}?view=dashboard`}
             className="open-link poppins-regular-italic"
           >
             Click to open

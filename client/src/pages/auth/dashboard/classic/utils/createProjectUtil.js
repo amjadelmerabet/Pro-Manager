@@ -1,5 +1,5 @@
-import createProjectAPI from "../../../../api/projects/createProjectAPI";
-import checkAccessTokenAPI from "../../../../api/tokens/checkAccessTokenAPI";
+import createProjectAPI from "../../../../../api/projects/createProjectAPI";
+import checkAccessTokenAPI from "../../../../../api/tokens/checkAccessTokenAPI";
 
 function tryAgain(tries, setTries, newAccessToken, setNewAccessToken) {
   setTries(tries + 1);

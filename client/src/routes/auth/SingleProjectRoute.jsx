@@ -8,6 +8,7 @@ import bcrypt from "bcryptjs";
 export default function SingleProjectRoute({
   isAuthenticated,
   setAuthentication,
+  setPreviewModernUI
 }) {
   const [session, setSession] = useState("");
 
@@ -75,6 +76,7 @@ export default function SingleProjectRoute({
           user={userAuthenticated.user}
           userId={userAuthenticated.userId}
           setAuthentication={setAuthentication}
+          setPreviewModernUI={setPreviewModernUI}
         />
       );
     } else {

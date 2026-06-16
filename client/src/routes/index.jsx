@@ -10,18 +10,20 @@ import SignUpRoute from "./public/SignupRoute";
 import WrongRoute from "./public/WrongRoute";
 
 // Authenticated routes
-import DashboardRoute from "./auth/DashboardRoute";
+import DashboardRouteClassic from "./auth/DashboardRouteClassic";
 import ProfileRoute from "./auth/ProfileRoute";
 import ProjectsRoute from "./auth/ProjectsRoute";
 import TasksRoute from "./auth/TasksRoute";
 import SingleProjectRoute from "./auth/SingleProjectRoute";
 import SingleTaskRoute from "./auth/SingleTaskRoute";
+import DashboardRouteModern from "./auth/DashboardRouteModern";
 
 export {
   HomeRoute,
   AboutRoute,
   LoginRoute,
-  DashboardRoute,
+  DashboardRouteClassic,
+  DashboardRouteModern,
   ProfileRoute,
   ProjectsRoute,
   FeaturesRoute,

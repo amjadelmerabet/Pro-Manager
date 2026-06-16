@@ -32,6 +32,8 @@ export default function LoginPage({ isAuthenticated, setAuthentication }) {
   const userAuthenticated = sessionStorage.getItem("authUser");
   const logout = sessionStorage.getItem("userLoggedOut");
 
+  const previewModernUI = sessionStorage.getItem("modern-ui");
+
   useEffect(() => {
     if (isAuthenticated) {
       setRedirect(true);
@@ -46,6 +48,7 @@ export default function LoginPage({ isAuthenticated, setAuthentication }) {
         navigate,
         logout,
         username,
+        previewModernUI
       );
     }
   }, [redirect]);

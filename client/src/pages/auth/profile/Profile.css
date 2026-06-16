@@ -437,3 +437,13 @@
 .profile-page main .security-settings .credentials-saved span {
   margin-left: 8px;
 }
+
+.profile-page .modern-theme-preview > div {
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+}
+
+.profile-page .modern-theme-preview input {
+  margin-right: 8px;
+}

@@ -26,7 +26,7 @@ import GlobalSearch from "../components/GlobalSearch";
 import countMatchingRecords from "../utils/countMatchingRecords";
 import KanbanCardTask from "./components/KanbanCardTask";
 
-export default function TasksPage({ user, userId, setAuthentication }) {
+export default function TasksPage({ user, userId, setAuthentication, setPreviewModernUI }) {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState({});
   const [create, setCreate] = useState(0);
@@ -316,7 +316,7 @@ export default function TasksPage({ user, userId, setAuthentication }) {
   let navigate = useNavigate();
 
   const openTask = (id) => {
-    navigate("/auth/" + user + "/task/" + id + "?view=" + selectedView);
+    navigate("/auth/" + user + "/classic/task/" + id + "?view=" + selectedView);
   };
 
   let myTasks = 0;
@@ -386,6 +386,7 @@ export default function TasksPage({ user, userId, setAuthentication }) {
           globalSearch={globalSearch}
           setGlobalSearch={setGlobalSearch}
           token={token}
+          setPreviewModernUI={setPreviewModernUI}
         />
       </div>
       <div className="container">

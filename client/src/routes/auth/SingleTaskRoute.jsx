@@ -7,6 +7,7 @@ import bcrypt from "bcryptjs";
 export default function SingleTaskRoute({
   isAuthenticated,
   setAuthentication,
+  setPreviewModernUI
 }) {
   const [session, setSession] = useState("");
 
@@ -74,6 +75,7 @@ export default function SingleTaskRoute({
           user={userAuthenticated.user}
           userId={userAuthenticated.userId}
           setAuthentication={setAuthentication}
+          setPreviewModernUI={setPreviewModernUI}
         />
       );
     } else {

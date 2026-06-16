@@ -1,0 +1,865 @@
+.dashboard-page-modern {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #e5e5e5;
+}
+
+.dashboard-page-modern .page-container {
+  display: flex;
+}
+
+.dashboard-page-modern .page-container main {
+  width: 100%;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  max-height: 100vh;
+  position: relative;
+}
+
+.dashboard-page-modern .page-container .popup-open::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.25);
+  z-index: 5;
+  cursor: not-allowed;
+}
+
+.dashboard-page-modern .page-container main .page-title {
+  text-align: center;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  color: var(--default-light-theme-primary-color);
+  height: 32px;
+}
+
+.dashboard-page-modern .page-container main > div {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  position: relative;
+}
+
+.dashboard-page-modern .page-container main > div > section {
+  height: calc(100vh - 48px);
+  padding-bottom: 8px;
+}
+
+.dashboard-page-modern .page-container main > div > section:first-child {
+  display: flex;
+  flex-direction: column;
+  grid-column: 1 / 6;
+}
+
+.dashboard-page-modern .page-container main > div > section:nth-child(2) {
+  grid-column: 6 / 8;
+}
+
+.dashboard-page-modern main > div > section .top-section {
+  display: flex;
+  width: 100%;
+  gap: 16px;
+  height: 30%;
+}
+
+/* .dashboard-page-modern main .top-section > div:first-child {
+  width: 100%;
+} */
+
+.dashboard-page-modern main .dashboard-reports {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: fit-content;
+  margin-bottom: 12px;
+}
+
+.dashboard-page-modern main .dashboard-reports .section {
+  margin-bottom: 8px;
+  /* height: 100px; */
+}
+
+.dashboard-page-modern main .dashboard-reports .section-title {
+  font-size: 18px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.dashboard-page-modern main .dashboard-reports .section-reports {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  padding-inline: 8px;
+}
+
+.dashboard-page-modern
+  main
+  .dashboard-reports
+  .section-reports
+  > .dashboard-report {
+  background-color: var(--default-light-theme-primary-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  color: white;
+  transition:
+    transform 250ms ease-in-out,
+    box-shadow 250ms ease-in-out;
+  padding: 12px;
+}
+
+.dashboard-page-modern main .dashboard-reports .dashboard-report:hover {
+  transform: scale(1.05);
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.25);
+}
+
+.dashboard-page-modern main .dashboard-reports .overdue .value {
+  color: rgb(255, 45, 80);
+}
+
+.dashboard-page-modern main .dashboard-reports .close-to-deadline .value {
+  color: rgb(255, 180, 0);
+}
+
+.dashboard-page-modern main .dashboard-reports .dashboard-report .attention {
+  text-decoration: underline;
+}
+
+.dashboard-page-modern main .dashboard-reports .completed .value,
+.dashboard-page-modern main .dashboard-reports .done .value {
+  color: rgb(0, 225, 120);
+}
+
+.dashboard-page-modern main .dashboard-report > .report-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dashboard-page-modern
+  main
+  .dashboard-report
+  > .report-container
+  > .report-title {
+  color: var(--default-light-theme-secondary-color);
+}
+
+.dashboard-page-modern main .dashboard-report > .report-container > .value {
+  font-size: 24px;
+  margin-top: 4px;
+  cursor: pointer;
+}
+
+/* .dashboard-page-modern main .charts {
+  display: flex;
+  width: 25%;
+  align-items: center;
+}
+
+.dashboard-page-modern main .charts .chart {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+}
+
+.dashboard-page-modern main .charts .chart > .chart-title {
+  font-size: 20px;
+  text-align: center;
+  padding-block: 8px;
+} */
+
+.dashboard-page-modern main .recent-activities {
+  height: 100%;
+  background-color: var(--default-light-theme-secondary-color);
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+.dashboard-page-modern main > div > section .bottom-section {
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  max-height: 70%;
+  position: relative;
+  padding-block: 8px;
+}
+
+.dashboard-page-modern main > div > section .bottom-section .controls {
+  display: flex;
+  gap: 4px;
+  padding: 8px;
+}
+
+.dashboard-page-modern main > div > section .bottom-section .controls > div {
+  padding: 4px 8px;
+  font-size: 12px;
+  border: 1px solid var(--default-light-theme-secondary-color);
+  border-radius: 4px;
+  cursor: pointer;
+  transition:
+    transform 250ms ease-in-out,
+    background 250ms ease-in-out;
+  position: relative;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-page-modern
+  main
+  > div
+  > section
+  .bottom-section
+  .controls
+  > div:hover {
+  transform: scale(0.98);
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-page-modern
+  main
+  > div
+  > section
+  .bottom-section
+  .controls
+  > div:hover::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.dashboard-page-modern
+  main
+  > div
+  > section
+  .bottom-section
+  .controls
+  > .selected {
+  background-color: var(--default-light-theme-secondary-color);
+}
+
+.dashboard-page-modern main > div > section .bottom-section table {
+  border-collapse: collapse;
+  border: none;
+  margin-inline: 8px;
+  background-color: white;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.dashboard-page-modern main > div > section .bottom-section table tr {
+  cursor: pointer;
+  transition: background 50ms ease-in-out;
+}
+
+.dashboard-page-modern main > div > section .bottom-section table tr:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-page-modern main > div > section .bottom-section table th {
+  background-color: var(--default-light-theme-accent-color);
+  color: white;
+  padding-block: 4px;
+  border-inline: 1px solid white;
+  min-width: 80px;
+}
+
+.dashboard-page-modern
+  main
+  > div
+  > section
+  .bottom-section
+  table
+  th:first-child {
+  border-left: none;
+}
+
+.dashboard-page-modern
+  main
+  > div
+  > section
+  .bottom-section
+  table
+  th:last-child {
+  border-right: none;
+}
+
+.dashboard-page-modern main > div > section .bottom-section table td {
+  padding: 8px 4px;
+  /* border-bottom: 1px solid black; */
+  font-size: 13px;
+}
+
+.dashboard-page-modern main > div > section .bottom-section table td > div {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dashboard-page-modern main > div > section .bottom-section table span {
+  display: flex;
+  align-items: center;
+}
+
+.dashboard-page-modern
+  main
+  > div
+  > section
+  .bottom-section
+  .projects-table
+  td
+  > span {
+  padding: 1px 12px;
+  border-radius: 32px;
+}
+
+.dashboard-page-modern
+  main
+  > div
+  > section
+  .bottom-section
+  .projects-table
+  .not-started {
+  color: rgb(255, 65, 80);
+  /* color: white; */
+}
+
+.dashboard-page-modern
+  main
+  > div
+  > section
+  .bottom-section
+  .projects-table
+  .in-progress {
+  color: rgb(255, 145, 0);
+  /* color: white; */
+}
+.dashboard-page-modern
+  main
+  > div
+  > section
+  .bottom-section
+  .projects-table
+  .completed {
+  color: rgb(45, 200, 165);
+  /* color: white; */
+}
+
+.dashboard-page-modern main > div > .project-popup,
+.dashboard-page-modern main > div > .task-popup {
+  position: absolute;
+  left: 5%;
+  top: 5%;
+  width: 90%;
+  height: 90%;
+  z-index: 10;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  padding: 8px 12px;
+  opacity: 0;
+  transform: scale(0);
+  visibility: hidden;
+  transition:
+    transform 250ms ease-in-out,
+    opacity 250ms ease-in-out,
+    visibility 250ms ease-in-out;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.25);
+}
+
+.dashboard-page-modern main > div > .project-popup.visible,
+.dashboard-page-modern main > div > .task-popup.visible {
+  opacity: 0.98;
+  transform: scale(1);
+  visibility: visible;
+}
+
+.dashboard-page-modern main > div > .project-popup > .project-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-block: 8px;
+  color: var(--default-light-theme-primary-color);
+}
+
+.dashboard-page-modern
+  main
+  > div
+  > .project-popup
+  > .project-header
+  > .project-state {
+  font-size: 14px;
+  padding: 2px 12px;
+  border-radius: 4px;
+}
+
+.dashboard-page-modern
+  main
+  > div
+  > .project-popup
+  > .project-header
+  > .not-started {
+  background-color: rgba(255, 65, 80, 0.25);
+  color: rgb(255, 65, 80);
+}
+
+.dashboard-page-modern
+  main
+  > div
+  > .project-popup
+  > .project-header
+  > .in-progress {
+  background-color: rgba(255, 145, 0, 0.25);
+  color: rgb(255, 145, 0);
+}
+
+.dashboard-page-modern
+  main
+  > div
+  > .project-popup
+  > .project-header
+  > .completed {
+  background-color: rgba(45, 200, 165, 0.25);
+  color: rgb(45, 200, 165);
+}
+
+.dashboard-page-modern main > div > .project-popup > .project-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  padding: 4px 8px;
+  margin-block: 4px;
+  border-radius: 4px;
+  /* border: 1px solid var(--default-light-theme-primary-color); */
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-page-modern
+  main
+  > div
+  > .project-popup
+  > .project-details
+  > .description-label {
+  font-size: 15px;
+}
+
+.dashboard-page-modern
+  main
+  > div
+  > .project-popup
+  > .project-details
+  > .description,
+.dashboard-page-modern main > div > .task-popup > .task-details .description {
+  width: 100%;
+  height: 200px;
+  padding: 4px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--default-light-theme-primary-color);
+}
+
+.dashboard-page-modern main > div > .project-popup > .actions,
+.dashboard-page-modern main > div > .task-popup > .actions {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  width: calc(100% - 16px);
+  padding: 8px;
+  border: 1px solid var(--default-light-theme-primary-color);
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.dashboard-page-modern main > div > .project-popup > .actions .action,
+.dashboard-page-modern main > div > .task-popup > .actions .action {
+  font-size: 12px;
+  border: none;
+  padding: 2px 8px;
+  background-color: var(--default-light-theme-primary-color);
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  transition:
+    transform 250ms ease-in-out,
+    box-shadow 250ms ease-in-out;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.dashboard-page-modern main > div > .project-popup > .actions > div,
+.dashboard-page-modern main > div > .task-popup > .actions > div {
+  display: flex;
+  gap: 8px;
+}
+
+.dashboard-page-modern main > div > .task-popup > .actions .project {
+  font-size: 15px;
+}
+
+.dashboard-page-modern main > div > .task-popup > .actions .parent-project {
+  color: var(--default-light-theme-accent-color);
+}
+
+.dashboard-page-modern main > div > .project-popup > .actions .save {
+  pointer-events: none;
+}
+
+.dashboard-page-modern main > div > .project-popup > .actions .enable-save {
+  pointer-events: all;
+}
+
+.dashboard-page-modern main > div > .project-popup > .actions .delete,
+.dashboard-page-modern main > div > .task-popup > .actions .delete {
+  background-color: rgb(255, 45, 80);
+}
+
+.dashboard-page-modern main > div > .project-popup > .actions .action:hover,
+.dashboard-page-modern main > div > .task-popup > .actions .action:hover {
+  transform: scale(0.98);
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+.dashboard-page-modern
+  main
+  > div
+  > .project-popup
+  > .actions
+  > .action:hover::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.dashboard-page-modern main > div > .project-popup .close-popup,
+.dashboard-page-modern main > div > .task-popup .close-popup {
+  position: absolute;
+  top: 4px;
+  right: 12px;
+  font-size: 14px;
+  color: rgb(255, 45, 80);
+  border: none;
+  cursor: pointer;
+}
+
+.dashboard-page-modern main > div > .project-popup .project-tasks-table {
+  width: 100%;
+  background-color: white;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.dashboard-page-modern
+  main
+  > div
+  > .project-popup
+  .project-tasks-table
+  tr
+  > th {
+  background-color: var(--default-light-theme-secondary-color);
+  padding-block: 2px;
+}
+
+.dashboard-page-modern
+  main
+  > div
+  > .project-popup
+  .project-tasks-table
+  tr
+  > td {
+  padding: 2px 8px;
+  font-size: 13px;
+}
+
+.dashboard-page-modern
+  main
+  > div
+  > .project-popup
+  .project-tasks-table
+  tr
+  > td
+  > span {
+  padding: 0 8px;
+  border-radius: 24px;
+}
+
+.dashboard-page-modern
+  main
+  > div
+  > .project-popup
+  .project-tasks-table
+  tr
+  > td
+  > div {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dashboard-page-modern
+  main
+  > div
+  > .project-popup
+  .project-tasks-table
+  tr
+  span {
+  display: flex;
+  align-items: center;
+}
+
+.dashboard-page-modern
+  main
+  > div
+  > .project-popup
+  .project-tasks-table
+  td
+  .to-do {
+  color: rgb(45, 180, 225);
+}
+
+.dashboard-page-modern
+  main
+  > div
+  > .project-popup
+  .project-tasks-table
+  td
+  .doing {
+  color: rgb(255, 180, 45);
+}
+
+.dashboard-page-modern
+  main
+  > div
+  > .project-popup
+  .project-tasks-table
+  td
+  .done {
+  color: rgb(0, 200, 120);
+}
+
+.dashboard-page-modern main > div > .task-popup > .task-header {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding-block: 8px;
+}
+
+.dashboard-page-modern main > div > .task-popup > .task-header > .task-state {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.dashboard-page-modern main > div > .task-popup > .task-header > .to-do {
+  background-color: rgba(45, 180, 225, 0.25);
+  color: rgb(45, 180, 225);
+}
+
+.dashboard-page-modern main > div > .task-popup > .task-header > .doing {
+  background-color: rgba(255, 180, 45, 0.25);
+  color: rgb(255, 180, 45);
+}
+
+.dashboard-page-modern main > div > .task-popup > .task-header > .done {
+  background-color: rgba(0, 200, 120, 0.25);
+  color: rgb(0, 200, 120);
+}
+
+.dashboard-page-modern main > div > .task-popup > .task-header > .task-name {
+  font-size: 18px;
+  color: var(--default-light-theme-primary-color);
+}
+
+.dashboard-page-modern main > div > .task-popup > .task-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-page-modern main > div > .task-popup > .task-details {
+  display: grid;
+  margin-top: 8px;
+}
+
+.dashboard-page-modern main > div > .task-popup > .task-details > div {
+  display: grid;
+}
+
+.dashboard-page-modern main > div > .task-popup > .task-details > div > label {
+  font-size: 15px;
+}
+
+.dashboard-page-modern main > div > .task-popup > .task-details > div > input {
+  padding: 4px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--default-light-theme-primary-color);
+}
+
+.dashboard-page-modern main > div > section > .quick-actions {
+  position: absolute;
+  bottom: 8px;
+  left: 0;
+  display: flex;
+  gap: 8px;
+}
+
+.dashboard-page-modern main > div > section > .quick-actions > button {
+  background-color: var(--default-light-theme-primary-color);
+  color: white;
+  padding: 4px 12px;
+  border: none;
+  border-radius: 4px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  transition:
+    transform 250ms ease-in-out,
+    box-shadow 250ms ease-in-out;
+}
+
+.dashboard-page-modern main > div > section > .quick-actions > button:hover {
+  transform: scale(0.98);
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+.dashboard-page-modern main > div > .new-project-form,
+.dashboard-page-modern main > div > .new-task-form {
+  position: absolute;
+  width: 60%;
+  height: 80%;
+  top: 10%;
+  left: 20%;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.25);
+  z-index: 10;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0);
+  transition:
+    opacity 250ms ease-in-out,
+    visibility 250ms ease-in-out,
+    transform 250ms ease-in-out;
+}
+
+.dashboard-page-modern main > div > .new-project-form.visible,
+.dashboard-page-modern main > div > .new-task-form.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+}
+
+.dashboard-page-modern main > div > .new-project-form > .close-form,
+.dashboard-page-modern main > div > .new-task-form > .close-form {
+  background: transparent;
+  border: none;
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  color: rgb(255, 45, 80);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.dashboard-page-modern main > div > .new-project-form .form-title,
+.dashboard-page-modern main > div > .new-task-form .form-title {
+  text-align: center;
+  margin-block: 32px;
+  font-size: 20px;
+}
+
+.dashboard-page-modern main > div > .new-project-form > div,
+.dashboard-page-modern main > div > .new-task-form > div {
+  display: grid;
+  margin: 16px auto;
+  width: 60%;
+}
+
+.dashboard-page-modern main > div > .new-project-form > div > div,
+.dashboard-page-modern main > div > .new-task-form > div > div {
+  display: grid;
+  margin-bottom: 8px;
+}
+
+.dashboard-page-modern main > div > .new-project-form > div > div > label,
+.dashboard-page-modern main > div > .new-task-form > div > div > label {
+  font-size: 14px;
+  color: var(--default-light-theme-primary-color);
+}
+
+.dashboard-page-modern main > div > .new-project-form > div > div > input,
+.dashboard-page-modern main > div > .new-task-form > div > div > input {
+  font-size: 14px;
+  padding: 4px;
+  border: 1px solid black;
+  border-radius: 4px;
+}
+
+.dashboard-page-modern main > div > .new-project-form > div > div > textarea,
+.dashboard-page-modern main > div > .new-task-form > div > div > textarea {
+  padding: 2px 4px;
+}
+
+.dashboard-page-modern main > div > .new-project-form > div > .create-project,
+.dashboard-page-modern main > div > .new-task-form > div > .create-task {
+  width: 20%;
+  padding: 2px;
+  background-color: var(--default-light-theme-primary-color);
+  color: white;
+  border: 1px solid var(--default-light-theme-primary-color);
+  border-radius: 4px;
+  margin: 24px auto;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+  transition:
+    transform 250ms ease-in-out,
+    box-shadow 250ms ease-in-out;
+  cursor: pointer;
+}
+
+.dashboard-page-modern
+  main
+  > div
+  > .new-project-form
+  > div
+  > .create-project:hover,
+.dashboard-page-modern main > div > .new-task-form > div > .create-task:hover {
+  transform: scale(0.98);
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+.dashboard-page-modern
+  main
+  > div
+  > .new-task-form
+  > div
+  > .task-priority-section
+  > div {
+  display: flex;
+  padding: 4px 8px;
+  gap: 16px;
+}
+
+.dashboard-page-modern
+  main
+  > div
+  > .new-task-form
+  > div
+  > .task-priority-section
+  > div
+  > div {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}

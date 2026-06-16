@@ -5,7 +5,12 @@ import { useLocation, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import bcrypt from "bcryptjs";
 
-export default function ProfileRoute({ isAuthenticated, setAuthentication }) {
+export default function ProfileRoute({
+  isAuthenticated,
+  setAuthentication,
+  previewModernUI,
+  setPreviewModernUI,
+}) {
   const [session, setSession] = useState("");
 
   let navigate = useNavigate();
@@ -70,6 +75,7 @@ export default function ProfileRoute({ isAuthenticated, setAuthentication }) {
           user={userAuthenticated.user}
           userId={userAuthenticated.userId}
           setAuthentication={setAuthentication}
+          setPreviewModernUI={setPreviewModernUI}
         />
       );
     } else {

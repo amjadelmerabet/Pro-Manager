@@ -12,17 +12,17 @@ import { IconContext } from "react-icons/lib";
 
 // Components
 import AllMenu from "./components/AllMenu";
-import AuthHeader from "../components/AuthHeader";
+import AuthHeader from "../../components/AuthHeader";
 import { Link } from "react-router";
-import NewProjectPopup from "../projects/components/NewProjectPopup";
-import NewTaskPopup from "../tasks/components/NewTaskPopup";
+import NewProjectPopup from "../../projects/components/NewProjectPopup";
+import NewTaskPopup from "../../tasks/components/NewTaskPopup";
 import RecentPage from "./components/RecentPage";
 import QuickActions from "./components/QuickActions";
 import Report from "./components/Report";
 import SelectedPage from "./components/SelectedPage";
 
 // Utils
-import updatedMessageUtil from "../../../utils/updatedMessageUtil";
+import updatedMessageUtil from "../../../../utils/updatedMessageUtil";
 import fetchUserProjectsUtil from "./utils/fetchUserProjectsUtil";
 import fetchUserTasksUtil from "./utils/fetchUserTasksUtil";
 import getAccessTokenUtil from "./utils/getAccessTokenUtil";
@@ -34,10 +34,10 @@ import createPageName from "./utils/createPageNameUtil";
 import "./Dashboard.css";
 import { RiAlarmWarningFill } from "react-icons/ri";
 import { IoClose } from "react-icons/io5";
-import GlobalSearch from "../components/GlobalSearch";
-import countMatchingRecords from "../utils/countMatchingRecords";
+import GlobalSearch from "../../components/GlobalSearch";
+import countMatchingRecords from "../../utils/countMatchingRecords";
 
-export default function DashboardPage({ user, userId, setAuthentication }) {
+export default function DashboardPage({ user, userId, setAuthentication, setPreviewModernUI }) {
   const [recentPages, setRecentPages] = useState([]);
   const [tries, setTries] = useState(0);
   const [tokenValidated, setTokenValidated] = useState(false);
@@ -330,6 +330,7 @@ export default function DashboardPage({ user, userId, setAuthentication }) {
           theme={theme}
           tokenValidated={tokenValidated}
           setTokenValidated={setTokenValidated}
+          setPreviewModernUI={setPreviewModernUI}
         />
       </div>
       <div className="dashboard-container">

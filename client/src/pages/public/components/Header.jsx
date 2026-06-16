@@ -3,6 +3,8 @@ import "./Header.css";
 
 export default function Header() {
   const userLoggedIn = JSON.parse(sessionStorage.getItem("authUser"));
+  const previewModernUI = sessionStorage.getItem("modern-ui");
+  console.log(previewModernUI);
 
   return (
     <header>
@@ -31,12 +33,21 @@ export default function Header() {
       </ul>
       <div className="auth-section">
         {userLoggedIn && userLoggedIn.authenticated ? (
-          <Link
-            to={`/auth/${userLoggedIn.user}/dashboard`}
-            className="workspace poppins-semibold"
-          >
-            My Workspace
-          </Link>
+          (previewModernUI && previewModernUI === "true") ? (
+            <Link
+              to={`/auth/${userLoggedIn.user}/modern/dashboard`}
+              className="workspace poppins-semibold"
+            >
+              My Workspace
+            </Link>
+          ) : (
+            <Link
+              to={`/auth/${userLoggedIn.user}/classic/dashboard`}
+              className="workspace poppins-semibold"
+            >
+              My Workspace
+            </Link>
+          )
         ) : (
           <div className="auth-buttons">
             <Link to="/signin" className="signin-button poppins-semibold">

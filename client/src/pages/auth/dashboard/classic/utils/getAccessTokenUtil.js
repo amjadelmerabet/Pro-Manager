@@ -1,4 +1,4 @@
-import getNewAccessTokenAPI from "../../../../api/tokens/getNewAccessTokenAPI";
+import getNewAccessTokenAPI from "../../../../../api/tokens/getNewAccessTokenAPI";
 
 function nextAction(
   newAccessToken,
