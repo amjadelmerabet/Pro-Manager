@@ -1,5 +1,5 @@
 // Hooks
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router";
 
 // Icons
@@ -9,7 +9,7 @@ import { GrFormClock } from "react-icons/gr";
 import { IoCheckmark, IoClose } from "react-icons/io5";
 import { FaArrowLeft, FaFire, FaRegSnowflake } from "react-icons/fa";
 import { MdOutlineModeEdit } from "react-icons/md";
-import { TbFolder, TbSquareCheck, TbSquarePlus } from "react-icons/tb";
+import { TbFolder, TbLink, TbSquareCheck, TbSquarePlus } from "react-icons/tb";
 import { RiAlarmWarningFill } from "react-icons/ri";
 
 // Components
@@ -28,6 +28,8 @@ import createNewProjectTaskUtil from "./utils/createNewProjectTaskUtil";
 
 // Styles
 import "./Project.css";
+import fetchUserTasksWithNoProjectUtil from "./utils/fetchUserTasksWithNoProjectUtil";
+import linkTasksToProjectUtil from "./utils/linkTasksToProjectUtil";
 
 export default function Project({ user, userId, setAuthentication }) {
   const [projectObject, setProjectObject] = useState({});
@@ -61,6 +63,14 @@ export default function Project({ user, userId, setAuthentication }) {
   const [newTask, setNewTask] = useState({});
   const [newTaskToCreate, setNewTaskToCreate] = useState(0);
   const [theme, setTheme] = useState("");
+  const [tasksWithNoProject, setTasksWithNoProject] = useState([]);
+  const [fetchUserTasksWithNoProject, setFetchUserTasksWithNoProject] =
+    useState(false);
+  const [openLinkTaskPopup, setOpenLinkTaskPopup] = useState(false);
+  const [linkTasksPopupVisible, setLinkTasksPopupVisible] = useState(false);
+  const [tasksToLink, setTasksToLink] = useState([]);
+  const [linkTasksToProject, setLinkTasksToProject] = useState(false);
+  const [tasksLinkedToProject, setTasksLinkedToProject] = useState(0);
 
   const location = useLocation();
   const pathname = location.pathname;
@@ -112,7 +122,7 @@ export default function Project({ user, userId, setAuthentication }) {
   }, [updatedsuccessfully, loadProject]);
 
   useEffect(() => {
-    if (loadTasks || projectFetched) {
+    if (loadTasks || projectFetched || tasksLinkedToProject > 0) {
       fetchProjectTasksUtil(
         projectId,
         sessionId,
@@ -127,7 +137,7 @@ export default function Project({ user, userId, setAuthentication }) {
         setNewAccessToken,
       );
     }
-  }, [loadTasks, projectFetched]);
+  }, [loadTasks, projectFetched, tasksLinkedToProject]);
 
   useEffect(() => {
     if (newAccessToken.counter > 0) {
@@ -145,6 +155,9 @@ export default function Project({ user, userId, setAuthentication }) {
         setProjectUpdated,
         setProjectDeleted,
         setLoadTasks,
+        newTaskToCreate,
+        setNewTaskToCreate,
+        setFetchUserTasksWithNoProject,
       );
     }
   }, [newAccessToken]);
@@ -220,6 +233,55 @@ export default function Project({ user, userId, setAuthentication }) {
     }
   }, [newTaskToCreate]);
 
+  useEffect(() => {
+    if (fetchUserTasksWithNoProject) {
+      fetchUserTasksWithNoProjectUtil(
+        user,
+        userId,
+        token,
+        sessionId,
+        tries,
+        setTries,
+        tokenValidated,
+        setTokenValidated,
+        newAccessToken,
+        setNewAccessToken,
+        setTasksWithNoProject,
+        setFetchUserTasksWithNoProject,
+      );
+    }
+  }, [fetchUserTasksWithNoProject]);
+
+  useEffect(() => {
+    if (linkTasksToProject) {
+      linkTasksToProjectUtil(
+        tasksToLink,
+        projectObject.project_id,
+        user,
+        userId,
+        token,
+        sessionId,
+        tries,
+        setTries,
+        tokenValidated,
+        setTokenValidated,
+        newAccessToken,
+        setNewAccessToken,
+        tasksLinkedToProject,
+        setTasksLinkedToProject,
+        setLinkTasksToProject,
+        tasksToLink,
+        setTasksToLink,
+      );
+    }
+  }, [linkTasksToProject]);
+
+  useEffect(() => {
+    if (tasksLinkedToProject > 0) {
+      closeLinkTaskPopup();
+    }
+  }, [tasksLinkedToProject]);
+
   const startProject = () => {
     setProjectUpdates({ state: 2, updated_by: userId });
     setProjectUpdated({ counter: projectUpdated.counter + 1, update: true });
@@ -287,6 +349,33 @@ export default function Project({ user, userId, setAuthentication }) {
       updated_by: userId,
     });
     setNewTaskToCreate(newTaskToCreate + 1);
+  };
+
+  const openLinkTasksPopupFn = () => {
+    setFetchUserTasksWithNoProject(true);
+    setOpenLinkTaskPopup(true);
+    setTimeout(() => {
+      setLinkTasksPopupVisible(true);
+    }, 250);
+  };
+
+  const closeLinkTaskPopup = () => {
+    setLinkTasksPopupVisible(false);
+    setTimeout(() => {
+      setOpenLinkTaskPopup(false);
+    }, 250);
+  };
+
+  const addOrRemoveTaskFromList = (taskId) => {
+    if (tasksToLink.indexOf(taskId) !== -1) {
+      setTasksToLink(tasksToLink.filter((task) => task !== taskId));
+    } else {
+      setTasksToLink([...tasksToLink, taskId]);
+    }
+  };
+
+  const linkTasks = () => {
+    setLinkTasksToProject(true);
   };
 
   return (
@@ -543,26 +632,46 @@ export default function Project({ user, userId, setAuthentication }) {
                 </IconContext.Provider>
                 Tasks
               </h3>
-              <button
-                className="create-new-task poppins-regular"
-                onClick={() =>
-                  setOpenNewTaskPopup({ ...openNewTaskPopup, active: true })
-                }
-              >
-                <IconContext.Provider
-                  value={{
-                    style: {
-                      color:
-                        theme === "light" || theme === ""
-                          ? "var(--primary-color)"
-                          : "var(--primary-color-dark)",
-                    },
-                  }}
+              <div>
+                <button
+                  className="create-new-task poppins-regular"
+                  onClick={() =>
+                    setOpenNewTaskPopup({ ...openNewTaskPopup, active: true })
+                  }
                 >
-                  <TbSquarePlus className="create-new-task-icon" />
-                </IconContext.Provider>
-                Create new task
-              </button>
+                  <IconContext.Provider
+                    value={{
+                      style: {
+                        color:
+                          theme === "light" || theme === ""
+                            ? "var(--primary-color)"
+                            : "var(--primary-color-dark)",
+                      },
+                    }}
+                  >
+                    <TbSquarePlus className="create-new-task-icon" />
+                  </IconContext.Provider>
+                  Create new task
+                </button>
+                <button
+                  className="link-task poppins-regular"
+                  onClick={() => openLinkTasksPopupFn()}
+                >
+                  <IconContext.Provider
+                    value={{
+                      style: {
+                        color:
+                          theme === "light" || theme === ""
+                            ? "var(--primary-color)"
+                            : "var(--primary-color-dark)",
+                      },
+                    }}
+                  >
+                    <TbLink className="link-task-icon" />
+                  </IconContext.Provider>
+                  Link a task
+                </button>
+              </div>
             </div>
             <div className="project-tasks-section">
               <div className="tasks">
@@ -729,6 +838,69 @@ export default function Project({ user, userId, setAuthentication }) {
           parentProjectId={projectObject.project_id}
           theme={theme}
         />
+      ) : (
+        ""
+      )}
+      {openLinkTaskPopup ? (
+        <div
+          className={
+            "link-tasks-popup" + (linkTasksPopupVisible ? " visible" : "")
+          }
+        >
+          {tasksWithNoProject.length > 0 ? (
+            <div>
+              <div>
+                <label
+                  htmlFor="available-tasks"
+                  className="available-tasks-label poppins-medium"
+                >
+                  Tasks
+                </label>
+                <div
+                  name="available-tasks"
+                  className="available-tasks poppins-regular"
+                >
+                  {tasksWithNoProject.map((task, index) => {
+                    return (
+                      <div
+                        className={
+                          "available-task" +
+                          (tasksToLink.indexOf(task.task_id) !== -1
+                            ? " selected"
+                            : "")
+                        }
+                        value={task.task_id}
+                        key={index}
+                        onClick={() => addOrRemoveTaskFromList(task.task_id)}
+                      >
+                        {task.name}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+              <button
+                className={
+                  "link-task poppins-semibold" +
+                  (tasksToLink.length === 0 ? " disabled" : "")
+                }
+                onClick={() => linkTasks()}
+              >
+                Link
+              </button>
+            </div>
+          ) : (
+            <span className="no-available-tasks poppins-regular">
+              No available tasks
+            </span>
+          )}
+          <button
+            className="close-popup poppins-semibold"
+            onClick={() => closeLinkTaskPopup()}
+          >
+            Close
+          </button>
+        </div>
       ) : (
         ""
       )}
