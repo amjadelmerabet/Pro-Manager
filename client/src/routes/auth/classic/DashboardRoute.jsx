@@ -1,14 +1,14 @@
-import { useLocation, useNavigate } from "react-router";
-import Project from "../../pages/auth/project/Project";
-import { useEffect, useState } from "react";
-import WrongRoute from "../public/WrongRoute";
+import DashboardPage from "../../../pages/auth/dashboard/classic/Dashboard";
+import WrongRoute from "../../public/WrongRoute";
 
+import { useLocation, useNavigate } from "react-router";
+import { useEffect, useState } from "react";
 import bcrypt from "bcryptjs";
 
-export default function SingleProjectRoute({
+export default function DashboardRouteClassic({
   isAuthenticated,
   setAuthentication,
-  setPreviewModernUI
+  setPreviewModernUI,
 }) {
   const [session, setSession] = useState("");
 
@@ -22,14 +22,14 @@ export default function SingleProjectRoute({
 
   const index = slicedPathname.indexOf("/");
 
+  const username = slicedPathname.slice(0, index);
+
   const logoutUser = () => {
     sessionStorage.setItem("userLoggedOut", true);
     sessionStorage.removeItem("authUser");
     setAuthentication(false);
     navigate("/signin");
   };
-
-  const username = slicedPathname.slice(0, index);
 
   useEffect(() => {
     const getUserSession = async () => {
@@ -64,15 +64,15 @@ export default function SingleProjectRoute({
       if (userLoggedOut) {
         navigate("/signin");
       } else {
-        navigate("/signin?redirect=/auth/user/projects");
+        navigate("/signin?redirect=/auth/user/dashboard");
       }
     }
   }, []);
 
-  if (isAuthenticated || userAuthenticated) {
+  if ((isAuthenticated || userAuthenticated) && !userLoggedOut) {
     if (username === userAuthenticated.user) {
       return (
-        <Project
+        <DashboardPage
           user={userAuthenticated.user}
           userId={userAuthenticated.userId}
           setAuthentication={setAuthentication}
@@ -80,7 +80,7 @@ export default function SingleProjectRoute({
         />
       );
     } else {
-      <WrongRoute />;
+      return <WrongRoute />;
     }
   }
 }

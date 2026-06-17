@@ -1,5 +1,5 @@
-import ProjectsPage from "../../pages/auth/projects/Projects";
-import WrongRoute from "../public/WrongRoute";
+import ProjectsPage from "../../../pages/auth/projects/Projects";
+import WrongRoute from "../../public/WrongRoute";
 
 import { useLocation, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
