@@ -155,6 +155,9 @@ export default function Project({ user, userId, setAuthentication }) {
         setProjectUpdated,
         setProjectDeleted,
         setLoadTasks,
+        newTaskToCreate,
+        setNewTaskToCreate,
+        setFetchUserTasksWithNoProject,
       );
     }
   }, [newAccessToken]);
@@ -231,7 +234,7 @@ export default function Project({ user, userId, setAuthentication }) {
   }, [newTaskToCreate]);
 
   useEffect(() => {
-    if (openLinkTaskPopup || fetchUserTasksWithNoProject) {
+    if (fetchUserTasksWithNoProject) {
       fetchUserTasksWithNoProjectUtil(
         user,
         userId,
@@ -244,9 +247,10 @@ export default function Project({ user, userId, setAuthentication }) {
         newAccessToken,
         setNewAccessToken,
         setTasksWithNoProject,
+        setFetchUserTasksWithNoProject,
       );
     }
-  }, [openLinkTaskPopup, fetchUserTasksWithNoProject]);
+  }, [fetchUserTasksWithNoProject]);
 
   useEffect(() => {
     if (linkTasksToProject) {
@@ -348,6 +352,7 @@ export default function Project({ user, userId, setAuthentication }) {
   };
 
   const openLinkTasksPopupFn = () => {
+    setFetchUserTasksWithNoProject(true);
     setOpenLinkTaskPopup(true);
     setTimeout(() => {
       setLinkTasksPopupVisible(true);
@@ -875,7 +880,10 @@ export default function Project({ user, userId, setAuthentication }) {
                 </div>
               </div>
               <button
-                className="link-task poppins-semibold"
+                className={
+                  "link-task poppins-semibold" +
+                  (tasksToLink.length === 0 ? " disabled" : "")
+                }
                 onClick={() => linkTasks()}
               >
                 Link

@@ -27,6 +27,7 @@ async function fetchUserTasksWithNoProjectAction(
     setTasksWithNoProject(
       fetchTasks.result.filter((task) => task.project === null),
     );
+    setFetchUserTasksWithNoProject(false);
   }
 }
 

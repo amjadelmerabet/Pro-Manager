@@ -61,6 +61,7 @@ export default async function getAccessTokenUtil(
   setLoadTasks,
   newTaskToCreate,
   setNewTaskToCreate,
+  setFetchUserTasksWithNoProject
 ) {
   try {
     const refreshToken = await cookieStore.get(user);
@@ -84,6 +85,7 @@ export default async function getAccessTokenUtil(
           setLoadTasks,
           newTaskToCreate,
           setNewTaskToCreate,
+          setFetchUserTasksWithNoProject
         );
         setTimeout(() => {
           setTokenValidated(false);

@@ -542,9 +542,10 @@
 }
 
 .project-page .link-tasks-popup .link-task {
+  position: relative;
   background-color: var(--primary-color);
   border: none;
-  padding: 2px 20px;
+  padding-block: 2px;
   color: white;
   border-radius: 4px;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
@@ -553,11 +554,26 @@
     box-shadow 250ms ease-in-out,
     transform 250ms ease-in-out;
   cursor: pointer;
-  width: 40%;
+  width: 30%;
   margin-inline: auto;
 }
 
-.project-page .link-tasks-popup .link-task:hover {
+.project-page .link-tasks-popup .link-task.disabled {
+  pointer-events: none;
+}
+
+.project-page .link-tasks-popup .link-task.disabled::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+.project-page .link-tasks-popup .link-task:not(.disabled):hover {
   background-color: var(--primary-color-hover);
   box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
   transform: scale(0.98);
