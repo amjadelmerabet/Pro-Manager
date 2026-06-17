@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router";
-import Task from "../../pages/auth/task/Task";
+import Task from "../../../pages/auth/task/Task";
 import { useEffect, useState } from "react";
-import WrongRoute from "../public/WrongRoute";
+import WrongRoute from "../../public/WrongRoute";
 import bcrypt from "bcryptjs";
 
 export default function SingleTaskRoute({

@@ -9,8 +9,8 @@ import {
   AboutRoute,
   BlogRoute,
   ContactRoute,
-  DashboardRouteClassic,
-  DashboardRouteModern,
+  ClassicDashboardRoute,
+  ModernDashboardRoute,
   FeaturesRoute,
   HomeRoute,
   LoginRoute,
@@ -67,7 +67,7 @@ function App() {
                 <Route
                   path="dashboard"
                   element={
-                    <DashboardRouteModern
+                    <ModernDashboardRoute
                       isAuthenticated={userAuthenticated}
                       setAuthentication={setUserAuthenticated}
                       previewModernUI={previewModernUI}
@@ -91,7 +91,7 @@ function App() {
                 <Route
                   path="dashboard"
                   element={
-                    <DashboardRouteClassic
+                    <ClassicDashboardRoute
                       isAuthenticated={userAuthenticated}
                       setAuthentication={setUserAuthenticated}
                       setPreviewModernUI={setPreviewModernUI}

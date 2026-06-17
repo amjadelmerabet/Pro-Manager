@@ -1,5 +1,5 @@
-import ProfilePage from "../../pages/auth/profile/Profile";
-import WrongRoute from "../public/WrongRoute";
+import ProfilePage from "../../../pages/auth/profile/Profile";
+import WrongRoute from "../../public/WrongRoute";
 
 import { useLocation, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
@@ -8,7 +8,6 @@ import bcrypt from "bcryptjs";
 export default function ProfileRoute({
   isAuthenticated,
   setAuthentication,
-  previewModernUI,
   setPreviewModernUI,
 }) {
   const [session, setSession] = useState("");
