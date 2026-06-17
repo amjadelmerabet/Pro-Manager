@@ -17,6 +17,7 @@ function nextAction(
   setLoadTasks,
   newTaskToCreate,
   setNewTaskToCreate,
+  setFetchUserTasksWithNoProject
 ) {
   if (newAccessToken.type === "load") {
     setLoadProject(loadProject + 1);
@@ -37,6 +38,11 @@ function nextAction(
     }, 250);
   } else if (newAccessToken.type === "create-task") {
     setNewTaskToCreate(newTaskToCreate + 1);
+  } else if (newAccessToken.type === "fetch-tasks-with-no-project") {
+    setFetchUserTasksWithNoProject(true);
+    setTimeout(() => {
+      setFetchUserTasksWithNoProject(false);
+    })
   }
 }
 
