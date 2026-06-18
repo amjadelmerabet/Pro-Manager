@@ -1,9 +1,9 @@
-.dashboard-container {
+.dashboard-page .dashboard-container {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
 }
 
-.dashboard-container main {
+.dashboard-page .dashboard-container main {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   grid-column: 2 / -1;

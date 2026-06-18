@@ -6,7 +6,7 @@ import "./Pricing.css";
 
 export default function PricingPage() {
   return (
-    <div className="pricing-page">
+    <div className="pricing-page public">
       <div className="container">
         <Header />
         <h2 className="poppins-bold">Pricing Page</h2>

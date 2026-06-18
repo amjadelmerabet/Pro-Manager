@@ -25,7 +25,12 @@ import loginUserAPI from "../../../api/users/loginUserAPI";
 // Styles
 import "./Profile.css";
 
-export default function ProfilePage({ user, userId, setAuthentication }) {
+export default function ProfilePage({
+  user,
+  userId,
+  setAuthentication,
+  setPreviewModernUI,
+}) {
   const [userObject, setUserObject] = useState({});
   const [editingProfile, setEditingProfile] = useState(false);
   const [profileUpdates, setProfileUpdates] = useState({});
@@ -186,6 +191,7 @@ export default function ProfilePage({ user, userId, setAuthentication }) {
         setTokenValidated,
         user,
         userId,
+        sessionId,
         tries,
         setTries,
         newAccessToken,
@@ -232,7 +238,7 @@ export default function ProfilePage({ user, userId, setAuthentication }) {
       secure: true,
       sameSite: "strict",
     });
-    navigate(`/auth/${username}/profile`);
+    navigate(`/auth/${username}/classic/profile`);
   };
 
   useEffect(() => {
@@ -290,6 +296,7 @@ export default function ProfilePage({ user, userId, setAuthentication }) {
           user={user}
           setAuthentication={setAuthentication}
           theme={selectedTheme}
+          setPreviewModernUI={setPreviewModernUI}
         />
       </div>
       <div className="profile-page-container">

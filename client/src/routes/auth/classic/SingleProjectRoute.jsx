@@ -1,11 +1,15 @@
-import ProfilePage from "../../pages/auth/profile/Profile";
-import WrongRoute from "../public/WrongRoute";
-
 import { useLocation, useNavigate } from "react-router";
+import Project from "../../../pages/auth/project/Project";
 import { useEffect, useState } from "react";
+import WrongRoute from "../../public/WrongRoute";
+
 import bcrypt from "bcryptjs";
 
-export default function ProfileRoute({ isAuthenticated, setAuthentication }) {
+export default function SingleProjectRoute({
+  isAuthenticated,
+  setAuthentication,
+  setPreviewModernUI
+}) {
   const [session, setSession] = useState("");
 
   let navigate = useNavigate();
@@ -18,14 +22,14 @@ export default function ProfileRoute({ isAuthenticated, setAuthentication }) {
 
   const index = slicedPathname.indexOf("/");
 
-  const username = slicedPathname.slice(0, index);
-
   const logoutUser = () => {
     sessionStorage.setItem("userLoggedOut", true);
     sessionStorage.removeItem("authUser");
     setAuthentication(false);
     navigate("/signin");
   };
+
+  const username = slicedPathname.slice(0, index);
 
   useEffect(() => {
     const getUserSession = async () => {
@@ -37,7 +41,9 @@ export default function ProfileRoute({ isAuthenticated, setAuthentication }) {
         logoutUser();
       }
     };
-    getUserSession();
+    if (userAuthenticated) {
+      getUserSession();
+    }
   }, []);
 
   useEffect(() => {
@@ -48,7 +54,7 @@ export default function ProfileRoute({ isAuthenticated, setAuthentication }) {
         logoutUser();
       }
     };
-    if (session !== "") {
+    if (userAuthenticated && session !== "") {
       checkSession();
     }
   }, [session]);
@@ -58,7 +64,7 @@ export default function ProfileRoute({ isAuthenticated, setAuthentication }) {
       if (userLoggedOut) {
         navigate("/signin");
       } else {
-        navigate("/signin?redirect=/auth/user/profile");
+        navigate("/signin?redirect=/auth/user/projects");
       }
     }
   }, []);
@@ -66,14 +72,15 @@ export default function ProfileRoute({ isAuthenticated, setAuthentication }) {
   if (isAuthenticated || userAuthenticated) {
     if (username === userAuthenticated.user) {
       return (
-        <ProfilePage
+        <Project
           user={userAuthenticated.user}
           userId={userAuthenticated.userId}
           setAuthentication={setAuthentication}
+          setPreviewModernUI={setPreviewModernUI}
         />
       );
     } else {
-      return <WrongRoute />;
+      <WrongRoute />;
     }
   }
 }

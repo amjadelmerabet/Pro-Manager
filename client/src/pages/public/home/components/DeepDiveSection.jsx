@@ -39,10 +39,7 @@ export default function DeepDiveSection() {
                 </li>
               </ul>
               <div className="link">
-                <a
-                  href="/auth/dashboard"
-                  className="read-more poppins-regular-italic"
-                >
+                <a href="" className="read-more poppins-regular-italic">
                   Read more ...
                 </a>
                 <IconContext.Provider

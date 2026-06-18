@@ -1,13 +1,14 @@
-import { useLocation, useNavigate } from "react-router";
-import Project from "../../pages/auth/project/Project";
-import { useEffect, useState } from "react";
-import WrongRoute from "../public/WrongRoute";
+import ProfilePage from "../../../pages/auth/profile/Profile";
+import WrongRoute from "../../public/WrongRoute";
 
+import { useLocation, useNavigate } from "react-router";
+import { useEffect, useState } from "react";
 import bcrypt from "bcryptjs";
 
-export default function SingleProjectRoute({
+export default function ProfileRoute({
   isAuthenticated,
   setAuthentication,
+  setPreviewModernUI,
 }) {
   const [session, setSession] = useState("");
 
@@ -21,14 +22,14 @@ export default function SingleProjectRoute({
 
   const index = slicedPathname.indexOf("/");
 
+  const username = slicedPathname.slice(0, index);
+
   const logoutUser = () => {
     sessionStorage.setItem("userLoggedOut", true);
     sessionStorage.removeItem("authUser");
     setAuthentication(false);
     navigate("/signin");
   };
-
-  const username = slicedPathname.slice(0, index);
 
   useEffect(() => {
     const getUserSession = async () => {
@@ -40,9 +41,7 @@ export default function SingleProjectRoute({
         logoutUser();
       }
     };
-    if (userAuthenticated) {
-      getUserSession();
-    }
+    getUserSession();
   }, []);
 
   useEffect(() => {
@@ -53,7 +52,7 @@ export default function SingleProjectRoute({
         logoutUser();
       }
     };
-    if (userAuthenticated && session !== "") {
+    if (session !== "") {
       checkSession();
     }
   }, [session]);
@@ -63,7 +62,7 @@ export default function SingleProjectRoute({
       if (userLoggedOut) {
         navigate("/signin");
       } else {
-        navigate("/signin?redirect=/auth/user/projects");
+        navigate("/signin?redirect=/auth/user/profile");
       }
     }
   }, []);
@@ -71,14 +70,15 @@ export default function SingleProjectRoute({
   if (isAuthenticated || userAuthenticated) {
     if (username === userAuthenticated.user) {
       return (
-        <Project
+        <ProfilePage
           user={userAuthenticated.user}
           userId={userAuthenticated.userId}
           setAuthentication={setAuthentication}
+          setPreviewModernUI={setPreviewModernUI}
         />
       );
     } else {
-      <WrongRoute />;
+      return <WrongRoute />;
     }
   }
 }

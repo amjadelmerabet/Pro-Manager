@@ -11,7 +11,7 @@ import "./Home.css";
 
 export default function HomePage() {
   return (
-    <div className="home-page">
+    <div className="home-page public">
       <div className="container">
         <Header />
         <HeroSection />
