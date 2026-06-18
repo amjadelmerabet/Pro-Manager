@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import bcrypt from "bcryptjs";
 
-export default function DashboardRouteClassic({
+export default function ClassicDashboardRoute({
   isAuthenticated,
   setAuthentication,
   setPreviewModernUI,

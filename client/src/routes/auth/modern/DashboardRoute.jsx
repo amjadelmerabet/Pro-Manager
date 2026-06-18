@@ -4,7 +4,7 @@ import DashboardPageModern from "../../../pages/auth/dashboard/modern/Dashboard"
 import WrongRoute from "../../public/WrongRoute";
 import bcrypt from "bcryptjs";
 
-export default function DashboardRouteModern({
+export default function ModernDashboardRoute({
   isAuthenticated,
   setAuthentication,
   previewModernUI,
