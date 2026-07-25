@@ -13,12 +13,12 @@ import { TbFolder, TbLink, TbSquareCheck, TbSquarePlus } from "react-icons/tb";
 import { RiAlarmWarningFill } from "react-icons/ri";
 
 // Components
-import AuthHeader from "../components/AuthHeader";
+import AuthHeader from "../../components/AuthHeader";
 import { Link } from "react-router";
-import NewTaskPopup from "../tasks/components/NewTaskPopup";
+import NewTaskPopup from "../../tasks/classic/components/NewTaskPopup";
 
 // Utils
-import updatedMessageUtil from "../../../utils/updatedMessageUtil";
+import updatedMessageUtil from "../../../../utils/updatedMessageUtil";
 import fetchUserProjectUtil from "./utils/fetchUserProjectUtil";
 import getAccessTokenUtil from "./utils/getAccessTokenUtil";
 import updateProjectUtil from "./utils/updateProjectUtil";

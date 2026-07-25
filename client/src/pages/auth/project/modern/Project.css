@@ -1,0 +1,227 @@
+.project-page-modern .page-container {
+  display: flex;
+  min-height: 100vh;
+}
+.project-page-modern main {
+  width: 100%;
+  padding: 24px;
+  background: rgb(248, 253, 253);
+}
+.project-page-modern .project-loading {
+  display: grid;
+  place-items: center;
+  color: var(--default-light-theme-primary-color);
+}
+.project-page-modern .project-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1000px;
+  margin: 0 auto 16px;
+}
+.project-page-modern .back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--default-light-theme-primary-color);
+  text-decoration: none;
+  transition: transform 250ms ease-in-out;
+}
+.project-page-modern .back-link:hover {
+  transform: translateX(-8px);
+  padding-right: 8px;
+}
+.project-page-modern .project-actions,
+.project-page-modern .edit-actions {
+  display: flex;
+  gap: 8px;
+}
+.project-page-modern .project-actions > button {
+  padding: 2px 8px;
+}
+.project-page-modern button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: 0;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-family: "Poppins", sans-serif;
+  background: var(--default-light-theme-secondary-color);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.12);
+}
+.project-page-modern button:hover {
+  transform: scale(0.98);
+}
+.project-page-modern .complete,
+.project-page-modern .save {
+  color: white;
+  background: var(--default-light-theme-primary-color);
+}
+.project-page-modern .delete {
+  color: white;
+  background: rgb(230, 55, 75);
+}
+.project-page-modern .project-details-card {
+  max-width: 1000px;
+  margin: auto;
+  padding: 28px;
+  border-radius: 10px;
+  background: white;
+  box-shadow: 4px 4px 16px rgba(0, 0, 0, 0.08);
+}
+.project-page-modern .project-details-card header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgb(225, 235, 235);
+}
+
+.project-page-modern .project-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.project-page-modern .project-heading h1 {
+  color: var(--default-light-theme-primary-color);
+  font-size: 26px;
+}
+.project-page-modern .project-state {
+  display: inline-block;
+  margin: 0;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+.project-page-modern .not-started {
+  color: rgb(180, 105, 0);
+  background: rgb(255, 238, 190);
+}
+.project-page-modern .in-progress {
+  color: rgb(0, 105, 175);
+  background: rgb(195, 230, 255);
+}
+.project-page-modern .completed {
+  color: rgb(0, 125, 75);
+  background: rgb(190, 245, 220);
+}
+.project-page-modern .updated-at {
+  margin: 4px 0 0;
+  color: rgb(105, 120, 120);
+  font-size: 13px;
+  white-space: nowrap;
+}
+.project-page-modern .project-meta {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 22px 0;
+  border: 1px solid rgb(225, 235, 235);
+  border-radius: 6px;
+}
+.project-page-modern .project-meta > div {
+  padding: 14px 18px;
+  border-right: 1px solid rgb(225, 235, 235);
+}
+.project-page-modern .project-meta > div:last-child {
+  border-right: 0;
+}
+.project-page-modern .project-meta span {
+  display: block;
+  margin-bottom: 4px;
+  color: rgb(105, 120, 120);
+  font-size: 12px;
+}
+.project-page-modern .state-button {
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.project-page-modern .state-button.not-started {
+  color: rgb(180, 105, 0);
+}
+.project-page-modern .state-button.in-progress {
+  color: rgb(0, 105, 175);
+}
+.project-page-modern .state-button.completed {
+  color: rgb(0, 125, 75);
+}
+.project-page-modern .project-content {
+  padding: 18px 0;
+  border-top: 1px solid rgb(225, 235, 235);
+}
+.project-page-modern .section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.project-page-modern h2 {
+  margin: 0;
+  font-size: 16px;
+}
+.project-page-modern .section-heading button {
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+.project-page-modern .project-content:hover .section-heading button,
+.project-page-modern .section-heading button:focus-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.project-page-modern .project-content p {
+  margin: 0;
+  color: rgb(70, 85, 85);
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+.project-page-modern textarea,
+.project-page-modern select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  border: 1px solid rgb(195, 210, 210);
+  border-radius: 4px;
+  font-family: "Poppins", sans-serif;
+}
+.project-page-modern .edit-actions {
+  margin-top: 10px;
+}
+.project-page-modern .state-edit {
+  justify-content: flex-end;
+}
+@media (max-width: 700px) {
+  .project-page-modern main {
+    padding: 16px;
+  }
+  .project-page-modern .project-topbar,
+  .project-page-modern .project-details-card header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .project-page-modern .project-actions {
+    flex-wrap: wrap;
+  }
+  .project-page-modern .project-details-card {
+    padding: 20px;
+  }
+  .project-page-modern .project-meta {
+    grid-template-columns: 1fr;
+  }
+  .project-page-modern .project-meta > div {
+    border-right: 0;
+    border-bottom: 1px solid rgb(225, 235, 235);
+  }
+  .project-page-modern .project-meta > div:last-child {
+    border-bottom: 0;
+  }
+}

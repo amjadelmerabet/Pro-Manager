@@ -1,43 +1,49 @@
-import getTasksByProjectAPI from "../../../../api/tasks/getTasksByProjectAPI";
-import checkAccessTokenAPI from "../../../../api/tokens/checkAccessTokenAPI";
+import updateProjectByIdAPI from "../../../../../api/projects/updateProjectByIdAPI";
+import checkAccessTokenAPI from "../../../../../api/tokens/checkAccessTokenAPI";
 
 function tryAgain(tries, setTries, newAccessToken, setNewAccessToken) {
   setTries(tries + 1);
   setNewAccessToken({
     counter: newAccessToken.counter + 1,
-    type: "load-tasks",
+    type: "update",
   });
 }
 
-async function fetchProjectTasksAction(
+async function updateProjectAction(
   projectId,
   token,
+  projectUpdates,
   tries,
   setTries,
   newAccessToken,
   setNewAccessToken,
-  setTasks,
+  setUpdatedSuccessfully,
 ) {
-  const tasks = await getTasksByProjectAPI(projectId, token);
-  if (tasks.error === "Invalid access token") {
+  const updatedProject = await updateProjectByIdAPI(
+    projectId,
+    token,
+    projectUpdates,
+  );
+  if (updatedProject.error === "Invalid access token" && tries < 3) {
     tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
   } else {
-    setTasks(tasks.result);
+    setUpdatedSuccessfully(true);
   }
 }
 
-export default async function fetchProjectTasksUtil(
-  projectId,
+export default async function updateProjectUtil(
+  tokenValidated,
+  user,
   session,
   token,
-  setTasks,
-  tokenValidated,
-  setTokenValidated,
-  user,
+  projectId,
+  projectUpdates,
   tries,
   setTries,
   newAccessToken,
   setNewAccessToken,
+  setUpdatedSuccessfully,
+  setTokenValidated,
 ) {
   try {
     if (!tokenValidated) {
@@ -49,14 +55,15 @@ export default async function fetchProjectTasksUtil(
           refreshToken,
         );
         if (validAccessToken.message === "Valid access token") {
-          fetchProjectTasksAction(
+          updateProjectAction(
             projectId,
             token,
+            projectUpdates,
             tries,
             setTries,
             newAccessToken,
             setNewAccessToken,
-            setTasks,
+            setUpdatedSuccessfully,
           );
         } else {
           tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
@@ -68,14 +75,15 @@ export default async function fetchProjectTasksUtil(
       setTimeout(() => {
         setTokenValidated(false);
       }, 500);
-      fetchProjectTasksAction(
+      updateProjectAction(
         projectId,
         token,
+        projectUpdates,
         tries,
         setTries,
         newAccessToken,
         setNewAccessToken,
-        setTasks,
+        setUpdatedSuccessfully,
       );
     }
   } catch (error) {

@@ -1,5 +1,5 @@
-import checkAccessTokenAPI from "../../../../api/tokens/checkAccessTokenAPI";
-import getTasksByAssignedToAPI from "../../../../api/tasks/getTasksByAssignedToAPI";
+import checkAccessTokenAPI from "../../../../../api/tokens/checkAccessTokenAPI";
+import getTasksByAssignedToAPI from "../../../../../api/tasks/getTasksByAssignedToAPI";
 
 function tryAgain(tries, setTries, newAccessToken, setNewAccessToken) {
   setTries(tries + 1);

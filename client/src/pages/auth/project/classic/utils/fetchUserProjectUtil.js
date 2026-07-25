@@ -1,57 +1,57 @@
-import checkAccessTokenAPI from "../../../../api/tokens/checkAccessTokenAPI";
-import createTaskAPI from "../../../../api/tasks/createTaskAPI";
+import getProjectByIdAPI from "../../../../../api/projects/getProjectByIdAPI";
+import checkAccessTokenAPI from "../../../../../api/tokens/checkAccessTokenAPI";
 
 function tryAgain(tries, setTries, newAccessToken, setNewAccessToken) {
   setTries(tries + 1);
   setNewAccessToken({
     counter: newAccessToken.counter + 1,
-    type: "create-task",
+    type: "load",
   });
 }
 
-async function createNewProjectTaskAction(
-  newTask,
+async function fetchProjectAction(
+  projectId,
   token,
   tries,
   setTries,
   newAccessToken,
   setNewAccessToken,
-  setLoadTasks,
+  setProjectObject,
+  setProjectNotFound,
+  setProjectFetched,
   setTokenValidated,
-  newProjectTaskPopupDisplay,
-  setNewProjectTaskPopupDisplay,
 ) {
-  const newTaskCreated = await createTaskAPI(newTask, token);
-  if (newTaskCreated.error === "Invalid access token" && tries < 3) {
+  const project = await getProjectByIdAPI(projectId, token);
+  if (project.error === "Invalid access token") {
     setTokenValidated(false);
     tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
   } else {
-    setLoadTasks(true);
-    setNewProjectTaskPopupDisplay({
-      ...newProjectTaskPopupDisplay,
-      active: false,
-    });
+    if (project.result.length > 0) {
+      setProjectObject(project.result[0]);
+      setProjectFetched(true);
+    } else {
+      setProjectNotFound(true);
+    }
     setTimeout(() => {
-      setLoadTasks(false);
       setTokenValidated(false);
     }, 500);
   }
 }
 
-export default async function createNewProjectTaskUtil(
+export default async function fetchUserProjectUtil(
   tokenValidated,
-  setTokenValidated,
   user,
   session,
   token,
-  newTask,
-  setLoadTasks,
+  projectId,
   tries,
   setTries,
   newAccessToken,
   setNewAccessToken,
-  newProjectTaskPopupDisplay,
-  setNewProjectTaskPopupDisplay,
+  setProjectObject,
+  setProjectNotFound,
+  setTokenValidated,
+  setProjectFetched,
 ) {
   try {
     if (!tokenValidated) {
@@ -64,35 +64,39 @@ export default async function createNewProjectTaskUtil(
         );
         if (validAccessToken.message === "Valid access token") {
           setTokenValidated(true);
-          createNewProjectTaskAction(
-            newTask,
+          fetchProjectAction(
+            projectId,
             token,
             tries,
             setTries,
             newAccessToken,
             setNewAccessToken,
-            setLoadTasks,
+            setProjectObject,
+            setProjectNotFound,
+            setProjectFetched,
             setTokenValidated,
-            newProjectTaskPopupDisplay,
-            setNewProjectTaskPopupDisplay,
           );
+        } else {
+          tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
         }
+      } else {
+        console.log("No refresh token");
       }
     } else {
       setTimeout(() => {
         setTokenValidated(false);
       }, 500);
-      createNewProjectTaskAction(
-        newTask,
+      fetchProjectAction(
+        projectId,
         token,
         tries,
         setTries,
         newAccessToken,
         setNewAccessToken,
-        setLoadTasks,
+        setProjectObject,
+        setProjectNotFound,
+        setProjectFetched,
         setTokenValidated,
-        newProjectTaskPopupDisplay,
-        setNewProjectTaskPopupDisplay,
       );
     }
   } catch (error) {

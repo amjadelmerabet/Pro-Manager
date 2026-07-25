@@ -1,5 +1,5 @@
-import deleteProjectByIdAPI from "../../../../api/projects/deleteProjectByIdAPI";
-import checkAccessTokenAPI from "../../../../api/tokens/checkAccessTokenAPI";
+import deleteProjectByIdAPI from "../../../../../api/projects/deleteProjectByIdAPI";
+import checkAccessTokenAPI from "../../../../../api/tokens/checkAccessTokenAPI";
 
 function tryAgain(tries, setTries, newAccessToken, setNewAccessToken) {
   setTries(tries + 1);

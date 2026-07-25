@@ -1,5 +1,5 @@
-import checkAccessTokenAPI from "../../../../api/tokens/checkAccessTokenAPI";
-import updateTaskByIdAPI from "../../../../api/tasks/updateTaskByIdAPI";
+import checkAccessTokenAPI from "../../../../../api/tokens/checkAccessTokenAPI";
+import updateTaskByIdAPI from "../../../../../api/tasks/updateTaskByIdAPI";
 
 function tryAgain(tries, setTries, newAccessToken, setNewAccessToken) {
   setTries(tries + 1);
