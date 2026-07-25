@@ -63,6 +63,12 @@
   background-color: rgba(255, 255, 255, 0.1);
 }
 
+.side-menu .sections .section .section-menu a {
+  text-decoration: none;
+  color: white;
+  display: block;
+}
+
 .side-menu .switch-ui {
   position: absolute;
   color: white;
@@ -95,6 +101,7 @@
   gap: 4px;
   line-height: 1.2;
   z-index: 5;
+  box-shadow: none;
 }
 
 .side-menu .logout {

@@ -69,7 +69,7 @@ const taskPriorities = {
 export default function DashboardPageModern({
   user,
   userId,
-  previewModernUI,
+  setAuthentication,
   setPreviewModernUI,
 }) {
   const [selectedTable, setSelectedTable] = useState("projects");
@@ -610,9 +610,9 @@ export default function DashboardPageModern({
       <div className="page-container">
         <SideMenu
           user={user}
-          previewModernUI={previewModernUI}
           setPreviewModernUI={setPreviewModernUI}
           recentWork={recentWork}
+          setAuthentication={setAuthentication}
         />
         <main
           className={

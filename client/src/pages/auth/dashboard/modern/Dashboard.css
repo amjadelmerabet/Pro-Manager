@@ -18,7 +18,7 @@
   position: relative;
 }
 
-.dashboard-page-modern .page-container .popup-open::before {
+.dashboard-page-modern .page-container main.popup-open::before {
   content: "";
   position: absolute;
   top: 0;
@@ -269,6 +269,7 @@
   padding-block: 4px;
   border-inline: 1px solid white;
   min-width: 80px;
+  font-size: 14px;
 }
 
 .dashboard-page-modern
@@ -809,7 +810,9 @@
 
 .dashboard-page-modern main > div > .new-project-form > div > div > textarea,
 .dashboard-page-modern main > div > .new-task-form > div > div > textarea {
-  padding: 2px 4px;
+  padding: 4px;
+  border: 1px solid black;
+  border-radius: 4px;
 }
 
 .dashboard-page-modern main > div > .new-project-form > div > .create-project,

@@ -1,22 +1,88 @@
-import { useNavigate } from "react-router";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router";
 
 import { RiWindow2Fill } from "react-icons/ri";
+
+import logoutUserUtil from "../../../profile/utils/logoutUserUtil";
+import getAccessTokenUtil from "../../../utils/getAccessTokenUtil";
 
 import "./SideMenu.css";
 
 export default function SideMenu({
   user,
-  previewModernUI,
   setPreviewModernUI,
   recentWork,
+  setAuthentication,
 }) {
+  const [tries, setTries] = useState(0);
+  const [tokenValidated, setTokenValidated] = useState(false);
+  const [newAccessToken, setNewAccessToken] = useState({
+    counter: 0,
+    type: "",
+  });
+  const [logoutUser, setLogoutUser] = useState(0);
+  const [successfulLogout, setSuccessfulLogout] = useState(false);
+
   let navigate = useNavigate();
+
+  const { userId, sessionId, token } = JSON.parse(
+    sessionStorage.getItem("authUser"),
+  );
 
   const switchUI = () => {
     setPreviewModernUI(false);
     navigate(`/auth/${user}/classic/dashboard`);
     sessionStorage.setItem("modern-ui", false);
   };
+
+  const logout = () => {
+    setLogoutUser(logoutUser + 1);
+  };
+
+  useEffect(() => {
+    const deleteSessionCookie = async () => {
+      await cookieStore.delete("session-" + userId);
+    };
+    if (successfulLogout) {
+      deleteSessionCookie();
+      sessionStorage.setItem("userLoggedOut", true);
+      sessionStorage.removeItem("authUser");
+      setAuthentication(false);
+      navigate("/signin");
+    }
+  }, [successfulLogout]);
+
+  useEffect(() => {
+    if (logoutUser > 0) {
+      logoutUserUtil(
+        sessionId,
+        user,
+        token,
+        tries,
+        setTries,
+        tokenValidated,
+        setTokenValidated,
+        newAccessToken,
+        setNewAccessToken,
+        setSuccessfulLogout,
+      );
+    }
+  }, [logoutUser]);
+
+  useEffect(() => {
+    if (newAccessToken.counter > 0) {
+      getAccessTokenUtil(
+        user,
+        userId,
+        sessionId,
+        setTokenValidated,
+        setTries,
+        newAccessToken,
+        logoutUser,
+        setLogoutUser,
+      );
+    }
+  }, [newAccessToken]);
 
   return (
     <div className="side-menu poppins-regular">
@@ -38,8 +104,15 @@ export default function SideMenu({
           <div className="section-title poppins-medium">Workspace</div>
           <ul className="section-menu">
             <li className="section-menu-item">Team</li>
-            <li className="section-menu-item">Projects</li>
-            <li className="section-menu-item">Tasks</li>
+            <li className="section-menu-item">
+              <Link to={`/auth/${user}/modern/dashboard`}>Dashbaord</Link>
+            </li>
+            <li className="section-menu-item">
+              <Link to={`/auth/${user}/modern/projects`}>Projects</Link>
+            </li>
+            <li className="section-menu-item">
+              <Link to={`/auth/${user}/modern/tasks`}>Tasks</Link>
+            </li>
           </ul>
         </div>
         <div className="section">
@@ -70,36 +143,12 @@ export default function SideMenu({
           <RiWindow2Fill />
           Go back to Classic
         </button>
-        {/* <div className="switch-ui poppins-regular">
-          <h3 className="switch-ui-title poppins-bold">Switch UI</h3>
-          <div className="classic-ui">
-            <input
-              type="radio"
-              name="dashboard-ui-picker"
-              id="classic-ui"
-              value="classic"
-              checked={!previewModernUI}
-              onChange={(e) => switchUI(e.target.value)}
-            />
-            <label htmlFor="classic" className="classic-ui-label">
-              Classic
-            </label>
-          </div>
-          <div className="modern-ui">
-            <input
-              type="radio"
-              name="dashboard-ui-picker"
-              id="modern-ui"
-              value="modern"
-              checked={previewModernUI}
-              onChange={(e) => switchUI(e.target.value)}
-            />
-            <label htmlFor="modern" className="modern-ui-label">
-              Modern
-            </label>
-          </div>
-        </div> */}
-        <button className="logout poppins-medium">Log out</button>
+        <button
+          className="logout poppins-medium"
+          onClick={() => logout()}
+        >
+          Log out
+        </button>
       </div>
     </div>
   );
