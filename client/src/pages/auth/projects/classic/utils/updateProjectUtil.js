@@ -1,66 +1,73 @@
-import deleteProjectByIdAPI from "../../../../api/projects/deleteProjectByIdAPI";
-import checkAccessTokenAPI from "../../../../api/tokens/checkAccessTokenAPI";
+import updateProjectByIdAPI from "../../../../../api/projects/updateProjectByIdAPI";
+import checkAccessTokenAPI from "../../../../../api/tokens/checkAccessTokenAPI";
 
 function tryAgain(
   tries,
   setTries,
-  deletedProjectId,
-  setDeletedProjectId,
+  updatedProjectId,
+  setUpdatedProjectId,
   newAccessToken,
   setNewAccessToken,
 ) {
   setTries(tries + 1);
-  setDeletedProjectId({ ...deletedProjectId, delete: false });
+  setUpdatedProjectId({ ...updatedProjectId, update: false });
   setNewAccessToken({
     counter: newAccessToken.counter + 1,
-    type: "delete",
+    type: "update",
   });
 }
 
-async function deleteProjectAction(
-  deletedProjectId,
+async function updateProjectAction(
+  updatedProjectId,
   token,
+  projectUpdates,
   tries,
   setTries,
-  setDeletedProjectId,
+  setUpdatedProjectId,
   newAccessToken,
   setNewAccessToken,
-  projectDeleted,
-  setProjectDeleted,
+  projectUpdated,
+  setProjectUpdated,
+  setProjectUpdates,
 ) {
-  const deletedProject = await deleteProjectByIdAPI(
-    deletedProjectId.projectId,
+  const updatedProject = await updateProjectByIdAPI(
+    updatedProjectId.projectId,
     token,
+    projectUpdates,
   );
-  if (deletedProject.error === "Invalid access token" && tries < 3) {
+  if (updatedProject.error === "Invalid access token" && tries < 3) {
     tryAgain(
       tries,
       setTries,
-      deletedProjectId,
-      setDeletedProjectId,
+      updatedProjectId,
+      setUpdatedProjectId,
       newAccessToken,
       setNewAccessToken,
     );
   } else {
     setTimeout(() => {
-      setProjectDeleted(projectDeleted + 1);
-    }, 1000);
+      setProjectUpdated(projectUpdated + 1);
+      setProjectUpdates({});
+      setUpdatedProjectId({});
+    }, 250);
   }
 }
 
-export default async function deleteProjectUtil(
+export default async function updateProjectUtil(
   tokenValidated,
   user,
   session,
   token,
+  projectUpdates,
   tries,
   setTries,
-  deletedProjectId,
-  setDeletedProjectId,
+  updatedProjectId,
+  setUpdatedProjectId,
   newAccessToken,
   setNewAccessToken,
-  projectDeleted,
-  setProjectDeleted,
+  projectUpdated,
+  setProjectUpdated,
+  setProjectUpdates,
   setTokenValidated,
 ) {
   try {
@@ -73,23 +80,25 @@ export default async function deleteProjectUtil(
           refreshToken,
         );
         if (validAccessToken.message === "Valid access token") {
-          deleteProjectAction(
-            deletedProjectId,
+          updateProjectAction(
+            updatedProjectId,
             token,
+            projectUpdates,
             tries,
             setTries,
-            setDeletedProjectId,
+            setUpdatedProjectId,
             newAccessToken,
             setNewAccessToken,
-            projectDeleted,
-            setProjectDeleted,
+            projectUpdated,
+            setProjectUpdated,
+            setProjectUpdates,
           );
         } else {
           tryAgain(
             tries,
             setTries,
-            deletedProjectId,
-            setDeletedProjectId,
+            updatedProjectId,
+            setUpdatedProjectId,
             newAccessToken,
             setNewAccessToken,
           );
@@ -101,16 +110,18 @@ export default async function deleteProjectUtil(
       setTimeout(() => {
         setTokenValidated(false);
       }, 500);
-      deleteProjectAction(
-        deletedProjectId,
+      updateProjectAction(
+        updatedProjectId,
         token,
+        projectUpdates,
         tries,
         setTries,
-        setDeletedProjectId,
+        setUpdatedProjectId,
         newAccessToken,
         setNewAccessToken,
-        projectDeleted,
-        setProjectDeleted,
+        projectUpdated,
+        setProjectUpdated,
+        setProjectUpdates,
       );
     }
   } catch (error) {

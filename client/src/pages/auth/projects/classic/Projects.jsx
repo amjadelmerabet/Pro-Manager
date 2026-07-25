@@ -3,16 +3,16 @@ import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 
 // Components
-import AuthHeader from "../components/AuthHeader";
-import SectionHeader from "../components/SectionHeader";
+import AuthHeader from "../../components/AuthHeader";
+import SectionHeader from "../../components/SectionHeader";
 import NewProjectPopup from "./components/NewProjectPopup";
 import GridProjectItem from "./components/GridProjectItem";
 import ListProjectItem from "./components/ListProjectItem";
 import KanbanCardProject from "./components/KanbanCardProject";
-import GlobalSearch from "../components/GlobalSearch";
+import GlobalSearch from "../../components/GlobalSearch";
 
 // Utils
-import updatedMessageUtil from "../../../utils/updatedMessageUtil";
+import updatedMessageUtil from "../../../../utils/updatedMessageUtil";
 import fetchUserProjectsUtil from "./utils/fetchUserProjectsUtil";
 import getAccessTokenUtil from "./utils/getAccessTokenUtil";
 import createProjectUtil from "./utils/createProjectUtil";
@@ -20,8 +20,8 @@ import updateProjectUtil from "./utils/updateProjectUtil";
 import deleteProjectUtil from "./utils/deleteProjectUtil";
 import filterProjectsUtil from "./utils/filterProjectsUtil";
 import sortProjectsUtil from "./utils/sortProjectsUtil";
-import fetchUserTasksUtil from "../tasks/utils/fetchUserTasksUtil";
-import countMatchingRecords from "../utils/countMatchingRecords";
+import fetchUserTasksUtil from "../../tasks/classic/utils/fetchUserTasksUtil";
+import countMatchingRecords from "../../utils/countMatchingRecords";
 
 // Styles
 import "./Projects.css";
