@@ -12,11 +12,11 @@ import { RiAlarmWarningFill } from "react-icons/ri";
 import { MdOutlineModeEdit } from "react-icons/md";
 
 // Components
-import AuthHeader from "../components/AuthHeader";
+import AuthHeader from "../../components/AuthHeader";
 import { Link } from "react-router";
 
 // Utils
-import updatedMessageUtil from "../../../utils/updatedMessageUtil";
+import updatedMessageUtil from "../../../../utils/updatedMessageUtil";
 import fetchUserTaskUtil from "./utils/fetchUserTaskUtil";
 import updateTaskUtil from "./utils/updateTaskUtil";
 import deleteTaskUtil from "./utils/deleteTaskUtil";

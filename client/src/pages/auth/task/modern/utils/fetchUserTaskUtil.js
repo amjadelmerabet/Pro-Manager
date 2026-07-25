@@ -1,12 +1,9 @@
-import getTaskByIdAPI from "../../../../api/tasks/getTaskByIdAPI";
-import checkAccessTokenAPI from "../../../../api/tokens/checkAccessTokenAPI";
+import getTaskByIdAPI from "../../../../../api/tasks/getTaskByIdAPI";
+import checkAccessTokenAPI from "../../../../../api/tokens/checkAccessTokenAPI";
 
 function tryAgain(tries, setTries, newAccessToken, setNewAccessToken) {
   setTries(tries + 1);
-  setNewAccessToken({
-    counter: newAccessToken.counter + 1,
-    type: "load",
-  });
+  setNewAccessToken({ counter: newAccessToken.counter + 1, type: "load" });
 }
 
 async function fetchTaskAction(
@@ -27,9 +24,7 @@ async function fetchTaskAction(
   } else {
     setTaskObject(task.result[0]);
     setTaskFetched(true);
-    setTimeout(() => {
-      setTokenValidated(false);
-    }, 500);
+    setTimeout(() => setTokenValidated(false), 500);
   }
 }
 
@@ -50,35 +45,30 @@ export default async function fetchUserTaskUtil(
   try {
     if (!tokenValidated) {
       const refreshToken = await cookieStore.get(user);
-      if (refreshToken) {
-        const validAccessToken = await checkAccessTokenAPI(
+      if (!refreshToken) return;
+      const validAccessToken = await checkAccessTokenAPI(
+        token,
+        session,
+        refreshToken,
+      );
+      if (validAccessToken.message === "Valid access token") {
+        setTokenValidated(true);
+        fetchTaskAction(
+          taskId,
           token,
-          session,
-          refreshToken,
+          tries,
+          setTries,
+          newAccessToken,
+          setNewAccessToken,
+          setTaskObject,
+          setTaskFetched,
+          setTokenValidated,
         );
-        if (validAccessToken.message === "Valid access token") {
-          setTokenValidated(true);
-          fetchTaskAction(
-            taskId,
-            token,
-            tries,
-            setTries,
-            newAccessToken,
-            setNewAccessToken,
-            setTaskObject,
-            setTaskFetched,
-            setTokenValidated,
-          );
-        } else {
-          tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
-        }
       } else {
-        console.log("No refresh token");
+        tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
       }
     } else {
-      setTimeout(() => {
-        setTokenValidated(false);
-      }, 500);
+      setTimeout(() => setTokenValidated(false), 500);
       fetchTaskAction(
         taskId,
         token,
