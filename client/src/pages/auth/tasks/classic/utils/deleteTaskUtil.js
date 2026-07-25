@@ -1,73 +1,63 @@
-import updateTaskByIdAPI from "../../../../api/tasks/updateTaskByIdAPI";
-import checkAccessTokenAPI from "../../../../api/tokens/checkAccessTokenAPI";
+import deleteTaskByIdAPI from "../../../../../api/tasks/deleteTaskByIdAPI";
+import checkAccessTokenAPI from "../../../../../api/tokens/checkAccessTokenAPI";
 
 function tryAgain(
   tries,
   setTries,
-  updatedTaskId,
-  setUpdatedTaskId,
+  deletedTaskId,
+  setdeletedTaskId,
   newAccessToken,
   setNewAccessToken,
 ) {
   setTries(tries + 1);
-  setUpdatedTaskId({ ...updatedTaskId, update: false });
+  setdeletedTaskId({ ...deletedTaskId, delete: false });
   setNewAccessToken({
     counter: newAccessToken.counter + 1,
-    type: "update",
+    type: "delete",
   });
 }
 
-async function updateTaskAction(
-  updatedTaskId,
+async function deleteTaskAction(
+  deletedTaskId,
   token,
-  taskUpdates,
   tries,
   setTries,
-  setUpdatedTaskId,
+  setdeletedTaskId,
   newAccessToken,
   setNewAccessToken,
-  taskUpdated,
-  setTaskUpdated,
-  setTaskUpdates,
+  taskDeleted,
+  setTaskDeleted,
 ) {
-  const updatedTask = await updateTaskByIdAPI(
-    updatedTaskId.taskId,
-    token,
-    taskUpdates,
-  );
-  if (updatedTask.error === "Invalid access token" && tries < 3) {
+  const deletedTask = await deleteTaskByIdAPI(deletedTaskId.taskId, token);
+  if (deletedTask.error === "Invalid access token" && tries < 3) {
     tryAgain(
       tries,
       setTries,
-      updatedTaskId,
-      setUpdatedTaskId,
+      deletedTaskId,
+      setdeletedTaskId,
       newAccessToken,
       setNewAccessToken,
     );
   } else {
     setTimeout(() => {
-      setTaskUpdated(taskUpdated + 1);
-      setTaskUpdates({});
-      setUpdatedTaskId({});
-    }, 250);
+      setTaskDeleted(taskDeleted + 1);
+    }, 1000);
   }
 }
 
-export default async function updateTaskUtil(
+export default async function deleteTaskUtil(
   tokenValidated,
   user,
   session,
   token,
-  updatedTaskId,
-  taskUpdates,
+  deletedTaskId,
   tries,
   setTries,
-  setUpdatedTaskId,
+  setdeletedTaskId,
   newAccessToken,
   setNewAccessToken,
-  taskUpdated,
-  setTaskUpdated,
-  setTaskUpdates,
+  taskDeleted,
+  setTaskDeleted,
   setTokenValidated,
 ) {
   try {
@@ -80,25 +70,23 @@ export default async function updateTaskUtil(
           refreshToken,
         );
         if (validAccessToken.message === "Valid access token") {
-          updateTaskAction(
-            updatedTaskId,
+          deleteTaskAction(
+            deletedTaskId,
             token,
-            taskUpdates,
             tries,
             setTries,
-            setUpdatedTaskId,
+            setdeletedTaskId,
             newAccessToken,
             setNewAccessToken,
-            taskUpdated,
-            setTaskUpdated,
-            setTaskUpdates,
+            taskDeleted,
+            setTaskDeleted,
           );
         } else {
           tryAgain(
             tries,
             setTries,
-            updatedTaskId,
-            setUpdatedTaskId,
+            deletedTaskId,
+            setdeletedTaskId,
             newAccessToken,
             setNewAccessToken,
           );
@@ -110,18 +98,16 @@ export default async function updateTaskUtil(
       setTimeout(() => {
         setTokenValidated(false);
       }, 500);
-      updateTaskAction(
-        updatedTaskId,
+      deleteTaskAction(
+        deletedTaskId,
         token,
-        taskUpdates,
         tries,
         setTries,
-        setUpdatedTaskId,
+        setdeletedTaskId,
         newAccessToken,
         setNewAccessToken,
-        taskUpdated,
-        setTaskUpdated,
-        setTaskUpdates,
+        taskDeleted,
+        setTaskDeleted,
       );
     }
   } catch (error) {

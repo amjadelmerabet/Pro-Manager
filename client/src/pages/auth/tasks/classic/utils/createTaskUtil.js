@@ -1,5 +1,5 @@
-import createTaskAPI from "../../../../api/tasks/createTaskAPI";
-import checkAccessTokenAPI from "../../../../api/tokens/checkAccessTokenAPI";
+import createTaskAPI from "../../../../../api/tasks/createTaskAPI";
+import checkAccessTokenAPI from "../../../../../api/tokens/checkAccessTokenAPI";
 
 function tryAgain(
   tries,

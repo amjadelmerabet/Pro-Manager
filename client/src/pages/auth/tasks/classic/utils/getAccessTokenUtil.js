@@ -1,4 +1,4 @@
-import getNewAccessTokenAPI from "../../../../api/tokens/getNewAccessTokenAPI";
+import getNewAccessTokenAPI from "../../../../../api/tokens/getNewAccessTokenAPI";
 
 function updateToken(accessTokenObject) {
   const authUser = JSON.parse(sessionStorage.getItem("authUser"));

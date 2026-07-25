@@ -6,11 +6,11 @@ import { IoClose } from "react-icons/io5";
 import { IconContext } from "react-icons/lib";
 
 // APIs
-import getProjectsByOwnerAPI from "../../../../api/projects/getProjectsByOwnerAPI";
+import getProjectsByOwnerAPI from "../../../../../api/projects/getProjectsByOwnerAPI";
 
 // Styles
 import "./NewTaskPopup.css";
-import getNewAccessTokenAPI from "../../../../api/tokens/getNewAccessTokenAPI";
+import getNewAccessTokenAPI from "../../../../../api/tokens/getNewAccessTokenAPI";
 
 export default function NewTaskPopup({
   newTask,
