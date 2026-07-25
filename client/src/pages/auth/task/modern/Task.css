@@ -1,0 +1,226 @@
+.task-page-modern .page-container {
+  display: flex;
+  min-height: 100vh;
+}
+.task-page-modern main {
+  width: 100%;
+  padding: 24px;
+  background: rgb(248, 253, 253);
+}
+.task-page-modern .task-loading {
+  display: grid;
+  place-items: center;
+  color: var(--default-light-theme-primary-color);
+}
+.task-page-modern .task-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1000px;
+  margin: 0 auto 16px;
+}
+.task-page-modern .back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--default-light-theme-primary-color);
+  text-decoration: none;
+  transition: transform 250ms ease-in-out;
+}
+.task-page-modern .back-link:hover {
+  transform: translateX(-8px);
+  padding-right: 8px;
+}
+.task-page-modern .task-actions,
+.task-page-modern .edit-actions {
+  display: flex;
+  gap: 8px;
+}
+.task-page-modern .task-actions > button {
+  padding: 2px 8px;
+}
+.task-page-modern button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: 0;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-family: "Poppins", sans-serif;
+  background: var(--default-light-theme-secondary-color);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.12);
+}
+.task-page-modern button:hover {
+  transform: scale(0.98);
+}
+.task-page-modern .complete,
+.task-page-modern .save {
+  color: white;
+  background: var(--default-light-theme-primary-color);
+}
+.task-page-modern .delete {
+  color: white;
+  background: rgb(255, 45, 80);
+}
+.task-page-modern .task-details-card {
+  max-width: 1000px;
+  margin: auto;
+  overflow: hidden;
+  border-radius: 8px;
+  background: white;
+  box-shadow: 3px 3px 12px rgba(0, 0, 0, 0.12);
+}
+.task-page-modern .task-details-card > header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 24px;
+  border-bottom: 1px solid rgb(225, 235, 235);
+}
+.task-page-modern h1,
+.task-page-modern h2,
+.task-page-modern p {
+  margin: 0;
+}
+.task-page-modern h1 {
+  color: var(--default-light-theme-primary-color);
+  font-size: 26px;
+}
+.task-page-modern .task-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.task-page-modern .task-state {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 32px;
+  font-size: 13px;
+}
+.task-page-modern .to-do {
+  color: rgb(255, 65, 80);
+  background: rgba(255, 65, 80, 0.1);
+}
+.task-page-modern .doing {
+  color: rgb(255, 145, 0);
+  background: rgba(255, 145, 0, 0.12);
+}
+.task-page-modern .done {
+  color: rgb(45, 170, 135);
+  background: rgba(45, 200, 165, 0.12);
+}
+.task-page-modern .updated-at {
+  color: rgb(110, 125, 125);
+  font-size: 13px;
+}
+.task-page-modern .task-meta {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-bottom: 1px solid rgb(225, 235, 235);
+}
+.task-page-modern .task-meta > div {
+  padding: 16px 24px;
+  border-right: 1px solid rgb(225, 235, 235);
+}
+.task-page-modern .task-meta > div:last-child {
+  border: 0;
+}
+.task-page-modern .task-meta span {
+  display: block;
+  margin-bottom: 4px;
+  color: rgb(110, 125, 125);
+  font-size: 12px;
+}
+.task-page-modern .task-meta strong,
+.task-page-modern .task-meta a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: rgb(40, 60, 60);
+  text-decoration: none;
+}
+.task-page-modern .priority.high {
+  color: rgb(225, 50, 70);
+}
+.task-page-modern .priority,
+.task-page-modern .section-heading button {
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.task-page-modern .priority.medium {
+  color: rgb(230, 130, 0);
+}
+.task-page-modern .priority.low {
+  color: rgb(40, 120, 200);
+}
+.task-page-modern .task-content {
+  padding: 20px 24px;
+  border-bottom: 1px solid rgb(225, 235, 235);
+}
+.task-page-modern .section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.task-page-modern .section-heading button {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+.task-page-modern .task-content:hover .section-heading button,
+.task-page-modern .section-heading button:focus-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.task-page-modern h2 {
+  color: var(--default-light-theme-primary-color);
+  font-size: 15px;
+}
+.task-page-modern .task-content p {
+  white-space: pre-wrap;
+  color: rgb(50, 70, 70);
+  font-size: 14px;
+  line-height: 1.6;
+}
+.task-page-modern textarea,
+.task-page-modern select {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 8px;
+  border: 1px solid rgb(180, 200, 200);
+  border-radius: 4px;
+  font-family: "Poppins", sans-serif;
+  resize: vertical;
+}
+.task-page-modern .edit-actions {
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+.task-page-modern .priority-edit {
+  padding: 0 24px 20px;
+}
+@media (max-width: 720px) {
+  .task-page-modern main {
+    padding: 12px;
+  }
+  .task-page-modern .task-topbar,
+  .task-page-modern .task-details-card > header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .task-page-modern .task-meta {
+    grid-template-columns: 1fr;
+  }
+  .task-page-modern .task-meta > div {
+    border-right: 0;
+    border-bottom: 1px solid rgb(225, 235, 235);
+  }
+  .task-page-modern .task-actions {
+    flex-wrap: wrap;
+  }
+}

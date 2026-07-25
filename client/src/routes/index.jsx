@@ -10,27 +10,37 @@ import SignUpRoute from "./public/SignupRoute";
 import WrongRoute from "./public/WrongRoute";
 
 // Authenticated routes
-import DashboardRoute from "./auth/DashboardRoute";
-import ProfileRoute from "./auth/ProfileRoute";
-import ProjectsRoute from "./auth/ProjectsRoute";
-import TasksRoute from "./auth/TasksRoute";
-import SingleProjectRoute from "./auth/SingleProjectRoute";
-import SingleTaskRoute from "./auth/SingleTaskRoute";
+import ClassicDashboardRoute from "./auth/classic/DashboardRoute";
+import ProfileRoute from "./auth/classic/ProfileRoute";
+import ClassicProjectsRoute from "./auth/classic/ProjectsRoute";
+import ClassicTasksRoute from "./auth/classic/TasksRoute";
+import SingleProjectRoute from "./auth/classic/SingleProjectRoute";
+import ClassicSingleTaskRoute from "./auth/classic/SingleTaskRoute";
+import ModernDashboardRoute from "./auth/modern/DashboardRoute";
+import ModernProjectsRoute from "./auth/modern/ProjectsRoute";
+import ModernTasksRoute from "./auth/modern/TasksRoute";
+import ModernSingleTaskRoute from "./auth/modern/SingleTaskRoute";
+import ModernSingleProjectRoute from "./auth/modern/SingleProjectRoute";
 
 export {
   HomeRoute,
   AboutRoute,
   LoginRoute,
-  DashboardRoute,
+  ClassicDashboardRoute,
+  ModernDashboardRoute,
   ProfileRoute,
-  ProjectsRoute,
+  ClassicProjectsRoute,
+  ModernProjectsRoute,
   FeaturesRoute,
   BlogRoute,
   PricingRoute,
   ContactRoute,
-  TasksRoute,
+  ClassicTasksRoute,
+  ModernTasksRoute,
   SignUpRoute,
   SingleProjectRoute,
-  SingleTaskRoute,
+  ClassicSingleTaskRoute,
+  ModernSingleTaskRoute,
+  ModernSingleProjectRoute,
   WrongRoute,
 };

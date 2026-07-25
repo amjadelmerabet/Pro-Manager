@@ -1,0 +1,348 @@
+.tasks-page-modern .page-container {
+  display: flex;
+}
+
+.tasks-page-modern main {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.tasks-page-modern main.popup-open::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .25);
+  z-index: 5;
+  cursor: not-allowed;
+}
+
+.tasks-page-modern main > .page-title {
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--default-light-theme-primary-color);
+  margin-bottom: 8px;
+  height: 32px;
+}
+
+.tasks-page-modern main .tasks-section {
+  padding: 8px;
+}
+
+.tasks-page-modern main .tasks-section > .tasks {
+  width: 100%;
+}
+
+.tasks-page-modern main .tasks-section > .tasks thead th {
+  background-color: var(--default-light-theme-primary-color);
+  color: white;
+  padding: 4px 12px;
+  font-size: 14px;
+}
+
+.tasks-page-modern main .tasks-section > .tasks > tbody {
+  font-size: 13px;
+}
+
+.tasks-page-modern main .tasks-section > .tasks > tbody > tr {
+  cursor: pointer;
+  transition: background 250ms ease-in-out;
+}
+
+.tasks-page-modern main .tasks-section > .tasks .select-column > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tasks-page-modern
+  main
+  .tasks-section
+  > .tasks
+  > tbody
+  > tr:nth-child(odd) {
+  background-color: rgb(245, 255, 255);
+}
+
+.tasks-page-modern
+  main
+  .tasks-section
+  > .tasks
+  > tbody
+  > tr:nth-child(even) {
+  background-color: rgb(235, 255, 255);
+}
+
+.tasks-page-modern main .tasks-section > .tasks > tbody > tr:hover {
+  background-color: rgba(225, 245, 245);
+}
+
+.tasks-page-modern main .tasks-section > .tasks > tbody td {
+  padding: 2px 4px;
+}
+
+.tasks-page-modern main .tasks-section > .tasks > tbody td > div {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tasks-page-modern main .tasks-section > .tasks span {
+  display: flex;
+  align-items: center;
+}
+
+.tasks-page-modern main .tasks-section > .tasks td > span {
+  padding: 1px 12px;
+  border-radius: 32px;
+}
+
+.tasks-page-modern main .tasks-section > .tasks .to-do {
+  color: rgb(255, 65, 80);
+}
+
+.tasks-page-modern main .tasks-section > .tasks .doing {
+  color: rgb(255, 145, 0);
+}
+
+.tasks-page-modern main .tasks-section > .tasks .done {
+  color: rgb(45, 200, 165);
+}
+
+.tasks-page-modern main .tasks-section > .tasks > tbody .description {
+  max-width: 400px;
+}
+
+.tasks-page-modern main .tasks-section > .tasks .project-badge {
+  padding: 1px 10px;
+  border-radius: 32px;
+  font-size: 12px;
+}
+
+.tasks-page-modern main .tasks-section > .tasks .project-badge.has-project {
+  color: rgb(45, 120, 200);
+}
+
+.tasks-page-modern main .tasks-section > .tasks .project-badge.standalone {
+  background-color: rgba(120, 120, 120, 0.12);
+  color: rgb(120, 120, 120);
+}
+
+.tasks-page-modern main .tasks-actions {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 12px;
+}
+
+.tasks-page-modern main .tasks-actions .tasks-actions-right {
+  display: flex;
+  gap: 8px;
+}
+
+.tasks-page-modern main .tasks-actions button {
+  background-color: var(--default-light-theme-secondary-color);
+  border: none;
+  padding: 2px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1);
+  transition:
+  transform 250ms ease-in-out,
+  background-color 250ms ease-in-out;
+}
+
+.tasks-page-modern main .tasks-actions .delete-tasks {
+  background-color: rgb(255, 45, 80);
+  color: white;
+}
+
+.tasks-page-modern main .tasks-actions > button:hover {
+  transform: scale(0.98);
+  background-color: var(--default-light-theme-secondary-color-hover);
+}
+
+.tasks-page-modern main .filters-popup {
+  position: absolute;
+  width: 42%;
+  top: 18%;
+  left: 29%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+  padding: 32px 16px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);
+  background-color: white;
+  border-radius: 8px;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0);
+  transition:
+    opacity 250ms ease-in-out,
+    visibility 250ms ease-in-out,
+    transform 250ms ease-in-out;
+    z-index: 10;
+}
+
+.tasks-page-modern main .filters-popup.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+}
+
+.tasks-page-modern main .filters-popup .close-popup {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: rgb(255, 45, 80);
+}
+
+.tasks-page-modern main .filters-popup .task-states,
+.tasks-page-modern main .filters-popup .task-scope {
+  display: flex;
+  font-size: 14px;
+  gap: 16px;
+}
+
+.tasks-page-modern main .filters-popup .task-states > div,
+.tasks-page-modern main .filters-popup .task-scope > div {
+  display: flex;
+  gap: 4px;
+}
+
+.tasks-page-modern main .filters-popup .actions {
+  display: flex;
+  gap: 8px;
+}
+
+.tasks-page-modern main .filters-popup .actions > button {
+  padding: 2px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 250ms ease-in-out, box-shadow 250ms ease-in-out;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, .25);
+}
+
+.tasks-page-modern main .filters-popup .actions > button:hover {
+  transform: scale(0.98);
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, .25);
+}
+
+.tasks-page-modern main .filters-popup .actions > .clear-filters {
+  background-color: var(--default-light-theme-secondary-color);
+}
+
+.tasks-page-modern main .filters-popup .actions > .apply-filters {
+  background-color: var(--default-light-theme-primary-color);
+  color: white;
+}
+
+.tasks-page-modern main .new-task-form {
+  position: absolute;
+  width: 60%;
+  height: 80%;
+  top: 10%;
+  left: 20%;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.25);
+  z-index: 10;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0);
+  transition:
+    opacity 250ms ease-in-out,
+    visibility 250ms ease-in-out,
+    transform 250ms ease-in-out;
+}
+
+.tasks-page-modern main .new-task-form.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+}
+
+.tasks-page-modern main .new-task-form > .close-form {
+  background: transparent;
+  border: none;
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  color: rgb(255, 45, 80);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.tasks-page-modern main .new-task-form .form-title {
+  text-align: center;
+  margin-block: 32px;
+  font-size: 20px;
+}
+
+.tasks-page-modern main .new-task-form > div {
+  display: grid;
+  margin: 16px auto;
+  width: 60%;
+}
+
+.tasks-page-modern main .new-task-form > div > div {
+  display: grid;
+  margin-bottom: 8px;
+}
+
+.tasks-page-modern main .new-task-form > div > div > label {
+  font-size: 14px;
+  color: var(--default-light-theme-primary-color);
+}
+
+.tasks-page-modern main .new-task-form > div > div > input,
+.tasks-page-modern main .new-task-form > div > div > select,
+.tasks-page-modern main .new-task-form > div > div > select option,
+.tasks-page-modern main .new-task-form > div > div > textarea {
+  font-family: "Poppins", sans-serif;
+}
+
+.tasks-page-modern main .new-task-form > div > div > input,
+.tasks-page-modern main .new-task-form > div > div > select {
+  font-size: 14px;
+  padding: 4px;
+  border: 1px solid black;
+  border-radius: 4px;
+  background-color: white;
+}
+
+.tasks-page-modern main .new-task-form > div > div > textarea {
+  padding: 4px;
+  border: 1px solid black;
+  border-radius: 4px;
+  background-color: white;
+}
+
+.tasks-page-modern main .new-task-form > div > .create-task {
+  width: 20%;
+  padding: 2px;
+  background-color: var(--default-light-theme-primary-color);
+  color: white;
+  border: 1px solid var(--default-light-theme-primary-color);
+  border-radius: 4px;
+  margin: 24px auto;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+  transition:
+    transform 250ms ease-in-out,
+    box-shadow 250ms ease-in-out;
+  cursor: pointer;
+}
+
+.tasks-page-modern main .new-task-form > div > .create-task:hover {
+  transform: scale(0.98);
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
+}

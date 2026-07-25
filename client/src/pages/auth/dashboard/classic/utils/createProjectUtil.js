@@ -1,0 +1,85 @@
+import createProjectAPI from "../../../../../api/projects/createProjectAPI";
+import checkAccessTokenAPI from "../../../../../api/tokens/checkAccessTokenAPI";
+
+function tryAgain(tries, setTries, newAccessToken, setNewAccessToken) {
+  setTries(tries + 1);
+  setNewAccessToken({
+    counter: newAccessToken.counter + 1,
+    type: "create",
+    page: "project",
+  });
+}
+
+async function createProjectAction(
+  newProject,
+  token,
+  tries,
+  setTries,
+  newAccessToken,
+  setNewAccessToken,
+  setProjectCreatedSuccessfully,
+) {
+  const newProjectObject = await createProjectAPI(newProject, token);
+  if (newProjectObject.error === "Invalid access token" && tries < 3) {
+    tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
+  } else {
+    setProjectCreatedSuccessfully(true);
+  }
+}
+
+export default async function createProjectUtil(
+  tokenValidated,
+  user,
+  session,
+  token,
+  newProject,
+  tries,
+  setTries,
+  newAccessToken,
+  setNewAccessToken,
+  setProjectCreatedSuccessfully,
+  setTokenValidated,
+) {
+  try {
+    if (!tokenValidated) {
+      const refreshToken = await cookieStore.get(user);
+      if (refreshToken) {
+        const validAccessToken = await checkAccessTokenAPI(
+          token,
+          session,
+          refreshToken,
+        );
+        if (validAccessToken.message === "Valid access token") {
+          createProjectAction(
+            newProject,
+            token,
+            tries,
+            setTries,
+            newAccessToken,
+            setNewAccessToken,
+            setProjectCreatedSuccessfully,
+          );
+        } else {
+          tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
+        }
+      } else {
+        console.log("Invalid refresh token");
+      }
+    } else {
+      setTimeout(() => {
+        setTokenValidated(false);
+      }, 500);
+      createProjectAction(
+        newProject,
+        token,
+        tries,
+        setTries,
+        newAccessToken,
+        setNewAccessToken,
+        setProjectCreatedSuccessfully,
+      );
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}

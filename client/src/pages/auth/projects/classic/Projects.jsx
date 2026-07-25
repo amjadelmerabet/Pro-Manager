@@ -1,0 +1,767 @@
+// Hooks
+import { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router";
+
+// Components
+import AuthHeader from "../../components/AuthHeader";
+import SectionHeader from "../../components/SectionHeader";
+import NewProjectPopup from "./components/NewProjectPopup";
+import GridProjectItem from "./components/GridProjectItem";
+import ListProjectItem from "./components/ListProjectItem";
+import KanbanCardProject from "./components/KanbanCardProject";
+import GlobalSearch from "../../components/GlobalSearch";
+
+// Utils
+import updatedMessageUtil from "../../../../utils/updatedMessageUtil";
+import fetchUserProjectsUtil from "./utils/fetchUserProjectsUtil";
+import getAccessTokenUtil from "./utils/getAccessTokenUtil";
+import createProjectUtil from "./utils/createProjectUtil";
+import updateProjectUtil from "./utils/updateProjectUtil";
+import deleteProjectUtil from "./utils/deleteProjectUtil";
+import filterProjectsUtil from "./utils/filterProjectsUtil";
+import sortProjectsUtil from "./utils/sortProjectsUtil";
+import fetchUserTasksUtil from "../../tasks/classic/utils/fetchUserTasksUtil";
+import countMatchingRecords from "../../utils/countMatchingRecords";
+
+// Styles
+import "./Projects.css";
+
+export default function ProjectsPage({ user, userId, setAuthentication, setPreviewModernUI }) {
+  const [projects, setProjects] = useState([]);
+  const [newProject, setNewProject] = useState({});
+  const [createProject, setCreateProject] = useState(0);
+  const [newProjectPopupDisplay, setNewProjectPopupDisplay] = useState({
+    active: false,
+    type: "project",
+  });
+  const [newProjectCreated, setNewProjectCreated] = useState(0);
+  const [loadingNewProject, setLoadingNewProject] = useState(false);
+  const [deletedProjectId, setDeletedProjectId] = useState({});
+  const [projectDeleted, setProjectDeleted] = useState(0);
+  const [openProjectClass, setOpenProjectClass] = useState("");
+  const [projectUpdates, setProjectUpdates] = useState({});
+  const [updatedProjectId, setUpdatedProjectId] = useState({});
+  const [projectUpdated, setProjectUpdated] = useState(0);
+  const [search, setSearch] = useState("");
+  const [filteredList, setFilteredList] = useState([]);
+  const [selectedView, setSelectedView] = useState("grid");
+  const [filter, setFilter] = useState({ state: "0" });
+  const [applyFilters, setApplyFilters] = useState(0);
+  const [newAccessToken, setNewAccessToken] = useState({
+    counter: 0,
+    type: "",
+  });
+  const [tries, setTries] = useState(0);
+  const [loadProjects, setLoadProjects] = useState(0);
+  const [tokenValidated, setTokenValidated] = useState(false);
+  const [sort, setSort] = useState({ sort_by: "0", type: 1 });
+  const [applySort, setApplySort] = useState(0);
+  const [sortedList, setSortedList] = useState([]);
+  const [globalSearch, setGlobalSearch] = useState("");
+  const [globalSearchList, setGlobalSearchList] = useState([]);
+  const [globalSearchInputFocus, setGlobalSearchInputFocus] = useState(false);
+  const [projectsFetched, setProjectsFetched] = useState(false);
+  const [tasks, setTasks] = useState([]);
+  const [tasksFetched, setTasksFetched] = useState(false);
+  const [globalSearchClosed, setGlobalSearchClosed] = useState(false);
+  // const [notStartedProjects, setNotStartedProjects] = useState(0);
+  // const [projectsFetched, setProjectsFetched] = useState(false);
+  const [theme, setTheme] = useState("");
+
+  const [searchParams] = useSearchParams();
+  const view = searchParams.get("view");
+  const filterInURL = searchParams.get("filter");
+
+  const { token, sessionId } = JSON.parse(sessionStorage.getItem("authUser"));
+
+  useEffect(() => {
+    const getUserTheme = async () => {
+      const userTheme = await cookieStore.get("userTheme-" + userId);
+      if (userTheme) {
+        setTheme(userTheme.value);
+      }
+    };
+    getUserTheme();
+  }, []);
+
+  useEffect(() => {
+    if (view) {
+      setSelectedView(view);
+    }
+    if (filterInURL) {
+      filterInURL.split("&").forEach((filterProp) => {
+        const keyValue = filterProp.split("=");
+        let tempFilter = filter;
+        tempFilter[keyValue[0]] = keyValue[1];
+        setFilter(tempFilter);
+      });
+      setTimeout(() => {
+        setApplyFilters(applyFilters + 1);
+      }, 250);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchUserProjectsUtil(
+      tokenValidated,
+      user,
+      userId,
+      sessionId,
+      token,
+      tries,
+      setTries,
+      newAccessToken,
+      setNewAccessToken,
+      setProjects,
+      setTokenValidated,
+      globalSearchList,
+      setGlobalSearchList,
+      setProjectsFetched,
+    );
+    // setProjectsFetched(true);
+  }, [newProjectCreated, projectDeleted, projectUpdated, loadProjects]);
+
+  useEffect(() => {
+    if (projectsFetched) {
+      fetchUserTasksUtil(
+        tokenValidated,
+        user,
+        userId,
+        sessionId,
+        token,
+        tries,
+        setTries,
+        newAccessToken,
+        setNewAccessToken,
+        setTasks,
+        setTokenValidated,
+        globalSearchList,
+        setGlobalSearchList,
+        setTasksFetched,
+      );
+    }
+  }, [projectsFetched]);
+
+  useEffect(() => {
+    if (newAccessToken.counter > 0) {
+      getAccessTokenUtil(
+        user,
+        userId,
+        sessionId,
+        setTokenValidated,
+        setTries,
+        newAccessToken,
+        loadProjects,
+        setLoadProjects,
+        createProject,
+        setCreateProject,
+        updatedProjectId,
+        setUpdatedProjectId,
+        deletedProjectId,
+        setDeletedProjectId,
+      );
+    }
+  }, [newAccessToken]);
+
+  useEffect(() => {
+    if (search !== "" || applyFilters > 0 || projects || applySort === 0) {
+      filterProjectsUtil(
+        filter,
+        search,
+        applySort === 0 ? projects : sortedList,
+        setFilteredList,
+      );
+    }
+  }, [search, applyFilters, projects, applySort]);
+
+  useEffect(() => {
+    if (applySort > 0 || projects) {
+      setSortedList(sortProjectsUtil(projects, sort));
+    }
+    if (applySort > 0 && (applyFilters > 0 || search !== "")) {
+      setFilteredList(sortProjectsUtil(filteredList, sort));
+    }
+  }, [applySort, projects]);
+
+  useEffect(() => {
+    if (Object.keys(newProject).length > 0 && createProject > 0) {
+      createProjectUtil(
+        tokenValidated,
+        user,
+        sessionId,
+        token,
+        newProject,
+        tries,
+        setTries,
+        setCreateProject,
+        newAccessToken,
+        setNewAccessToken,
+        newProjectCreated,
+        setNewProjectCreated,
+        setNewProject,
+        setLoadingNewProject,
+        newProjectPopupDisplay,
+        setNewProjectPopupDisplay,
+        setTokenValidated,
+      );
+    }
+  }, [createProject]);
+
+  useEffect(() => {
+    if (!newProjectPopupDisplay.active) {
+      setNewProject({});
+    }
+  }, [newProjectPopupDisplay]);
+
+  const createNewProject = () => {
+    setNewProject({
+      ...newProject,
+      owner: userId,
+      created_by: userId,
+      updated_by: userId,
+    });
+    setCreateProject(createProject + 1);
+  };
+
+  useEffect(() => {
+    if (updatedProjectId.update) {
+      updateProjectUtil(
+        tokenValidated,
+        user,
+        sessionId,
+        token,
+        projectUpdates,
+        tries,
+        setTries,
+        updatedProjectId,
+        setUpdatedProjectId,
+        newAccessToken,
+        setNewAccessToken,
+        projectUpdated,
+        setProjectUpdated,
+        setProjectUpdates,
+        setTokenValidated,
+      );
+    }
+  }, [updatedProjectId]);
+
+  const startProject = (id) => {
+    setProjectUpdates({ state: 2, updated_by: userId });
+    setUpdatedProjectId({ projectId: id, update: true });
+  };
+
+  const resetProject = (id) => {
+    setProjectUpdates({ state: 1, updated_by: userId });
+    setUpdatedProjectId({ projectId: id, update: true });
+  };
+
+  const completeProject = (id) => {
+    setProjectUpdates({ state: 3, updated_by: userId });
+    setUpdatedProjectId({ projectId: id, update: true });
+  };
+
+  useEffect(() => {
+    if (deletedProjectId.delete) {
+      deleteProjectUtil(
+        tokenValidated,
+        user,
+        sessionId,
+        token,
+        tries,
+        setTries,
+        deletedProjectId,
+        setDeletedProjectId,
+        newAccessToken,
+        setNewAccessToken,
+        projectDeleted,
+        setProjectDeleted,
+        setTokenValidated,
+      );
+    }
+  }, [deletedProjectId]);
+
+  const deleteProject = (id) => {
+    setDeletedProjectId({ projectId: id, delete: true });
+  };
+
+  let navigate = useNavigate();
+
+  const openProject = (id) => {
+    navigate("/auth/" + user + "/classic/project/" + id + "?view=" + selectedView);
+  };
+
+  const hoverOverProject = (id) => {
+    setTimeout(() => {
+      setOpenProjectClass(id);
+    }, 50);
+  };
+
+  const hoverOverProjectEnd = () => {
+    setTimeout(() => {
+      setOpenProjectClass("");
+    }, 50);
+  };
+
+  let myProjects = 0;
+  let projectsNotStarted = 0;
+  let projectsInProgress = 0;
+  let projectsCompleted = 0;
+  projects.forEach((project) => {
+    myProjects++;
+    if (project.state === 1) {
+      projectsNotStarted++;
+    } else if (project.state === 2) {
+      projectsInProgress++;
+    } else if (project.state === 3) {
+      projectsCompleted++;
+    }
+  });
+
+  let { projectsMatchingSearch, tasksMatchingSearch } = countMatchingRecords(
+    globalSearchList,
+    globalSearch,
+  );
+
+  const closeGlobalSearch = () => {
+    setGlobalSearchClosed(true);
+    setGlobalSearchInputFocus(false);
+    setGlobalSearch("");
+    setTimeout(() => {
+      setGlobalSearchClosed(false);
+    }, 500);
+  };
+
+  return (
+    <div
+      className={
+        "projects-page" +
+        (theme === "light" || theme === "" ? " light" : " dark")
+      }
+    >
+      <div
+        className={
+          "auth-header-container" +
+          (theme === "light" || theme === "" ? " light" : " dark")
+        }
+      >
+        <AuthHeader
+          user={user}
+          setAuthentication={setAuthentication}
+          globalSearch={globalSearch}
+          setGlobalSearch={setGlobalSearch}
+          token={token}
+          setPreviewModernUI={setPreviewModernUI}
+        />
+      </div>
+      <div className="container">
+        {(globalSearch !== "" || globalSearchInputFocus) &&
+        !globalSearchClosed ? (
+          <div>
+            <div
+              className="global-search-container"
+              onClick={() => closeGlobalSearch()}
+            ></div>
+            <GlobalSearch
+              globalSearch={globalSearch}
+              setGlobalSearch={setGlobalSearch}
+              setGlobalSearchInputFocus={setGlobalSearchInputFocus}
+              globalSearchList={globalSearchList}
+              user={user}
+              projectsMatchingSearch={projectsMatchingSearch}
+              tasksMatchingSearch={tasksMatchingSearch}
+              closeGlobalSearch={closeGlobalSearch}
+            />
+          </div>
+        ) : (
+          ""
+        )}
+        <SectionHeader
+          title="Your projects"
+          selectedView={selectedView}
+          setSelectedView={setSelectedView}
+          page="projects"
+          popupDisplay={newProjectPopupDisplay}
+          setPopupDisplay={setNewProjectPopupDisplay}
+          search={search}
+          setSearch={setSearch}
+          filter={filter}
+          setFilter={setFilter}
+          applyFilters={applyFilters}
+          setApplyFilters={setApplyFilters}
+          sort={sort}
+          setSort={setSort}
+          applySort={applySort}
+          setApplySort={setApplySort}
+        />
+        {/* REFACTOR: The code for the kanban view can be refactored with a shorter version */}
+        {/* FIXME: Using the search feature doesn't work when the kanban view is selected */}
+        <div className={"projects " + selectedView}>
+          {selectedView === "kanban" ? (
+            <div className="kanban-board">
+              <div className="kanban-column">
+                <div className="kanban-header poppins-semibold not-started">
+                  Not started
+                  <span className="count">{projectsNotStarted}</span>
+                </div>
+                <div className="projects-cards">
+                  {applySort === 0
+                    ? projects
+                        .filter((project) => project.state === 1)
+                        .map((project) => {
+                          let updated = new Date(project.updated_on);
+                          let updatedStatus = updatedMessageUtil(updated);
+                          return (
+                            <KanbanCardProject
+                              key={project.project_id}
+                              project={project}
+                              user={user}
+                              userId={userId}
+                              hoverOverProject={hoverOverProject}
+                              hoverOverProjectEnd={hoverOverProjectEnd}
+                              openProjectClass={openProjectClass}
+                              openProject={openProject}
+                              startProject={startProject}
+                              completeProject={completeProject}
+                              resetProject={resetProject}
+                              deleteProject={deleteProject}
+                              updatedStatus={updatedStatus}
+                              theme={theme}
+                            />
+                          );
+                        })
+                    : sortedList
+                        .filter((project) => project.state === 1)
+                        .map((project) => {
+                          let updated = new Date(project.updated_on);
+                          let updatedStatus = updatedMessageUtil(updated);
+                          return (
+                            <KanbanCardProject
+                              key={project.project_id}
+                              project={project}
+                              user={user}
+                              userId={userId}
+                              hoverOverProject={hoverOverProject}
+                              hoverOverProjectEnd={hoverOverProjectEnd}
+                              openProjectClass={openProjectClass}
+                              openProject={openProject}
+                              startProject={startProject}
+                              completeProject={completeProject}
+                              resetProject={resetProject}
+                              deleteProject={deleteProject}
+                              updatedStatus={updatedStatus}
+                              theme={theme}
+                            />
+                          );
+                        })}
+                </div>
+              </div>
+              <div className="kanban-column">
+                <div className="kanban-header poppins-semibold in-progress">
+                  In progress
+                  <span className="count">{projectsInProgress}</span>
+                </div>
+                <div className="projects-cards">
+                  {applySort === 0
+                    ? projects
+                        .filter((project) => project.state === 2)
+                        .map((project) => {
+                          let updated = new Date(project.updated_on);
+                          let updatedStatus = updatedMessageUtil(updated);
+                          return (
+                            <KanbanCardProject
+                              key={project.project_id}
+                              project={project}
+                              user={user}
+                              userId={userId}
+                              hoverOverProject={hoverOverProject}
+                              hoverOverProjectEnd={hoverOverProjectEnd}
+                              openProjectClass={openProjectClass}
+                              openProject={openProject}
+                              startProject={startProject}
+                              completeProject={completeProject}
+                              resetProject={resetProject}
+                              deleteProject={deleteProject}
+                              updatedStatus={updatedStatus}
+                              theme={theme}
+                            />
+                          );
+                        })
+                    : sortedList
+                        .filter((project) => project.state === 2)
+                        .map((project) => {
+                          let updated = new Date(project.updated_on);
+                          let updatedStatus = updatedMessageUtil(updated);
+                          return (
+                            <KanbanCardProject
+                              key={project.project_id}
+                              project={project}
+                              user={user}
+                              userId={userId}
+                              hoverOverProject={hoverOverProject}
+                              hoverOverProjectEnd={hoverOverProjectEnd}
+                              openProjectClass={openProjectClass}
+                              openProject={openProject}
+                              startProject={startProject}
+                              completeProject={completeProject}
+                              resetProject={resetProject}
+                              deleteProject={deleteProject}
+                              updatedStatus={updatedStatus}
+                              theme={theme}
+                            />
+                          );
+                        })}
+                </div>
+              </div>
+              <div className="kanban-column">
+                <div className="kanban-header poppins-semibold completed">
+                  Completed
+                  <span className="count">{projectsCompleted}</span>
+                </div>
+                <div className="projects-cards">
+                  {applySort === 0
+                    ? projects
+                        .filter((project) => project.state === 3)
+                        .map((project) => {
+                          let updated = new Date(project.updated_on);
+                          let updatedStatus = updatedMessageUtil(updated);
+                          return (
+                            <KanbanCardProject
+                              key={project.project_id}
+                              project={project}
+                              user={user}
+                              userId={userId}
+                              hoverOverProject={hoverOverProject}
+                              hoverOverProjectEnd={hoverOverProjectEnd}
+                              openProjectClass={openProjectClass}
+                              openProject={openProject}
+                              startProject={startProject}
+                              completeProject={completeProject}
+                              resetProject={resetProject}
+                              deleteProject={deleteProject}
+                              updatedStatus={updatedStatus}
+                              theme={theme}
+                            />
+                          );
+                        })
+                    : sortedList
+                        .filter((project) => project.state === 3)
+                        .map((project) => {
+                          let updated = new Date(project.updated_on);
+                          let updatedStatus = updatedMessageUtil(updated);
+                          return (
+                            <KanbanCardProject
+                              key={project.project_id}
+                              project={project}
+                              user={user}
+                              userId={userId}
+                              hoverOverProject={hoverOverProject}
+                              hoverOverProjectEnd={hoverOverProjectEnd}
+                              openProjectClass={openProjectClass}
+                              openProject={openProject}
+                              startProject={startProject}
+                              completeProject={completeProject}
+                              resetProject={resetProject}
+                              deleteProject={deleteProject}
+                              updatedStatus={updatedStatus}
+                              theme={theme}
+                            />
+                          );
+                        })}
+                </div>
+              </div>
+            </div>
+          ) : search === "" && applyFilters === 0 ? (
+            applySort === 0 ? (
+              projects.map((project) => {
+                if (project.owner === userId) {
+                  const updated = new Date(project.updated_on);
+                  let updatedStatus = updatedMessageUtil(updated);
+                  if (deletedProjectId.projectId !== project.project_id) {
+                    if (selectedView === "grid") {
+                      return (
+                        <GridProjectItem
+                          key={project.project_id}
+                          project={project}
+                          openProjectClass={openProjectClass}
+                          hoverOverProject={hoverOverProject}
+                          hoverOverProjectEnd={hoverOverProjectEnd}
+                          openProject={openProject}
+                          startProject={startProject}
+                          resetProject={resetProject}
+                          completeProject={completeProject}
+                          deleteProject={deleteProject}
+                          user={user}
+                          userId={userId}
+                          updatedStatus={updatedStatus}
+                          theme={theme}
+                        />
+                      );
+                    } else {
+                      return (
+                        <ListProjectItem
+                          key={project.project_id}
+                          project={project}
+                          user={user}
+                          openProjectClass={openProjectClass}
+                          openProject={openProject}
+                          startProject={startProject}
+                          completeProject={completeProject}
+                          resetProject={resetProject}
+                          deleteProject={deleteProject}
+                          hoverOverProject={hoverOverProject}
+                          hoverOverProjectEnd={hoverOverProjectEnd}
+                          updatedStatus={updatedStatus}
+                          theme={theme}
+                        />
+                      );
+                    }
+                  } else {
+                    return (
+                      <div className={"deleting-project poppins-semibold"}>
+                        Project being deleted ...
+                      </div>
+                    );
+                  }
+                }
+              })
+            ) : (
+              sortedList.map((project) => {
+                if (project.owner === userId) {
+                  const updated = new Date(project.updated_on);
+                  let updatedStatus = updatedMessageUtil(updated);
+                  if (deletedProjectId.projectId !== project.project_id) {
+                    if (selectedView === "grid") {
+                      return (
+                        <GridProjectItem
+                          key={project.project_id}
+                          project={project}
+                          openProjectClass={openProjectClass}
+                          hoverOverProject={hoverOverProject}
+                          hoverOverProjectEnd={hoverOverProjectEnd}
+                          openProject={openProject}
+                          startProject={startProject}
+                          resetProject={resetProject}
+                          completeProject={completeProject}
+                          deleteProject={deleteProject}
+                          user={user}
+                          userId={userId}
+                          updatedStatus={updatedStatus}
+                          theme={theme}
+                        />
+                      );
+                    } else {
+                      return (
+                        <ListProjectItem
+                          key={project.project_id}
+                          project={project}
+                          user={user}
+                          openProjectClass={openProjectClass}
+                          openProject={openProject}
+                          startProject={startProject}
+                          completeProject={completeProject}
+                          resetProject={resetProject}
+                          deleteProject={deleteProject}
+                          hoverOverProject={hoverOverProject}
+                          hoverOverProjectEnd={hoverOverProjectEnd}
+                          updatedStatus={updatedStatus}
+                          theme={theme}
+                        />
+                      );
+                    }
+                  } else {
+                    return (
+                      <div className={"deleting-project poppins-semibold"}>
+                        Project being deleted ...
+                      </div>
+                    );
+                  }
+                }
+              })
+            )
+          ) : (
+            filteredList.map((project) => {
+              if (project.owner === userId) {
+                const updated = new Date(project.updated_on);
+                let updatedStatus = updatedMessageUtil(updated);
+                if (deletedProjectId.projectId !== project.project_id) {
+                  if (selectedView === "grid") {
+                    return (
+                      <GridProjectItem
+                        key={project.project_id}
+                        project={project}
+                        openProjectClass={openProjectClass}
+                        hoverOverProject={hoverOverProject}
+                        hoverOverProjectEnd={hoverOverProjectEnd}
+                        openProject={openProject}
+                        startProject={startProject}
+                        resetProject={resetProject}
+                        completeProject={completeProject}
+                        deleteProject={deleteProject}
+                        user={user}
+                        userId={userId}
+                        updatedStatus={updatedStatus}
+                        theme={theme}
+                      />
+                    );
+                  } else {
+                    return (
+                      <ListProjectItem
+                        key={project.project_id}
+                        project={project}
+                        user={user}
+                        openProjectClass={openProjectClass}
+                        openProject={openProject}
+                        startProject={startProject}
+                        completeProject={completeProject}
+                        resetProject={resetProject}
+                        deleteProject={deleteProject}
+                        hoverOverProject={hoverOverProject}
+                        hoverOverProjectEnd={hoverOverProjectEnd}
+                        updatedStatus={updatedStatus}
+                        theme={theme}
+                      />
+                    );
+                  }
+                } else {
+                  return (
+                    <div className={"deleting-project poppins-semibold"}>
+                      Project being deleted ...
+                    </div>
+                  );
+                }
+              }
+            })
+          )}
+          {loadingNewProject ? (
+            <div className="loading-new-project poppins-regular">
+              Creating a new project ...
+            </div>
+          ) : (
+            ""
+          )}
+        </div>
+        {myProjects === 0 ? (
+          <div className="no-projects">
+            <h3 className="no-projects-message poppins-semibold">
+              You have no projects
+            </h3>
+          </div>
+        ) : (
+          ""
+        )}
+        {newProjectPopupDisplay.active ? (
+          <NewProjectPopup
+            newProject={newProject}
+            setNewProject={setNewProject}
+            createNewProject={createNewProject}
+            popupDisplay={newProjectPopupDisplay}
+            setPopupDisplay={setNewProjectPopupDisplay}
+            theme={theme}
+          />
+        ) : (
+          ""
+        )}
+      </div>
+    </div>
+  );
+}

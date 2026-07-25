@@ -1,0 +1,84 @@
+import ProfilePage from "../../../pages/auth/profile/Profile";
+import WrongRoute from "../../public/WrongRoute";
+
+import { useLocation, useNavigate } from "react-router";
+import { useEffect, useState } from "react";
+import bcrypt from "bcryptjs";
+
+export default function ProfileRoute({
+  isAuthenticated,
+  setAuthentication,
+  setPreviewModernUI,
+}) {
+  const [session, setSession] = useState("");
+
+  let navigate = useNavigate();
+  let userAuthenticated = JSON.parse(sessionStorage.getItem("authUser"));
+  let userLoggedOut = JSON.parse(sessionStorage.getItem("userLoggedOut"));
+
+  const location = useLocation();
+  const pathname = location.pathname;
+  const slicedPathname = pathname.replace("/auth/", "");
+
+  const index = slicedPathname.indexOf("/");
+
+  const username = slicedPathname.slice(0, index);
+
+  const logoutUser = () => {
+    sessionStorage.setItem("userLoggedOut", true);
+    sessionStorage.removeItem("authUser");
+    setAuthentication(false);
+    navigate("/signin");
+  };
+
+  useEffect(() => {
+    const getUserSession = async () => {
+      const { userId } = JSON.parse(sessionStorage.getItem("authUser"));
+      const userSession = await cookieStore.get("session-" + userId);
+      if (userSession) {
+        setSession(userSession.value);
+      } else {
+        logoutUser();
+      }
+    };
+    getUserSession();
+  }, []);
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const { user, userId } = JSON.parse(sessionStorage.getItem("authUser"));
+      const validSession = await bcrypt.compare(user + "-" + userId, session);
+      if (!validSession) {
+        logoutUser();
+      }
+    };
+    if (session !== "") {
+      checkSession();
+    }
+  }, [session]);
+
+  useEffect(() => {
+    if (!isAuthenticated && !userAuthenticated) {
+      if (userLoggedOut) {
+        navigate("/signin");
+      } else {
+        navigate("/signin?redirect=/auth/user/profile");
+      }
+    }
+  }, []);
+
+  if (isAuthenticated || userAuthenticated) {
+    if (username === userAuthenticated.user) {
+      return (
+        <ProfilePage
+          user={userAuthenticated.user}
+          userId={userAuthenticated.userId}
+          setAuthentication={setAuthentication}
+          setPreviewModernUI={setPreviewModernUI}
+        />
+      );
+    } else {
+      return <WrongRoute />;
+    }
+  }
+}

@@ -72,7 +72,6 @@ export async function projectsRoute(req, res) {
           if (readAllRecords) {
             allowedToRead = true;
           } else {
-            console.log(projectOwner);
             if (projectOwner === req.user.user_id) {
               allowedToRead = true;
             }

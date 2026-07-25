@@ -6,7 +6,7 @@ import "./Blog.css";
 
 export default function BlogPage() {
   return (
-    <div className="blog-page">
+    <div className="blog-page public">
       <div className="container">
         <Header />
         <h2 className="poppins-bold">Blog Page</h2>

@@ -7,7 +7,7 @@ import { IoIosSearch } from "react-icons/io";
 import { CgProfile } from "react-icons/cg";
 import { GoGear } from "react-icons/go";
 import { LuPaintbrush } from "react-icons/lu";
-import { BsFillTriangleFill } from "react-icons/bs";
+import { BsFillTriangleFill, BsStars } from "react-icons/bs";
 import { IoLogOutOutline } from "react-icons/io5";
 import { TbBell } from "react-icons/tb";
 import { IconContext } from "react-icons/lib";
@@ -22,6 +22,7 @@ import getAccessTokenUtil from "../utils/getAccessTokenUtil";
 
 // Styles
 import "./AuthHeader.css";
+import { FaRegEye } from "react-icons/fa";
 
 export default function AuthHeader({
   user,
@@ -31,6 +32,7 @@ export default function AuthHeader({
   theme,
   tokenValidated,
   setTokenValidated,
+  setPreviewModernUI,
 }) {
   const [settingsPopup, setSettingsPopup] = useState(false);
   const [tries, setTries] = useState(0);
@@ -96,6 +98,12 @@ export default function AuthHeader({
     }
   }, [newAccessToken]);
 
+  const switchUI = () => {
+    setPreviewModernUI(true);
+    navigate(`/auth/${user}/modern/dashboard`);
+    sessionStorage.setItem("modern-ui", true);
+  };
+
   return (
     <header className="auth-header">
       <h1 className="application-name poppins-bold">
@@ -103,16 +111,16 @@ export default function AuthHeader({
       </h1>
       <ul className="auth-menu">
         <li className="auth-menu-item poppins-semibold">
-          <Link to={"/auth/" + user + "/dashboard"}>Dashboard</Link>
+          <Link to={"/auth/" + user + "/classic/dashboard"}>Dashboard</Link>
         </li>
         <li className="auth-menu-item poppins-semibold">
-          <Link to={"/auth/" + user + "/projects"}>Projects</Link>
+          <Link to={"/auth/" + user + "/classic/projects"}>Projects</Link>
         </li>
         <li className="auth-menu-item poppins-semibold">
-          <Link to={"/auth/" + user + "/tasks"}>Tasks</Link>
+          <Link to={"/auth/" + user + "/classic/tasks"}>Tasks</Link>
         </li>
         <li className="auth-menu-item poppins-semibold feature-disabled">
-          <Link to={"/auth/" + user + "/insights"}>Insights</Link>
+          <Link to={"/auth/" + user + "/classic/insights"}>Insights</Link>
         </li>
       </ul>
       <div className="search">
@@ -165,7 +173,7 @@ export default function AuthHeader({
             </IconContext.Provider>
             <ul className="settings-list poppins-regular">
               <li className="setting-item">
-                <Link to={"/auth/" + user + "/profile"}>
+                <Link to={"/auth/" + user + "/classic/profile"}>
                   <CgProfile />
                   <span>Profile</span>
                 </Link>
@@ -188,6 +196,10 @@ export default function AuthHeader({
           </div>
         </div>
       </div>
+      <button className="switch-to-modern-ui poppins-medium" onClick={() => switchUI()}>
+        <BsStars />
+        Preview Modern UI
+      </button>
     </header>
   );
 }

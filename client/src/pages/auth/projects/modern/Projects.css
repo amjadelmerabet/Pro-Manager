@@ -1,0 +1,330 @@
+.projects-page-modern .page-container {
+  display: flex;
+}
+
+.projects-page-modern main {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.projects-page-modern main.popup-open::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .25);
+  z-index: 5;
+  cursor: not-allowed;
+}
+
+.projects-page-modern main > .page-title {
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--default-light-theme-primary-color);
+  margin-bottom: 8px;
+  height: 32px;
+}
+
+.projects-page-modern main .projects-section {
+  padding: 8px;
+}
+
+.projects-page-modern main .projects-section > .projects {
+  width: 100%;
+}
+
+.projects-page-modern main .projects-section > .projects thead th {
+  background-color: var(--default-light-theme-primary-color);
+  color: white;
+  padding: 4px 12px;
+  font-size: 14px;
+}
+
+.projects-page-modern main .projects-section > .projects > tbody {
+  font-size: 13px;
+}
+
+.projects-page-modern main .projects-section > .projects > tbody > tr {
+  cursor: pointer;
+  transition: background 250ms ease-in-out;
+}
+
+.projects-page-modern main .projects-section > .projects .select-column > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.projects-page-modern
+  main
+  .projects-section
+  > .projects
+  > tbody
+  > tr:nth-child(odd) {
+  background-color: rgb(245, 255, 255);
+}
+
+.projects-page-modern
+  main
+  .projects-section
+  > .projects
+  > tbody
+  > tr:nth-child(even) {
+  background-color: rgb(235, 255, 255);
+}
+
+.projects-page-modern main .projects-section > .projects > tbody > tr:hover {
+  background-color: rgba(225, 245, 245);
+}
+
+.projects-page-modern main .projects-section > .projects > tbody td {
+  padding: 2px 4px;
+}
+
+.projects-page-modern main .projects-section > .projects > tbody td > div {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.projects-page-modern main .projects-section > .projects span {
+  display: flex;
+  align-items: center;
+}
+
+.projects-page-modern main .projects-section > .projects td > span {
+  padding: 1px 12px;
+  border-radius: 32px;
+}
+
+.projects-page-modern main .projects-section > .projects .not-started {
+  color: rgb(255, 65, 80);
+}
+
+.projects-page-modern main .projects-section > .projects .in-progress {
+  color: rgb(255, 145, 0);
+}
+
+.projects-page-modern main .projects-section > .projects .completed {
+  color: rgb(45, 200, 165);
+}
+
+.projects-page-modern main .projects-section > .projects > tbody .description {
+  max-width: 400px;
+}
+
+.projects-page-modern main .projects-actions {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 12px;
+}
+
+.projects-page-modern main .projects-actions .projects-actions-right {
+  display: flex;
+  gap: 8px;
+}
+
+.projects-page-modern main .projects-actions button {
+  background-color: var(--default-light-theme-secondary-color);
+  border: none;
+  padding: 2px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1);
+  transition:
+  transform 250ms ease-in-out,
+  background-color 250ms ease-in-out;
+}
+
+.projects-page-modern main .projects-actions .delete-projects {
+  background-color: rgb(255, 45, 80);
+  color: white;
+}
+
+.projects-page-modern main .projects-actions > button:hover {
+  transform: scale(0.98);
+  background-color: var(--default-light-theme-secondary-color-hover);
+}
+
+.projects-page-modern main .filters-popup {
+  position: absolute;
+  width: 50%;
+  aspect-ratio: 1 / 1;
+  top: 25%;
+  left: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 24px;
+  width: 40%;
+  height: 40%;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);
+  background-color: white;
+  border-radius: 8px;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0);
+  transition:
+    opacity 250ms ease-in-out,
+    visibility 250ms ease-in-out,
+    transform 250ms ease-in-out;
+    z-index: 10;
+}
+
+.projects-page-modern main .filters-popup.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+}
+
+.projects-page-modern main .filters-popup .close-popup {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: rgb(255, 45, 80);
+}
+
+.projects-page-modern main .filters-popup .project-states {
+  display: flex;
+  font-size: 14px;
+  gap: 16px;
+}
+
+.projects-page-modern main .filters-popup .project-states > div {
+  display: flex;
+  gap: 4px;
+}
+
+.projects-page-modern main .filters-popup .actions {
+  display: flex;
+  gap: 8px;
+}
+
+.projects-page-modern main .filters-popup .actions > button {
+  padding: 2px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 250ms ease-in-out, box-shadow 250ms ease-in-out;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, .25);
+}
+
+.projects-page-modern main .filters-popup .actions > button:hover {
+  transform: scale(0.98);
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, .25);
+}
+
+.projects-page-modern main .filters-popup .actions > .clear-filters {
+  background-color: var(--default-light-theme-secondary-color);
+}
+
+.projects-page-modern main .filters-popup .actions > .apply-filters {
+  background-color: var(--default-light-theme-primary-color);
+  color: white;
+}
+
+.projects-page-modern main .new-project-form {
+  position: absolute;
+  width: 60%;
+  height: 80%;
+  top: 10%;
+  left: 20%;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.25);
+  z-index: 10;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0);
+  transition:
+    opacity 250ms ease-in-out,
+    visibility 250ms ease-in-out,
+    transform 250ms ease-in-out;
+}
+
+.projects-page-modern main .new-project-form.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+}
+
+.projects-page-modern main .new-project-form > .close-form {
+  background: transparent;
+  border: none;
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  color: rgb(255, 45, 80);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.projects-page-modern main .new-project-form .form-title {
+  text-align: center;
+  margin-block: 32px;
+  font-size: 20px;
+}
+
+.projects-page-modern main .new-project-form > div {
+  display: grid;
+  margin: 16px auto;
+  width: 60%;
+}
+
+.projects-page-modern main .new-project-form > div > div {
+  display: grid;
+  margin-bottom: 8px;
+}
+
+.projects-page-modern main .new-project-form > div > div > label {
+  font-size: 14px;
+  color: var(--default-light-theme-primary-color);
+}
+
+.projects-page-modern main .new-project-form > div > div > input,
+.projects-page-modern main .new-project-form > div > div > select,
+.projects-page-modern main .new-project-form > div > div > select option,
+.projects-page-modern main .new-project-form > div > div > textarea {
+  font-family: "Poppins", sans-serif;
+}
+
+.projects-page-modern main .new-project-form > div > div > input {
+  font-size: 14px;
+  padding: 4px;
+  border: 1px solid black;
+  border-radius: 4px;
+}
+
+.projects-page-modern main .new-project-form > div > div > textarea {
+  padding: 4px;
+  border: 1px solid black;
+  border-radius: 4px;
+}
+
+.projects-page-modern main .new-project-form > div > .create-project {
+  width: 20%;
+  padding: 2px;
+  background-color: var(--default-light-theme-primary-color);
+  color: white;
+  border: 1px solid var(--default-light-theme-primary-color);
+  border-radius: 4px;
+  margin: 24px auto;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+  transition:
+    transform 250ms ease-in-out,
+    box-shadow 250ms ease-in-out;
+  cursor: pointer;
+}
+
+.projects-page-modern main .new-project-form > div > .create-project:hover {
+  transform: scale(0.98);
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
+}
