@@ -1,13 +1,15 @@
-import { useLocation, useNavigate } from "react-router";
-import Task from "../../../pages/auth/task/classic/Task";
-import { useEffect, useState } from "react";
+import ProjectsPageModern from "../../../pages/auth/projects/modern/Projects";
 import WrongRoute from "../../public/WrongRoute";
+
+import { useLocation, useNavigate } from "react-router";
+import { useEffect, useState } from "react";
+
 import bcrypt from "bcryptjs";
 
-export default function SingleTaskRoute({
+export default function ProjectsRoute({
   isAuthenticated,
   setAuthentication,
-  setPreviewModernUI
+  setPreviewModernUI,
 }) {
   const [session, setSession] = useState("");
 
@@ -63,7 +65,7 @@ export default function SingleTaskRoute({
       if (userLoggedOut) {
         navigate("/signin");
       } else {
-        navigate("/signin?redirect=/auth/user/tasks");
+        navigate("/signin?redirect=/auth/user/projects");
       }
     }
   }, []);
@@ -71,7 +73,7 @@ export default function SingleTaskRoute({
   if (isAuthenticated || userAuthenticated) {
     if (username === userAuthenticated.user) {
       return (
-        <Task
+        <ProjectsPageModern
           user={userAuthenticated.user}
           userId={userAuthenticated.userId}
           setAuthentication={setAuthentication}

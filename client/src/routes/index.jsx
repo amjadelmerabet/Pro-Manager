@@ -12,11 +12,15 @@ import WrongRoute from "./public/WrongRoute";
 // Authenticated routes
 import ClassicDashboardRoute from "./auth/classic/DashboardRoute";
 import ProfileRoute from "./auth/classic/ProfileRoute";
-import ProjectsRoute from "./auth/classic/ProjectsRoute";
-import TasksRoute from "./auth/classic/TasksRoute";
+import ClassicProjectsRoute from "./auth/classic/ProjectsRoute";
+import ClassicTasksRoute from "./auth/classic/TasksRoute";
 import SingleProjectRoute from "./auth/classic/SingleProjectRoute";
-import SingleTaskRoute from "./auth/classic/SingleTaskRoute";
+import ClassicSingleTaskRoute from "./auth/classic/SingleTaskRoute";
 import ModernDashboardRoute from "./auth/modern/DashboardRoute";
+import ModernProjectsRoute from "./auth/modern/ProjectsRoute";
+import ModernTasksRoute from "./auth/modern/TasksRoute";
+import ModernSingleTaskRoute from "./auth/modern/SingleTaskRoute";
+import ModernSingleProjectRoute from "./auth/modern/SingleProjectRoute";
 
 export {
   HomeRoute,
@@ -25,14 +29,18 @@ export {
   ClassicDashboardRoute,
   ModernDashboardRoute,
   ProfileRoute,
-  ProjectsRoute,
+  ClassicProjectsRoute,
+  ModernProjectsRoute,
   FeaturesRoute,
   BlogRoute,
   PricingRoute,
   ContactRoute,
-  TasksRoute,
+  ClassicTasksRoute,
+  ModernTasksRoute,
   SignUpRoute,
   SingleProjectRoute,
-  SingleTaskRoute,
+  ClassicSingleTaskRoute,
+  ModernSingleTaskRoute,
+  ModernSingleProjectRoute,
   WrongRoute,
 };

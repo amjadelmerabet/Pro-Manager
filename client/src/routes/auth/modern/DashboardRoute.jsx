@@ -7,7 +7,6 @@ import bcrypt from "bcryptjs";
 export default function ModernDashboardRoute({
   isAuthenticated,
   setAuthentication,
-  previewModernUI,
   setPreviewModernUI,
 }) {
   const [session, setSession] = useState("");
@@ -75,7 +74,7 @@ export default function ModernDashboardRoute({
         <DashboardPageModern
           user={userAuthenticated.user}
           userId={userAuthenticated.userId}
-          previewModernUI={previewModernUI}
+          setAuthentication={setAuthentication}
           setPreviewModernUI={setPreviewModernUI}
         />
       );

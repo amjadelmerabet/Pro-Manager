@@ -1,13 +1,13 @@
 import { useLocation, useNavigate } from "react-router";
-import Task from "../../../pages/auth/task/classic/Task";
+import TasksPageModern from "../../../pages/auth/tasks/modern/Tasks";
 import { useEffect, useState } from "react";
 import WrongRoute from "../../public/WrongRoute";
 import bcrypt from "bcryptjs";
 
-export default function SingleTaskRoute({
+export default function TasksRoute({
   isAuthenticated,
   setAuthentication,
-  setPreviewModernUI
+  setPreviewModernUI,
 }) {
   const [session, setSession] = useState("");
 
@@ -66,12 +66,12 @@ export default function SingleTaskRoute({
         navigate("/signin?redirect=/auth/user/tasks");
       }
     }
-  }, []);
+  });
 
   if (isAuthenticated || userAuthenticated) {
     if (username === userAuthenticated.user) {
       return (
-        <Task
+        <TasksPageModern
           user={userAuthenticated.user}
           userId={userAuthenticated.userId}
           setAuthentication={setAuthentication}

@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router";
-import TasksPage from "../../../pages/auth/tasks/Tasks";
+import TasksPage from "../../../pages/auth/tasks/classic/Tasks";
 import { useEffect, useState } from "react";
 import WrongRoute from "../../public/WrongRoute";
 import bcrypt from "bcryptjs";

@@ -16,8 +16,11 @@
   --accent-color-dark: #7fb9c4;
   --primary-color-dark-hover: #033a58;
   --default-light-theme-primary-color: #02394A;
+  --default-light-theme-primary-color-hover: #012b38;
   --default-light-theme-secondary-color: #89D2DC;
+  --default-light-theme-secondary-color-hover: #74bcc5;
   --default-light-theme-accent-color: #F46036;
+  --default-light-theme-accent-color-hover: #db5530;
   --default-light-theme-accessory-color-one: #6B0504;
   --default-light-theme-accessory-color-two: #E9B44C;
 }

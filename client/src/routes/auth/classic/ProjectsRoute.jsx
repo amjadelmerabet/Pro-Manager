@@ -1,4 +1,4 @@
-import ProjectsPage from "../../../pages/auth/projects/Projects";
+import ProjectsPage from "../../../pages/auth/projects/classic/Projects";
 import WrongRoute from "../../public/WrongRoute";
 
 import { useLocation, useNavigate } from "react-router";

@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router";
-import Project from "../../../pages/auth/project/Project";
+import Project from "../../../pages/auth/project/classic/Project";
 import { useEffect, useState } from "react";
 import WrongRoute from "../../public/WrongRoute";
 

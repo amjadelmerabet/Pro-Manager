@@ -4,8 +4,7 @@ import "./Header.css";
 export default function Header() {
   const userLoggedIn = JSON.parse(sessionStorage.getItem("authUser"));
   const previewModernUI = sessionStorage.getItem("modern-ui");
-  console.log(previewModernUI);
-
+  
   return (
     <header>
       <h1 className="app-name poppins-bold">

@@ -16,11 +16,15 @@ import {
   LoginRoute,
   PricingRoute,
   ProfileRoute,
-  ProjectsRoute,
+  ClassicProjectsRoute,
+  ModernProjectsRoute,
   SignUpRoute,
   SingleProjectRoute,
-  SingleTaskRoute,
-  TasksRoute,
+  ClassicSingleTaskRoute,
+  ModernSingleTaskRoute,
+  ModernSingleProjectRoute,
+  ClassicTasksRoute,
+  ModernTasksRoute,
   WrongRoute,
 } from "./routes";
 
@@ -70,11 +74,54 @@ function App() {
                     <ModernDashboardRoute
                       isAuthenticated={userAuthenticated}
                       setAuthentication={setUserAuthenticated}
-                      previewModernUI={previewModernUI}
                       setPreviewModernUI={setPreviewModernUI}
                     />
                   }
                 />
+                <Route
+                  path="projects"
+                  element={
+                    <ModernProjectsRoute
+                      isAuthenticated={userAuthenticated}
+                      setAuthentication={setUserAuthenticated}
+                      setPreviewModernUI={setPreviewModernUI}
+                    />
+                  }
+                />
+                <Route path="project">
+                  <Route
+                    path=":projectId"
+                    element={
+                      <ModernSingleProjectRoute
+                        isAuthenticated={userAuthenticated}
+                        setAuthentication={setUserAuthenticated}
+                        setPreviewModernUI={setPreviewModernUI}
+                      />
+                    }
+                  />
+                </Route>
+                <Route
+                  path="tasks"
+                  element={
+                    <ModernTasksRoute
+                      isAuthenticated={userAuthenticated}
+                      setAuthentication={setUserAuthenticated}
+                      setPreviewModernUI={setPreviewModernUI}
+                    />
+                  }
+                />
+                <Route path="task">
+                  <Route
+                    path=":taskId"
+                    element={
+                      <ModernSingleTaskRoute
+                        isAuthenticated={userAuthenticated}
+                        setAuthentication={setUserAuthenticated}
+                        setPreviewModernUI={setPreviewModernUI}
+                      />
+                    }
+                  />
+                </Route>
               </Route>
             ) : (
               <Route path="classic">
@@ -101,7 +148,7 @@ function App() {
                 <Route
                   path="projects"
                   element={
-                    <ProjectsRoute
+                    <ClassicProjectsRoute
                       isAuthenticated={userAuthenticated}
                       setAuthentication={setUserAuthenticated}
                       setPreviewModernUI={setPreviewModernUI}
@@ -123,7 +170,7 @@ function App() {
                 <Route
                   path="tasks"
                   element={
-                    <TasksRoute
+                    <ClassicTasksRoute
                       isAuthenticated={userAuthenticated}
                       setAuthentication={setUserAuthenticated}
                       setPreviewModernUI={setPreviewModernUI}
@@ -134,7 +181,7 @@ function App() {
                   <Route
                     path=":taskid"
                     element={
-                      <SingleTaskRoute
+                      <ClassicSingleTaskRoute
                         isAuthenticated={userAuthenticated}
                         setAuthentication={setUserAuthenticated}
                         setPreviewModernUI={setPreviewModernUI}
