@@ -10,12 +10,26 @@ import updateProjectUtil from "./utils/updateProjectUtil";
 import deleteProjectUtil from "./utils/deleteProjectUtil";
 import getAccessTokenUtil from "./utils/getAccessTokenUtil";
 import "./Project.css";
+import fetchProjectTasksUtil from "../utils/fetchProjectTasksUtil";
 
 const states = {
   1: ["Not started", "not-started"],
   2: ["In progress", "in-progress"],
   3: ["Completed", "completed"],
 };
+
+const taskStates = {
+  1: { label: "To do", class: "to-do" },
+  2: { label: "Doing", class: "doing" },
+  3: { label: "Done", class: "done" },
+};
+
+const taskPriorities = {
+  1: { label: "High", class: "high" },
+  2: { label: "Medium", class: "medium" },
+  3: { label: "Low", class: "low" },
+};
+
 const truncateProjectName = (name, maxLength = 30) =>
   name?.length > maxLength ? `${name.slice(0, maxLength)}...` : name;
 
@@ -44,9 +58,28 @@ export default function ProjectPageModern({
   const [projectDeleted, setProjectDeleted] = useState(false);
   const [editingField, setEditingField] = useState("");
   const [draftValue, setDraftValue] = useState("");
+  const [projectTasks, setProjectTasks] = useState([]);
+  const [fetchProjectTasks, setFetchProjectTasks] = useState(0);
+
   const authUser = JSON.parse(sessionStorage.getItem("authUser"));
   const token = authUser?.token;
   const sessionId = authUser?.sessionId;
+
+  useEffect(() => {
+    fetchProjectTasksUtil(
+      projectId,
+      sessionId,
+      token,
+      setProjectTasks,
+      tokenValidated,
+      setTokenValidated,
+      user,
+      tries,
+      setTries,
+      newAccessToken,
+      setNewAccessToken,
+    );
+  }, []);
 
   useEffect(() => {
     if (token)
@@ -105,6 +138,25 @@ export default function ProjectPageModern({
         navigate,
       );
   }, [projectDeleted]);
+
+  useEffect(() => {
+    if (fetchProjectTasks > 0) {
+      fetchProjectTasksUtil(
+        projectId,
+        sessionId,
+        token,
+        setProjectTasks,
+        tokenValidated,
+        setTokenValidated,
+        user,
+        tries,
+        setTries,
+        newAccessToken,
+        setNewAccessToken,
+      );
+    }
+  }, [fetchProjectTasks]);
+
   useEffect(() => {
     if (newAccessToken.counter)
       getAccessTokenUtil(
@@ -142,6 +194,10 @@ export default function ProjectPageModern({
 
   const projectNameWords =
     Object.keys(project).length > 0 ? project.name.split(" ").length : 0;
+
+  const openTask = (taskId) => {
+    navigate(`/auth/${user}/modern/task/${taskId}`);
+  };
 
   if (!Object.keys(project).length)
     return (
@@ -292,6 +348,52 @@ export default function ProjectPageModern({
                 </button>
               </div>
             )}
+          </article>
+          <h3 className="project-tasks-section-title poppins-bold">
+            Project tasks
+          </h3>
+          <article className="project-tasks">
+            <table className="tasks">
+              <thead>
+                <tr>
+                  <th className="poppins-semibold">Name</th>
+                  <th className="poppins-semibold">State</th>
+                  <th className="poppins-semibold">Priority</th>
+                  <th className="poppins-semibold">Assigned to</th>
+                  {/* <th className="poppins-semibold">Project</th> */}
+                  <th className="poppins-semibold">Updated</th>
+                  <th className="poppins-semibold">Created</th>
+                </tr>
+              </thead>
+              <tbody>
+                {projectTasks.map((task) => {
+                  return (
+                    <tr
+                      className="project-task"
+                      onClick={() => openTask(task.task_id)}
+                    >
+                      <td className="poppins-regular">{task.name}</td>
+                      <td className="poppins-regular">
+                        {taskStates[task.state].label}
+                      </td>
+                      <td className="poppins-regular">
+                        {taskPriorities[task.priority].label}
+                      </td>
+                      <td className="poppins-regular">
+                        {task.assigned_to === userId ? "Me" : ""}
+                      </td>
+                      {/* <td className="poppins-regular">{project.name}</td> */}
+                      <td className="poppins-regular">
+                        {new Date(task.updated_on).toLocaleString()}
+                      </td>
+                      <td className="poppins-regular">
+                        {new Date(task.created_on).toLocaleString()}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </article>
         </main>
       </div>

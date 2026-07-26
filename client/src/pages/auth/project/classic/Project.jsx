@@ -23,7 +23,7 @@ import fetchUserProjectUtil from "./utils/fetchUserProjectUtil";
 import getAccessTokenUtil from "./utils/getAccessTokenUtil";
 import updateProjectUtil from "./utils/updateProjectUtil";
 import deleteProjectUtil from "./utils/deleteProjectUtil";
-import fetchProjectTasksUtil from "./utils/fetchProjectTasksUtil";
+import fetchProjectTasksUtil from "../utils/fetchProjectTasksUtil";
 import createNewProjectTaskUtil from "./utils/createNewProjectTaskUtil";
 
 // Styles
