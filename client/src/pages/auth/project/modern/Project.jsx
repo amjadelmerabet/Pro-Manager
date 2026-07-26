@@ -140,6 +140,9 @@ export default function ProjectPageModern({
   const deadline = project.deadline ? new Date(project.deadline) : null;
   const [stateLabel, stateClass] = states[project.state] || states[1];
 
+  const projectNameWords =
+    Object.keys(project).length > 0 ? project.name.split(" ").length : 0;
+
   if (!Object.keys(project).length)
     return (
       <div className="project-page-modern">
@@ -210,8 +213,13 @@ export default function ProjectPageModern({
                 <p className={`project-state ${stateClass} poppins-semibold`}>
                   {stateLabel}
                 </p>
-                <h1 className="poppins-bold" title={project.name}>
-                  {truncateProjectName(project.name)}
+                <h1
+                  className={
+                    "poppins-bold" + (projectNameWords > 5 ? " long-name" : "")
+                  }
+                  title={project.name}
+                >
+                  {project.name}
                 </h1>
               </div>
               <p className="updated-at poppins-regular">

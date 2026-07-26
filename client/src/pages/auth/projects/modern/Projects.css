@@ -83,6 +83,7 @@
 
 .projects-page-modern main .projects-section > .projects > tbody td {
   padding: 2px 4px;
+  min-width: fit-content;
 }
 
 .projects-page-modern main .projects-section > .projects > tbody td > div {
@@ -114,7 +115,7 @@
 }
 
 .projects-page-modern main .projects-section > .projects > tbody .description {
-  max-width: 400px;
+  max-width: 320px;
 }
 
 .projects-page-modern main .projects-actions {

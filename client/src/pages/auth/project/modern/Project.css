@@ -91,6 +91,11 @@
   color: var(--default-light-theme-primary-color);
   font-size: 26px;
 }
+
+.project-page-modern .project-heading h1.long-name {
+  font-size: 20px;
+}
+
 .project-page-modern .project-state {
   display: inline-block;
   margin: 0;

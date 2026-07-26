@@ -495,7 +495,6 @@ export default function TasksPageModern({
                     <th className="poppins-semibold">State</th>
                     <th className="poppins-semibold">Project</th>
                     <th className="poppins-semibold">Assigned to</th>
-                    <th className="poppins-semibold">Deadline</th>
                     <th className="poppins-semibold">Description</th>
                     <th className="poppins-semibold">Updated</th>
                     <th className="poppins-semibold">Updated by</th>
@@ -551,12 +550,11 @@ export default function TasksPageModern({
                             </span>
                           ) : (
                             <span className="project-badge standalone">
-                              Standalone
+                              N/A
                             </span>
                           )}
                         </td>
                         <td>{task.assigned_to === userId ? "Me" : ""}</td>
-                        <td>{new Date(task.deadline).toLocaleString()}</td>
                         <td className="description">{task.description}</td>
                         <td>{new Date(task.updated_on).toLocaleString()}</td>
                         <td>{task.updated_by === userId ? "Me" : ""}</td>

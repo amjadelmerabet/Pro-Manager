@@ -83,6 +83,7 @@
 
 .tasks-page-modern main .tasks-section > .tasks > tbody td {
   padding: 2px 4px;
+  min-width: fit-content;
 }
 
 .tasks-page-modern main .tasks-section > .tasks > tbody td > div {
@@ -114,7 +115,7 @@
 }
 
 .tasks-page-modern main .tasks-section > .tasks > tbody .description {
-  max-width: 400px;
+  max-width: 320px;
 }
 
 .tasks-page-modern main .tasks-section > .tasks .project-badge {
@@ -128,7 +129,6 @@
 }
 
 .tasks-page-modern main .tasks-section > .tasks .project-badge.standalone {
-  background-color: rgba(120, 120, 120, 0.12);
   color: rgb(120, 120, 120);
 }
 
