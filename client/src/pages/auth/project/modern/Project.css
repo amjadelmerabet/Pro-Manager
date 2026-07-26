@@ -230,3 +230,56 @@
     border-bottom: 0;
   }
 }
+
+.project-page-modern main h3.project-tasks-section-title {
+  margin-block: 16px;
+  text-align: center;
+}
+
+.project-page-modern main .project-tasks {
+  width: 1000px;
+  margin-inline: auto;
+  margin-bottom: 24px;
+  background-color: white;
+  padding: 16px;
+  border-radius: 4px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+}
+
+.project-page-modern main .project-tasks > .tasks {
+  width: 100%;
+}
+
+.project-page-modern main .project-tasks > .tasks > thead {
+  background-color: var(--default-light-theme-secondary-color);
+  font-size: 15px;
+}
+
+.project-page-modern main .project-tasks > .tasks > thead th {
+  padding: 1px 24px;
+}
+
+.project-page-modern main .project-tasks > .tasks > tbody {
+  font-size: 13px;
+}
+
+.project-page-modern main .project-tasks > .tasks > tbody td {
+  padding: 2px 8px;
+}
+
+.project-page-modern main .project-tasks > .tasks > tbody tr {
+  cursor: pointer;
+  position: relative;
+}
+
+.project-page-modern main .project-tasks > .tasks > tbody > tr:nth-child(odd) {
+  background-color: rgb(245, 255, 255);
+}
+
+.project-page-modern main .project-tasks > .tasks > tbody > tr:nth-child(even) {
+  background-color: rgb(235, 255, 255);
+}
+
+.project-page-modern main .project-tasks > .tasks > tbody > tr:hover {
+  background-color: rgb(225, 245, 245);
+}

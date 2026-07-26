@@ -27,6 +27,19 @@ const taskStates = {
   },
 };
 
+const taskPriorities = {
+  labels: {
+    1: "High",
+    2: "Medium",
+    3: "Low",
+  },
+  classes: {
+    1: "high",
+    2: "medium",
+    3: "low",
+  },
+};
+
 export default function TasksPageModern({
   user,
   userId,
@@ -72,8 +85,7 @@ export default function TasksPageModern({
   const [taskDeleted, setTaskDeleted] = useState(0);
 
   const { token, sessionId } = JSON.parse(sessionStorage.getItem("authUser"));
-  const displayedTasks =
-    filtersApplied > 0 ? filteredTasksList : userTasks;
+  const displayedTasks = filtersApplied > 0 ? filteredTasksList : userTasks;
   const hasSelectedTasks = selectedTaskIds.length > 0;
   const allDisplayedTasksSelected =
     displayedTasks.length > 0 &&
@@ -324,9 +336,7 @@ export default function TasksPageModern({
           setAuthentication={setAuthentication}
         />
         <main
-          className={
-            filtersPopupVisible || showNewTaskForm ? "popup-open" : ""
-          }
+          className={filtersPopupVisible || showNewTaskForm ? "popup-open" : ""}
         >
           <h2 className="page-title poppins-bold">My Tasks</h2>
           <div className="tasks-actions">
@@ -493,6 +503,7 @@ export default function TasksPageModern({
                     </th>
                     <th className="poppins-semibold">Name</th>
                     <th className="poppins-semibold">State</th>
+                    <th className="poppins-semibold">Priority</th>
                     <th className="poppins-semibold">Project</th>
                     <th className="poppins-semibold">Assigned to</th>
                     <th className="poppins-semibold">Description</th>
@@ -507,31 +518,37 @@ export default function TasksPageModern({
                     return (
                       <tr
                         key={task.task_id}
-                        onClick={() => navigate(`/auth/${user}/modern/task/${task.task_id}`)}
+                        onClick={() =>
+                          navigate(`/auth/${user}/modern/task/${task.task_id}`)
+                        }
                       >
                         <td className="select-column">
                           <div>
                             <input
                               type="checkbox"
-                              checked={selectedTaskIds.includes(
-                                task.task_id,
-                              )}
-                              onChange={() =>
-                                toggleTaskSelection(task.task_id)
-                              }
+                              checked={selectedTaskIds.includes(task.task_id)}
+                              onChange={() => toggleTaskSelection(task.task_id)}
                               onClick={(e) => e.stopPropagation()}
                             />
                           </div>
                         </td>
-                        <td>
+                        <td className="task-name">
                           <div>
-                            <span
-                              className={taskStates.classes[task.state]}
-                            >
+                            <span className={taskStates.classes[task.state]}>
                               <MdOutlineRadioButtonChecked />
                             </span>
                             {task.name}
                           </div>
+                        </td>
+                        <td>
+                          <span
+                            className={
+                              "poppins-semibold priority " +
+                              taskPriorities.classes[task.priority]
+                            }
+                          >
+                            {taskPriorities.labels[task.priority]}
+                          </span>
                         </td>
                         <td>
                           <span
@@ -543,6 +560,7 @@ export default function TasksPageModern({
                             {taskStates.labels[task.state]}
                           </span>
                         </td>
+
                         <td>
                           {task.project ? (
                             <span className="project-badge has-project">
