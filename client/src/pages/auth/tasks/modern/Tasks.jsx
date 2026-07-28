@@ -74,7 +74,7 @@ export default function TasksPageModern({
   const [newTaskFormVisible, setNewTaskFormVisible] = useState(false);
   const [createNewTask, setCreateNewTask] = useState(false);
   const [newTaskCreated, setNewTaskCreated] = useState(0);
-  const [newTask, setNewTask] = useState({});
+  const [newTask, setNewTask] = useState({ state: 1 });
 
   const [selectedTaskIds, setSelectedTaskIds] = useState([]);
   const [deleteQueue, setDeleteQueue] = useState([]);
@@ -543,7 +543,7 @@ export default function TasksPageModern({
                         <td>
                           <span
                             className={
-                              "poppins-semibold priority " +
+                              "poppins-medium priority " +
                               taskPriorities.classes[task.priority]
                             }
                           >
@@ -553,8 +553,7 @@ export default function TasksPageModern({
                         <td>
                           <span
                             className={
-                              "poppins-semibold " +
-                              taskStates.classes[task.state]
+                              "poppins-medium " + taskStates.classes[task.state]
                             }
                           >
                             {taskStates.labels[task.state]}
@@ -568,7 +567,7 @@ export default function TasksPageModern({
                             </span>
                           ) : (
                             <span className="project-badge standalone">
-                              N/A
+                              N.A.
                             </span>
                           )}
                         </td>
