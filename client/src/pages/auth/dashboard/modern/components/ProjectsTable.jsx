@@ -39,7 +39,7 @@ export default function ProjectsTable({
               <td>
                 <span
                   className={
-                    "poppins-semibold " +
+                    "poppins-medium " +
                     projectStates.classes[userProject.state]
                   }
                 >

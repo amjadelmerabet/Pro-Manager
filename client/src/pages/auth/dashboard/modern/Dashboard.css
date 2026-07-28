@@ -353,6 +353,24 @@
   /* color: white; */
 }
 
+.dashboard-page-modern main > div > section .bottom-section .tasks-table .name {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dashboard-page-modern main > div > section > .bottom-section .tasks-table .to-do {
+  color: rgb(255, 65, 80);
+}
+
+.dashboard-page-modern main > div > section > .bottom-section .tasks-table .doing {
+  color: rgb(255, 145, 0);
+}
+
+.dashboard-page-modern main > div > section > .bottom-section .tasks-table .done {
+  color: rgb(45, 200, 165);
+}
+
 .dashboard-page-modern main > div > .project-popup,
 .dashboard-page-modern main > div > .task-popup {
   position: absolute;
@@ -625,7 +643,7 @@
   .project-tasks-table
   td
   .to-do {
-  color: rgb(45, 180, 225);
+  color: rgb(230, 65, 80);
 }
 
 .dashboard-page-modern

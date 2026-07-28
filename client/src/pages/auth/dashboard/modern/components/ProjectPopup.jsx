@@ -74,7 +74,7 @@ export default  function ProjectPopup({
                     <td>
                       <span
                         className={
-                          "poppins-semibold " + taskStates.classes[task.state]
+                          "poppins-medium " + taskStates.classes[task.state]
                         }
                       >
                         {taskStates.labels[task.state]}

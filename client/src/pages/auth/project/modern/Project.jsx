@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from "react-router";
 import { BiReset } from "react-icons/bi";
 import { GrFormClock } from "react-icons/gr";
 import { IoArrowBack, IoCheckmark, IoTrashOutline } from "react-icons/io5";
-import { MdOutlineEdit } from "react-icons/md";
+import { MdOutlineEdit, MdOutlineRadioButtonChecked } from "react-icons/md";
 import SideMenu from "../../dashboard/modern/components/SideMenu";
 import fetchUserProjectUtil from "./utils/fetchUserProjectUtil";
 import updateProjectUtil from "./utils/updateProjectUtil";
@@ -372,8 +372,13 @@ export default function ProjectPageModern({
                       className="project-task"
                       onClick={() => openTask(task.task_id)}
                     >
-                      <td className="poppins-regular">{task.name}</td>
-                      <td className="poppins-regular">
+                      <td className="poppins-regular name">
+                        <span className={taskStates[task.state].class}>
+                          <MdOutlineRadioButtonChecked />
+                        </span>
+                        {task.name}
+                      </td>
+                      <td className={"poppins-medium state " + (taskStates[task.state].class)}>
                         {taskStates[task.state].label}
                       </td>
                       <td className="poppins-regular">

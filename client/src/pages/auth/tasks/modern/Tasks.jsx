@@ -13,6 +13,8 @@ import deleteTaskUtil from "./utils/deleteTaskUtil";
 import { MdOutlineRadioButtonChecked } from "react-icons/md";
 
 import "./Tasks.css";
+import { RiAlarmWarningFill } from "react-icons/ri";
+import { FaFire, FaRegSnowflake } from "react-icons/fa";
 
 const taskStates = {
   labels: {
@@ -540,17 +542,7 @@ export default function TasksPageModern({
                             {task.name}
                           </div>
                         </td>
-                        <td>
-                          <span
-                            className={
-                              "poppins-medium priority " +
-                              taskPriorities.classes[task.priority]
-                            }
-                          >
-                            {taskPriorities.labels[task.priority]}
-                          </span>
-                        </td>
-                        <td>
+                        <td className="state">
                           <span
                             className={
                               "poppins-medium " + taskStates.classes[task.state]
@@ -559,7 +551,25 @@ export default function TasksPageModern({
                             {taskStates.labels[task.state]}
                           </span>
                         </td>
-
+                        <td
+                          className={
+                            "poppins-medium priority " +
+                            taskPriorities.classes[task.priority]
+                          }
+                        >
+                          <div>
+                            <span>
+                              {task.priority === 1 ? (
+                                <RiAlarmWarningFill />
+                              ) : task.priority === 2 ? (
+                                <FaFire />
+                              ) : (
+                                <FaRegSnowflake />
+                              )}
+                            </span>
+                            {taskPriorities.labels[task.priority]}
+                          </div>
+                        </td>
                         <td>
                           {task.project ? (
                             <span className="project-badge has-project">

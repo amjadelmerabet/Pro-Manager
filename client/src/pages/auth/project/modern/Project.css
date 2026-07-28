@@ -283,3 +283,31 @@
 .project-page-modern main .project-tasks > .tasks > tbody > tr:hover {
   background-color: rgb(225, 245, 245);
 }
+
+.project-page-modern main .project-tasks .tasks .name {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.project-page-modern main .project-tasks .tasks .name > span {
+  display: flex;
+  align-items: center;
+}
+
+.project-page-modern main .project-tasks .tasks .name > .to-do,
+.project-page-modern main .project-tasks .tasks .state.to-do {
+  color: rgb(230, 65, 80);
+}
+
+.project-page-modern main .project-tasks .tasks .name > .doing,
+.project-page-modern main .project-tasks .tasks .state.doing {
+  color: rgb(255, 145, 0);
+}
+
+.project-page-modern main .project-tasks .tasks .name > .done,
+.project-page-modern main .project-tasks .tasks .state.done {
+  color: rgb(45, 200, 165);
+}
+
+

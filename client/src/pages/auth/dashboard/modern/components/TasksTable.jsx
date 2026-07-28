@@ -1,3 +1,5 @@
+import { MdOutlineRadioButtonChecked } from "react-icons/md";
+
 export default function TasksTable({
   userTasks,
   userProjects,
@@ -30,11 +32,16 @@ export default function TasksTable({
           });
           return (
             <tr key={index} onClick={() => openTaskPopup(userTask.task_id)}>
-              <td>{userTask.name}</td>
+              <td className="name">
+                <span className={taskStates.classes[userTask.state]}>
+                  <MdOutlineRadioButtonChecked />
+                </span>
+                {userTask.name}
+              </td>
               <td>
                 <span
                   className={
-                    "poppins-semibold " + taskStates.classes[userTask.state]
+                    "poppins-medium " + taskStates.classes[userTask.state]
                   }
                 >
                   {taskStates.labels[userTask.state]}

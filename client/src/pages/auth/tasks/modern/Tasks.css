@@ -86,20 +86,25 @@
   min-width: fit-content;
 }
 
+.tasks-page-modern main .tasks-section > .tasks > tbody .priority {
+  display: flex;
+  align-items: center;
+}
+
 .tasks-page-modern main .tasks-section > .tasks > tbody td > div {
   display: flex;
   align-items: center;
   gap: 4px;
 }
 
-.tasks-page-modern main .tasks-section > .tasks span {
-  display: flex;
-  align-items: center;
-}
-
-.tasks-page-modern main .tasks-section > .tasks td > span {
+.tasks-page-modern main .tasks-section > .tasks .state span {
   padding: 1px 12px;
   border-radius: 32px;
+}
+
+.tasks-page-modern main .tasks-section > .tasks td span > svg {
+  display: flex;
+  align-items: center;
 }
 
 .tasks-page-modern main .tasks-section > .tasks .high {
