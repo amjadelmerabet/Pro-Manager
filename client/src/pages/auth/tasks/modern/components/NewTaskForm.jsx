@@ -9,8 +9,7 @@ export default function NewTaskForm({
   return (
     <div
       className={
-        "new-task-form poppins-regular" +
-        (newTaskFormVisible ? " visible" : "")
+        "new-task-form poppins-regular" + (newTaskFormVisible ? " visible" : "")
       }
     >
       <button
@@ -22,19 +21,14 @@ export default function NewTaskForm({
       <h2 className="form-title poppins-bold">New Task</h2>
       <div>
         <div className="task-name-section">
-          <label
-            htmlFor="task-name"
-            className="task-name-label poppins-medium"
-          >
+          <label htmlFor="task-name" className="task-name-label poppins-medium">
             Name
           </label>
           <input
             type="text"
             name="task-name"
             className="task-name poppins-regular"
-            onChange={(e) =>
-              setNewTask({ ...newTask, name: e.target.value })
-            }
+            onChange={(e) => setNewTask({ ...newTask, name: e.target.value })}
           />
         </div>
         <div className="task-project-section">
@@ -63,47 +57,20 @@ export default function NewTaskForm({
             ))}
           </select>
         </div>
-        <div className="task-state-section">
+        <div className="task-short-description-section">
           <label
-            htmlFor="task-state"
-            className="task-state-label poppins-medium"
+            htmlFor="task-short-description"
+            className="task-short-description-label poppins-medium"
           >
-            State
-          </label>
-          <select
-            name="task-state"
-            className="task-state poppins-regular"
-            value={newTask.state || 1}
-            onChange={(e) =>
-              setNewTask({
-                ...newTask,
-                state: Number(e.target.value),
-              })
-            }
-          >
-            <option value={1}>To do</option>
-            <option value={2}>Doing</option>
-            <option value={3}>Done</option>
-          </select>
-        </div>
-        <div className="task-deadline-section">
-          <label
-            htmlFor="task-deadline"
-            className="task-deadline-label poppins-medium"
-          >
-            Deadline
+            Short description
           </label>
           <input
-            type="date"
-            name="task-deadline"
-            className="task-deadline poppins-regular"
+            type="text"
+            name="task-short-description"
+            className="task-short-description"
             onChange={(e) =>
-              setNewTask({
-                ...newTask,
-                deadline: e.target.value,
-              })
+              setNewTask({ ...newTask, short_description: e.target.value })
             }
-            required
           />
         </div>
         <div className="task-description-section">
