@@ -25,6 +25,25 @@ const projectStates = {
 const truncateProjectName = (name, maxLength = 40) =>
   name?.length > maxLength ? `${name.slice(0, maxLength)}...` : name;
 
+const truncateDescription = (description, maxWords = 16) => {
+  let descWords = description.split(" ").length;
+  if (descWords <= maxWords) {
+    return description;
+  } else {
+    let descArr = description.split(" ");
+    let newDesc = "";
+    for (let i = 0; i < maxWords; i++) {
+      newDesc += descArr[i];
+      if (i < maxWords - 1) {
+        newDesc += " ";
+      } else {
+        newDesc += " ...";
+      }
+    }
+    return newDesc;
+  }
+};
+
 export default function ProjectsPageModern({
   user,
   userId,
@@ -471,11 +490,19 @@ export default function ProjectsPageModern({
                           </span>
                         </td>
                         <td>{project.owner === userId ? "Me" : ""}</td>
-                        <td>{new Date(project.deadline).toLocaleString()}</td>
-                        <td className="description">{project.description}</td>
-                        <td>{new Date(project.updated_on).toLocaleString()}</td>
+                        <td>
+                          {new Date(project.deadline).toLocaleString("fr")}
+                        </td>
+                        <td className="description">
+                          {truncateDescription(project.description)}
+                        </td>
+                        <td>
+                          {new Date(project.updated_on).toLocaleString("fr")}
+                        </td>
                         <td>{project.updated_by === userId ? "Me" : ""}</td>
-                        <td>{new Date(project.created_on).toLocaleString()}</td>
+                        <td>
+                          {new Date(project.created_on).toLocaleString("fr")}
+                        </td>
                         <td>{project.created_by === userId ? "Me" : ""}</td>
                       </tr>
                     );

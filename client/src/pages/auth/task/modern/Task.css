@@ -224,3 +224,8 @@
     flex-wrap: wrap;
   }
 }
+
+.task-page-modern .task-details-card .task-meta .parent-project {
+  font-size: 14px;
+  color: rgb(40, 120, 200);
+}

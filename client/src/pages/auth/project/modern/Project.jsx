@@ -279,7 +279,9 @@ export default function ProjectPageModern({
                 </h1>
               </div>
               <p className="updated-at poppins-regular">
-                Updated {new Date(project.updated_on).toLocaleString()}
+                Updated on{" "}
+                {new Date(project.updated_on).toLocaleDateString("fr")} at{" "}
+                {new Date(project.updated_on).toLocaleTimeString("fr")}
               </p>
             </header>
             <section className="project-meta poppins-regular">
@@ -292,7 +294,7 @@ export default function ProjectPageModern({
               <div>
                 <span>Deadline</span>
                 <strong>
-                  {deadline ? deadline.toLocaleDateString() : "No deadline"}
+                  {deadline ? deadline.toLocaleDateString("fr") : "No deadline"}
                 </strong>
               </div>
               <div>
@@ -378,7 +380,11 @@ export default function ProjectPageModern({
                         </span>
                         {task.name}
                       </td>
-                      <td className={"poppins-medium state " + (taskStates[task.state].class)}>
+                      <td
+                        className={
+                          "poppins-medium state " + taskStates[task.state].class
+                        }
+                      >
                         {taskStates[task.state].label}
                       </td>
                       <td className="poppins-regular">
@@ -388,11 +394,11 @@ export default function ProjectPageModern({
                         {task.assigned_to === userId ? "Me" : ""}
                       </td>
                       {/* <td className="poppins-regular">{project.name}</td> */}
-                      <td className="poppins-regular">
-                        {new Date(task.updated_on).toLocaleString()}
+                      <td className="poppins-regular updated">
+                        {new Date(task.updated_on).toLocaleString("fr")}
                       </td>
-                      <td className="poppins-regular">
-                        {new Date(task.created_on).toLocaleString()}
+                      <td className="poppins-regular created">
+                        {new Date(task.created_on).toLocaleString("fr")}
                       </td>
                     </tr>
                   );

@@ -169,6 +169,9 @@ export default function TaskPageModern({
     }
   };
 
+  const truncateProjectName = (name, maxLength = 30) =>
+    name?.length > maxLength ? `${name.slice(0, maxLength)}...` : name;
+
   if (!Object.keys(task).length)
     return (
       <div className="task-page-modern">
@@ -242,7 +245,8 @@ export default function TaskPageModern({
                 <h1 className="poppins-bold">{task.name}</h1>
               </div>
               <p className="updated-at poppins-regular">
-                Updated {new Date(task.updated_on).toLocaleString()}
+                Updated on {new Date(task.updated_on).toLocaleDateString("fr")}{" "}
+                at {new Date(task.updated_on).toLocaleTimeString("fr")}
               </p>
             </header>
             <section className="task-meta poppins-regular">
@@ -258,10 +262,11 @@ export default function TaskPageModern({
                 <span>Project</span>
                 {task.project ? (
                   <Link
-                    to={`/auth/${user}/modern/projects`}
+                    to={`/auth/${user}/modern/project/${project.project_id}`}
                     className="parent-project"
                   >
-                    <MdOutlineFolder /> {project.name || "Loading…"}
+                    <MdOutlineFolder />{" "}
+                    {truncateProjectName(project.name) || "Loading…"}
                   </Link>
                 ) : (
                   <strong>Standalone</strong>

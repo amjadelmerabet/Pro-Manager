@@ -86,9 +86,8 @@
   min-width: fit-content;
 }
 
-.tasks-page-modern main .tasks-section > .tasks > tbody .priority {
-  display: flex;
-  align-items: center;
+.tasks-page-modern main .tasks-section > .tasks > tbody .parent-project {
+  max-width: 200px;
 }
 
 .tasks-page-modern main .tasks-section > .tasks > tbody td > div {
@@ -133,12 +132,6 @@
 
 .tasks-page-modern main .tasks-section > .tasks > tbody .description {
   max-width: 320px;
-}
-
-.tasks-page-modern main .tasks-section > .tasks .project-badge {
-  padding: 1px 10px;
-  border-radius: 32px;
-  max-width: 200px;
 }
 
 .tasks-page-modern main .tasks-section > .tasks .project-badge.has-project {

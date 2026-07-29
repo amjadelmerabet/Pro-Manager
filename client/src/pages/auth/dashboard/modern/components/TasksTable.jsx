@@ -23,8 +23,8 @@ export default function TasksTable({
       </thead>
       <tbody>
         {userTasks.map((userTask, index) => {
-          const updated = new Date(userTask.updated_on).toLocaleString();
-          const created = new Date(userTask.created_on).toLocaleString();
+          const updated = new Date(userTask.updated_on).toLocaleString("fr");
+          const created = new Date(userTask.created_on).toLocaleString("fr");
           const project = userProjects.filter((project) => {
             if (project.project_id === userTask.project) {
               return project;

@@ -20,9 +20,9 @@ export default function ProjectsTable({
       </thead>
       <tbody>
         {userProjects.map((userProject, index) => {
-          const deadline = new Date(userProject.deadline).toLocaleString();
-          const updated = new Date(userProject.updated_on).toLocaleString();
-          const created = new Date(userProject.created_on).toLocaleString();
+          const deadline = new Date(userProject.deadline).toLocaleString("fr");
+          const updated = new Date(userProject.updated_on).toLocaleString("fr");
+          const created = new Date(userProject.created_on).toLocaleString("fr");
           return (
             <tr
               key={index}

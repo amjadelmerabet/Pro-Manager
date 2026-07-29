@@ -570,7 +570,7 @@ export default function TasksPageModern({
                             {taskPriorities.labels[task.priority]}
                           </div>
                         </td>
-                        <td>
+                        <td className="parent-project">
                           {task.project ? (
                             <span className="project-badge has-project">
                               {getProjectName(task.project)}
@@ -583,9 +583,13 @@ export default function TasksPageModern({
                         </td>
                         <td>{task.assigned_to === userId ? "Me" : ""}</td>
                         <td className="description">{task.description}</td>
-                        <td>{new Date(task.updated_on).toLocaleString()}</td>
+                        <td>
+                          {new Date(task.updated_on).toLocaleString("fr")}
+                        </td>
                         <td>{task.updated_by === userId ? "Me" : ""}</td>
-                        <td>{new Date(task.created_on).toLocaleString()}</td>
+                        <td>
+                          {new Date(task.created_on).toLocaleString("fr")}
+                        </td>
                         <td>{task.created_by === userId ? "Me" : ""}</td>
                       </tr>
                     );
