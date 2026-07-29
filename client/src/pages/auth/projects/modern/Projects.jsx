@@ -77,10 +77,19 @@ export default function ProjectsPageModern({
     delete: false,
   });
   const [projectDeleted, setProjectDeleted] = useState(0);
+  const [sortBy, setSortBy] = useState({ type: 1 });
+  const [showSortingPopup, setShowSortingPopup] = useState(false);
+  const [sortingPopupVisible, setSortingPopupVisible] = useState(false);
+  const [sortingApplied, setSortingApplied] = useState(0);
+  const [sortedList, setSortedList] = useState([]);
 
   const { token, sessionId } = JSON.parse(sessionStorage.getItem("authUser"));
   const displayedProjects =
-    filtersApplied > 0 ? filteredProjectsList : userProjects;
+    filtersApplied > 0
+      ? sortingApplied > 0
+        ? sortedList
+        : filteredProjectsList
+      : userProjects;
   const hasSelectedProjects = selectedProjectIds.length > 0;
   const allDisplayedProjectsSelected =
     displayedProjects.length > 0 &&
@@ -197,6 +206,67 @@ export default function ProjectsPageModern({
     }
   }, [filtersApplied]);
 
+  useEffect(() => {
+    if (sortingApplied > 0) {
+      const { by, type } = sortBy;
+      const sortedTempList =
+        filtersApplied > 0 ? filteredProjectsList : userProjects;
+      switch (by) {
+        case "state":
+          if (type === 1) {
+            sortedTempList.sort((a, b) => a.state - b.state);
+          } else {
+            sortedTempList.sort((a, b) => b.state - a.state);
+          }
+          break;
+        case "deadline":
+          if (type === 1) {
+            sortedTempList.sort(
+              (a, b) =>
+                new Date(a.deadline).getTime() - new Date(b.deadline).getTime(),
+            );
+          } else {
+            sortedTempList.sort(
+              (a, b) =>
+                new Date(b.deadline).getTime() - new Date(a.deadline).getTime(),
+            );
+          }
+          break;
+        case "created":
+          if (type === 1) {
+            sortedTempList.sort(
+              (a, b) =>
+                new Date(a.created_on).getTime() -
+                new Date(b.created_on).getTime(),
+            );
+          } else {
+            sortedTempList.sort(
+              (a, b) =>
+                new Date(b.created_on).getTime() -
+                new Date(a.created_on).getTime(),
+            );
+          }
+          break;
+        default:
+          if (type === 1) {
+            sortedTempList.sort(
+              (a, b) =>
+                new Date(a.updated_on).getTime() -
+                new Date(b.updated_on).getTime(),
+            );
+          } else {
+            sortedTempList.sort(
+              (a, b) =>
+                new Date(b.updated_on).getTime() -
+                new Date(a.updated_on).getTime(),
+            );
+          }
+          break;
+      }
+      setSortedList(sortedTempList);
+    }
+  }, [sortingApplied]);
+
   const openFiltersPopup = () => {
     setShowFiltersPopup(true);
     setTimeout(() => {
@@ -226,7 +296,6 @@ export default function ProjectsPageModern({
     setFiltersApplied(0);
     setFilters({});
     setFilteredProjectsList([]);
-    closeFiltersPopup();
   };
 
   const openNewProjectForm = () => {
@@ -290,6 +359,31 @@ export default function ProjectsPageModern({
     });
   };
 
+  const openSortingPopup = () => {
+    setShowSortingPopup(true);
+    setTimeout(() => {
+      setSortingPopupVisible(true);
+    }, 250);
+  };
+
+  const closeSortingPopup = () => {
+    setSortingPopupVisible(false);
+    setTimeout(() => {
+      setShowSortingPopup(false);
+    }, 250);
+  };
+
+  const applySorting = () => {
+    setSortingApplied(sortingApplied + 1);
+    closeSortingPopup();
+  };
+
+  const clearSorting = () => {
+    setSortingApplied(0);
+    setSortBy({ type: 1 });
+    setSortedList([]);
+  };
+
   return (
     <div className="projects-page-modern">
       <div className="page-container">
@@ -301,17 +395,27 @@ export default function ProjectsPageModern({
         />
         <main
           className={
-            filtersPopupVisible || showNewProjectForm ? "popup-open" : ""
+            filtersPopupVisible || showNewProjectForm || sortingPopupVisible
+              ? "popup-open"
+              : ""
           }
         >
           <h2 className="page-title poppins-bold">My Projects</h2>
           <div className="projects-actions">
-            <button
-              className="filter-projects poppins-medium"
-              onClick={() => openFiltersPopup()}
-            >
-              Filter
-            </button>
+            <div className="project-actions-left">
+              <button
+                className="filter-projects poppins-medium"
+                onClick={() => openFiltersPopup()}
+              >
+                Filter
+              </button>
+              <button
+                className="sort-projects poppins-medium"
+                onClick={() => openSortingPopup()}
+              >
+                Sort
+              </button>
+            </div>
             <div className="projects-actions-right">
               <button
                 className={
@@ -357,6 +461,13 @@ export default function ProjectsPageModern({
                       name="project-state"
                       value="1"
                       id="not-started"
+                      checked={
+                        Object.keys(filters).indexOf("state") !== -1
+                          ? filters.state === 1
+                            ? true
+                            : false
+                          : false
+                      }
                       onChange={(e) => updateFilters("state", e.target.value)}
                     />
                     <label htmlFor="not-started" className="not-started-label">
@@ -369,6 +480,13 @@ export default function ProjectsPageModern({
                       name="project-state"
                       value="2"
                       id="in-progress"
+                      checked={
+                        Object.keys(filters).indexOf("state") !== -1
+                          ? filters.state === 2
+                            ? true
+                            : false
+                          : false
+                      }
                       onChange={(e) => updateFilters("state", e.target.value)}
                     />
                     <label htmlFor="in-progress" className="in-progress-label">
@@ -381,6 +499,13 @@ export default function ProjectsPageModern({
                       name="project-state"
                       value="3"
                       id="completed"
+                      checked={
+                        Object.keys(filters).indexOf("state") !== -1
+                          ? filters.state === 3
+                            ? true
+                            : false
+                          : false
+                      }
                       onChange={(e) => updateFilters("state", e.target.value)}
                     />
                     <label htmlFor="completed" className="completed-label">
@@ -399,6 +524,110 @@ export default function ProjectsPageModern({
                 <button
                   className="apply-filters poppins-semibold"
                   onClick={() => applyFilters()}
+                >
+                  Apply
+                </button>
+              </div>
+            </div>
+          ) : (
+            ""
+          )}
+          {showSortingPopup ? (
+            <div
+              className={
+                "sorting-popup" + (sortingPopupVisible ? " visible" : "")
+              }
+            >
+              <button
+                className="close-popup poppins-semibold"
+                onClick={() => closeSortingPopup()}
+              >
+                Close
+              </button>
+              <div className="sort-form">
+                <div>
+                  <label
+                    htmlFor="sort-by"
+                    className="sort-by-label poppins-medium"
+                  >
+                    Sort by
+                  </label>
+                  <select
+                    name="sort-by"
+                    className="sort-by"
+                    className="poppins-regular"
+                    value={
+                      Object.keys(sortBy).indexOf("by") !== -1
+                        ? sortBy.by
+                        : "default"
+                    }
+                    onChange={(e) =>
+                      setSortBy({ ...sortBy, by: e.target.value })
+                    }
+                  >
+                    <option value="default" defaultChecked>
+                      Default
+                    </option>
+                    <option value="state">State</option>
+                    <option value="deadline">Deadline</option>
+                    <option value="updated">Updated</option>
+                    <option value="created">Created</option>
+                  </select>
+                </div>
+                <div>
+                  <label htmlFor="sort-type" className="poppins-medium">
+                    Sort type
+                  </label>
+                  <div>
+                    <div className="a-to-z-sort poppins-regular">
+                      <input
+                        type="radio"
+                        name="sort-type"
+                        id="a-to-z"
+                        checked={
+                          Object.keys(sortBy).indexOf("type") !== -1
+                            ? sortBy.type === 1
+                              ? true
+                              : false
+                            : false
+                        }
+                        onChange={() => setSortBy({ ...sortBy, type: 1 })}
+                      />
+                      <label htmlFor="a-to-z" className="a-to-z-sort-label">
+                        A to Z
+                      </label>
+                    </div>
+                    <div className="z-to-a sort poppins-regular">
+                      <input
+                        type="radio"
+                        name="sort-type"
+                        id="z-to-a"
+                        checked={
+                          Object.keys(sortBy).indexOf("type") !== -1
+                            ? sortBy.type === 2
+                              ? true
+                              : false
+                            : false
+                        }
+                        onChange={() => setSortBy({ ...sortBy, type: 2 })}
+                      />
+                      <label htmlFor="z-to-a" className="z-to-a-sort-label">
+                        Z to A
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="actions">
+                <button
+                  className="clear-sort poppins-semibold"
+                  onClick={() => clearSorting()}
+                >
+                  Clear
+                </button>
+                <button
+                  className="apply-sort poppins-semibold"
+                  onClick={() => applySorting()}
                 >
                   Apply
                 </button>

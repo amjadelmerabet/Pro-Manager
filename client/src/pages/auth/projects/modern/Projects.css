@@ -16,7 +16,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, .25);
+  background-color: rgba(0, 0, 0, 0.25);
   z-index: 5;
   cursor: not-allowed;
 }
@@ -124,7 +124,7 @@
   padding: 4px 12px;
 }
 
-.projects-page-modern main .projects-actions .projects-actions-right {
+.projects-page-modern main .projects-actions > div {
   display: flex;
   gap: 8px;
 }
@@ -137,8 +137,8 @@
   cursor: pointer;
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1);
   transition:
-  transform 250ms ease-in-out,
-  background-color 250ms ease-in-out;
+    transform 250ms ease-in-out,
+    background-color 250ms ease-in-out;
 }
 
 .projects-page-modern main .projects-actions .delete-projects {
@@ -151,10 +151,11 @@
   background-color: var(--default-light-theme-secondary-color-hover);
 }
 
-.projects-page-modern main .filters-popup {
+.projects-page-modern main .filters-popup,
+.projects-page-modern main .sorting-popup {
   position: absolute;
-  width: 50%;
-  aspect-ratio: 1 / 1;
+  width: 40%;
+  height: fit-content;
   top: 25%;
   left: 25%;
   display: flex;
@@ -162,8 +163,7 @@
   align-items: center;
   flex-direction: column;
   gap: 24px;
-  width: 40%;
-  height: 40%;
+  padding-block: 24px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);
   background-color: white;
   border-radius: 8px;
@@ -174,16 +174,17 @@
     opacity 250ms ease-in-out,
     visibility 250ms ease-in-out,
     transform 250ms ease-in-out;
-    z-index: 10;
+  z-index: 10;
 }
 
-.projects-page-modern main .filters-popup.visible {
+.projects-page-modern main .filters-popup.visible,
+.projects-page-modern main .sorting-popup.visible {
   opacity: 1;
   visibility: visible;
   transform: scale(1);
 }
 
-.projects-page-modern main .filters-popup .close-popup {
+.projects-page-modern main .close-popup {
   position: absolute;
   top: 4px;
   right: 8px;
@@ -204,32 +205,66 @@
   gap: 4px;
 }
 
-.projects-page-modern main .filters-popup .actions {
+.projects-page-modern main .actions {
   display: flex;
   gap: 8px;
 }
 
-.projects-page-modern main .filters-popup .actions > button {
+.projects-page-modern main .actions > button {
   padding: 2px 16px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  transition: transform 250ms ease-in-out, box-shadow 250ms ease-in-out;
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, .25);
+  transition:
+    transform 250ms ease-in-out,
+    box-shadow 250ms ease-in-out;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
 }
 
-.projects-page-modern main .filters-popup .actions > button:hover {
+.projects-page-modern main .actions > button:hover {
   transform: scale(0.98);
-  box-shadow: 1px 1px 2px rgba(0, 0, 0, .25);
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
 }
 
-.projects-page-modern main .filters-popup .actions > .clear-filters {
+.projects-page-modern main .filters-popup .actions > .clear-filters,
+.projects-page-modern main .sorting-popup .actions > .clear-sort {
   background-color: var(--default-light-theme-secondary-color);
 }
 
-.projects-page-modern main .filters-popup .actions > .apply-filters {
+.projects-page-modern main .filters-popup .actions > .apply-filters,
+.projects-page-modern main .sorting-popup .actions > .apply-sort {
   background-color: var(--default-light-theme-primary-color);
   color: white;
+}
+
+/* .projects-page-modern main .sorting-popup > div {
+  margin-block: 24px;
+} */
+
+.projects-page-modern main .sorting-popup > .sort-form {
+  display: grid;
+  gap: 8px;
+}
+
+.projects-page-modern main .sorting-popup > .sort-form > div {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.projects-page-modern main .sorting-popup > .sort-form > div:last-child > div {
+  display: flex;
+  gap: 20px;
+}
+
+.projects-page-modern main .sorting-popup > .sort-form > div:last-child > div > div {
+  display: flex;
+  gap: 4px;
+}
+
+.projects-page-modern main .sorting-popup > div .sort-by {
+  width: fit-content;
+  border: 1px solid var(--default-light-theme-primary-color);
+  border-radius: 4px;
 }
 
 .projects-page-modern main .new-project-form {
@@ -330,7 +365,12 @@
   cursor: pointer;
 }
 
-.projects-page-modern main .new-project-form > div > div > .create-project:hover {
+.projects-page-modern
+  main
+  .new-project-form
+  > div
+  > div
+  > .create-project:hover {
   transform: scale(0.98);
   box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
 }
