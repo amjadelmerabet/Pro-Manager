@@ -328,6 +328,25 @@ export default function TasksPageModern({
     });
   };
 
+  const truncateShortDescription = (description, maxWords = 16) => {
+    let descWords = description.split(" ").length;
+    if (descWords <= maxWords) {
+      return description;
+    } else {
+      let descArr = description.split(" ");
+      let newDesc = "";
+      for (let i = 0; i < maxWords; i++) {
+        newDesc += descArr[i];
+        if (i < maxWords - 1) {
+          newDesc += " ";
+        } else {
+          newDesc += " ...";
+        }
+      }
+      return newDesc;
+    }
+  };
+
   return (
     <div className="tasks-page-modern">
       <div className="page-container">
@@ -496,12 +515,14 @@ export default function TasksPageModern({
                 <thead>
                   <tr>
                     <th className="poppins-semibold select-column">
-                      <input
-                        type="checkbox"
-                        checked={allDisplayedTasksSelected}
-                        onChange={() => toggleSelectAllTasks()}
-                        disabled={displayedTasks.length === 0}
-                      />
+                      <div>
+                        <input
+                          type="checkbox"
+                          checked={allDisplayedTasksSelected}
+                          onChange={() => toggleSelectAllTasks()}
+                          disabled={displayedTasks.length === 0}
+                        />
+                      </div>
                     </th>
                     <th className="poppins-semibold">Name</th>
                     <th className="poppins-semibold">State</th>
@@ -582,7 +603,9 @@ export default function TasksPageModern({
                           )}
                         </td>
                         <td>{task.assigned_to === userId ? "Me" : ""}</td>
-                        <td className="description">{task.description}</td>
+                        <td className="description">
+                          {truncateShortDescription(task.short_description)}
+                        </td>
                         <td>
                           {new Date(task.updated_on).toLocaleString("fr")}
                         </td>

@@ -757,7 +757,7 @@
 .dashboard-page-modern main > div > .new-task-form {
   position: absolute;
   width: 60%;
-  height: 80%;
+  height: fit-content;
   top: 10%;
   left: 20%;
   background-color: white;

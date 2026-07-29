@@ -57,6 +57,59 @@ export default function NewTaskForm({
             ))}
           </select>
         </div>
+        <div className="task-priority-section">
+          <label
+            htmlFor="task-priority"
+            className="task-priority-label poppins-medium"
+          >
+            Priority
+          </label>
+          <div className="task-priorities">
+            <div className="high-priority">
+              <input
+                type="radio"
+                name="task-priority"
+                className="task-priority"
+                value="1"
+                onChange={(e) =>
+                  setNewTask({ ...newTask, priority: Number(e.target.value) })
+                }
+              />
+              <label htmlFor="task-priority" className="task-priority-label">
+                High
+              </label>
+            </div>
+            <div className="medium-priority">
+              <input
+                type="radio"
+                name="task-priority"
+                className="task-priority"
+                value="2"
+                defaultChecked
+                onChange={(e) =>
+                  setNewTask({ ...newTask, priority: Number(e.target.value) })
+                }
+              />
+              <label htmlFor="task-priority" className="task-priority-label">
+                Medium
+              </label>
+            </div>
+            <div className="low-priority">
+              <input
+                type="radio"
+                name="task-priority"
+                className="task-priority"
+                value="3"
+                onChange={(e) =>
+                  setNewTask({ ...newTask, priority: Number(e.target.value) })
+                }
+              />
+              <label htmlFor="task-priority" className="task-priority-label">
+                Low
+              </label>
+            </div>
+          </div>
+        </div>
         <div className="task-short-description-section">
           <label
             htmlFor="task-short-description"

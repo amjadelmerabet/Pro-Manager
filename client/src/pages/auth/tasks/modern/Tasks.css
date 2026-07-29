@@ -44,6 +44,11 @@
   font-size: 14px;
 }
 
+.tasks-page-modern main .tasks-section > .tasks thead th:first-child > div {
+  display: flex;
+  align-items: center;
+}
+
 .tasks-page-modern main .tasks-section > .tasks > tbody {
   font-size: 13px;
 }
@@ -82,7 +87,7 @@
 }
 
 .tasks-page-modern main .tasks-section > .tasks > tbody td {
-  padding: 2px 4px;
+  padding: 2px 8px;
   min-width: fit-content;
 }
 
@@ -259,7 +264,7 @@
 .tasks-page-modern main .new-task-form {
   position: absolute;
   width: 60%;
-  height: 80%;
+  height: fit-content;
   top: 10%;
   left: 20%;
   background-color: white;
@@ -355,4 +360,14 @@
 .tasks-page-modern main .new-task-form > div > .create-task:hover {
   transform: scale(0.98);
   box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+.tasks-page-modern main .new-task-form > div .task-priorities {
+  display: flex;
+  gap: 16px;
+}
+
+.tasks-page-modern main .new-task-form > div .task-priorities > div {
+  display: flex;
+  gap: 4px;
 }
