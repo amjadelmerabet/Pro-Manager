@@ -220,6 +220,16 @@
   color: rgb(255, 45, 80);
 }
 
+.tasks-page-modern main .filters-popup > div {
+  display: grid;
+  gap: 8px;
+  margin-block: 24px;
+}
+
+.tasks-page-modern main .filters-popup label {
+  font-size: 15px;
+}
+
 .tasks-page-modern main .filters-popup .task-states,
 .tasks-page-modern main .filters-popup .task-scope {
   display: flex;

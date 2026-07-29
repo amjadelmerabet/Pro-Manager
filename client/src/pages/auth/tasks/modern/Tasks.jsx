@@ -266,7 +266,6 @@ export default function TasksPageModern({
     setFiltersApplied(0);
     setFilters({});
     setFilteredTasksList([]);
-    closeFiltersPopup();
   };
 
   const openNewTaskForm = () => {
@@ -398,84 +397,134 @@ export default function TasksPageModern({
               >
                 Close
               </button>
-              <div className="state-section poppins-regular">
-                <label htmlFor="task-states" className="task-states-label">
-                  State
-                </label>
-                <div className="task-states">
-                  <div className="to-do-section">
-                    <input
-                      type="radio"
-                      name="task-state"
-                      value="1"
-                      id="to-do"
-                      onChange={(e) => updateFilters("state", e.target.value)}
-                    />
-                    <label htmlFor="to-do" className="to-do-label">
-                      To do
-                    </label>
-                  </div>
-                  <div className="doing-section">
-                    <input
-                      type="radio"
-                      name="task-state"
-                      value="2"
-                      id="doing"
-                      onChange={(e) => updateFilters("state", e.target.value)}
-                    />
-                    <label htmlFor="doing" className="doing-label">
-                      Doing
-                    </label>
-                  </div>
-                  <div className="done-section">
-                    <input
-                      type="radio"
-                      name="task-state"
-                      value="3"
-                      id="done"
-                      onChange={(e) => updateFilters("state", e.target.value)}
-                    />
-                    <label htmlFor="done" className="done-label">
-                      Done
-                    </label>
+              <div>
+                <div className="state-section poppins-regular">
+                  <label
+                    htmlFor="task-states"
+                    className="task-states-label poppins-medium"
+                  >
+                    State
+                  </label>
+                  <div className="task-states">
+                    <div className="to-do-section">
+                      <input
+                        type="radio"
+                        name="task-state"
+                        value="1"
+                        id="to-do"
+                        onChange={(e) => updateFilters("state", e.target.value)}
+                        checked={
+                          Object.keys(filters).indexOf("state") !== -1
+                            ? filters.state === 1
+                              ? true
+                              : false
+                            : false
+                        }
+                      />
+                      <label htmlFor="to-do" className="to-do-label">
+                        To do
+                      </label>
+                    </div>
+                    <div className="doing-section">
+                      <input
+                        type="radio"
+                        name="task-state"
+                        value="2"
+                        id="doing"
+                        checked={
+                          Object.keys(filters).indexOf("state") !== -1
+                            ? filters.state === 2
+                              ? true
+                              : false
+                            : false
+                        }
+                        onChange={(e) => updateFilters("state", e.target.value)}
+                      />
+                      <label htmlFor="doing" className="doing-label">
+                        Doing
+                      </label>
+                    </div>
+                    <div className="done-section">
+                      <input
+                        type="radio"
+                        name="task-state"
+                        value="3"
+                        id="done"
+                        checked={
+                          Object.keys(filters).indexOf("state") !== -1
+                            ? filters.state === 3
+                              ? true
+                              : false
+                            : false
+                        }
+                        onChange={(e) => updateFilters("state", e.target.value)}
+                      />
+                      <label htmlFor="done" className="done-label">
+                        Done
+                      </label>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="scope-section poppins-regular">
-                <label htmlFor="task-scope" className="task-scope-label">
-                  Project
-                </label>
-                <div className="task-scope">
-                  <div>
-                    <input
-                      type="radio"
-                      name="task-scope"
-                      value="all"
-                      id="scope-all"
-                      defaultChecked
-                      onChange={(e) => updateFilters("scope", e.target.value)}
-                    />
-                    <label htmlFor="scope-all">All</label>
-                  </div>
-                  <div>
-                    <input
-                      type="radio"
-                      name="task-scope"
-                      value="project"
-                      id="scope-project"
-                      onChange={(e) => updateFilters("scope", e.target.value)}
-                    />
-                    <label htmlFor="scope-project">Belongs to a project</label>
-                  </div>
-                  <div>
-                    <input
-                      type="radio"
-                      name="task-scope"
-                      value="standalone"
-                      id="scope-standalone"
-                      onChange={(e) => updateFilters("scope", e.target.value)}
-                    />
-                    <label htmlFor="scope-standalone">Standalone</label>
+                <div className="scope-section poppins-regular">
+                  <label
+                    htmlFor="task-scope"
+                    className="task-scope-label poppins-medium"
+                  >
+                    Project
+                  </label>
+                  <div className="task-scope">
+                    <div>
+                      <input
+                        type="radio"
+                        name="task-scope"
+                        value="all"
+                        id="scope-all"
+                        defaultChecked
+                        checked={
+                          Object.keys(filters).indexOf("scope") === -1
+                            ? true
+                            : false
+                        }
+                        onChange={(e) => updateFilters("scope", e.target.value)}
+                      />
+                      <label htmlFor="scope-all">All</label>
+                    </div>
+                    <div>
+                      <input
+                        type="radio"
+                        name="task-scope"
+                        value="project"
+                        id="scope-project"
+                        checked={
+                          Object.keys(filters).indexOf("scope") !== -1
+                            ? filters.scope === "project"
+                              ? true
+                              : false
+                            : false
+                        }
+                        onChange={(e) => updateFilters("scope", e.target.value)}
+                      />
+                      <label htmlFor="scope-project">
+                        Belongs to a project
+                      </label>
+                    </div>
+                    <div>
+                      <input
+                        type="radio"
+                        name="task-scope"
+                        value="standalone"
+                        id="scope-standalone"
+                        checked={
+                          Object.keys(filters).indexOf("scope") !== -1
+                            ? filters.scope === "standalone"
+                              ? true
+                              : false
+                            : false
+                        }
+                        onChange={(e) => updateFilters("scope", e.target.value)}
+                      />
+                      <label htmlFor="scope-standalone">Standalone</label>
+                    </div>
                   </div>
                 </div>
               </div>
