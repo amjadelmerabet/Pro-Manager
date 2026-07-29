@@ -235,7 +235,7 @@
 .projects-page-modern main .new-project-form {
   position: absolute;
   width: 60%;
-  height: 80%;
+  height: fit-content;
   top: 10%;
   left: 20%;
   background-color: white;
@@ -268,49 +268,54 @@
   cursor: pointer;
 }
 
+.projects-page-modern main .new-project-form > div {
+  display: flex;
+  flex-direction: column;
+}
+
 .projects-page-modern main .new-project-form .form-title {
   text-align: center;
   margin-block: 32px;
   font-size: 20px;
 }
 
-.projects-page-modern main .new-project-form > div {
+.projects-page-modern main .new-project-form > div > div {
   display: grid;
   margin: 16px auto;
   width: 60%;
 }
 
-.projects-page-modern main .new-project-form > div > div {
+.projects-page-modern main .new-project-form > div > div > div {
   display: grid;
   margin-bottom: 8px;
 }
 
-.projects-page-modern main .new-project-form > div > div > label {
+.projects-page-modern main .new-project-form > div > div > div > label {
   font-size: 14px;
   color: var(--default-light-theme-primary-color);
 }
 
-.projects-page-modern main .new-project-form > div > div > input,
-.projects-page-modern main .new-project-form > div > div > select,
-.projects-page-modern main .new-project-form > div > div > select option,
-.projects-page-modern main .new-project-form > div > div > textarea {
+.projects-page-modern main .new-project-form > div > div > div > input,
+.projects-page-modern main .new-project-form > div > div > div > select,
+.projects-page-modern main .new-project-form > div > div > div > select option,
+.projects-page-modern main .new-project-form > div > div > div > textarea {
   font-family: "Poppins", sans-serif;
 }
 
-.projects-page-modern main .new-project-form > div > div > input {
+.projects-page-modern main .new-project-form > div > div > div > input {
   font-size: 14px;
   padding: 4px;
   border: 1px solid black;
   border-radius: 4px;
 }
 
-.projects-page-modern main .new-project-form > div > div > textarea {
+.projects-page-modern main .new-project-form > div > div > div > textarea {
   padding: 4px;
   border: 1px solid black;
   border-radius: 4px;
 }
 
-.projects-page-modern main .new-project-form > div > .create-project {
+.projects-page-modern main .new-project-form > div > div > .create-project {
   width: 20%;
   padding: 2px;
   background-color: var(--default-light-theme-primary-color);
@@ -325,7 +330,7 @@
   cursor: pointer;
 }
 
-.projects-page-modern main .new-project-form > div > .create-project:hover {
+.projects-page-modern main .new-project-form > div > div > .create-project:hover {
   transform: scale(0.98);
   box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
 }
