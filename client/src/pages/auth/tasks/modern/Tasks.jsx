@@ -334,7 +334,7 @@ export default function TasksPageModern({
         <SideMenu
           user={user}
           setPreviewModernUI={setPreviewModernUI}
-          recentWork={[]}
+          useLocalRecentWork={true}
           setAuthentication={setAuthentication}
         />
         <main

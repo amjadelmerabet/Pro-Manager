@@ -179,7 +179,7 @@ export default function TaskPageModern({
           <SideMenu
             user={user}
             setPreviewModernUI={setPreviewModernUI}
-            recentWork={[]}
+            useLocalRecentWork={true}
             setAuthentication={setAuthentication}
           />
           <main className="task-loading poppins-regular">Loading task…</main>
@@ -195,7 +195,7 @@ export default function TaskPageModern({
         <SideMenu
           user={user}
           setPreviewModernUI={setPreviewModernUI}
-          recentWork={[]}
+          useLocalRecentWork={true}
           setAuthentication={setAuthentication}
         />
         <main>

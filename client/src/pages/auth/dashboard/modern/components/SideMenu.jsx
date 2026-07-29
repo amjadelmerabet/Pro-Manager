@@ -5,6 +5,8 @@ import { RiWindow2Fill } from "react-icons/ri";
 
 import logoutUserUtil from "../../../profile/utils/logoutUserUtil";
 import getAccessTokenUtil from "../../../utils/getAccessTokenUtil";
+import fetchUserProjectsUtil from "../../../projects/modern/utils/fetchUserProjectsUtil";
+import fetchUserTasksUtil from "../../../tasks/modern/utils/fetchUserTasksUtil";
 
 import "./SideMenu.css";
 
@@ -12,6 +14,7 @@ export default function SideMenu({
   user,
   setPreviewModernUI,
   recentWork,
+  useLocalRecentWork,
   setAuthentication,
 }) {
   const [tries, setTries] = useState(0);
@@ -22,6 +25,11 @@ export default function SideMenu({
   });
   const [logoutUser, setLogoutUser] = useState(0);
   const [successfulLogout, setSuccessfulLogout] = useState(false);
+  const [userProjects, setUserProjects] = useState([]);
+  const [userProjectsFetched, setUserProjectsFetched] = useState(false);
+  const [userTasks, setUserTasks] = useState([]);
+  const [userTasksFetched, setUserTasksFetched] = useState(false);
+  const [localRecentWork, setLocalRecentWork] = useState([]);
 
   let navigate = useNavigate();
 
@@ -68,6 +76,58 @@ export default function SideMenu({
       );
     }
   }, [logoutUser]);
+
+  useEffect(() => {
+    if (useLocalRecentWork) {
+      fetchUserProjectsUtil(
+        user,
+        userId,
+        token,
+        sessionId,
+        tries,
+        setTries,
+        tokenValidated,
+        setTokenValidated,
+        newAccessToken,
+        setNewAccessToken,
+        setUserProjects,
+        setUserProjectsFetched,
+      );
+    }
+  }, []);
+
+  useEffect(() => {
+    if (userProjectsFetched) {
+      fetchUserTasksUtil(
+        user,
+        userId,
+        token,
+        sessionId,
+        tries,
+        setTries,
+        tokenValidated,
+        setTokenValidated,
+        newAccessToken,
+        setNewAccessToken,
+        setUserTasks,
+        setUserTasksFetched,
+      );
+    }
+  }, [userProjectsFetched]);
+
+  useEffect(() => {
+    if (userTasksFetched) {
+      setLocalRecentWork(
+        [...userProjects, ...userTasks]
+          .sort(
+            (a, b) =>
+              new Date(b.updated_on).getTime() -
+              new Date(a.updated_on).getTime(),
+          )
+          .slice(0, 5),
+      );
+    }
+  }, [userTasksFetched]);
 
   useEffect(() => {
     if (newAccessToken.counter > 0) {
@@ -126,14 +186,35 @@ export default function SideMenu({
         <div className="section recent-work">
           <div className="section-title poppins-medium">Recents</div>
           <ul className="section-menu">
-            {recentWork.map((item, index) => {
-              let recentPage = item.slice(0, 23) + " ...";
-              return (
-                <li className="section-menu-item" key={index}>
-                  {recentPage}
-                </li>
-              );
-            })}
+            {useLocalRecentWork
+              ? localRecentWork.length > 0
+                ? localRecentWork.map((item, index) => {
+                    let recentPage = item.name.slice(0, 23) + " ...";
+                    return (
+                      <li className="section-menu-item" key={index}>
+                        <Link
+                          to={
+                            item.owner
+                              ? `/auth/${user}/modern/project/${item.project_id}`
+                              : `/auth/${user}/modern/task/${item.task_id}`
+                          }
+                        >
+                          {recentPage}
+                        </Link>
+                      </li>
+                    );
+                  })
+                : "Loading ..."
+              : recentWork.length > 0
+                ? recentWork.map((item, index) => {
+                    let recentPage = item.slice(0, 23) + " ...";
+                    return (
+                      <li className="section-menu-item" key={index}>
+                        {recentPage}
+                      </li>
+                    );
+                  })
+                : "Loading ..."}
           </ul>
         </div>
         <button
@@ -143,10 +224,7 @@ export default function SideMenu({
           <RiWindow2Fill />
           Go back to Classic
         </button>
-        <button
-          className="logout poppins-medium"
-          onClick={() => logout()}
-        >
+        <button className="logout poppins-medium" onClick={() => logout()}>
           Log out
         </button>
       </div>

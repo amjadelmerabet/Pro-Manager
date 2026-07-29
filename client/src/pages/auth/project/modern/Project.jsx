@@ -206,7 +206,7 @@ export default function ProjectPageModern({
           <SideMenu
             user={user}
             setPreviewModernUI={setPreviewModernUI}
-            recentWork={[]}
+            useLocalRecentWork={true}
             setAuthentication={setAuthentication}
           />
           <main className="project-loading poppins-regular">
@@ -222,7 +222,7 @@ export default function ProjectPageModern({
         <SideMenu
           user={user}
           setPreviewModernUI={setPreviewModernUI}
-          recentWork={[]}
+          useLocalRecentWork={true}
           setAuthentication={setAuthentication}
         />
         <main>
@@ -368,11 +368,12 @@ export default function ProjectPageModern({
                 </tr>
               </thead>
               <tbody>
-                {projectTasks.map((task) => {
+                {projectTasks.map((task, index) => {
                   return (
                     <tr
                       className="project-task"
                       onClick={() => openTask(task.task_id)}
+                      key={index}
                     >
                       <td className="poppins-regular name">
                         <span className={taskStates[task.state].class}>

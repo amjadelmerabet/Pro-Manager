@@ -612,6 +612,7 @@ export default function DashboardPageModern({
           user={user}
           setPreviewModernUI={setPreviewModernUI}
           recentWork={recentWork}
+          useLocalRecentWork={false}
           setAuthentication={setAuthentication}
         />
         <main
