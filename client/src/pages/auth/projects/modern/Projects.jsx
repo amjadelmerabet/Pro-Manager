@@ -296,7 +296,7 @@ export default function ProjectsPageModern({
         <SideMenu
           user={user}
           setPreviewModernUI={setPreviewModernUI}
-          recentWork={[]}
+          useLocalRecentWork={true}
           setAuthentication={setAuthentication}
         />
         <main
