@@ -7,6 +7,7 @@ import getNewAccessTokenUtil from "./utils/getNewAccessTokenUtil";
 import createNewProjectUtil from "./utils/createNewProjectUtil";
 import deleteProjectUtil from "./utils/deleteProjectUtil";
 import { MdOutlineRadioButtonChecked } from "react-icons/md";
+import { FaArrowDown, FaArrowUp } from "react-icons/fa";
 
 import "./Projects.css";
 
@@ -661,13 +662,136 @@ export default function ProjectsPageModern({
                       />
                     </th>
                     <th className="poppins-semibold">Name</th>
-                    <th className="poppins-semibold">State</th>
+                    <th
+                      className={
+                        "poppins-semibold" +
+                        (sortingApplied > 0
+                          ? sortBy.by === "state"
+                            ? " sorted-by"
+                            : ""
+                          : "")
+                      }
+                    >
+                      <div>
+                        State
+                        {sortingApplied > 0 &&
+                        Object.keys(sortBy).indexOf("by") !== -1 ? (
+                          sortBy.by === "state" ? (
+                            <span>
+                              {sortBy.type === 1 ? (
+                                <FaArrowUp />
+                              ) : (
+                                <FaArrowDown />
+                              )}
+                            </span>
+                          ) : (
+                            ""
+                          )
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                    </th>
                     <th className="poppins-semibold">Owner</th>
-                    <th className="poppins-semibold">Deadline</th>
+                    <th
+                      className={
+                        "poppins-semibold" +
+                        (sortingApplied > 0
+                          ? sortBy.by === "deadline"
+                            ? " sorted-by"
+                            : ""
+                          : "")
+                      }
+                    >
+                      <div>
+                        Deadline
+                        {sortingApplied > 0 &&
+                        Object.keys(sortBy).indexOf("by") !== -1 ? (
+                          sortBy.by === "deadline" ? (
+                            <span>
+                              {sortBy.type === 1 ? (
+                                <FaArrowUp />
+                              ) : (
+                                <FaArrowDown />
+                              )}
+                            </span>
+                          ) : (
+                            ""
+                          )
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                    </th>
                     <th className="poppins-semibold">Description</th>
-                    <th className="poppins-semibold">Updated</th>
+                    <th
+                      className={
+                        "poppins-semibold" +
+                        (sortingApplied > 0 &&
+                        Object.keys(sortBy).indexOf("by") !== -1
+                          ? sortBy.by === "updated"
+                            ? " sorted-by"
+                            : ""
+                          : " sorted-by")
+                      }
+                    >
+                      <div>
+                        Updated
+                        {sortingApplied > 0 &&
+                        Object.keys(sortBy).indexOf("by") !== -1 ? (
+                          sortBy.by === "updated" ? (
+                            <span>
+                              {sortBy.type === 1 ? (
+                                <FaArrowUp />
+                              ) : (
+                                <FaArrowDown />
+                              )}
+                            </span>
+                          ) : (
+                            ""
+                          )
+                        ) : (
+                          <span>
+                            {sortBy.type === 1 ? (
+                              <FaArrowUp />
+                            ) : (
+                              <FaArrowDown />
+                            )}
+                          </span>
+                        )}
+                      </div>
+                    </th>
                     <th className="poppins-semibold">Updated by</th>
-                    <th className="poppins-semibold">Created</th>
+                    <th
+                      className={
+                        "poppins-semibold" +
+                        (sortingApplied > 0
+                          ? sortBy.by === "created"
+                            ? " sorted-by"
+                            : ""
+                          : "")
+                      }
+                    >
+                      <div>
+                        Created
+                        {sortingApplied > 0 &&
+                        Object.keys(sortBy).indexOf("by") !== -1 ? (
+                          sortBy.by === "created" ? (
+                            <span>
+                              {sortBy.type === 1 ? (
+                                <FaArrowUp />
+                              ) : (
+                                <FaArrowDown />
+                              )}
+                            </span>
+                          ) : (
+                            ""
+                          )
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                    </th>
                     <th className="poppins-semibold">Created by</th>
                   </tr>
                 </thead>

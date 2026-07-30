@@ -44,6 +44,17 @@
   font-size: 14px;
 }
 
+.projects-page-modern main .projects-section > .projects thead .sorted-by {
+  color: rgb(45, 255, 200);
+}
+
+.projects-page-modern main .projects-section > .projects thead .sorted-by > div {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  align-items: center;
+}
+
 .projects-page-modern main .projects-section > .projects > tbody {
   font-size: 13px;
 }
@@ -256,7 +267,13 @@
   gap: 20px;
 }
 
-.projects-page-modern main .sorting-popup > .sort-form > div:last-child > div > div {
+.projects-page-modern
+  main
+  .sorting-popup
+  > .sort-form
+  > div:last-child
+  > div
+  > div {
   display: flex;
   gap: 4px;
 }
