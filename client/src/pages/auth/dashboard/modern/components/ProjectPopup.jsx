@@ -1,7 +1,7 @@
 import { MdOutlineRadioButtonChecked } from "react-icons/md";
 import updatedMessageUtil from "../../../../../utils/updatedMessageUtil";
 
-export default  function ProjectPopup({
+export default function ProjectPopup({
   projectPopupVisible,
   projectStates,
   popupProject,
@@ -10,6 +10,7 @@ export default  function ProjectPopup({
   updateProjectDescription,
   userTasks,
   taskStates,
+  taskPriorities,
   updateProjectState,
   deleteProjectFn,
   saveUpdates,
@@ -51,6 +52,7 @@ export default  function ProjectPopup({
             <tr>
               <th className="poppins-medium">Name</th>
               <th className="poppins-medium">State</th>
+              <th className="poppins-medium">Priority</th>
               <th className="poppins-medium">Assignee</th>
               <th className="poppins-medium">Updated</th>
               <th className="poppins-medium">Created</th>
@@ -59,8 +61,8 @@ export default  function ProjectPopup({
           <tbody>
             {userTasks.map((task, index) => {
               if (task.project === popupProject.project_id) {
-                const updated = new Date(task.updated_on).toLocaleString();
-                const created = new Date(task.created_on).toLocaleString();
+                const updated = new Date(task.updated_on).toLocaleString("fr");
+                const created = new Date(task.created_on).toLocaleString("fr");
                 return (
                   <tr className="project-task" key={index}>
                     <td>
@@ -78,6 +80,16 @@ export default  function ProjectPopup({
                         }
                       >
                         {taskStates.labels[task.state]}
+                      </span>
+                    </td>
+                    <td>
+                      <span
+                        className={
+                          "poppins-medium " +
+                          taskPriorities.classes[task.priority]
+                        }
+                      >
+                        {taskPriorities.labels[task.priority]}
                       </span>
                     </td>
                     <td>{task.assigned_to === userId ? "Me" : ""}</td>

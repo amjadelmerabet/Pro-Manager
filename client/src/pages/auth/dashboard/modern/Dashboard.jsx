@@ -703,6 +703,7 @@ export default function DashboardPageModern({
                 updateProjectDescription={updateProjectDescription}
                 userTasks={userTasks}
                 taskStates={taskStates}
+                taskPriorities={taskPriorities}
                 updateProjectState={updateProjectState}
                 deleteProjectFn={deleteProjectFn}
                 saveUpdates={saveUpdates}
