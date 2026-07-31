@@ -53,9 +53,11 @@ export default function ProjectPopup({
               <th className="poppins-medium">Name</th>
               <th className="poppins-medium">State</th>
               <th className="poppins-medium">Priority</th>
-              <th className="poppins-medium">Assignee</th>
+              <th className="poppins-medium">Assigned to</th>
               <th className="poppins-medium">Updated</th>
+              <th className="poppins-medium">Updated by</th>
               <th className="poppins-medium">Created</th>
+              <th className="poppins-medium">Created by</th>
             </tr>
           </thead>
           <tbody>
@@ -94,7 +96,9 @@ export default function ProjectPopup({
                     </td>
                     <td>{task.assigned_to === userId ? "Me" : ""}</td>
                     <td>{updated}</td>
+                    <td>{task.updated_by === userId ? "Me" : ""}</td>
                     <td>{created}</td>
+                    <td>{task.created_by === userId ? "Me" : ""}</td>
                   </tr>
                 );
               }
