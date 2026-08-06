@@ -196,7 +196,9 @@ export default function ProjectPageModern({
     Object.keys(project).length > 0 ? project.name.split(" ").length : 0;
 
   const openTask = (taskId) => {
-    navigate(`/auth/${user}/modern/task/${taskId}`);
+    navigate(
+      `/auth/${user}/modern/task/${taskId}?backUrl=project&id=${project.project_id}`,
+    );
   };
 
   if (!Object.keys(project).length)
