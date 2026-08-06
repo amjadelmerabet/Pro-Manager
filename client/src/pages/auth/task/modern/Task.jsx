@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router";
+import { Link, useLocation, useNavigate, useParams } from "react-router";
 import { BiReset } from "react-icons/bi";
 import { GrFormClock } from "react-icons/gr";
 import { IoArrowBack, IoCheckmark, IoTrashOutline } from "react-icons/io5";
@@ -52,6 +52,14 @@ export default function TaskPageModern({
   const authUser = JSON.parse(sessionStorage.getItem("authUser"));
   const token = authUser?.token;
   const sessionId = authUser?.sessionId;
+
+  const location = useLocation();
+  const prevPageIsProject = location.search.indexOf("project") !== -1;
+  let projectId = "";
+  if (prevPageIsProject) {
+    const backUrl = location.search.replace("?backUrl=", "");
+    projectId = backUrl.split("&")[1].replace("id=", "");
+  }
 
   useEffect(() => {
     if (token)
@@ -200,12 +208,22 @@ export default function TaskPageModern({
         />
         <main>
           <div className="task-topbar">
-            <Link
-              to={`/auth/${user}/modern/tasks`}
-              className="back-link poppins-medium"
-            >
-              <IoArrowBack /> All tasks
-            </Link>
+            {!prevPageIsProject ? (
+              <Link
+                to={`/auth/${user}/modern/tasks`}
+                className="back-link poppins-medium"
+              >
+                <IoArrowBack /> All tasks
+              </Link>
+            ) : (
+              <Link
+                to={`/auth/${user}/modern/project/${projectId}`}
+                className="back-link poppins-medium"
+              >
+                <IoArrowBack />
+                {project.name}
+              </Link>
+            )}
             <div className="task-actions">
               {task.state !== 1 && (
                 <button
