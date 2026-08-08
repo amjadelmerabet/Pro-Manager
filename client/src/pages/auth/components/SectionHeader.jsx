@@ -51,7 +51,8 @@ export default function SectionHeader(props) {
     }
   };
 
-  const openKanbanSelect = () => {
+  const openKanbanSelect = (event) => {
+    event.preventDefault();
     handleKanbanSelect(props.selectedView);
   };
 
@@ -227,7 +228,7 @@ export default function SectionHeader(props) {
                 (props.selectedView === "kanban" ? " selected" : "")
               }
               onClick={() => setKanbanView()}
-              onDoubleClick={() => openKanbanSelect()}
+              onContextMenu={(e) => openKanbanSelect(e)}
               onMouseEnter={() => showToolTip()}
               onMouseLeave={() => hideToolTip()}
             >
@@ -238,7 +239,7 @@ export default function SectionHeader(props) {
                     (toolTipVisible ? " visible" : "")
                   }
                 >
-                  Double click
+                  Right click
                 </div>
               ) : (
                 ""
