@@ -555,8 +555,7 @@ export default function ProjectsPageModern({
                   </label>
                   <select
                     name="sort-by"
-                    className="sort-by"
-                    className="poppins-regular"
+                    className="sort-by poppins-regular"
                     value={
                       Object.keys(sortBy).indexOf("by") !== -1
                         ? sortBy.by
