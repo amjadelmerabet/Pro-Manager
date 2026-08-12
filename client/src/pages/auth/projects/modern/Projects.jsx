@@ -752,9 +752,9 @@ export default function ProjectsPageModern({
                         ) : (
                           <span>
                             {sortBy.type === 1 ? (
-                              <FaArrowUp />
-                            ) : (
                               <FaArrowDown />
+                            ) : (
+                              <FaArrowUp />
                             )}
                           </span>
                         )}
