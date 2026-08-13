@@ -280,7 +280,7 @@ export default function TaskPageModern({
                 <span>Project</span>
                 {task.project ? (
                   <Link
-                    to={`/auth/${user}/modern/project/${project.project_id}`}
+                    to={`/auth/${user}/modern/project/${project.project_id}?backUrl=task&id=${taskId}`}
                     className="parent-project"
                   >
                     <MdOutlineFolder />{" "}
