@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router";
+import { Link, useLocation, useNavigate, useParams } from "react-router";
 import { BiReset } from "react-icons/bi";
 import { GrFormClock } from "react-icons/gr";
 import { IoArrowBack, IoCheckmark, IoTrashOutline } from "react-icons/io5";
@@ -64,6 +64,14 @@ export default function ProjectPageModern({
   const authUser = JSON.parse(sessionStorage.getItem("authUser"));
   const token = authUser?.token;
   const sessionId = authUser?.sessionId;
+
+  const location = useLocation();
+  const prevPageIsTask = location.search.indexOf("task") !== -1;
+  let taskId = "";
+  if (prevPageIsTask) {
+    const backUrl = location.search.replace("?backUrl=", "");
+    taskId = backUrl.split("&")[1].replace("id=", "");
+  }
 
   useEffect(() => {
     fetchProjectTasksUtil(
@@ -229,12 +237,25 @@ export default function ProjectPageModern({
         />
         <main>
           <div className="project-topbar">
-            <Link
-              to={`/auth/${user}/modern/projects`}
-              className="back-link poppins-medium"
-            >
-              <IoArrowBack /> All projects
-            </Link>
+            {!prevPageIsTask ? (
+              <Link
+                to={`/auth/${user}/modern/projects`}
+                className="back-link poppins-medium"
+              >
+                <IoArrowBack /> All projects
+              </Link>
+            ) : (
+              <Link
+                to={`/auth/${user}/modern/task/${taskId}`}
+                className="back-link poppins-medium"
+              >
+                <IoArrowBack />{" "}
+                {projectTasks.length > 0
+                  ? projectTasks.filter((task) => task.task_id === taskId)[0]
+                      .name
+                  : "Loading ..."}
+              </Link>
+            )}
             <div className="project-actions">
               {project.state !== 1 && (
                 <button onClick={() => updateProject({ state: 1 })}>
