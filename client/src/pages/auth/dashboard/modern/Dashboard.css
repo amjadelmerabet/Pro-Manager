@@ -886,6 +886,14 @@ color: rgb(45, 145, 200);
   border-radius: 4px;
 }
 
+.dashboard-page-modern main .new-task-form > div > div > select {
+  font-size: 14px;
+  padding: 4px;
+  border: 1px solid black;
+  border-radius: 4px;
+  background-color: white;
+}
+
 .dashboard-page-modern main > div > .new-project-form > div > div > textarea,
 .dashboard-page-modern main > div > .new-task-form > div > div > textarea {
   padding: 4px;

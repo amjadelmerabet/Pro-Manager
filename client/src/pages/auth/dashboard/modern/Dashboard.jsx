@@ -77,7 +77,7 @@ export default function DashboardPageModern({
   const [tries, setTries] = useState(0);
   const [newAccessToken, setNewAccessToken] = useState({
     counter: 0,
-    type: "",
+    action: "",
   });
   const [reportsStats, setReportsStats] = useState({
     projects: {
@@ -433,6 +433,8 @@ export default function DashboardPageModern({
         setUpdateTask,
         deleteTask,
         setDeleteTask,
+        setCreateNewTask,
+        setCreateNewProject
       );
     }
   }, [newAccessToken]);
@@ -738,6 +740,7 @@ export default function DashboardPageModern({
                 newTask={newTask}
                 setNewTask={setNewTask}
                 createNewTaskFn={createNewTaskFn}
+                projects={userProjects}
               />
             ) : (
               ""

@@ -22,6 +22,7 @@ async function createNewTaskAction(
 ) {
   const create = await createTaskAPI(newTask, token);
   if (create.error === "Invalid access token" && tries < 3) {
+    setCreateNewTask(false);
     tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
   } else {
     setCreateNewTask(false);
