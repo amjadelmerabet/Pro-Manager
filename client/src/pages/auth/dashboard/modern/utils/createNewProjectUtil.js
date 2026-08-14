@@ -22,6 +22,7 @@ async function createNewProjectAction(
 ) {
   const create = await createProjectAPI(newProject, token);
   if (create.error === "Invalid access token" && tries < 3) {
+    setCreateNewProject(false);
     tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
   } else {
     setCreateNewProject(false);

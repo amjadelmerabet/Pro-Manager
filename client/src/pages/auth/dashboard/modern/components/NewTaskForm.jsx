@@ -4,6 +4,7 @@ export default function NewTaskForm({
   newTask,
   setNewTask,
   createNewTaskFn,
+  projects
 }) {
   return (
     <div
@@ -29,6 +30,32 @@ export default function NewTaskForm({
             className="task-name poppins-regular"
             onChange={(e) => setNewTask({ ...newTask, name: e.target.value })}
           />
+        </div>
+        <div className="task-project-section">
+          <label
+            htmlFor="task-project"
+            className="task-project-label poppins-medium"
+          >
+            Project
+          </label>
+          <select
+            name="task-project"
+            className="task-project poppins-regular"
+            value={newTask.project || ""}
+            onChange={(e) =>
+              setNewTask({
+                ...newTask,
+                project: e.target.value === "" ? null : e.target.value,
+              })
+            }
+          >
+            <option value="">-- None --</option>
+            {projects.map((project) => (
+              <option key={project.project_id} value={project.project_id}>
+                {project.name}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="task-priority-section">
           <label

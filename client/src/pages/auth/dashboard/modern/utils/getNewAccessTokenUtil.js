@@ -14,6 +14,8 @@ function nextAction(
   setUpdateTask,
   deleteTask,
   setDeleteTask,
+  setCreateNewTask,
+  setCreateNewProject
 ) {
   switch (newAccessToken.action) {
     case "fetch_user_projects":
@@ -33,6 +35,12 @@ function nextAction(
       break;
     case "delete_task":
       setDeleteTask({ ...deleteTask, delete: true });
+      break;
+    case "create_task":
+      setCreateNewTask(true);
+      break;
+    case "create_project":
+      setCreateNewProject(true);
       break;
     default:
       break;
@@ -58,6 +66,8 @@ export default async function getNewAccessTokenUtil(
   setUpdateTask,
   deleteTask,
   setDeleteTask,
+  setCreateNewTask,
+  setCreateNewProject
 ) {
   try {
     const refreshToken = await cookieStore.get(user);
@@ -88,6 +98,8 @@ export default async function getNewAccessTokenUtil(
           setUpdateTask,
           deleteTask,
           setDeleteTask,
+          setCreateNewTask,
+          setCreateNewProject
         );
       }
     } else {
