@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 
 import { RiWindow2Fill } from "react-icons/ri";
 
@@ -37,9 +37,13 @@ export default function SideMenu({
     sessionStorage.getItem("authUser"),
   );
 
+  const location = useLocation();
+
   const switchUI = () => {
     setPreviewModernUI(false);
-    navigate(`/auth/${user}/classic/dashboard`);
+    let navigateUrl = location.pathname.replace("modern", "classic");
+    navigate(navigateUrl);
+    // navigate(`/auth/${user}/classic/dashboard`);
     sessionStorage.setItem("modern-ui", false);
   };
 

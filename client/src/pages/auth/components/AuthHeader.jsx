@@ -1,6 +1,6 @@
 // Hooks
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 // Icons
 import { IoIosSearch } from "react-icons/io";
@@ -98,9 +98,16 @@ export default function AuthHeader({
     }
   }, [newAccessToken]);
 
+  const location = useLocation();
+
   const switchUI = () => {
     setPreviewModernUI(true);
-    navigate(`/auth/${user}/modern/dashboard`);
+    if (location.pathname.includes("profile")) {
+      navigate(`/auth/${user}/modern/dashboard`);
+    } else {
+      let navigateUrl = location.pathname.replace("classic", "modern");
+      navigate(navigateUrl);
+    }
     sessionStorage.setItem("modern-ui", true);
   };
 
