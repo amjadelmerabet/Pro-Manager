@@ -434,7 +434,7 @@ export default function DashboardPageModern({
         deleteTask,
         setDeleteTask,
         setCreateNewTask,
-        setCreateNewProject
+        setCreateNewProject,
       );
     }
   }, [newAccessToken]);
@@ -496,6 +496,7 @@ export default function DashboardPageModern({
     });
   };
 
+  // TODO: Exclude the fields that haven't changed from the updates sent to the server
   const saveUpdates = () => {
     let save = false;
     Object.keys(projectUpdates).forEach((key) => {
@@ -508,6 +509,7 @@ export default function DashboardPageModern({
     }
   };
 
+  // BUG: Audits created for the description even though it hasn't changed.
   const updateProjectState = (state) => {
     setProjectUpdates({
       ...projectUpdates,
@@ -595,6 +597,7 @@ export default function DashboardPageModern({
     }, 250);
   };
 
+  // BUG: Audits created for short description & description even though they haven't changed.
   const updateTaskState = (state) => {
     setTaskUpdates({
       ...taskUpdates,
