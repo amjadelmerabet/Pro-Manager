@@ -267,15 +267,17 @@ export async function projectsRoute(req, res) {
                           const activityId = newActivity?.rows[0].activity_id;
                           await Promise.all(
                             Object.entries(updates).map(async (field) => {
-                              const newAudit = await createAudit(
-                                "update",
-                                activityId,
-                                req.user.user_id,
-                                "project",
-                                projectId,
-                                field[0],
-                                field[1],
-                              );
+                              if (field[0] !== "updated_by" && field[0] !== "created_by") {
+                                const newAudit = await createAudit(
+                                  "update",
+                                  activityId,
+                                  req.user.user_id,
+                                  "project",
+                                  projectId,
+                                  field[0],
+                                  field[1],
+                                );
+                              }
                             }),
                           );
                         }
