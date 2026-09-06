@@ -895,8 +895,16 @@ export default function Task({
                 {userActivities.map((activity, index) => {
                   return (
                     <div key={index}>
-                      <div className="activity-time">
-                        {new Date(activity.created_on).toLocaleString()}
+                      <div className="activity-header">
+                        <p className="activity-user">
+                          {activity.created_by === userId
+                            ? "Me"
+                            : "Other user"}
+                        </p>
+                        <div className="dot"></div>
+                        <p className="activity-time">
+                          {new Date(activity.created_on).toLocaleString()}
+                        </p>
                       </div>
                       <div className="updates">
                         {activity.audits.map((audit, index) => {
@@ -924,7 +932,7 @@ export default function Task({
                                         : TaskStates[audit.new_value].value
                                       : audit.new_value === userId
                                         ? "Me"
-                                        : ""}
+                                        : "Other user"}
                                   </span>{" "}
                                   was{" "}
                                   <span className="old-value">
@@ -944,7 +952,7 @@ export default function Task({
                                         : TaskStates[audit.old_value].value
                                       : audit.old_value === userId
                                         ? "Me"
-                                        : ""}
+                                        : "Other user"}
                                   </span>
                                 </div>
                               ) : (
@@ -962,7 +970,7 @@ export default function Task({
                                       : TaskStates[audit.new_value].value
                                     : audit.new_value === userId
                                       ? "Me"
-                                      : ""}
+                                      : "Other user"}
                                 </div>
                               )}
                             </div>

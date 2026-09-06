@@ -417,12 +417,23 @@
   box-shadow: 2px 2px 4px rgba(0, 0, 0, .05);
 }
 
-.task-page .user-activities > div > .activity-time {
+.task-page .user-activities > div > .activity-header {
   position: absolute;
   content: "";
   top: 4px;
   right: 8px;
   font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.task-page .user-activities > div > .activity-header > .dot {
+  width: 4px;
+  aspect-ratio: 1 / 1;
+  background-color: var(--primary-color);
+  border-radius: 2px;
 }
 
 .task-page .user-activities > div > .updates > .update {
