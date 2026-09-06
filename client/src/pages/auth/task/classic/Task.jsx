@@ -10,6 +10,7 @@ import { IoCheckmark, IoClose } from "react-icons/io5";
 import { FaArrowLeft, FaFire, FaRegSnowflake } from "react-icons/fa";
 import { RiAlarmWarningFill } from "react-icons/ri";
 import { MdOutlineModeEdit } from "react-icons/md";
+import { TbFolderFilled, TbSquareCheck } from "react-icons/tb";
 
 // Components
 import AuthHeader from "../../components/AuthHeader";
@@ -23,11 +24,11 @@ import deleteTaskUtil from "./utils/deleteTaskUtil";
 import getAccessTokenUtil from "./utils/getAccessTokenUtil";
 import fetchLinkedProjectUtil from "./utils/fetchLinkedProjectUtil";
 import fetchUserProjectsUtil from "./utils/fetchUserProjectsUtil";
+import fetchUserActivitiesUtil from "../../utils/fetchUserActivitiesUtil";
 
 // Styles
 import "./Task.css";
-import { TbFolderFilled, TbSquareCheck } from "react-icons/tb";
-import fetchUserActivitiesUtil from "../../utils/fetchUserActivitiesUtil";
+import fetchTaskProjectsHistoryUtil from "./utils/fetchTaskProjectsHistory";
 
 const fieldDiplayValues = {
   name: {
@@ -111,6 +112,9 @@ export default function Task({
   const [theme, setTheme] = useState("");
   const [userActivities, setUserActivities] = useState([]);
   const [fetchUserActivities, setFetchUserActivities] = useState(false);
+  const [userActivitiesFetched, setUserActivitiesFetched] = useState(false);
+  const [projectsHistory, setProjectsHistory] = useState({});
+  const [fetchProjectsHistory, setFetchProjectsHistory] = useState(false);
 
   const location = useLocation();
   const pathname = location.pathname;
@@ -218,6 +222,7 @@ export default function Task({
         setNewAccessToken,
         setUserActivities,
         setFetchUserActivities,
+        setUserActivitiesFetched,
       );
     }
   }, [taskFetched, loadProject, taskUpdated]);
@@ -263,9 +268,51 @@ export default function Task({
         setNewAccessToken,
         setUserActivities,
         setFetchUserActivities,
+        setUserActivitiesFetched,
       );
     }
   }, [updatedSuccessfully]);
+
+  useEffect(() => {
+    let projects = [];
+    userActivities.forEach((activity) => {
+      activity.audits.forEach((audit) => {
+        if (
+          audit.field === "project" &&
+          projects.indexOf(audit.old_value) === -1 &&
+          audit.old_value !== null
+        ) {
+          projects.push(audit.old_value);
+        }
+        if (
+          audit.field === "project" &&
+          projects.indexOf(audit.new_value) === -1 &&
+          audit.new_value !== null
+        ) {
+          projects.push(audit.new_value);
+        }
+      });
+    });
+    if (
+      (userActivitiesFetched && projects.length > 0) ||
+      fetchProjectsHistory
+    ) {
+      fetchTaskProjectsHistoryUtil(
+        projects,
+        user,
+        userId,
+        sessionId,
+        token,
+        tries,
+        setTries,
+        newAccessToken,
+        setNewAccessToken,
+        tokenValidated,
+        setTokenValidated,
+        setProjectsHistory,
+      );
+    }
+  }, [userActivitiesFetched, fetchProjectsHistory]);
 
   let navigate = useNavigate();
 
@@ -305,6 +352,7 @@ export default function Task({
         setTaskUpdated,
         setTaskDeleted,
         setLoadProject,
+        setFetchProjectsHistory,
       );
     }
   }, [newAccessToken]);
@@ -863,7 +911,14 @@ export default function Task({
                                     {audit.field !== "assigned_to"
                                       ? audit.field !== "state"
                                         ? audit.field !== "priority"
-                                          ? audit.new_value
+                                          ? audit.field !== "project"
+                                            ? audit.new_value === null ||
+                                              audit.new_value === ""
+                                              ? "Empty"
+                                              : audit.new_value
+                                            : audit.new_value !== null
+                                              ? project.name
+                                              : "Empty"
                                           : TaskPriorities[audit.new_value]
                                               .value
                                         : TaskStates[audit.new_value].value
@@ -876,7 +931,14 @@ export default function Task({
                                     {audit.field !== "assigned_to"
                                       ? audit.field !== "state"
                                         ? audit.field !== "priority"
-                                          ? audit.old_value
+                                          ? audit.field !== "project"
+                                            ? audit.old_value === null ||
+                                              audit.old_value === ""
+                                              ? "Empty"
+                                              : audit.old_value
+                                            : audit.old_value !== null
+                                              ? projectsHistory[audit.old_value]
+                                              : "Empty"
                                           : TaskPriorities[audit.old_value]
                                               .value
                                         : TaskStates[audit.old_value].value
@@ -890,7 +952,12 @@ export default function Task({
                                   {audit.field !== "assigned_to"
                                     ? audit.field !== "state"
                                       ? audit.field !== "priority"
-                                        ? audit.new_value
+                                        ? audit.field !== "project"
+                                          ? audit.new_value
+                                          : project.project_id ===
+                                              audit.new_value
+                                            ? project.name
+                                            : projectsHistory[audit.new_value]
                                         : TaskPriorities[audit.new_value].value
                                       : TaskStates[audit.new_value].value
                                     : audit.new_value === userId

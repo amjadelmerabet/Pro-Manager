@@ -22,6 +22,7 @@ async function fetchUserActivitiesAction(
   setNewAccessToken,
   setUserActivities,
   setFetchUserActivities,
+  setUserActivitiesFetched
 ) {
   const userActivities = await getUserActivitiesAPI(record, recordId, token);
   if (userActivities.error === "Invalid access token") {
@@ -30,6 +31,10 @@ async function fetchUserActivitiesAction(
   } else {
     setTimeout(() => {
       setUserActivities(userActivities.result);
+      setUserActivitiesFetched(true);
+      setTimeout(() => {
+        setUserActivitiesFetched(false);
+      }, 500);
     }, 500);
   }
 }
@@ -48,6 +53,7 @@ export default async function fetchUserActivitiesUtil(
   setNewAccessToken,
   setUserActivities,
   setFetchUserActivities,
+  setUserActivitiesFetched
 ) {
   if (!tokenValidated) {
     const refreshToken = await cookieStore.get(user);
@@ -71,6 +77,7 @@ export default async function fetchUserActivitiesUtil(
           setNewAccessToken,
           setUserActivities,
           setFetchUserActivities,
+          setUserActivitiesFetched
         );
       } else {
         tryAgain(tries, setTries, newAccessToken, setNewAccessToken, record);
@@ -94,6 +101,7 @@ export default async function fetchUserActivitiesUtil(
       setNewAccessToken,
       setUserActivities,
       setFetchUserActivities,
+      setUserActivitiesFetched
     );
   }
 }

@@ -16,7 +16,8 @@ function nextAction(
   setTaskDeleted,
   setLoadProject,
   setLoadProjects,
-  setFetchUserActivities
+  setFetchUserActivities,
+  setFetchProjectsHistory
 ) {
   if (newAccessToken.type === "load") {
     setLoadTask(loadTask + 1);
@@ -33,6 +34,11 @@ function nextAction(
     setFetchUserActivities(true);
     setTimeout(() => {
       setFetchUserActivities(false);
+    }, 250);
+  } else if (newAccessToken.type === "fetch-task-projects-history") {
+    setFetchProjectsHistory(true);
+    setTimeout(() => {
+      setFetchProjectsHistory(false);
     }, 250);
   }
 }
@@ -51,7 +57,8 @@ export default async function getAccessTokenUtil(
   setTaskDeleted,
   setLoadProject,
   setLoadProjects,
-  setFetchUserActivities
+  setFetchUserActivities,
+  setFetchProjectsHistory
 ) {
   try {
     const refreshToken = await cookieStore.get(user);
@@ -74,7 +81,8 @@ export default async function getAccessTokenUtil(
           setTaskDeleted,
           setLoadProject,
           setLoadProjects,
-          setFetchUserActivities
+          setFetchUserActivities,
+          setFetchProjectsHistory
         );
       }
     } else {

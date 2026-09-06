@@ -25,13 +25,12 @@ import updateProjectUtil from "./utils/updateProjectUtil";
 import deleteProjectUtil from "./utils/deleteProjectUtil";
 import fetchProjectTasksUtil from "../utils/fetchProjectTasksUtil";
 import createNewProjectTaskUtil from "./utils/createNewProjectTaskUtil";
+import fetchUserTasksWithNoProjectUtil from "./utils/fetchUserTasksWithNoProjectUtil";
+import linkTasksToProjectUtil from "./utils/linkTasksToProjectUtil";
+import fetchUserActivitiesUtil from "../../utils/fetchUserActivitiesUtil";
 
 // Styles
 import "./Project.css";
-import fetchUserTasksWithNoProjectUtil from "./utils/fetchUserTasksWithNoProjectUtil";
-import linkTasksToProjectUtil from "./utils/linkTasksToProjectUtil";
-import getUserActivitiesAPI from "../../../../api/activities/getUserActivitiesAPI";
-import fetchUserActivitiesUtil from "../../utils/fetchUserActivitiesUtil";
 
 const fieldDiplayValues = {
   name: {
