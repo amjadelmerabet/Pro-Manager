@@ -3,7 +3,8 @@
   height: 100vh;
   background-color: var(--default-light-theme-primary-color);
   padding: 12px 20px;
-  position: relative;
+  /* position: relative; */
+  position:fixed;
 }
 
 .side-menu .app-title {

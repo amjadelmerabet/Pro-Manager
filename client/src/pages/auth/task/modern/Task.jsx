@@ -12,7 +12,9 @@ import fetchLinkedProjectUtil from "./utils/fetchLinkedProjectUtil";
 import updateTaskUtil from "./utils/updateTaskUtil";
 import getAccessTokenUtil from "./utils/getAccessTokenUtil";
 import deleteTaskUtil from "./utils/deleteTaskUtil";
+import fetchUserActivitiesUtil from "../../utils/fetchUserActivitiesUtil";
 import "./Task.css";
+import fetchTaskProjectsHistoryUtil from "../classic/utils/fetchTaskProjectsHistory";
 
 const states = {
   1: ["To do", "to-do"],
@@ -23,6 +25,54 @@ const priorities = {
   1: ["High", RiAlarmWarningFill, "high"],
   2: ["Medium", FaFire, "medium"],
   3: ["Low", FaRegSnowflake, "low"],
+};
+
+const fieldDiplayValues = {
+  name: {
+    display: "Name",
+  },
+  state: {
+    display: "State",
+  },
+  priority: {
+    display: "Priority",
+  },
+  short_description: {
+    display: "Short description",
+  },
+  description: {
+    display: "Description",
+  },
+  assigned_to: {
+    display: "Owner",
+  },
+  project: {
+    display: "Project",
+  },
+};
+
+const TaskStates = {
+  1: {
+    value: "To do",
+  },
+  2: {
+    value: "Doing",
+  },
+  3: {
+    value: "Done",
+  },
+};
+
+const TaskPriorities = {
+  1: {
+    value: "High",
+  },
+  2: {
+    value: "Medium",
+  },
+  3: {
+    value: "Low",
+  },
 };
 
 export default function TaskPageModern({
@@ -49,6 +99,12 @@ export default function TaskPageModern({
   const [taskDeleted, setTaskDeleted] = useState(false);
   const [editingField, setEditingField] = useState("");
   const [draftValue, setDraftValue] = useState("");
+  const [userActivities, setUserActivities] = useState([]);
+  const [fetchUserActivities, setFetchUserActivities] = useState(false);
+  const [userActivitiesFetched, setUserActivitiesFetched] = useState(false);
+  const [projectsHistory, setProjectsHistory] = useState({});
+  const [fetchProjectsHistory, setFetchProjectsHistory] = useState(false);
+
   const authUser = JSON.parse(sessionStorage.getItem("authUser"));
   const token = authUser?.token;
   const sessionId = authUser?.sessionId;
@@ -78,6 +134,7 @@ export default function TaskPageModern({
         setTaskFetched,
       );
   }, [loadTask]);
+
   useEffect(() => {
     if (task.project)
       fetchLinkedProjectUtil(
@@ -93,7 +150,26 @@ export default function TaskPageModern({
         setNewAccessToken,
         setProject,
       );
+    if (taskFetched) {
+      fetchUserActivitiesUtil(
+        "task",
+        taskId,
+        user,
+        sessionId,
+        token,
+        tries,
+        setTries,
+        tokenValidated,
+        setTokenValidated,
+        newAccessToken,
+        setNewAccessToken,
+        setUserActivities,
+        setFetchUserActivities,
+        setUserActivitiesFetched,
+      );
+    }
   }, [taskFetched, loadProject, task.project]);
+
   useEffect(() => {
     if (taskUpdated.update)
       updateTaskUtil(
@@ -111,13 +187,72 @@ export default function TaskPageModern({
         setTokenValidated,
       );
   }, [taskUpdated]);
+
   useEffect(() => {
     if (updatedSuccessfully) {
       setTaskUpdated((current) => ({ ...current, update: false }));
       setUpdatedSuccessfully(false);
       setLoadTask((current) => current + 1);
+      fetchUserActivitiesUtil(
+        "task",
+        taskId,
+        user,
+        sessionId,
+        token,
+        tries,
+        setTries,
+        tokenValidated,
+        setTokenValidated,
+        newAccessToken,
+        setNewAccessToken,
+        setUserActivities,
+        setFetchUserActivities,
+        setUserActivitiesFetched,
+      );
     }
   }, [updatedSuccessfully]);
+
+  useEffect(() => {
+    let projects = [];
+    userActivities.forEach((activity) => {
+      activity.audits.forEach((audit) => {
+        if (
+          audit.field === "project" &&
+          projects.indexOf(audit.old_value) === -1 &&
+          audit.old_value !== null
+        ) {
+          projects.push(audit.old_value);
+        }
+        if (
+          audit.field === "project" &&
+          projects.indexOf(audit.new_value) === -1 &&
+          audit.new_value !== null
+        ) {
+          projects.push(audit.new_value);
+        }
+      });
+    });
+    if (
+      (userActivitiesFetched && projects.length > 0) ||
+      fetchProjectsHistory
+    ) {
+      fetchTaskProjectsHistoryUtil(
+        projects,
+        user,
+        userId,
+        sessionId,
+        token,
+        tries,
+        setTries,
+        newAccessToken,
+        setNewAccessToken,
+        tokenValidated,
+        setTokenValidated,
+        setProjectsHistory,
+      );
+    }
+  }, [userActivitiesFetched, fetchProjectsHistory]);
+
   useEffect(() => {
     if (taskDeleted)
       deleteTaskUtil(
@@ -135,6 +270,7 @@ export default function TaskPageModern({
         navigate,
       );
   }, [taskDeleted]);
+
   useEffect(() => {
     if (newAccessToken.counter)
       getAccessTokenUtil(
@@ -344,6 +480,108 @@ export default function TaskPageModern({
               </div>
             )}
           </article>
+          <h3 className="poppins-semibold activity-log-title">
+              Activity Log
+            </h3>
+            {userActivities.length !== 0 ? (
+              <div className="poppins-regular user-activities">
+                {userActivities.map((activity, index) => {
+                  return (
+                    <div key={index}>
+                      <div className="activity-header">
+                        <p className="activity-user">
+                          {activity.created_by === userId
+                            ? "Me"
+                            : "Other user"}
+                        </p>
+                        <div className="dot"></div>
+                        <p className="activity-time">
+                          {new Date(activity.created_on).toLocaleString()}
+                        </p>
+                      </div>
+                      <div className="updates">
+                        {activity.audits.map((audit, index) => {
+                          return (
+                            <div key={index} className="update">
+                              <div className="field">
+                                {fieldDiplayValues[audit.field].display}
+                              </div>
+                              {audit.type === "update" ? (
+                                <div className="changes">
+                                  <span className="new-value">
+                                    {audit.field !== "assigned_to"
+                                      ? audit.field !== "state"
+                                        ? audit.field !== "priority"
+                                          ? audit.field !== "project"
+                                            ? audit.new_value === null ||
+                                              audit.new_value === ""
+                                              ? "Empty"
+                                              : audit.new_value
+                                            : audit.new_value !== null
+                                              ? project.name
+                                              : "Empty"
+                                          : TaskPriorities[audit.new_value]
+                                              .value
+                                        : TaskStates[audit.new_value].value
+                                      : audit.new_value === userId
+                                        ? "Me"
+                                        : "Other user"}
+                                  </span>{" "}
+                                  was{" "}
+                                  <span className="old-value">
+                                    {audit.field !== "assigned_to"
+                                      ? audit.field !== "state"
+                                        ? audit.field !== "priority"
+                                          ? audit.field !== "project"
+                                            ? audit.old_value === null ||
+                                              audit.old_value === ""
+                                              ? "Empty"
+                                              : audit.old_value
+                                            : audit.old_value !== null
+                                              ? projectsHistory[audit.old_value]
+                                              : "Empty"
+                                          : TaskPriorities[audit.old_value]
+                                              .value
+                                        : TaskStates[audit.old_value].value
+                                      : audit.old_value === userId
+                                        ? "Me"
+                                        : "Other user"}
+                                  </span>
+                                </div>
+                              ) : (
+                                <div className="insert">
+                                  {audit.field !== "assigned_to"
+                                    ? audit.field !== "state"
+                                      ? audit.field !== "priority"
+                                        ? audit.field !== "project"
+                                          ? audit.new_value
+                                          : project.project_id ===
+                                              audit.new_value
+                                            ? project.name
+                                            : projectsHistory[audit.new_value]
+                                        : TaskPriorities[audit.new_value].value
+                                      : TaskStates[audit.new_value].value
+                                    : audit.new_value === userId
+                                      ? "Me"
+                                      : "Other user"}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div
+                style={{ textAlign: "center", paddingBlock: "8px" }}
+                className="poppins-medium"
+              >
+                Loading user activities ...
+              </div>
+            )}
         </main>
       </div>
     </div>

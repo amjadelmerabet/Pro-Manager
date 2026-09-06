@@ -13,6 +13,7 @@ export default async function fetchUserProjectUtil(
   setNewAccessToken,
   setProject,
   setTokenValidated,
+  setProjectLoaded
 ) {
   try {
     if (!tokenValidated) {
@@ -40,6 +41,10 @@ export default async function fetchUserProjectUtil(
       setNewAccessToken({ counter: newAccessToken.counter + 1, type: "load" });
     } else if (!response.error) {
       setProject(response.result[0] || {});
+      setProjectLoaded(true);
+      setTimeout(() => {
+        setProjectLoaded(false);
+      }, 500);
       setTokenValidated(false);
     }
   } catch (error) {

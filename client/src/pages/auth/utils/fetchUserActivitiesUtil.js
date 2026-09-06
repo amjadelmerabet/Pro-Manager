@@ -29,12 +29,10 @@ async function fetchUserActivitiesAction(
     setFetchUserActivities(false);
     tryAgain(tries, setTries, newAccessToken, setNewAccessToken, record);
   } else {
+    setUserActivities(userActivities.result);
+    setUserActivitiesFetched(true);
     setTimeout(() => {
-      setUserActivities(userActivities.result);
-      setUserActivitiesFetched(true);
-      setTimeout(() => {
-        setUserActivitiesFetched(false);
-      }, 500);
+      setUserActivitiesFetched(false);
     }, 500);
   }
 }

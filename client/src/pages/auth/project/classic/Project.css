@@ -614,12 +614,34 @@
   box-shadow: 2px 2px 4px rgba(0, 0, 0, .05);
 }
 
-.project-page .user-activities > div > .activity-time {
+.project-page .user-activities > div > .activity-header {
   position: absolute;
   content: "";
   top: 4px;
   right: 8px;
   font-size: 12px;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  width: 30%;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.project-page .user-activities > div > .activity-header > .activity-user {
+  grid-column: 4 / 5;
+}
+
+.project-page .user-activities > div > .activity-header > .dot {
+  width: 4px;
+  aspect-ratio: 1 / 1;
+  background-color: var(--primary-color);
+  border-radius: 2px;
+  margin-inline: auto
+}
+
+.project-page .user-activities > div > .activity-header > .activity-time {
+  grid-column: 6 / -1;
 }
 
 .project-page .user-activities > div > .updates > .update {

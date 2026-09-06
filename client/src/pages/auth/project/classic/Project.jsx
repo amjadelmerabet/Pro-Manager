@@ -874,8 +874,14 @@ export default function Project({
                 {userActivities.map((activity, index) => {
                   return (
                     <div key={index}>
-                      <div className="activity-time">
-                        {new Date(activity.created_on).toLocaleString()}
+                      <div className="activity-header">
+                        <p className="activity-user">
+                          {activity.created_by === userId ? "Me" : "Other user"}
+                        </p>
+                        <div className="dot"></div>
+                        <p className="activity-time">
+                          {new Date(activity.created_on).toLocaleString()}
+                        </p>
                       </div>
                       <div className="updates">
                         {activity.audits.map((audit, index) => {

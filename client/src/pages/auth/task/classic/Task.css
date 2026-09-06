@@ -423,10 +423,16 @@
   top: 4px;
   right: 8px;
   font-size: 12px;
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  width: 30%;
   justify-content: space-between;
   align-items: center;
   gap: 8px;
+}
+
+.task-page .user-activities > div > .activity-header > .activity-user {
+  grid-column: 4 / 5;
 }
 
 .task-page .user-activities > div > .activity-header > .dot {
@@ -434,6 +440,11 @@
   aspect-ratio: 1 / 1;
   background-color: var(--primary-color);
   border-radius: 2px;
+  margin-inline: auto
+}
+
+.task-page .user-activities > div > .activity-header > .activity-time {
+  grid-column: 6 / -1;
 }
 
 .task-page .user-activities > div > .updates > .update {
