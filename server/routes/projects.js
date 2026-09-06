@@ -10,6 +10,8 @@ import canRead from "../authorization/canRead.js";
 import canCreate from "../authorization/canCreate.js";
 import canEdit from "../authorization/canEdit.js";
 import canDelete from "../authorization/canDelete.js";
+import createActivity from "../controllers/activities/createActivity.js";
+import createAudit from "../controllers/audits/createAudit.js";
 
 export async function projectsRoute(req, res) {
   const { method, url } = req;
@@ -152,6 +154,35 @@ export async function projectsRoute(req, res) {
                     );
                   }
                   const projectId = newProject.rows[0].project_id;
+                  const newActivity = await createActivity(
+                    "insert",
+                    req.user.user_id,
+                    "project",
+                    projectId,
+                  );
+                  if (!newActivity.error) {
+                    const activityId = newActivity?.rows[0].activity_id;
+                    await Promise.all(
+                      Object.entries({ ...newProjectFields, state: 1 }).map(
+                        async (field) => {
+                          if (
+                            field[0] !== "updated_by" &&
+                            field[0] !== "created_by"
+                          ) {
+                            const newAudit = await createAudit(
+                              "insert",
+                              activityId,
+                              req.user.user_id,
+                              "project",
+                              projectId,
+                              field[0],
+                              field[1],
+                            );
+                          }
+                        },
+                      ),
+                    );
+                  }
                   res.end(
                     JSON.stringify({
                       message: "Project created successfully",
@@ -231,6 +262,33 @@ export async function projectsRoute(req, res) {
                         res.writeHead(200, {
                           "Content-Type": "application/json",
                         });
+                        const newActivity = await createActivity(
+                          "update",
+                          req.user.user_id,
+                          "project",
+                          projectId,
+                        );
+                        if (!newActivity.error) {
+                          const activityId = newActivity?.rows[0].activity_id;
+                          await Promise.all(
+                            Object.entries(updates).map(async (field) => {
+                              if (
+                                field[0] !== "updated_by" &&
+                                field[0] !== "created_by"
+                              ) {
+                                const newAudit = await createAudit(
+                                  "update",
+                                  activityId,
+                                  req.user.user_id,
+                                  "project",
+                                  projectId,
+                                  field[0],
+                                  field[1],
+                                );
+                              }
+                            }),
+                          );
+                        }
                         res.end(
                           JSON.stringify({
                             message: "Project updated successfully",

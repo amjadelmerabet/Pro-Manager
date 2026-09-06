@@ -395,3 +395,78 @@
 .task-page.dark .task .task-info .project .project-link {
   color: rgb(225, 225, 225);
 }
+
+.task-page .activity-log-title {
+  text-align: center;
+  margin-block: 24px;
+}
+
+.task-page .user-activities {
+  display: grid;
+  gap: 16px;
+}
+
+.task-page .user-activities > div {
+  position: relative;
+  font-size: 14px;
+  width: 60%;
+  padding: 24px 8px;
+  margin-inline: auto;
+  border-radius: 4px;
+  border: 1px solid var(--secondary-color);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, .05);
+}
+
+.task-page .user-activities > div > .activity-header {
+  position: absolute;
+  content: "";
+  top: 4px;
+  right: 8px;
+  font-size: 12px;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  width: 30%;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.task-page .user-activities > div > .activity-header > .activity-user {
+  grid-column: 4 / 5;
+}
+
+.task-page .user-activities > div > .activity-header > .dot {
+  width: 4px;
+  aspect-ratio: 1 / 1;
+  background-color: var(--primary-color);
+  border-radius: 2px;
+  margin-inline: auto
+}
+
+.task-page .user-activities > div > .activity-header > .activity-time {
+  grid-column: 6 / -1;
+}
+
+.task-page .user-activities > div > .updates > .update {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.task-page .user-activities > div > .updates > .update > .field {
+  font-weight: 500;
+}
+
+.task-page .user-activities > div > .updates > .update > .changes {
+  grid-column: 2 / -1;
+  /* color: rgba(0, 0, 0, .65); */
+}
+
+.task-page .user-activities > div > .updates > .update span {
+  color: rgba(0, 0, 0, .65);
+  /* color: black; */
+}
+
+.task-page .user-activities > div > .updates > .update > .insert {
+  grid-column: 2 / -1;
+  color: rgba(0, 0, 0, .65);
+}

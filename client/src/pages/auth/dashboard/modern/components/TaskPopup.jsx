@@ -5,8 +5,12 @@ export default function TaskPopup({
   taskStates,
   popupTask,
   userId,
+  taskUpdates,
   updateTaskState,
+  updateTaskShortDescription,
+  updateTaskDescription,
   userProjects,
+  saveUpdates,
   deleteTaskFn,
   closeTaskPopup,
 }) {
@@ -42,8 +46,8 @@ export default function TaskPopup({
             type="text"
             name="short-description"
             className="short-description poppins-regular"
-            value={popupTask.short_description}
-            onChange={() => console.log("Test")}
+            value={taskUpdates.short_description}
+            onChange={(e) => updateTaskShortDescription(e.target.value)}
           />
         </div>
         <div className="description-section">
@@ -56,8 +60,8 @@ export default function TaskPopup({
           <textarea
             name="description"
             className="description poppins-regular"
-            value={popupTask.description}
-            onChange={() => console.log("Test")}
+            value={taskUpdates.description}
+            onChange={(e) => updateTaskDescription(e.target.value)}
           />
         </div>
       </div>
@@ -115,7 +119,12 @@ export default function TaskPopup({
           >
             Delete
           </button>
-          <button className="action save poppins-regular">Save</button>
+          <button
+            className="action save poppins-regular"
+            onClick={() => saveUpdates()}
+          >
+            Save
+          </button>
         </div>
       </div>
       <button

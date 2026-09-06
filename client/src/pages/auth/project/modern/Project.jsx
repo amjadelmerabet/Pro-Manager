@@ -11,6 +11,7 @@ import deleteProjectUtil from "./utils/deleteProjectUtil";
 import getAccessTokenUtil from "./utils/getAccessTokenUtil";
 import "./Project.css";
 import fetchProjectTasksUtil from "../utils/fetchProjectTasksUtil";
+import fetchUserActivitiesUtil from "../../utils/fetchUserActivitiesUtil";
 
 const states = {
   1: ["Not started", "not-started"],
@@ -28,6 +29,36 @@ const taskPriorities = {
   1: { label: "High", class: "high" },
   2: { label: "Medium", class: "medium" },
   3: { label: "Low", class: "low" },
+};
+
+const fieldDiplayValues = {
+  name: {
+    display: "Name",
+  },
+  state: {
+    display: "State",
+  },
+  description: {
+    display: "Description",
+  },
+  owner: {
+    display: "Owner",
+  },
+  deadline: {
+    display: "Deadline",
+  },
+};
+
+const ProjectStates = {
+  1: {
+    value: "Not started",
+  },
+  2: {
+    value: "In progress",
+  },
+  3: {
+    value: "Completed",
+  },
 };
 
 const truncateProjectName = (name, maxLength = 30) =>
@@ -49,6 +80,7 @@ export default function ProjectPageModern({
     type: "",
   });
   const [loadProject, setLoadProject] = useState(0);
+  const [projectLoaded, setProjectLoaded] = useState(false);
   const [projectUpdated, setProjectUpdated] = useState({
     counter: 0,
     update: false,
@@ -60,6 +92,9 @@ export default function ProjectPageModern({
   const [draftValue, setDraftValue] = useState("");
   const [projectTasks, setProjectTasks] = useState([]);
   const [fetchProjectTasks, setFetchProjectTasks] = useState(0);
+  const [userActivities, setUserActivities] = useState([]);
+  const [fetchUserActivities, setFetchUserActivities] = useState(false);
+  const [userActivitiesFetched, setUserActivitiesFetched] = useState(false);
 
   const authUser = JSON.parse(sessionStorage.getItem("authUser"));
   const token = authUser?.token;
@@ -103,8 +138,31 @@ export default function ProjectPageModern({
         setNewAccessToken,
         setProject,
         setTokenValidated,
+        setProjectLoaded,
       );
   }, [loadProject]);
+
+  useEffect(() => {
+    if (projectLoaded) {
+      fetchUserActivitiesUtil(
+        "project",
+        projectId,
+        user,
+        sessionId,
+        token,
+        tries,
+        setTries,
+        tokenValidated,
+        setTokenValidated,
+        newAccessToken,
+        setNewAccessToken,
+        setUserActivities,
+        setFetchUserActivities,
+        setUserActivitiesFetched,
+      );
+    }
+  }, [projectLoaded]);
+
   useEffect(() => {
     if (projectUpdated.update)
       updateProjectUtil(
@@ -122,13 +180,31 @@ export default function ProjectPageModern({
         setTokenValidated,
       );
   }, [projectUpdated]);
+
   useEffect(() => {
     if (updatedSuccessfully) {
       setProjectUpdated((current) => ({ ...current, update: false }));
       setUpdatedSuccessfully(false);
       setLoadProject((current) => current + 1);
+      fetchUserActivitiesUtil(
+        "project",
+        projectId,
+        user,
+        sessionId,
+        token,
+        tries,
+        setTries,
+        tokenValidated,
+        setTokenValidated,
+        newAccessToken,
+        setNewAccessToken,
+        setUserActivities,
+        setFetchUserActivities,
+        setUserActivitiesFetched,
+      );
     }
   }, [updatedSuccessfully]);
+
   useEffect(() => {
     if (projectDeleted)
       deleteProjectUtil(
@@ -177,6 +253,7 @@ export default function ProjectPageModern({
         setLoadProject,
         setProjectUpdated,
         setProjectDeleted,
+        setFetchUserActivities,
       );
   }, [newAccessToken]);
 
@@ -430,6 +507,77 @@ export default function ProjectPageModern({
               </tbody>
             </table>
           </article>
+          <h3 className="poppins-semibold activity-log-title">Activity Log</h3>
+          {userActivities.length !== 0 ? (
+            <div className="poppins-regular user-activities">
+              {userActivities.map((activity, index) => {
+                return (
+                  <div key={index}>
+                    <div className="activity-header">
+                      <p className="activity-user">
+                        {activity.created_by === userId ? "Me" : "Other user"}
+                      </p>
+                      <div className="dot"></div>
+                      <p className="activity-time">
+                        {new Date(activity.created_on).toLocaleString()}
+                      </p>
+                    </div>
+                    <div className="updates">
+                      {activity.audits.map((audit, index) => {
+                        return (
+                          <div key={index} className="update">
+                            <div className="field">
+                              {fieldDiplayValues[audit.field].display}
+                            </div>
+                            {audit.type === "update" ? (
+                              <div className="changes">
+                                <span className="new-value">
+                                  {audit.field !== "owner"
+                                    ? audit.field !== "state"
+                                      ? audit.new_value
+                                      : ProjectStates[audit.new_value].value
+                                    : audit.new_value === userId
+                                      ? "Me"
+                                      : ""}
+                                </span>{" "}
+                                was{" "}
+                                <span className="old-value">
+                                  {audit.field !== "owner"
+                                    ? audit.field !== "state"
+                                      ? audit.old_value
+                                      : ProjectStates[audit.old_value].value
+                                    : audit.old_value === userId
+                                      ? "Me"
+                                      : ""}
+                                </span>
+                              </div>
+                            ) : (
+                              <div className="insert">
+                                {audit.field !== "owner"
+                                  ? audit.field !== "state"
+                                    ? audit.new_value
+                                    : ProjectStates[audit.new_value].value
+                                  : audit.new_value === userId
+                                    ? "Me"
+                                    : ""}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div
+              style={{ textAlign: "center", paddingBlock: "8px" }}
+              className="poppins-medium"
+            >
+              Loading user activities ...
+            </div>
+          )}
         </main>
       </div>
     </div>

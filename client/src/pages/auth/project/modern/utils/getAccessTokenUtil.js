@@ -10,6 +10,7 @@ export default async function getAccessTokenUtil(
   setLoadProject,
   setProjectUpdated,
   setProjectDeleted,
+  setFetchUserActivities
 ) {
   try {
     const refreshToken = await cookieStore.get(user);
@@ -33,7 +34,14 @@ export default async function getAccessTokenUtil(
         counter: current.counter + 1,
         update: true,
       }));
-    else if (newAccessToken.type === "delete") setProjectDeleted(true);
+    else if (newAccessToken.type === "delete") {
+      setProjectDeleted(true);
+    } else if (newAccessToken.type === "fetch-project-activities") {
+      setFetchUserActivities(true);
+      setTimeout(() => {
+        setFetchUserActivities(false);
+      }, 250);
+    }
   } catch (error) {
     console.log(error);
   }

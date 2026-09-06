@@ -6,6 +6,8 @@
   width: 100%;
   padding: 24px;
   background: rgb(248, 253, 253);
+  overflow-y: auto;
+  margin-left: 15%;
 }
 .project-page-modern .project-loading {
   display: grid;
@@ -310,4 +312,77 @@
   color: rgb(45, 200, 165);
 }
 
+.project-page-modern .activity-log-title {
+  text-align: center;
+  margin-block: 24px;
+}
 
+.project-page-modern .user-activities {
+  display: grid;
+  gap: 16px;
+}
+
+.project-page-modern .user-activities > div {
+  position: relative;
+  font-size: 14px;
+  width: 60%;
+  background-color: white;
+  padding: 24px 8px;
+  margin-inline: auto;
+  border-radius: 4px;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, .1);
+}
+
+.project-page-modern .user-activities > div > .activity-header {
+  position: absolute;
+  content: "";
+  top: 4px;
+  right: 8px;
+  font-size: 12px;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  width: 30%;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.project-page-modern .user-activities > div > .activity-header > .activity-user {
+  grid-column: 4 / 5;
+}
+
+.project-page-modern .user-activities > div > .activity-header > .dot {
+  width: 4px;
+  aspect-ratio: 1 / 1;
+  background-color: var(--default-light-theme-secondary-color);
+  border-radius: 2px;
+  margin-inline: auto
+}
+
+.project-page-modern .user-activities > div > .activity-header > .activity-time {
+  grid-column: 6 / -1;
+}
+
+.project-page-modern .user-activities > div > .updates > .update {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.project-page-modern .user-activities > div > .updates > .update > .field {
+  font-weight: 500;
+}
+
+.project-page-modern .user-activities > div > .updates > .update > .changes {
+  grid-column: 2 / -1;
+  /* color: rgba(0, 0, 0, .65); */
+}
+
+.project-page-modern .user-activities > div > .updates > .update span {
+  color: rgba(0, 0, 0, .65);
+  /* color: black; */
+}
+
+.project-page-modern .user-activities > div > .updates > .update > .insert {
+  grid-column: 2 / -1;
+  color: rgba(0, 0, 0, .65);
+}

@@ -1,5 +1,5 @@
 // Hooks
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router";
 
 // Icons
@@ -25,11 +25,42 @@ import updateProjectUtil from "./utils/updateProjectUtil";
 import deleteProjectUtil from "./utils/deleteProjectUtil";
 import fetchProjectTasksUtil from "../utils/fetchProjectTasksUtil";
 import createNewProjectTaskUtil from "./utils/createNewProjectTaskUtil";
+import fetchUserTasksWithNoProjectUtil from "./utils/fetchUserTasksWithNoProjectUtil";
+import linkTasksToProjectUtil from "./utils/linkTasksToProjectUtil";
+import fetchUserActivitiesUtil from "../../utils/fetchUserActivitiesUtil";
 
 // Styles
 import "./Project.css";
-import fetchUserTasksWithNoProjectUtil from "./utils/fetchUserTasksWithNoProjectUtil";
-import linkTasksToProjectUtil from "./utils/linkTasksToProjectUtil";
+
+const fieldDiplayValues = {
+  name: {
+    display: "Name",
+  },
+  state: {
+    display: "State",
+  },
+  description: {
+    display: "Description",
+  },
+  owner: {
+    display: "Owner",
+  },
+  deadline: {
+    display: "Deadline",
+  },
+};
+
+const ProjectStates = {
+  1: {
+    value: "Not started",
+  },
+  2: {
+    value: "In progress",
+  },
+  3: {
+    value: "Completed",
+  },
+};
 
 export default function Project({
   user,
@@ -76,6 +107,8 @@ export default function Project({
   const [tasksToLink, setTasksToLink] = useState([]);
   const [linkTasksToProject, setLinkTasksToProject] = useState(false);
   const [tasksLinkedToProject, setTasksLinkedToProject] = useState(0);
+  const [userActivities, setUserActivities] = useState([]);
+  const [fetchUserActivities, setFetchUserActivities] = useState(false);
 
   const location = useLocation();
   const pathname = location.pathname;
@@ -140,6 +173,23 @@ export default function Project({
         setTries,
         newAccessToken,
         setNewAccessToken,
+      );
+    }
+    if (projectFetched) {
+      fetchUserActivitiesUtil(
+        "project",
+        projectId,
+        user,
+        sessionId,
+        token,
+        tries,
+        setTries,
+        tokenValidated,
+        setTokenValidated,
+        newAccessToken,
+        setNewAccessToken,
+        setUserActivities,
+        setFetchUserActivities,
       );
     }
   }, [loadTasks, projectFetched, tasksLinkedToProject]);
@@ -215,6 +265,21 @@ export default function Project({
         setProjectUpdates({});
         setUpdatedsuccessfully(false);
       }, 250);
+      fetchUserActivitiesUtil(
+        "project",
+        projectId,
+        user,
+        sessionId,
+        token,
+        tries,
+        setTries,
+        tokenValidated,
+        setTokenValidated,
+        newAccessToken,
+        setNewAccessToken,
+        setUserActivities,
+        setFetchUserActivities,
+      );
     }
   }, [updatedsuccessfully]);
 
@@ -801,6 +866,79 @@ export default function Project({
                 )}
               </div>
             </div>
+            <h3 className="poppins-semibold activity-log-title">
+              Activity Log
+            </h3>
+            {userActivities.length !== 0 ? (
+              <div className="poppins-regular user-activities">
+                {userActivities.map((activity, index) => {
+                  return (
+                    <div key={index}>
+                      <div className="activity-header">
+                        <p className="activity-user">
+                          {activity.created_by === userId ? "Me" : "Other user"}
+                        </p>
+                        <div className="dot"></div>
+                        <p className="activity-time">
+                          {new Date(activity.created_on).toLocaleString()}
+                        </p>
+                      </div>
+                      <div className="updates">
+                        {activity.audits.map((audit, index) => {
+                          return (
+                            <div key={index} className="update">
+                              <div className="field">
+                                {fieldDiplayValues[audit.field].display}
+                              </div>
+                              {audit.type === "update" ? (
+                                <div className="changes">
+                                  <span className="new-value">
+                                    {audit.field !== "owner"
+                                      ? audit.field !== "state"
+                                        ? audit.new_value
+                                        : ProjectStates[audit.new_value].value
+                                      : audit.new_value === userId
+                                        ? "Me"
+                                        : ""}
+                                  </span>{" "}
+                                  was{" "}
+                                  <span className="old-value">
+                                    {audit.field !== "owner"
+                                      ? audit.field !== "state"
+                                        ? audit.old_value
+                                        : ProjectStates[audit.old_value].value
+                                      : audit.old_value === userId
+                                        ? "Me"
+                                        : ""}
+                                  </span>
+                                </div>
+                              ) : (
+                                <div className="insert">
+                                  {audit.field !== "owner"
+                                    ? audit.field !== "state"
+                                      ? audit.new_value
+                                      : ProjectStates[audit.new_value].value
+                                    : audit.new_value === userId
+                                      ? "Me"
+                                      : ""}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div
+                style={{ textAlign: "center", paddingBlock: "8px" }}
+                className="poppins-medium"
+              >
+                Loading user activities ...
+              </div>
+            )}
             <div className="links poppins-semibold">
               <Link
                 to={

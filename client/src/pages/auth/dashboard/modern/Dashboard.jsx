@@ -434,7 +434,7 @@ export default function DashboardPageModern({
         deleteTask,
         setDeleteTask,
         setCreateNewTask,
-        setCreateNewProject
+        setCreateNewProject,
       );
     }
   }, [newAccessToken]);
@@ -496,24 +496,47 @@ export default function DashboardPageModern({
     });
   };
 
-  const saveUpdates = () => {
+  const saveProjectUpdates = () => {
     let save = false;
+    let updatedFields = {};
     Object.keys(projectUpdates).forEach((key) => {
       if (projectUpdates[key] !== popupProject[key]) {
+        updatedFields[key] = projectUpdates[key];
         save = true;
       }
     });
     if (save) {
+      setProjectUpdates(updatedFields);
       setUpdateProject({ projectId: popupProject.project_id, update: true });
     }
   };
 
   const updateProjectState = (state) => {
-    setProjectUpdates({
-      ...projectUpdates,
-      state: state,
-    });
+    setProjectUpdates({ state: state });
     setUpdateProject({ projectId: popupProject.project_id, update: true });
+  };
+
+  const updateTaskShortDescription = (shortDescription) => {
+    setTaskUpdates({ ...taskUpdates, short_description: shortDescription });
+  };
+
+  const updateTaskDescription = (description) => {
+    setTaskUpdates({ ...taskUpdates, description: description });
+  };
+
+  const saveTaskUpdates = () => {
+    let save = false;
+    let updatedFields = {};
+    Object.keys(taskUpdates).forEach((key) => {
+      if (taskUpdates[key] !== popupTask[key]) {
+        updatedFields[key] = taskUpdates[key];
+        save = true;
+      }
+    });
+    if (save) {
+      setTaskUpdates(updatedFields);
+      setUpdateTask({ taskId: popupTask.task_id, update: true });
+    }
   };
 
   const deleteProjectFn = () => {
@@ -596,10 +619,7 @@ export default function DashboardPageModern({
   };
 
   const updateTaskState = (state) => {
-    setTaskUpdates({
-      ...taskUpdates,
-      state: state,
-    });
+    setTaskUpdates({ state: state });
     setUpdateTask({ taskId: popupTask.task_id, update: true });
   };
 
@@ -708,7 +728,7 @@ export default function DashboardPageModern({
                 taskPriorities={taskPriorities}
                 updateProjectState={updateProjectState}
                 deleteProjectFn={deleteProjectFn}
-                saveUpdates={saveUpdates}
+                saveUpdates={saveProjectUpdates}
                 closeProjectPopup={closeProjectPopup}
               />
             ) : showTaskPopup ? (
@@ -717,8 +737,12 @@ export default function DashboardPageModern({
                 taskStates={taskStates}
                 popupTask={popupTask}
                 userId={userId}
+                taskUpdates={taskUpdates}
                 updateTaskState={updateTaskState}
+                updateTaskShortDescription={updateTaskShortDescription}
+                updateTaskDescription={updateTaskDescription}
                 userProjects={userProjects}
+                saveUpdates={saveTaskUpdates}
                 deleteTaskFn={deleteTaskFn}
                 closeTaskPopup={closeTaskPopup}
               />

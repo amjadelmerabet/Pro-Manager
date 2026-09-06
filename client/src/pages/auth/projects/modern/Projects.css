@@ -1,5 +1,6 @@
 .projects-page-modern .page-container {
   display: flex;
+  min-height: 100vh;
 }
 
 .projects-page-modern main {
@@ -7,6 +8,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  margin-left: 15%;
 }
 
 .projects-page-modern main.popup-open::before {
