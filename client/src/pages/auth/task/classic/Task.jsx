@@ -27,6 +27,55 @@ import fetchUserProjectsUtil from "./utils/fetchUserProjectsUtil";
 // Styles
 import "./Task.css";
 import { TbFolderFilled, TbSquareCheck } from "react-icons/tb";
+import fetchUserActivitiesUtil from "../../utils/fetchUserActivitiesUtil";
+
+const fieldDiplayValues = {
+  name: {
+    display: "Name",
+  },
+  state: {
+    display: "State",
+  },
+  priority: {
+    display: "Priority",
+  },
+  short_description: {
+    display: "Short description",
+  },
+  description: {
+    display: "Description",
+  },
+  assigned_to: {
+    display: "Owner",
+  },
+  project: {
+    display: "Project",
+  },
+};
+
+const TaskStates = {
+  1: {
+    value: "To do",
+  },
+  2: {
+    value: "Doing",
+  },
+  3: {
+    value: "Done",
+  },
+};
+
+const TaskPriorities = {
+  1: {
+    value: "High",
+  },
+  2: {
+    value: "Medium",
+  },
+  3: {
+    value: "Low",
+  },
+};
 
 export default function Task({
   user,
@@ -60,6 +109,8 @@ export default function Task({
   const [userProjects, setUserProjects] = useState([]);
   const [loadProjects, setLoadProjects] = useState(false);
   const [theme, setTheme] = useState("");
+  const [userActivities, setUserActivities] = useState([]);
+  const [fetchUserActivities, setFetchUserActivities] = useState(false);
 
   const location = useLocation();
   const pathname = location.pathname;
@@ -152,6 +203,23 @@ export default function Task({
         setProject,
       );
     }
+    if (taskFetched) {
+      fetchUserActivitiesUtil(
+        "task",
+        taskId,
+        user,
+        sessionId,
+        token,
+        tries,
+        setTries,
+        tokenValidated,
+        setTokenValidated,
+        newAccessToken,
+        setNewAccessToken,
+        setUserActivities,
+        setFetchUserActivities,
+      );
+    }
   }, [taskFetched, loadProject, taskUpdated]);
 
   useEffect(() => {
@@ -181,6 +249,21 @@ export default function Task({
         setTaskUpdates({});
         setUpdatedSuccessfully(false);
       }, 250);
+      fetchUserActivitiesUtil(
+        "task",
+        taskId,
+        user,
+        sessionId,
+        token,
+        tries,
+        setTries,
+        tokenValidated,
+        setTokenValidated,
+        newAccessToken,
+        setNewAccessToken,
+        setUserActivities,
+        setFetchUserActivities,
+      );
     }
   }, [updatedSuccessfully]);
 
@@ -756,6 +839,81 @@ export default function Task({
                 )}
               </div>
             </div>
+            <h3 className="poppins-semibold activity-log-title">
+              Activity Log
+            </h3>
+            {userActivities.length !== 0 ? (
+              <div className="poppins-regular user-activities">
+                {userActivities.map((activity, index) => {
+                  return (
+                    <div key={index}>
+                      <div className="activity-time">
+                        {new Date(activity.created_on).toLocaleString()}
+                      </div>
+                      <div className="updates">
+                        {activity.audits.map((audit, index) => {
+                          return (
+                            <div key={index} className="update">
+                              <div className="field">
+                                {fieldDiplayValues[audit.field].display}
+                              </div>
+                              {audit.type === "update" ? (
+                                <div className="changes">
+                                  <span className="new-value">
+                                    {audit.field !== "assigned_to"
+                                      ? audit.field !== "state"
+                                        ? audit.field !== "priority"
+                                          ? audit.new_value
+                                          : TaskPriorities[audit.new_value]
+                                              .value
+                                        : TaskStates[audit.new_value].value
+                                      : audit.new_value === userId
+                                        ? "Me"
+                                        : ""}
+                                  </span>{" "}
+                                  was{" "}
+                                  <span className="old-value">
+                                    {audit.field !== "assigned_to"
+                                      ? audit.field !== "state"
+                                        ? audit.field !== "priority"
+                                          ? audit.old_value
+                                          : TaskPriorities[audit.old_value]
+                                              .value
+                                        : TaskStates[audit.old_value].value
+                                      : audit.old_value === userId
+                                        ? "Me"
+                                        : ""}
+                                  </span>
+                                </div>
+                              ) : (
+                                <div className="insert">
+                                  {audit.field !== "assigned_to"
+                                    ? audit.field !== "state"
+                                      ? audit.field !== "priority"
+                                        ? audit.new_value
+                                        : TaskPriorities[audit.new_value].value
+                                      : TaskStates[audit.new_value].value
+                                    : audit.new_value === userId
+                                      ? "Me"
+                                      : ""}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div
+                style={{ textAlign: "center", paddingBlock: "8px" }}
+                className="poppins-medium"
+              >
+                Loading user activities ...
+              </div>
+            )}
             <div className="links poppins-semibold">
               <Link
                 to={

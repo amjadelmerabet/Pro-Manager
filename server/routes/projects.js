@@ -165,15 +165,20 @@ export async function projectsRoute(req, res) {
                     await Promise.all(
                       Object.entries({ ...newProjectFields, state: 1 }).map(
                         async (field) => {
-                          const newAudit = await createAudit(
-                            "insert",
-                            activityId,
-                            req.user.user_id,
-                            "project",
-                            projectId,
-                            field[0],
-                            field[1],
-                          );
+                          if (
+                            field[0] !== "updated_by" &&
+                            field[0] !== "created_by"
+                          ) {
+                            const newAudit = await createAudit(
+                              "insert",
+                              activityId,
+                              req.user.user_id,
+                              "project",
+                              projectId,
+                              field[0],
+                              field[1],
+                            );
+                          }
                         },
                       ),
                     );
@@ -267,7 +272,10 @@ export async function projectsRoute(req, res) {
                           const activityId = newActivity?.rows[0].activity_id;
                           await Promise.all(
                             Object.entries(updates).map(async (field) => {
-                              if (field[0] !== "updated_by" && field[0] !== "created_by") {
+                              if (
+                                field[0] !== "updated_by" &&
+                                field[0] !== "created_by"
+                              ) {
                                 const newAudit = await createAudit(
                                   "update",
                                   activityId,
