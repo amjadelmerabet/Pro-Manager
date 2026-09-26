@@ -640,6 +640,11 @@
   margin-inline: auto
 }
 
+.project-page .user-activities > div > .activity-header > .at {
+  color: var(--primary-color);
+  padding-bottom: 2px;
+}
+
 .project-page .user-activities > div > .activity-header > .activity-time {
   grid-column: 6 / -1;
 }

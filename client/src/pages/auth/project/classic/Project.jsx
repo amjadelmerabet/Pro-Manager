@@ -878,7 +878,7 @@ export default function Project({
                         <p className="activity-user">
                           {activity.created_by === userId ? "Me" : "Other user"}
                         </p>
-                        <div className="dot"></div>
+                        <span className="at poppins-semibold">@</span>
                         <p className="activity-time">
                           {new Date(activity.created_on).toLocaleString()}
                         </p>
