@@ -7,7 +7,12 @@ import { IconContext } from "react-icons/lib";
 import { BiReset } from "react-icons/bi";
 import { GrFormClock } from "react-icons/gr";
 import { IoCheckmark, IoClose } from "react-icons/io5";
-import { FaArrowLeft, FaFire, FaRegSnowflake } from "react-icons/fa";
+import {
+  FaArrowLeft,
+  FaFire,
+  FaRegCommentAlt,
+  FaRegSnowflake,
+} from "react-icons/fa";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { TbFolder, TbLink, TbSquareCheck, TbSquarePlus } from "react-icons/tb";
 import { RiAlarmWarningFill } from "react-icons/ri";
@@ -31,6 +36,8 @@ import fetchUserActivitiesUtil from "../../utils/fetchUserActivitiesUtil";
 
 // Styles
 import "./Project.css";
+import postNewCommentUtil from "../../projects/classic/utils/postNewCommentUtil";
+import fetchUserCommentsUtil from "../../utils/fetchUserCommentsUtil";
 
 const fieldDiplayValues = {
   name: {
@@ -109,6 +116,14 @@ export default function Project({
   const [tasksLinkedToProject, setTasksLinkedToProject] = useState(0);
   const [userActivities, setUserActivities] = useState([]);
   const [fetchUserActivities, setFetchUserActivities] = useState(false);
+  const [userActivitiesFetched, setUserActivitiesFetched] = useState(false);
+  const [comment, setComment] = useState({ comment: "" });
+  const [postComment, setPostComment] = useState(false);
+  const [newCommentPosted, setNewCommentPosted] = useState(false);
+  const [userComments, setUserComments] = useState([]);
+  const [fetchUserComments, setFetchUserComments] = useState(false);
+  const [userCommentsFetched, setUserCommentsFetched] = useState(false);
+  const [activitiesAndComments, setActivitiesAndComments] = useState([]);
 
   const location = useLocation();
   const pathname = location.pathname;
@@ -176,6 +191,21 @@ export default function Project({
       );
     }
     if (projectFetched) {
+      fetchUserCommentsUtil(
+        "project",
+        projectId,
+        user,
+        sessionId,
+        token,
+        tries,
+        setTries,
+        tokenValidated,
+        setTokenValidated,
+        newAccessToken,
+        setNewAccessToken,
+        setUserComments,
+        setUserCommentsFetched,
+      );
       fetchUserActivitiesUtil(
         "project",
         projectId,
@@ -190,6 +220,7 @@ export default function Project({
         setNewAccessToken,
         setUserActivities,
         setFetchUserActivities,
+        setUserActivitiesFetched,
       );
     }
   }, [loadTasks, projectFetched, tasksLinkedToProject]);
@@ -265,6 +296,21 @@ export default function Project({
         setProjectUpdates({});
         setUpdatedsuccessfully(false);
       }, 250);
+      fetchUserCommentsUtil(
+        "project",
+        projectId,
+        user,
+        sessionId,
+        token,
+        tries,
+        setTries,
+        tokenValidated,
+        setTokenValidated,
+        newAccessToken,
+        setNewAccessToken,
+        setUserComments,
+        setUserCommentsFetched,
+      );
       fetchUserActivitiesUtil(
         "project",
         projectId,
@@ -279,6 +325,7 @@ export default function Project({
         setNewAccessToken,
         setUserActivities,
         setFetchUserActivities,
+        setUserActivitiesFetched,
       );
     }
   }, [updatedsuccessfully]);
@@ -345,6 +392,69 @@ export default function Project({
       );
     }
   }, [linkTasksToProject]);
+
+  useEffect(() => {
+    if (postComment) {
+      postNewCommentUtil(
+        comment,
+        user,
+        sessionId,
+        token,
+        tries,
+        setTries,
+        tokenValidated,
+        setTokenValidated,
+        newAccessToken,
+        setNewAccessToken,
+        setPostComment,
+        setNewCommentPosted,
+      );
+    }
+  }, [postComment]);
+
+  useEffect(() => {
+    if (newCommentPosted) {
+      setComment({ comment: "" });
+      setTimeout(() => {
+        setNewCommentPosted(false);
+      }, 250);
+      setFetchUserComments(true);
+      setTimeout(() => {
+        setFetchUserComments(false);
+      }, 250);
+    }
+  }, [newCommentPosted]);
+
+  useEffect(() => {
+    if (fetchUserComments) {
+      fetchUserCommentsUtil(
+        "project",
+        projectId,
+        user,
+        sessionId,
+        token,
+        tries,
+        setTries,
+        tokenValidated,
+        setTokenValidated,
+        newAccessToken,
+        setNewAccessToken,
+        setUserComments,
+        setUserCommentsFetched,
+      );
+    }
+  }, [fetchUserComments]);
+
+  useEffect(() => {
+    if (userActivitiesFetched || userCommentsFetched) {
+      let tempArr = [...userActivities, ...userComments];
+      tempArr.sort(
+        (a, b) =>
+          new Date(b.created_on).getTime() - new Date(a.created_on).getTime(),
+      );
+      setActivitiesAndComments(tempArr);
+    }
+  }, [userActivitiesFetched, userCommentsFetched]);
 
   useEffect(() => {
     if (tasksLinkedToProject > 0) {
@@ -446,6 +556,19 @@ export default function Project({
 
   const linkTasks = () => {
     setLinkTasksToProject(true);
+  };
+
+  const postCommentFn = () => {
+    setComment((comment) => {
+      return {
+        ...comment,
+        record: "project",
+        recordId: projectId,
+        type: "0",
+        owner: userId,
+      };
+    });
+    setPostComment(true);
   };
 
   return (
@@ -866,14 +989,40 @@ export default function Project({
                 )}
               </div>
             </div>
+            <div className="user-comments-section">
+              <div className="user-comments">
+                <textarea
+                  name="comment-input"
+                  className="comment-input poppins-regular"
+                  cols="140"
+                  rows="4"
+                  placeholder="Add your comment here ..."
+                  value={comment.comment}
+                  onChange={(e) =>
+                    setComment({ ...comment, comment: e.target.value })
+                  }
+                ></textarea>
+                <div className="actions">
+                  <button
+                    className="post-comment poppins-semibold"
+                    onClick={() => postCommentFn()}
+                  >
+                    Post
+                  </button>
+                </div>
+              </div>
+            </div>
             <h3 className="poppins-semibold activity-log-title">
               Activity Log
             </h3>
-            {userActivities.length !== 0 ? (
+            {activitiesAndComments.length !== 0 ? (
               <div className="poppins-regular user-activities">
-                {userActivities.map((activity, index) => {
+                {activitiesAndComments.map((activity, index) => {
                   return (
-                    <div key={index}>
+                    <div
+                      key={index}
+                      className={activity.activity_id ? "activity" : "comment"}
+                    >
                       <div className="activity-header">
                         <p className="activity-user">
                           {activity.created_by === userId ? "Me" : "Other user"}
@@ -883,16 +1032,38 @@ export default function Project({
                           {new Date(activity.created_on).toLocaleString()}
                         </p>
                       </div>
-                      <div className="updates">
-                        {activity.audits.map((audit, index) => {
-                          return (
-                            <div key={index} className="update">
-                              <div className="field">
-                                {fieldDiplayValues[audit.field].display}
-                              </div>
-                              {audit.type === "update" ? (
-                                <div className="changes">
-                                  <span className="new-value">
+                      {activity.activity_id ? (
+                        <div className="updates">
+                          {activity.audits.map((audit, index) => {
+                            return (
+                              <div key={index} className="update">
+                                <div className="field">
+                                  {fieldDiplayValues[audit.field].display}
+                                </div>
+                                {audit.type === "update" ? (
+                                  <div className="changes">
+                                    <span className="new-value">
+                                      {audit.field !== "owner"
+                                        ? audit.field !== "state"
+                                          ? audit.new_value
+                                          : ProjectStates[audit.new_value].value
+                                        : audit.new_value === userId
+                                          ? "Me"
+                                          : ""}
+                                    </span>{" "}
+                                    was{" "}
+                                    <span className="old-value">
+                                      {audit.field !== "owner"
+                                        ? audit.field !== "state"
+                                          ? audit.old_value
+                                          : ProjectStates[audit.old_value].value
+                                        : audit.old_value === userId
+                                          ? "Me"
+                                          : ""}
+                                    </span>
+                                  </div>
+                                ) : (
+                                  <div className="insert">
                                     {audit.field !== "owner"
                                       ? audit.field !== "state"
                                         ? audit.new_value
@@ -900,33 +1071,22 @@ export default function Project({
                                       : audit.new_value === userId
                                         ? "Me"
                                         : ""}
-                                  </span>{" "}
-                                  was{" "}
-                                  <span className="old-value">
-                                    {audit.field !== "owner"
-                                      ? audit.field !== "state"
-                                        ? audit.old_value
-                                        : ProjectStates[audit.old_value].value
-                                      : audit.old_value === userId
-                                        ? "Me"
-                                        : ""}
-                                  </span>
-                                </div>
-                              ) : (
-                                <div className="insert">
-                                  {audit.field !== "owner"
-                                    ? audit.field !== "state"
-                                      ? audit.new_value
-                                      : ProjectStates[audit.new_value].value
-                                    : audit.new_value === userId
-                                      ? "Me"
-                                      : ""}
-                                </div>
-                              )}
-                            </div>
-                          );
-                        })}
-                      </div>
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <div className="comment-content">
+                          <IconContext.Provider
+                            value={{ color: "var(--primary-color)" }}
+                          >
+                            <FaRegCommentAlt />
+                          </IconContext.Provider>
+                          {activity.value}
+                        </div>
+                      )}
                     </div>
                   );
                 })}

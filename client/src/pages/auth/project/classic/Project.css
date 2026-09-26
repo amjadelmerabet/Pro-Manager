@@ -593,6 +593,45 @@
   cursor: pointer;
 }
 
+.project-page .user-comments-section {
+  display: flex;
+  justify-content: center;
+}
+
+.project-page .user-comments-section .user-comments {
+  display: grid;
+  gap: 8px;
+}
+
+.project-page .user-comments-section .user-comments > .comment-input {
+  padding: 5px 8px;
+  border: 1px solid black;
+  border-radius: 6px;
+}
+
+.project-page .user-comments-section .actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.project-page .user-comments-section .actions .post-comment {
+  padding: 4px 20px;
+  background-color: var(--primary-color);
+  border: none;
+  border-radius: 4px;
+  color: white;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  transition:
+    background 250ms ease-in-out,
+    transform 250ms ease-in-out;
+}
+
+.project-page .user-comments-section .actions .post-comment:hover {
+  transform: scale(0.98);
+  background-color: var(--primary-color-hover)
+}
+
 .project-page .activity-log-title {
   text-align: center;
   margin-block: 24px;
@@ -610,8 +649,21 @@
   padding: 24px 8px;
   margin-inline: auto;
   border-radius: 4px;
-  border: 1px solid var(--secondary-color);
   box-shadow: 2px 2px 4px rgba(0, 0, 0, .05);
+}
+
+.project-page .user-activities > .activity {
+  border: 1px solid var(--secondary-color);
+}
+
+.project-page .user-activities > .comment {
+  background-color: rgba(245, 200, 45, .5);
+}
+
+.project-page .user-activities > .comment > .comment-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .project-page .user-activities > div > .activity-header {

@@ -18,7 +18,8 @@ function nextAction(
   newTaskToCreate,
   setNewTaskToCreate,
   setFetchUserTasksWithNoProject,
-  setFetchUserActivities
+  setFetchUserActivities,
+  setPostComment
 ) {
   if (newAccessToken.type === "load") {
     setLoadProject(loadProject + 1);
@@ -49,6 +50,8 @@ function nextAction(
     setTimeout(() => {
       setFetchUserActivities(false);
     }, 250);
+  } else if (newAccessToken.type === "post-user-comment") {
+    setPostComment(true);
   }
 }
 
@@ -68,7 +71,8 @@ export default async function getAccessTokenUtil(
   newTaskToCreate,
   setNewTaskToCreate,
   setFetchUserTasksWithNoProject,
-  setFetchUserActivities
+  setFetchUserActivities,
+  setPostComment
 ) {
   try {
     const refreshToken = await cookieStore.get(user);
@@ -93,7 +97,8 @@ export default async function getAccessTokenUtil(
           newTaskToCreate,
           setNewTaskToCreate,
           setFetchUserTasksWithNoProject,
-          setFetchUserActivities
+          setFetchUserActivities,
+          setPostComment
         );
         setTimeout(() => {
           setTokenValidated(false);

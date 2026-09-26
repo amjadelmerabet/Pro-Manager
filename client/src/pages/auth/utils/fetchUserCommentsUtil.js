@@ -1,5 +1,5 @@
-import getUserCommentsAPI from "../../../../../api/comments/getUserCommentsAPI";
-import checkAccessTokenAPI from "../../../../../api/tokens/checkAccessTokenAPI";
+import getUserCommentsAPI from "../../../api/comments/getUserCommentsAPI";
+import checkAccessTokenAPI from "../../../api/tokens/checkAccessTokenAPI";
 
 function tryAgain(tries, setTries, newAccessToken, setNewAccessToken) {
   setTries(tries + 1);

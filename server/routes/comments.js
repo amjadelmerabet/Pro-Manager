@@ -202,7 +202,7 @@ export async function commentsRoute(req, res) {
                 if (createAllRecords) {
                   allowedToCreate = true;
                 } else {
-                  if (assigned_to === req.user.user_id) {
+                  if (owner === req.user.user_id) {
                     allowedToCreate = true;
                   }
                 }

@@ -172,6 +172,7 @@ export async function projectsRoute(req, res) {
                             const newAudit = await createAudit(
                               "insert",
                               activityId,
+                              "",
                               req.user.user_id,
                               "project",
                               projectId,
@@ -279,6 +280,7 @@ export async function projectsRoute(req, res) {
                                 const newAudit = await createAudit(
                                   "update",
                                   activityId,
+                                  "",
                                   req.user.user_id,
                                   "project",
                                   projectId,

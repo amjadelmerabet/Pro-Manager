@@ -10,6 +10,7 @@ import { IoCheckmark, IoClose } from "react-icons/io5";
 import {
   FaArrowLeft,
   FaFire,
+  FaRegCommentAlt,
   FaRegComments,
   FaRegSnowflake,
 } from "react-icons/fa";
@@ -35,7 +36,7 @@ import fetchUserActivitiesUtil from "../../utils/fetchUserActivitiesUtil";
 import "./Task.css";
 import fetchTaskProjectsHistoryUtil from "./utils/fetchTaskProjectsHistory";
 import postNewCommentUtil from "./utils/postNewCommentUtil";
-import fetchUserCommentsUtil from "./utils/fetchUserCommentsUtil";
+import fetchUserCommentsUtil from "../../utils/fetchUserCommentsUtil";
 
 const fieldDiplayValues = {
   name: {
@@ -128,7 +129,7 @@ export default function Task({
   const [userComments, setUserComments] = useState([]);
   const [fetchUserComments, setFetchUserComments] = useState(false);
   const [userCommentsFetched, setUserCommentsFetched] = useState(false);
-  const [activitesAndComments, setActivitiesAndComments] = useState([]);
+  const [activitiesAndComments, setActivitiesAndComments] = useState([]);
 
   const location = useLocation();
   const pathname = location.pathname;
@@ -1049,15 +1050,13 @@ export default function Task({
             <h3 className="poppins-semibold activity-log-title">
               Activity Log
             </h3>
-            {activitesAndComments.length !== 0 ? (
+            {activitiesAndComments.length !== 0 ? (
               <div className="poppins-regular user-activities">
-                {activitesAndComments.map((activity, index) => {
+                {activitiesAndComments.map((activity, index) => {
                   return (
                     <div
                       key={index}
-                      className={
-                        activity.activity_id ? "activity" : "comment"
-                      }
+                      className={activity.activity_id ? "activity" : "comment"}
                     >
                       <div className={"activity-header"}>
                         <p className="activity-user">
@@ -1144,7 +1143,14 @@ export default function Task({
                           })}
                         </div>
                       ) : (
-                        <div className="comment-content">{activity.value}</div>
+                        <div className="comment-content">
+                          <IconContext.Provider
+                            value={{ color: "var(--primary-color)" }}
+                          >
+                            <FaRegCommentAlt />
+                          </IconContext.Provider>
+                          {activity.value}
+                        </div>
                       )}
                     </div>
                   );
