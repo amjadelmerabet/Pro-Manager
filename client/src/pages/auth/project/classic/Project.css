@@ -605,7 +605,7 @@
 
 .project-page .user-comments-section .user-comments > .comment-input {
   padding: 5px 8px;
-  border: 1px solid black;
+  border: 1px solid var(--primary-color);
   border-radius: 6px;
 }
 

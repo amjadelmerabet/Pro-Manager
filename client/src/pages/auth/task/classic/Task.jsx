@@ -35,7 +35,7 @@ import fetchUserActivitiesUtil from "../../utils/fetchUserActivitiesUtil";
 // Styles
 import "./Task.css";
 import fetchTaskProjectsHistoryUtil from "./utils/fetchTaskProjectsHistory";
-import postNewCommentUtil from "./utils/postNewCommentUtil";
+import postNewCommentUtil from "../utils/postNewCommentUtil";
 import fetchUserCommentsUtil from "../../utils/fetchUserCommentsUtil";
 
 const fieldDiplayValues = {
