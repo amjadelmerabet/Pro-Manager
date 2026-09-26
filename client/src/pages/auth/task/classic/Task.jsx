@@ -7,7 +7,13 @@ import { IconContext } from "react-icons/lib";
 import { GrFormClock } from "react-icons/gr";
 import { BiReset } from "react-icons/bi";
 import { IoCheckmark, IoClose } from "react-icons/io5";
-import { FaArrowLeft, FaFire, FaRegSnowflake } from "react-icons/fa";
+import {
+  FaArrowLeft,
+  FaFire,
+  FaRegCommentAlt,
+  FaRegComments,
+  FaRegSnowflake,
+} from "react-icons/fa";
 import { RiAlarmWarningFill } from "react-icons/ri";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { TbFolderFilled, TbSquareCheck } from "react-icons/tb";
@@ -29,6 +35,8 @@ import fetchUserActivitiesUtil from "../../utils/fetchUserActivitiesUtil";
 // Styles
 import "./Task.css";
 import fetchTaskProjectsHistoryUtil from "./utils/fetchTaskProjectsHistory";
+import postNewCommentUtil from "../utils/postNewCommentUtil";
+import fetchUserCommentsUtil from "../../utils/fetchUserCommentsUtil";
 
 const fieldDiplayValues = {
   name: {
@@ -115,6 +123,13 @@ export default function Task({
   const [userActivitiesFetched, setUserActivitiesFetched] = useState(false);
   const [projectsHistory, setProjectsHistory] = useState({});
   const [fetchProjectsHistory, setFetchProjectsHistory] = useState(false);
+  const [comment, setComment] = useState({ comment: "" });
+  const [postComment, setPostComment] = useState(false);
+  const [newCommentPosted, setNewCommentPosted] = useState(false);
+  const [userComments, setUserComments] = useState([]);
+  const [fetchUserComments, setFetchUserComments] = useState(false);
+  const [userCommentsFetched, setUserCommentsFetched] = useState(false);
+  const [activitiesAndComments, setActivitiesAndComments] = useState([]);
 
   const location = useLocation();
   const pathname = location.pathname;
@@ -208,6 +223,21 @@ export default function Task({
       );
     }
     if (taskFetched) {
+      fetchUserCommentsUtil(
+        "task",
+        taskId,
+        user,
+        sessionId,
+        token,
+        tries,
+        setTries,
+        tokenValidated,
+        setTokenValidated,
+        newAccessToken,
+        setNewAccessToken,
+        setUserComments,
+        setUserCommentsFetched,
+      );
       fetchUserActivitiesUtil(
         "task",
         taskId,
@@ -254,6 +284,21 @@ export default function Task({
         setTaskUpdates({});
         setUpdatedSuccessfully(false);
       }, 250);
+      fetchUserCommentsUtil(
+        "task",
+        taskId,
+        user,
+        sessionId,
+        token,
+        tries,
+        setTries,
+        tokenValidated,
+        setTokenValidated,
+        newAccessToken,
+        setNewAccessToken,
+        setUserComments,
+        setUserCommentsFetched,
+      );
       fetchUserActivitiesUtil(
         "task",
         taskId,
@@ -337,6 +382,69 @@ export default function Task({
   }, [taskDeleted]);
 
   useEffect(() => {
+    if (postComment) {
+      postNewCommentUtil(
+        comment,
+        user,
+        sessionId,
+        token,
+        tries,
+        setTries,
+        tokenValidated,
+        setTokenValidated,
+        newAccessToken,
+        setNewAccessToken,
+        setPostComment,
+        setNewCommentPosted,
+      );
+    }
+  }, [postComment]);
+
+  useEffect(() => {
+    if (newCommentPosted) {
+      setComment({ comment: "" });
+      setTimeout(() => {
+        setNewCommentPosted(false);
+      }, 250);
+      setFetchUserComments(true);
+      setTimeout(() => {
+        setFetchUserComments(false);
+      }, 250);
+    }
+  }, [newCommentPosted]);
+
+  useEffect(() => {
+    if (fetchUserComments) {
+      fetchUserCommentsUtil(
+        "task",
+        taskId,
+        user,
+        sessionId,
+        token,
+        tries,
+        setTries,
+        tokenValidated,
+        setTokenValidated,
+        newAccessToken,
+        setNewAccessToken,
+        setUserComments,
+        setUserCommentsFetched,
+      );
+    }
+  }, [fetchUserComments]);
+
+  useEffect(() => {
+    if (userActivitiesFetched || userCommentsFetched) {
+      let tempArr = [...userActivities, ...userComments];
+      tempArr.sort(
+        (a, b) =>
+          new Date(b.created_on).getTime() - new Date(a.created_on).getTime(),
+      );
+      setActivitiesAndComments(tempArr);
+    }
+  }, [userActivitiesFetched, userCommentsFetched]);
+
+  useEffect(() => {
     if (newAccessToken.counter > 0) {
       // getAccessTokenAPI();
       getAccessTokenUtil(
@@ -353,6 +461,10 @@ export default function Task({
         setTaskDeleted,
         setLoadProject,
         setFetchProjectsHistory,
+        setFetchUserActivities,
+        setFetchProjectsHistory,
+        setPostComment,
+        setFetchUserComments,
       );
     }
   }, [newAccessToken]);
@@ -450,6 +562,19 @@ export default function Task({
     setEditingProject(false);
   };
 
+  const postCommentFn = () => {
+    setComment((comment) => {
+      return {
+        ...comment,
+        record: "task",
+        recordId: taskId,
+        type: "0",
+        assigned_to: userId,
+      };
+    });
+    setPostComment(true);
+  };
+
   let updated = new Date(taskObject.updated_on);
   let updatedStatus = updatedMessageUtil(updated);
 
@@ -478,6 +603,18 @@ export default function Task({
           </div>
         ) : (
           <div className="task">
+            {/* <button className="show-hide-comments poppins-regular">
+              <IconContext.Provider
+                value={{
+                  style: {
+                    color: "var(--primary-color)",
+                    fontSize: "20px",
+                  },
+                }}
+              >
+                <FaRegComments />
+              </IconContext.Provider>
+            </button> */}
             <div className="task-header">
               <div className="left">
                 <h5 className="task-icon poppins-semibold">
@@ -887,96 +1024,134 @@ export default function Task({
                 )}
               </div>
             </div>
+            <div className="user-comments-section">
+              <div className="user-comments">
+                <textarea
+                  name="comment-input"
+                  className="comment-input poppins-regular"
+                  cols="140"
+                  rows="4"
+                  placeholder="Add your comment here ..."
+                  value={comment.comment}
+                  onChange={(e) =>
+                    setComment({ ...comment, comment: e.target.value })
+                  }
+                ></textarea>
+                <div className="actions">
+                  <button
+                    className="post-comment poppins-semibold"
+                    onClick={() => postCommentFn()}
+                  >
+                    Post
+                  </button>
+                </div>
+              </div>
+            </div>
             <h3 className="poppins-semibold activity-log-title">
               Activity Log
             </h3>
-            {userActivities.length !== 0 ? (
+            {activitiesAndComments.length !== 0 ? (
               <div className="poppins-regular user-activities">
-                {userActivities.map((activity, index) => {
+                {activitiesAndComments.map((activity, index) => {
                   return (
-                    <div key={index}>
-                      <div className="activity-header">
+                    <div
+                      key={index}
+                      className={activity.activity_id ? "activity" : "comment"}
+                    >
+                      <div className={"activity-header"}>
                         <p className="activity-user">
-                          {activity.created_by === userId
-                            ? "Me"
-                            : "Other user"}
+                          {activity.created_by === userId ? "Me" : "Other user"}
                         </p>
-                        <div className="dot"></div>
+                        <span className="at poppins-semibold">@</span>
                         <p className="activity-time">
                           {new Date(activity.created_on).toLocaleString()}
                         </p>
                       </div>
-                      <div className="updates">
-                        {activity.audits.map((audit, index) => {
-                          return (
-                            <div key={index} className="update">
-                              <div className="field">
-                                {fieldDiplayValues[audit.field].display}
-                              </div>
-                              {audit.type === "update" ? (
-                                <div className="changes">
-                                  <span className="new-value">
+                      {activity.activity_id ? (
+                        <div className="updates">
+                          {activity.audits.map((audit, index) => {
+                            return (
+                              <div key={index} className="update">
+                                <div className="field">
+                                  {fieldDiplayValues[audit.field].display}
+                                </div>
+                                {audit.type === "update" ? (
+                                  <div className="changes">
+                                    <span className="new-value">
+                                      {audit.field !== "assigned_to"
+                                        ? audit.field !== "state"
+                                          ? audit.field !== "priority"
+                                            ? audit.field !== "project"
+                                              ? audit.new_value === null ||
+                                                audit.new_value === ""
+                                                ? "Empty"
+                                                : audit.new_value
+                                              : audit.new_value !== null
+                                                ? project.name
+                                                : "Empty"
+                                            : TaskPriorities[audit.new_value]
+                                                .value
+                                          : TaskStates[audit.new_value].value
+                                        : audit.new_value === userId
+                                          ? "Me"
+                                          : "Other user"}
+                                    </span>{" "}
+                                    was{" "}
+                                    <span className="old-value">
+                                      {audit.field !== "assigned_to"
+                                        ? audit.field !== "state"
+                                          ? audit.field !== "priority"
+                                            ? audit.field !== "project"
+                                              ? audit.old_value === null ||
+                                                audit.old_value === ""
+                                                ? "Empty"
+                                                : audit.old_value
+                                              : audit.old_value !== null
+                                                ? projectsHistory[
+                                                    audit.old_value
+                                                  ]
+                                                : "Empty"
+                                            : TaskPriorities[audit.old_value]
+                                                .value
+                                          : TaskStates[audit.old_value].value
+                                        : audit.old_value === userId
+                                          ? "Me"
+                                          : "Other user"}
+                                    </span>
+                                  </div>
+                                ) : (
+                                  <div className="insert">
                                     {audit.field !== "assigned_to"
                                       ? audit.field !== "state"
                                         ? audit.field !== "priority"
                                           ? audit.field !== "project"
-                                            ? audit.new_value === null ||
-                                              audit.new_value === ""
-                                              ? "Empty"
-                                              : audit.new_value
-                                            : audit.new_value !== null
+                                            ? audit.new_value
+                                            : project.project_id ===
+                                                audit.new_value
                                               ? project.name
-                                              : "Empty"
+                                              : projectsHistory[audit.new_value]
                                           : TaskPriorities[audit.new_value]
                                               .value
                                         : TaskStates[audit.new_value].value
                                       : audit.new_value === userId
                                         ? "Me"
                                         : "Other user"}
-                                  </span>{" "}
-                                  was{" "}
-                                  <span className="old-value">
-                                    {audit.field !== "assigned_to"
-                                      ? audit.field !== "state"
-                                        ? audit.field !== "priority"
-                                          ? audit.field !== "project"
-                                            ? audit.old_value === null ||
-                                              audit.old_value === ""
-                                              ? "Empty"
-                                              : audit.old_value
-                                            : audit.old_value !== null
-                                              ? projectsHistory[audit.old_value]
-                                              : "Empty"
-                                          : TaskPriorities[audit.old_value]
-                                              .value
-                                        : TaskStates[audit.old_value].value
-                                      : audit.old_value === userId
-                                        ? "Me"
-                                        : "Other user"}
-                                  </span>
-                                </div>
-                              ) : (
-                                <div className="insert">
-                                  {audit.field !== "assigned_to"
-                                    ? audit.field !== "state"
-                                      ? audit.field !== "priority"
-                                        ? audit.field !== "project"
-                                          ? audit.new_value
-                                          : project.project_id ===
-                                              audit.new_value
-                                            ? project.name
-                                            : projectsHistory[audit.new_value]
-                                        : TaskPriorities[audit.new_value].value
-                                      : TaskStates[audit.new_value].value
-                                    : audit.new_value === userId
-                                      ? "Me"
-                                      : "Other user"}
-                                </div>
-                              )}
-                            </div>
-                          );
-                        })}
-                      </div>
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <div className="comment-content">
+                          <IconContext.Provider
+                            value={{ color: "var(--primary-color)" }}
+                          >
+                            <FaRegCommentAlt />
+                          </IconContext.Provider>
+                          {activity.value}
+                        </div>
+                      )}
                     </div>
                   );
                 })}
@@ -986,7 +1161,7 @@ export default function Task({
                 style={{ textAlign: "center", paddingBlock: "8px" }}
                 className="poppins-medium"
               >
-                Loading user activities ...
+                Loading user activities & comments ...
               </div>
             )}
             <div className="links poppins-semibold">

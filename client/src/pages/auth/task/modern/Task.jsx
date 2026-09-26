@@ -5,7 +5,7 @@ import { GrFormClock } from "react-icons/gr";
 import { IoArrowBack, IoCheckmark, IoTrashOutline } from "react-icons/io5";
 import { MdOutlineEdit, MdOutlineFolder } from "react-icons/md";
 import { RiAlarmWarningFill } from "react-icons/ri";
-import { FaFire, FaRegSnowflake } from "react-icons/fa";
+import { FaFire, FaRegCommentAlt, FaRegSnowflake } from "react-icons/fa";
 import SideMenu from "../../dashboard/modern/components/SideMenu";
 import fetchUserTaskUtil from "./utils/fetchUserTaskUtil";
 import fetchLinkedProjectUtil from "./utils/fetchLinkedProjectUtil";
@@ -15,6 +15,9 @@ import deleteTaskUtil from "./utils/deleteTaskUtil";
 import fetchUserActivitiesUtil from "../../utils/fetchUserActivitiesUtil";
 import "./Task.css";
 import fetchTaskProjectsHistoryUtil from "../classic/utils/fetchTaskProjectsHistory";
+import postNewCommentUtil from "../utils/postNewCommentUtil";
+import fetchUserCommentsUtil from "../../utils/fetchUserCommentsUtil";
+import { IconContext } from "react-icons/lib";
 
 const states = {
   1: ["To do", "to-do"],
@@ -104,6 +107,13 @@ export default function TaskPageModern({
   const [userActivitiesFetched, setUserActivitiesFetched] = useState(false);
   const [projectsHistory, setProjectsHistory] = useState({});
   const [fetchProjectsHistory, setFetchProjectsHistory] = useState(false);
+  const [comment, setComment] = useState({ comment: "" });
+  const [postComment, setPostComment] = useState(false);
+  const [newCommentPosted, setNewCommentPosted] = useState(false);
+  const [userComments, setUserComments] = useState([]);
+  const [fetchUserComments, setFetchUserComments] = useState(false);
+  const [userCommentsFetched, setUserCommentsFetched] = useState(false);
+  const [activitiesAndComments, setActivitiesAndComments] = useState([]);
 
   const authUser = JSON.parse(sessionStorage.getItem("authUser"));
   const token = authUser?.token;
@@ -151,6 +161,21 @@ export default function TaskPageModern({
         setProject,
       );
     if (taskFetched) {
+      fetchUserCommentsUtil(
+        "task",
+        taskId,
+        user,
+        sessionId,
+        token,
+        tries,
+        setTries,
+        tokenValidated,
+        setTokenValidated,
+        newAccessToken,
+        setNewAccessToken,
+        setUserComments,
+        setUserCommentsFetched,
+      );
       fetchUserActivitiesUtil(
         "task",
         taskId,
@@ -193,6 +218,21 @@ export default function TaskPageModern({
       setTaskUpdated((current) => ({ ...current, update: false }));
       setUpdatedSuccessfully(false);
       setLoadTask((current) => current + 1);
+      fetchUserCommentsUtil(
+        "task",
+        taskId,
+        user,
+        sessionId,
+        token,
+        tries,
+        setTries,
+        tokenValidated,
+        setTokenValidated,
+        newAccessToken,
+        setNewAccessToken,
+        setUserComments,
+        setUserCommentsFetched,
+      );
       fetchUserActivitiesUtil(
         "task",
         taskId,
@@ -211,6 +251,69 @@ export default function TaskPageModern({
       );
     }
   }, [updatedSuccessfully]);
+
+  useEffect(() => {
+    if (postComment) {
+      postNewCommentUtil(
+        comment,
+        user,
+        sessionId,
+        token,
+        tries,
+        setTries,
+        tokenValidated,
+        setTokenValidated,
+        newAccessToken,
+        setNewAccessToken,
+        setPostComment,
+        setNewCommentPosted,
+      );
+    }
+  }, [postComment]);
+
+  useEffect(() => {
+    if (newCommentPosted) {
+      setComment({ comment: "" });
+      setTimeout(() => {
+        setNewCommentPosted(false);
+      }, 250);
+      setFetchUserComments(true);
+      setTimeout(() => {
+        setFetchUserComments(false);
+      }, 250);
+    }
+  }, [newCommentPosted]);
+
+  useEffect(() => {
+    if (fetchUserComments) {
+      fetchUserCommentsUtil(
+        "task",
+        taskId,
+        user,
+        sessionId,
+        token,
+        tries,
+        setTries,
+        tokenValidated,
+        setTokenValidated,
+        newAccessToken,
+        setNewAccessToken,
+        setUserComments,
+        setUserCommentsFetched,
+      );
+    }
+  }, [fetchUserComments]);
+
+  useEffect(() => {
+    if (userActivitiesFetched || userCommentsFetched) {
+      let tempArr = [...userActivities, ...userComments];
+      tempArr.sort(
+        (a, b) =>
+          new Date(b.created_on).getTime() - new Date(a.created_on).getTime(),
+      );
+      setActivitiesAndComments(tempArr);
+    }
+  }, [userActivitiesFetched, userCommentsFetched]);
 
   useEffect(() => {
     let projects = [];
@@ -315,6 +418,19 @@ export default function TaskPageModern({
 
   const truncateProjectName = (name, maxLength = 30) =>
     name?.length > maxLength ? `${name.slice(0, maxLength)}...` : name;
+
+  const postCommentFn = () => {
+    setComment((comment) => {
+      return {
+        ...comment,
+        record: "task",
+        recordId: taskId,
+        type: "0",
+        assigned_to: userId,
+      };
+    });
+    setPostComment(true);
+  };
 
   if (!Object.keys(task).length)
     return (
@@ -480,25 +596,48 @@ export default function TaskPageModern({
               </div>
             )}
           </article>
-          <h3 className="poppins-semibold activity-log-title">
-              Activity Log
-            </h3>
-            {userActivities.length !== 0 ? (
-              <div className="poppins-regular user-activities">
-                {userActivities.map((activity, index) => {
-                  return (
-                    <div key={index}>
-                      <div className="activity-header">
-                        <p className="activity-user">
-                          {activity.created_by === userId
-                            ? "Me"
-                            : "Other user"}
-                        </p>
-                        <div className="dot"></div>
-                        <p className="activity-time">
-                          {new Date(activity.created_on).toLocaleString()}
-                        </p>
-                      </div>
+          <div className="user-comments-section">
+            <div className="user-comments">
+              <textarea
+                name="comment-input"
+                className="comment-input poppins-regular"
+                cols="148"
+                rows="4"
+                placeholder="Add your comment here ..."
+                value={comment.comment}
+                onChange={(e) =>
+                  setComment({ ...comment, comment: e.target.value })
+                }
+              ></textarea>
+              <div className="actions">
+                <button
+                  className="post-comment poppins-semibold"
+                  onClick={() => postCommentFn()}
+                >
+                  Post
+                </button>
+              </div>
+            </div>
+          </div>
+          <h3 className="poppins-semibold activity-log-title">Activity Log</h3>
+          {activitiesAndComments.length !== 0 ? (
+            <div className="poppins-regular user-activities">
+              {activitiesAndComments.map((activity, index) => {
+                return (
+                  <div
+                    key={index}
+                    className={activity.activity_id ? "activity" : "comment"}
+                  >
+                    <div className="activity-header">
+                      <p className="activity-user">
+                        {activity.created_by === userId ? "Me" : "Other user"}
+                      </p>
+                      <div className="dot"></div>
+                      <p className="activity-time">
+                        {new Date(activity.created_on).toLocaleString()}
+                      </p>
+                    </div>
+                    {activity.activity_id ? (
                       <div className="updates">
                         {activity.audits.map((audit, index) => {
                           return (
@@ -570,18 +709,28 @@ export default function TaskPageModern({
                           );
                         })}
                       </div>
-                    </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <div
-                style={{ textAlign: "center", paddingBlock: "8px" }}
-                className="poppins-medium"
-              >
-                Loading user activities ...
-              </div>
-            )}
+                    ) : (
+                      <div className="comment-content">
+                        <IconContext.Provider
+                          value={{ color: "var(--primary-color)" }}
+                        >
+                          <FaRegCommentAlt />
+                        </IconContext.Provider>
+                        {activity.value}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div
+              style={{ textAlign: "center", paddingBlock: "8px" }}
+              className="poppins-medium"
+            >
+              Loading user activities ...
+            </div>
+          )}
         </main>
       </div>
     </div>

@@ -9,6 +9,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { userRolesRoute } from "./routes/userRoles.js";
 import { activitiesRoute } from "./routes/activities.js";
+import { commentsRoute } from "./routes/comments.js";
 
 dotenv.config();
 
@@ -82,6 +83,8 @@ const server = createServer(async (req, res) => {
           await userRolesRoute(req, res);
         } else if (url.startsWith("/api/activities")) {
           await activitiesRoute(req, res);
+        } else if (url.startsWith("/api/comments")) {
+          await commentsRoute(req, res);
         } else {
           res.writeHead(404, { "Content-Type": "application/json" });
           res.end(

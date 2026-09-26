@@ -201,6 +201,7 @@ export async function tasksRoute(req, res) {
                                 const newAudit = await createAudit(
                                   "insert",
                                   activityId,
+                                  "",
                                   req.user.user_id,
                                   "task",
                                   taskId,
@@ -327,6 +328,7 @@ export async function tasksRoute(req, res) {
                                 const newAudit = await createAudit(
                                   "update",
                                   activityId,
+                                  "",
                                   req.user.user_id,
                                   "task",
                                   taskId,
