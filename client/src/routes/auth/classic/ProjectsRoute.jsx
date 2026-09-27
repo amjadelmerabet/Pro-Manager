@@ -6,7 +6,11 @@ import { useEffect, useState } from "react";
 
 import bcrypt from "bcryptjs";
 
-export default function ProjectsRoute({ isAuthenticated, setAuthentication, setPreviewModernUI }) {
+export default function ProjectsRoute({
+  isAuthenticated,
+  setAuthentication,
+  setPreviewModernUI,
+}) {
   const [session, setSession] = useState("");
 
   let navigate = useNavigate();
@@ -30,8 +34,12 @@ export default function ProjectsRoute({ isAuthenticated, setAuthentication, setP
 
   useEffect(() => {
     const getUserSession = async () => {
-      const { userId } = JSON.parse(sessionStorage.getItem("authUser"));
-      const userSession = await cookieStore.get("session-" + userId);
+      const { userId, sessionNumber } = JSON.parse(
+        sessionStorage.getItem("authUser"),
+      );
+      const userSession = await cookieStore.get(
+        "session-" + userId + "_" + sessionNumber,
+      );
       if (userSession) {
         setSession(userSession.value);
       } else {
@@ -45,8 +53,13 @@ export default function ProjectsRoute({ isAuthenticated, setAuthentication, setP
 
   useEffect(() => {
     const checkSession = async () => {
-      const { user, userId } = JSON.parse(sessionStorage.getItem("authUser"));
-      const validSession = await bcrypt.compare(user + "-" + userId, session);
+      const { user, userId, sessionNumber } = JSON.parse(
+        sessionStorage.getItem("authUser"),
+      );
+      const validSession = await bcrypt.compare(
+        user + "-" + userId + "_" + sessionNumber,
+        session,
+      );
       if (!validSession) {
         logoutUser();
       }

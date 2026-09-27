@@ -9,6 +9,7 @@ import getValidRefreshTokenByUser from "../tokens/getValidRefreshTokenByUser.js"
 import updateToken from "../tokens/updateToken.js";
 import createSession from "../sessions/createSession.js";
 import linkSessionWithToken from "../tokens/linkSessionWithToken.js";
+import getLastSessionNumber from "../sessions/getLastSessionNumber.js";
 
 dotenv.config();
 
@@ -34,7 +35,12 @@ export default async function loginUser(username, password) {
         user_id,
         user_id,
       );
-      const newSession = await createSession(username);
+      const lastSessionNumber = await getLastSessionNumber(user_id);
+      let sessionNumber = 0;
+      if (lastSessionNumber.length > 0) {
+        sessionNumber = Number(lastSessionNumber[0].number) + 1;
+      }
+      const newSession = await createSession(username, sessionNumber);
       const linkedToken = await linkSessionWithToken(
         newSession[0].session_id,
         newAccessToken[0].token_id,
@@ -73,6 +79,7 @@ export default async function loginUser(username, password) {
             token: accessToken,
             refresh: refreshToken,
             sessionId: newSession[0].session_id,
+            sessionNumber: sessionNumber,
             session: newSession[0].id,
           };
         } else {
@@ -82,6 +89,7 @@ export default async function loginUser(username, password) {
             token: accessToken,
             refresh: validRefreshToken[0].token,
             sessionId: newSession[0].session_id,
+            sessionNumber: sessionNumber,
             session: newSession[0].id,
           };
         }

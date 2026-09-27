@@ -8,18 +8,20 @@ async function hashSession(plainSession) {
   return hashedSession;
 }
 
-export default async function createSession(username) {
+export default async function createSession(username, sessionNumber) {
   try {
     const user = await getUserByUsername(username);
     if (user.error) {
       return user.error;
     } else {
-      const hashedSession = await hashSession(username + "-" + user[0].user_id);
+      const hashedSession = await hashSession(
+        username + "-" + user[0].user_id + "_" + sessionNumber,
+      );
       let sessionExpiresIn = new Date();
       sessionExpiresIn.setHours(sessionExpiresIn.getHours() + 2);
       const result = await pool.query(
-        "INSERT INTO sessions (id, session_for_user, expires) VALUES ($1, $2, $3) RETURNING session_id, id",
-        [hashedSession, user[0].user_id, sessionExpiresIn],
+        "INSERT INTO sessions (id, number, session_for_user, expires) VALUES ($1, $2, $3, $4) RETURNING session_id, id",
+        [hashedSession, sessionNumber, user[0].user_id, sessionExpiresIn],
       );
       const newSession = result.rows;
       return newSession;

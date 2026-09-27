@@ -45,7 +45,7 @@ export default function AuthHeader({
 
   let navigate = useNavigate();
 
-  const { userId, sessionId, token } = JSON.parse(
+  const { userId, sessionId, token, sessionNumber } = JSON.parse(
     sessionStorage.getItem("authUser"),
   );
 
@@ -55,7 +55,7 @@ export default function AuthHeader({
 
   useEffect(() => {
     const deleteSessionCookie = async () => {
-      await cookieStore.delete("session-" + userId);
+      await cookieStore.delete("session-" + userId + "_" + sessionNumber);
     };
     if (successfulLogout) {
       deleteSessionCookie();
@@ -203,7 +203,10 @@ export default function AuthHeader({
           </div>
         </div>
       </div>
-      <button className="switch-to-modern-ui poppins-medium" onClick={() => switchUI()}>
+      <button
+        className="switch-to-modern-ui poppins-medium"
+        onClick={() => switchUI()}
+      >
         <BsStars />
         Preview Modern UI
       </button>
