@@ -12,10 +12,6 @@ import getAccessTokenUtil from "./utils/getAccessTokenUtil";
 import "./Project.css";
 import fetchProjectTasksUtil from "../utils/fetchProjectTasksUtil";
 import fetchUserActivitiesUtil from "../../utils/fetchUserActivitiesUtil";
-import postNewCommentUtil from "../utils/postNewCommentUtil";
-import fetchUserCommentsUtil from "../../utils/fetchUserCommentsUtil";
-import { IconContext } from "react-icons/lib";
-import { FaRegCommentAlt } from "react-icons/fa";
 
 const states = {
   1: ["Not started", "not-started"],
@@ -99,13 +95,6 @@ export default function ProjectPageModern({
   const [userActivities, setUserActivities] = useState([]);
   const [fetchUserActivities, setFetchUserActivities] = useState(false);
   const [userActivitiesFetched, setUserActivitiesFetched] = useState(false);
-  const [comment, setComment] = useState({ comment: "" });
-  const [postComment, setPostComment] = useState(false);
-  const [newCommentPosted, setNewCommentPosted] = useState(false);
-  const [userComments, setUserComments] = useState([]);
-  const [fetchUserComments, setFetchUserComments] = useState(false);
-  const [userCommentsFetched, setUserCommentsFetched] = useState(false);
-  const [activitiesAndComments, setActivitiesAndComments] = useState([]);
 
   const authUser = JSON.parse(sessionStorage.getItem("authUser"));
   const token = authUser?.token;
@@ -155,21 +144,6 @@ export default function ProjectPageModern({
 
   useEffect(() => {
     if (projectLoaded) {
-      fetchUserCommentsUtil(
-        "project",
-        projectId,
-        user,
-        sessionId,
-        token,
-        tries,
-        setTries,
-        tokenValidated,
-        setTokenValidated,
-        newAccessToken,
-        setNewAccessToken,
-        setUserComments,
-        setUserCommentsFetched,
-      );
       fetchUserActivitiesUtil(
         "project",
         projectId,
@@ -212,21 +186,6 @@ export default function ProjectPageModern({
       setProjectUpdated((current) => ({ ...current, update: false }));
       setUpdatedSuccessfully(false);
       setLoadProject((current) => current + 1);
-      fetchUserCommentsUtil(
-        "project",
-        projectId,
-        user,
-        sessionId,
-        token,
-        tries,
-        setTries,
-        tokenValidated,
-        setTokenValidated,
-        newAccessToken,
-        setNewAccessToken,
-        setUserComments,
-        setUserCommentsFetched,
-      );
       fetchUserActivitiesUtil(
         "project",
         projectId,
@@ -283,69 +242,6 @@ export default function ProjectPageModern({
   }, [fetchProjectTasks]);
 
   useEffect(() => {
-    if (postComment) {
-      postNewCommentUtil(
-        comment,
-        user,
-        sessionId,
-        token,
-        tries,
-        setTries,
-        tokenValidated,
-        setTokenValidated,
-        newAccessToken,
-        setNewAccessToken,
-        setPostComment,
-        setNewCommentPosted,
-      );
-    }
-  }, [postComment]);
-
-  useEffect(() => {
-    if (newCommentPosted) {
-      setComment({ comment: "" });
-      setTimeout(() => {
-        setNewCommentPosted(false);
-      }, 250);
-      setFetchUserComments(true);
-      setTimeout(() => {
-        setFetchUserComments(false);
-      }, 250);
-    }
-  }, [newCommentPosted]);
-
-  useEffect(() => {
-    if (fetchUserComments) {
-      fetchUserCommentsUtil(
-        "project",
-        projectId,
-        user,
-        sessionId,
-        token,
-        tries,
-        setTries,
-        tokenValidated,
-        setTokenValidated,
-        newAccessToken,
-        setNewAccessToken,
-        setUserComments,
-        setUserCommentsFetched,
-      );
-    }
-  }, [fetchUserComments]);
-
-  useEffect(() => {
-    if (userActivitiesFetched || userCommentsFetched) {
-      let tempArr = [...userActivities, ...userComments];
-      tempArr.sort(
-        (a, b) =>
-          new Date(b.created_on).getTime() - new Date(a.created_on).getTime(),
-      );
-      setActivitiesAndComments(tempArr);
-    }
-  }, [userActivitiesFetched, userCommentsFetched]);
-
-  useEffect(() => {
     if (newAccessToken.counter)
       getAccessTokenUtil(
         user,
@@ -388,19 +284,6 @@ export default function ProjectPageModern({
     navigate(
       `/auth/${user}/modern/task/${taskId}?backUrl=project&id=${project.project_id}`,
     );
-  };
-
-  const postCommentFn = () => {
-    setComment((comment) => {
-      return {
-        ...comment,
-        record: "project",
-        recordId: projectId,
-        type: "0",
-        owner: userId,
-      };
-    });
-    setPostComment(true);
   };
 
   if (!Object.keys(project).length)
@@ -624,38 +507,12 @@ export default function ProjectPageModern({
               </tbody>
             </table>
           </article>
-          <div className="user-comments-section">
-            <div className="user-comments">
-              <textarea
-                name="comment-input"
-                className="comment-input poppins-regular"
-                cols="148"
-                rows="4"
-                placeholder="Add your comment here ..."
-                value={comment.comment}
-                onChange={(e) =>
-                  setComment({ ...comment, comment: e.target.value })
-                }
-              ></textarea>
-              <div className="actions">
-                <button
-                  className="post-comment poppins-semibold"
-                  onClick={() => postCommentFn()}
-                >
-                  Post
-                </button>
-              </div>
-            </div>
-          </div>
           <h3 className="poppins-semibold activity-log-title">Activity Log</h3>
-          {activitiesAndComments.length !== 0 ? (
+          {userActivities.length !== 0 ? (
             <div className="poppins-regular user-activities">
-              {activitiesAndComments.map((activity, index) => {
+              {userActivities.map((activity, index) => {
                 return (
-                  <div
-                    key={index}
-                    className={activity.activity_id ? "activity" : "comment"}
-                  >
+                  <div key={index}>
                     <div className="activity-header">
                       <p className="activity-user">
                         {activity.created_by === userId ? "Me" : "Other user"}
@@ -665,38 +522,16 @@ export default function ProjectPageModern({
                         {new Date(activity.created_on).toLocaleString()}
                       </p>
                     </div>
-                    {activity.activity_id ? (
-                      <div className="updates">
-                        {activity.audits.map((audit, index) => {
-                          return (
-                            <div key={index} className="update">
-                              <div className="field">
-                                {fieldDiplayValues[audit.field].display}
-                              </div>
-                              {audit.type === "update" ? (
-                                <div className="changes">
-                                  <span className="new-value">
-                                    {audit.field !== "owner"
-                                      ? audit.field !== "state"
-                                        ? audit.new_value
-                                        : ProjectStates[audit.new_value].value
-                                      : audit.new_value === userId
-                                        ? "Me"
-                                        : ""}
-                                  </span>{" "}
-                                  was{" "}
-                                  <span className="old-value">
-                                    {audit.field !== "owner"
-                                      ? audit.field !== "state"
-                                        ? audit.old_value
-                                        : ProjectStates[audit.old_value].value
-                                      : audit.old_value === userId
-                                        ? "Me"
-                                        : ""}
-                                  </span>
-                                </div>
-                              ) : (
-                                <div className="insert">
+                    <div className="updates">
+                      {activity.audits.map((audit, index) => {
+                        return (
+                          <div key={index} className="update">
+                            <div className="field">
+                              {fieldDiplayValues[audit.field].display}
+                            </div>
+                            {audit.type === "update" ? (
+                              <div className="changes">
+                                <span className="new-value">
                                   {audit.field !== "owner"
                                     ? audit.field !== "state"
                                       ? audit.new_value
@@ -704,22 +539,33 @@ export default function ProjectPageModern({
                                     : audit.new_value === userId
                                       ? "Me"
                                       : ""}
-                                </div>
-                              )}
-                            </div>
-                          );
-                        })}
-                      </div>
-                    ) : (
-                      <div className="comment-content">
-                        <IconContext.Provider
-                          value={{ color: "var(--primary-color)" }}
-                        >
-                          <FaRegCommentAlt />
-                        </IconContext.Provider>
-                        {activity.value}
-                      </div>
-                    )}
+                                </span>{" "}
+                                was{" "}
+                                <span className="old-value">
+                                  {audit.field !== "owner"
+                                    ? audit.field !== "state"
+                                      ? audit.old_value
+                                      : ProjectStates[audit.old_value].value
+                                    : audit.old_value === userId
+                                      ? "Me"
+                                      : ""}
+                                </span>
+                              </div>
+                            ) : (
+                              <div className="insert">
+                                {audit.field !== "owner"
+                                  ? audit.field !== "state"
+                                    ? audit.new_value
+                                    : ProjectStates[audit.new_value].value
+                                  : audit.new_value === userId
+                                    ? "Me"
+                                    : ""}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
                 );
               })}

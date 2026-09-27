@@ -1,5 +1,5 @@
-import postProjectCommentAPI from "../../../../api/comments/psotProjectCommentAPI";
-import checkAccessTokenAPI from "../../../../api/tokens/checkAccessTokenAPI";
+import postProjectCommentAPI from "../../../../../api/comments/psotProjectCommentAPI";
+import checkAccessTokenAPI from "../../../../../api/tokens/checkAccessTokenAPI";
 
 function tryAgain(tries, setTries, newAccessToken, setNewAccessToken) {
   setTries(tries + 1);
