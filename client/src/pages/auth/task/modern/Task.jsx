@@ -47,7 +47,7 @@ const fieldDiplayValues = {
     display: "Description",
   },
   assigned_to: {
-    display: "Owner",
+    display: "Assigned to",
   },
   project: {
     display: "Project",
@@ -102,7 +102,10 @@ export default function TaskPageModern({
   const [taskDeleted, setTaskDeleted] = useState(false);
   const [editingField, setEditingField] = useState("");
   const [draftValue, setDraftValue] = useState("");
-  const [userActivities, setUserActivities] = useState([]);
+  const [userActivities, setUserActivities] = useState({
+    loaded: false,
+    activities: [],
+  });
   const [fetchUserActivities, setFetchUserActivities] = useState(false);
   const [userActivitiesFetched, setUserActivitiesFetched] = useState(false);
   const [projectsHistory, setProjectsHistory] = useState({});
@@ -110,7 +113,10 @@ export default function TaskPageModern({
   const [comment, setComment] = useState({ comment: "" });
   const [postComment, setPostComment] = useState(false);
   const [newCommentPosted, setNewCommentPosted] = useState(false);
-  const [userComments, setUserComments] = useState([]);
+  const [userComments, setUserComments] = useState({
+    loaded: false,
+    comments: [],
+  });
   const [fetchUserComments, setFetchUserComments] = useState(false);
   const [userCommentsFetched, setUserCommentsFetched] = useState(false);
   const [activitiesAndComments, setActivitiesAndComments] = useState([]);
@@ -306,7 +312,7 @@ export default function TaskPageModern({
 
   useEffect(() => {
     if (userActivitiesFetched || userCommentsFetched) {
-      let tempArr = [...userActivities, ...userComments];
+      let tempArr = [...userActivities.activities, ...userComments.comments];
       tempArr.sort(
         (a, b) =>
           new Date(b.created_on).getTime() - new Date(a.created_on).getTime(),
@@ -317,7 +323,7 @@ export default function TaskPageModern({
 
   useEffect(() => {
     let projects = [];
-    userActivities.forEach((activity) => {
+    userActivities.activities.forEach((activity) => {
       activity.audits.forEach((audit) => {
         if (
           audit.field === "project" &&
@@ -645,7 +651,8 @@ export default function TaskPageModern({
                               <div className="field">
                                 {fieldDiplayValues[audit.field].display}
                               </div>
-                              {audit.type === "update" ? (
+                              {audit.type === "update" &&
+                              audit.old_value !== "[No audit]" ? (
                                 <div className="changes">
                                   <span className="new-value">
                                     {audit.field !== "assigned_to"
@@ -687,6 +694,29 @@ export default function TaskPageModern({
                                         : "Other user"}
                                   </span>
                                 </div>
+                              ) : audit.type === "update" &&
+                                audit.old_value === "[No audit]" ? (
+                                <div className="changes">
+                                  <span className="new-value">
+                                    {audit.field !== "assigned_to"
+                                      ? audit.field !== "state"
+                                        ? audit.field !== "priority"
+                                          ? audit.field !== "project"
+                                            ? audit.new_value === null ||
+                                              audit.new_value === ""
+                                              ? "Empty"
+                                              : audit.new_value
+                                            : audit.new_value !== null
+                                              ? project.name
+                                              : "Empty"
+                                          : TaskPriorities[audit.new_value]
+                                              .value
+                                        : TaskStates[audit.new_value].value
+                                      : audit.new_value === userId
+                                        ? "Me"
+                                        : "Other user"}
+                                  </span>
+                                </div>
                               ) : (
                                 <div className="insert">
                                   {audit.field !== "assigned_to"
@@ -723,12 +753,19 @@ export default function TaskPageModern({
                 );
               })}
             </div>
-          ) : (
+          ) : !userActivities.loaded || !userComments.loaded ? (
             <div
               style={{ textAlign: "center", paddingBlock: "8px" }}
               className="poppins-medium"
             >
               Loading user activities ...
+            </div>
+          ) : (
+            <div
+              style={{ textAlign: "center", paddingBlock: "8px" }}
+              className="poppins-medium"
+            >
+              No activities
             </div>
           )}
         </main>

@@ -24,7 +24,7 @@ async function fetchUserCommentsAction(
   if (comments.error === "Invalid access token" && tries < 3) {
     tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
   } else {
-    setUserComments(comments.result);
+    setUserComments({ loaded: true, comments: comments.result });
     setUserCommentsFetched(true);
     setTimeout(() => {
       setUserCommentsFetched(false);
