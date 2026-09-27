@@ -217,8 +217,8 @@
 
 .auth-header .switch-to-modern-ui {
   position: fixed;
-  bottom: 8px;
-  left: 8px;
+  top: 8px;
+  right: 8px;
   padding: 2px 8px;
   background: transparent;
   border: none;

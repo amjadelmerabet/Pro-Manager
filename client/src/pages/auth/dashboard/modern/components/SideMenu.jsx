@@ -33,7 +33,7 @@ export default function SideMenu({
 
   let navigate = useNavigate();
 
-  const { userId, sessionId, token, sessionNumber } = JSON.parse(
+  const { userId, sessionId, token } = JSON.parse(
     sessionStorage.getItem("authUser"),
   );
 
@@ -53,7 +53,7 @@ export default function SideMenu({
 
   useEffect(() => {
     const deleteSessionCookie = async () => {
-      await cookieStore.delete("session-" + userId + "_" + sessionNumber);
+      await cookieStore.delete("session-" + userId);
     };
     if (successfulLogout) {
       deleteSessionCookie();
