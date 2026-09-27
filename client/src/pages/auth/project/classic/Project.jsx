@@ -1046,7 +1046,8 @@ export default function Project({
                                 <div className="field">
                                   {fieldDiplayValues[audit.field].display}
                                 </div>
-                                {audit.type === "update" ? (
+                                {audit.type === "update" &&
+                                audit.old_value !== "[No audit]" ? (
                                   <div className="changes">
                                     <span className="new-value">
                                       {audit.field !== "owner"
@@ -1064,6 +1065,19 @@ export default function Project({
                                           ? audit.old_value
                                           : ProjectStates[audit.old_value].value
                                         : audit.old_value === userId
+                                          ? "Me"
+                                          : ""}
+                                    </span>
+                                  </div>
+                                ) : audit.type === "update" &&
+                                  audit.old_value === "[No audit]" ? (
+                                  <div className="changes">
+                                    <span className="new-value">
+                                      {audit.field !== "owner"
+                                        ? audit.field !== "state"
+                                          ? audit.new_value
+                                          : ProjectStates[audit.new_value].value
+                                        : audit.new_value === userId
                                           ? "Me"
                                           : ""}
                                     </span>

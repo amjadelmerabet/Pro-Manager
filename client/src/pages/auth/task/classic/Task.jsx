@@ -1081,7 +1081,8 @@ export default function Task({
                                 <div className="field">
                                   {fieldDiplayValues[audit.field].display}
                                 </div>
-                                {audit.type === "update" ? (
+                                {audit.type === "update" &&
+                                audit.old_value !== "[No audit]" ? (
                                   <div className="changes">
                                     <span className="new-value">
                                       {audit.field !== "assigned_to"
@@ -1121,6 +1122,29 @@ export default function Task({
                                                 .value
                                           : TaskStates[audit.old_value].value
                                         : audit.old_value === userId
+                                          ? "Me"
+                                          : "Other user"}
+                                    </span>
+                                  </div>
+                                ) : audit.type === "update" &&
+                                  audit.old_value === "[No audit]" ? (
+                                  <div className="changes">
+                                    <span className="new-value">
+                                      {audit.field !== "assigned_to"
+                                        ? audit.field !== "state"
+                                          ? audit.field !== "priority"
+                                            ? audit.field !== "project"
+                                              ? audit.new_value === null ||
+                                                audit.new_value === ""
+                                                ? "Empty"
+                                                : audit.new_value
+                                              : audit.new_value !== null
+                                                ? project.name
+                                                : "Empty"
+                                            : TaskPriorities[audit.new_value]
+                                                .value
+                                          : TaskStates[audit.new_value].value
+                                        : audit.new_value === userId
                                           ? "Me"
                                           : "Other user"}
                                     </span>
