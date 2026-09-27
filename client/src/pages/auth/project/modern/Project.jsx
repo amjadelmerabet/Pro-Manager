@@ -96,13 +96,19 @@ export default function ProjectPageModern({
   const [draftValue, setDraftValue] = useState("");
   const [projectTasks, setProjectTasks] = useState([]);
   const [fetchProjectTasks, setFetchProjectTasks] = useState(0);
-  const [userActivities, setUserActivities] = useState([]);
+  const [userActivities, setUserActivities] = useState({
+    loaded: false,
+    activities: [],
+  });
   const [fetchUserActivities, setFetchUserActivities] = useState(false);
   const [userActivitiesFetched, setUserActivitiesFetched] = useState(false);
   const [comment, setComment] = useState({ comment: "" });
   const [postComment, setPostComment] = useState(false);
   const [newCommentPosted, setNewCommentPosted] = useState(false);
-  const [userComments, setUserComments] = useState([]);
+  const [userComments, setUserComments] = useState({
+    loaded: false,
+    comments: [],
+  });
   const [fetchUserComments, setFetchUserComments] = useState(false);
   const [userCommentsFetched, setUserCommentsFetched] = useState(false);
   const [activitiesAndComments, setActivitiesAndComments] = useState([]);
@@ -336,7 +342,7 @@ export default function ProjectPageModern({
 
   useEffect(() => {
     if (userActivitiesFetched || userCommentsFetched) {
-      let tempArr = [...userActivities, ...userComments];
+      let tempArr = [...userActivities.activities, ...userComments.comments];
       tempArr.sort(
         (a, b) =>
           new Date(b.created_on).getTime() - new Date(a.created_on).getTime(),
@@ -724,12 +730,19 @@ export default function ProjectPageModern({
                 );
               })}
             </div>
-          ) : (
+          ) : !userActivities.loaded || !userComments.loaded ? (
             <div
               style={{ textAlign: "center", paddingBlock: "8px" }}
               className="poppins-medium"
             >
               Loading user activities ...
+            </div>
+          ) : (
+            <div
+              style={{ textAlign: "center", paddingBlock: "8px" }}
+              className="poppins-medium"
+            >
+              No activities
             </div>
           )}
         </main>
