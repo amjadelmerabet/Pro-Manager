@@ -92,10 +92,10 @@
 
 .side-menu .switch-to-classic-ui {
   position: fixed;
-  top: 8px;
-  right: 8px;
+  bottom: 8px;
+  left: 8px;
   background: transparent;
-  color: var(--default-light-theme-primary-color);
+  color: white;
   padding: 0;
   display: flex;
   align-items: center;
