@@ -250,6 +250,7 @@ export async function usersRoute(req, res) {
                 token: auth.token,
                 refresh: auth.refresh,
                 sessionId: auth.sessionId,
+                sessionNumber: auth.sessionNumber,
                 session: auth.session,
                 name: user[0].name,
                 userId: user[0].user_id,

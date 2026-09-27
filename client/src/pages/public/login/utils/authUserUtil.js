@@ -25,6 +25,18 @@ export default async function authUserUtil(
   setLogin("LoginEnded");
   if (auth.authenticated && auth.token) {
     sessionStorage.removeItem("userLoggedOut");
+    // let sessionNumber = 0;
+    // let sessionFound = true;
+    // while (sessionFound) {
+    //   let session = await cookieStore.get(
+    //     "session-" + auth.userId + "_" + sessionNumber,
+    //   );
+    //   if (!session) {
+    //     sessionFound = false;
+    //   } else {
+    //     sessionNumber++;
+    //   }
+    // }
     sessionStorage.setItem(
       "authUser",
       JSON.stringify({
@@ -32,6 +44,7 @@ export default async function authUserUtil(
         authenticated: true,
         token: auth.token,
         sessionId: auth.sessionId,
+        sessionNumber: auth.sessionNumber,
         name: auth.name,
         userId: auth.userId,
       }),
@@ -39,7 +52,7 @@ export default async function authUserUtil(
     let sessionExpiresIn = new Date();
     sessionExpiresIn.setHours(new Date().getHours() + 2);
     await cookieStore.set({
-      name: "session-" + auth.userId,
+      name: "session-" + auth.userId + "_" + auth.sessionNumber,
       value: auth.session,
       expires: sessionExpiresIn,
       path: "/",

@@ -32,8 +32,12 @@ export default function ModernDashboardRoute({
 
   useEffect(() => {
     const getUserSession = async () => {
-      const { userId } = JSON.parse(sessionStorage.getItem("authUser"));
-      const userSession = await cookieStore.get("session-" + userId);
+      const { userId, sessionNumber } = JSON.parse(
+        sessionStorage.getItem("authUser"),
+      );
+      const userSession = await cookieStore.get(
+        "session-" + userId + "_" + sessionNumber,
+      );
       if (userSession) {
         setSession(userSession.value);
       } else {
@@ -47,8 +51,13 @@ export default function ModernDashboardRoute({
 
   useEffect(() => {
     const checkSession = async () => {
-      const { user, userId } = JSON.parse(sessionStorage.getItem("authUser"));
-      const validSession = await bcrypt.compare(user + "-" + userId, session);
+      const { user, userId, sessionNumber } = JSON.parse(
+        sessionStorage.getItem("authUser"),
+      );
+      const validSession = await bcrypt.compare(
+        user + "-" + userId + "_" + sessionNumber,
+        session,
+      );
       if (!validSession) {
         logoutUser();
       }
@@ -79,7 +88,7 @@ export default function ModernDashboardRoute({
         />
       );
     } else {
-      <WrongRoute />
+      <WrongRoute />;
     }
   }
 }

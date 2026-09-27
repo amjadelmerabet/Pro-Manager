@@ -4,7 +4,11 @@ import bcrypt from "bcryptjs";
 import TaskPageModern from "../../../pages/auth/task/modern/Task";
 import WrongRoute from "../../public/WrongRoute";
 
-export default function SingleTaskRoute({ isAuthenticated, setAuthentication, setPreviewModernUI }) {
+export default function SingleTaskRoute({
+  isAuthenticated,
+  setAuthentication,
+  setPreviewModernUI,
+}) {
   const [session, setSession] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
@@ -21,7 +25,9 @@ export default function SingleTaskRoute({ isAuthenticated, setAuthentication, se
 
   useEffect(() => {
     const getSession = async () => {
-      const userSession = await cookieStore.get(`session-${authUser.userId}`);
+      const userSession = await cookieStore.get(
+        `session-${authUser.userId}_${authUser.sessionNumber}`,
+      );
       if (userSession) setSession(userSession.value);
       else logout();
     };
@@ -30,16 +36,34 @@ export default function SingleTaskRoute({ isAuthenticated, setAuthentication, se
 
   useEffect(() => {
     const checkSession = async () => {
-      if (!(await bcrypt.compare(`${authUser.user}-${authUser.userId}`, session))) logout();
+      if (
+        !(await bcrypt.compare(
+          `${authUser.user}-${authUser.userId}_${authUser.sessionNumber}`,
+          session,
+        ))
+      )
+        logout();
     };
     if (authUser && session) checkSession();
   }, [session]);
 
   useEffect(() => {
-    if (!isAuthenticated && !authUser) navigate(loggedOut ? "/signin" : "/signin?redirect=/auth/user/modern/tasks");
+    if (!isAuthenticated && !authUser)
+      navigate(
+        loggedOut ? "/signin" : "/signin?redirect=/auth/user/modern/tasks",
+      );
   }, []);
 
   if ((isAuthenticated || authUser) && authUser) {
-    return username === authUser.user ? <TaskPageModern user={authUser.user} userId={authUser.userId} setAuthentication={setAuthentication} setPreviewModernUI={setPreviewModernUI} /> : <WrongRoute />;
+    return username === authUser.user ? (
+      <TaskPageModern
+        user={authUser.user}
+        userId={authUser.userId}
+        setAuthentication={setAuthentication}
+        setPreviewModernUI={setPreviewModernUI}
+      />
+    ) : (
+      <WrongRoute />
+    );
   }
 }
