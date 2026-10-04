@@ -354,7 +354,8 @@ export async function usersRoute(req, res) {
               process.env.BASIC_TASKS_ROLE,
               process.env.BASIC_USERS_ROLE,
               process.env.BASIC_TOKENS_ROLE,
-              process.env.BASIC_ACTIVITIES_ROLE
+              process.env.BASIC_ACTIVITIES_ROLE,
+              process.env.BASIC_COMMENTS_ROLE
             ];
             basicRoles.forEach(async (basicRole) => {
               const role = await getRoleByName(basicRole);
