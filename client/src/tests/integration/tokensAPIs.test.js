@@ -5,8 +5,10 @@ import getNewAccessTokenAPI from "../../api/tokens/getNewAccessTokenAPI";
 import logoutUserAPI from "../../api/users/logoutUserAPI";
 
 describe("Tokens APIs", async () => {
-  let accessToken, refreshToken = {}, session;
-  it ("Login a user to generate a new token", async () => {
+  let accessToken,
+    refreshToken = {},
+    session;
+  it("Login a user to generate a new token", async () => {
     const auth = await loginUserAPI(
       import.meta.env.VITE_TEST_USERNAME,
       import.meta.env.VITE_TEST_PASSWORD,
@@ -14,7 +16,7 @@ describe("Tokens APIs", async () => {
     accessToken = auth.token;
     refreshToken.value = auth.refresh;
     session = auth.sessionId;
-  })
+  });
 
   it("Checking a valid access token", async () => {
     const validAccessToken = await checkAccessTokenAPI(
@@ -23,18 +25,6 @@ describe("Tokens APIs", async () => {
       refreshToken,
     );
     expect(validAccessToken).toHaveProperty("message", "Valid access token");
-  });
-
-  it("Checking an invalid accessToken", async () => {
-    const invalidAccessToken = await checkAccessTokenAPI(
-      "Invalid access token",
-      session,
-      refreshToken,
-    );
-    expect(invalidAccessToken).toHaveProperty(
-      "message",
-      "Invalid access token",
-    );
   });
 
   it("Getting a new access token", async () => {
@@ -53,4 +43,27 @@ describe("Tokens APIs", async () => {
       "User logged out successfully",
     );
   });
+
+  let refreshToken2 = {};
+  const auth2 = await loginUserAPI(
+    import.meta.env.VITE_TEST_USERNAME_2,
+    import.meta.env.VITE_TEST_PASSWORD,
+  );
+  refreshToken2.value = auth2.refresh;
+
+  it("Checking an invalid accessToken", async () => {
+    setTimeout(async () => {
+      const invalidAccessToken = await checkAccessTokenAPI(
+        accessToken,
+        session,
+        refreshToken2,
+      );
+      expect(invalidAccessToken).toHaveProperty(
+        "message",
+        "Invalid access token",
+      );
+    }, 1000);
+  });
+
+  await logoutUserAPI(session, auth2.token);
 });
