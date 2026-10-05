@@ -94,9 +94,7 @@ export default function TasksPage({ user, userId, setAuthentication, setPreviewM
         tempFilter[keyValue[0]] = keyValue[1];
         setFilter(tempFilter);
       });
-      setTimeout(() => {
-        setApplyFilters(applyFilters + 1);
-      }, 250);
+      setApplyFilters(applyFilters + 1);
     }
   }, []);
 
