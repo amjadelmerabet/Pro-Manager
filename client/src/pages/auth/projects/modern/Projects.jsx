@@ -842,8 +842,14 @@ export default function ProjectsPageModern({
                           </span>
                         </td>
                         <td>{project.owner === userId ? "Me" : ""}</td>
-                        <td>
-                          {new Date(project.deadline).toLocaleString("fr")}
+                        <td
+                          className={
+                            new Date() > new Date(project.deadline)
+                              ? "overdue"
+                              : ""
+                          }
+                        >
+                          {new Date(project.deadline).toLocaleDateString("fr")}
                         </td>
                         <td className="description">
                           {truncateDescription(project.description)}

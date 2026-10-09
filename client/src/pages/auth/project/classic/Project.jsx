@@ -751,9 +751,22 @@ export default function Project({
                       : projectObject.owner}
                   </div>
                   <div className="project-deadline poppins-regular">
-                    {projectObject.deadline
-                      ? `Deadline on ${projectDeadline.getMonth()}/${projectDeadline.getDate()}/${projectDeadline.getFullYear()}`
-                      : "No deadline"}
+                    {projectObject.deadline ? "Deadline on " : "No deadline"}
+                    {projectObject.deadline ? (
+                      <span
+                        className={
+                          new Date() > projectDeadline ? "deadline overdue" : "deadline"
+                        }
+                      >
+                        {projectDeadline.getMonth() +
+                          "/" +
+                          projectDeadline.getDate() +
+                          "/" +
+                          projectDeadline.getFullYear()}
+                      </span>
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </div>
                 <div className="right">

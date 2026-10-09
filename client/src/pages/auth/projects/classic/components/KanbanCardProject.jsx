@@ -173,7 +173,12 @@ export default function KanbanCardProject({
           </tr>
           <tr>
             <td className="property poppins-bold">Deadline</td>
-            <td className="value poppins-regular">
+            <td
+              className={
+                "value poppins-regular" +
+                (new Date() > projectDeadline ? " overdue" : "")
+              }
+            >
               {project.deadline
                 ? `${projectDeadline.getMonth()}/${projectDeadline.getDate()}/${projectDeadline.getFullYear()}`
                 : "No deadline"}

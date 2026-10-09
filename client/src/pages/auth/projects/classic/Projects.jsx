@@ -600,6 +600,7 @@ export default function ProjectsPage({ user, userId, setAuthentication, setPrevi
                           key={project.project_id}
                           project={project}
                           user={user}
+                          userId={userId}
                           openProjectClass={openProjectClass}
                           openProject={openProject}
                           startProject={startProject}

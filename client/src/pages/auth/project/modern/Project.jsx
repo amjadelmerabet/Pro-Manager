@@ -516,7 +516,7 @@ export default function ProjectPageModern({
               </div>
               <div>
                 <span>Deadline</span>
-                <strong>
+                <strong className={new Date() > deadline ? "overdue" : ""}>
                   {deadline ? deadline.toLocaleDateString("fr") : "No deadline"}
                 </strong>
               </div>

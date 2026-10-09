@@ -143,6 +143,11 @@
   color: rgb(105, 120, 120);
   font-size: 12px;
 }
+
+.project-page-modern .project-meta .overdue {
+  color: rgb(225, 0, 45);
+}
+
 .project-page-modern .state-button {
   padding: 0;
   background: transparent;

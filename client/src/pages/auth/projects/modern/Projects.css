@@ -99,6 +99,11 @@
   min-width: fit-content;
 }
 
+.projects-page-modern main .projects-section > .projects > tbody td.overdue {
+  color: rgb(225, 0, 45);
+  font-weight: 500;
+}
+
 .projects-page-modern main .projects-section > .projects > tbody td > div {
   display: flex;
   align-items: center;
