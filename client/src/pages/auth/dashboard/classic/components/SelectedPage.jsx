@@ -83,7 +83,15 @@ export default function SelectedPage({
           {selectedPage.type === "project" ? (
             <tr>
               <td className="property poppins-semibold">Deadline</td>
-              <td className="value poppins-regular">
+              <td
+                className={
+                  "value poppins-regular" +
+                  (new Date() > new Date(selectedPage.deadline) &&
+                  selectedPage.state !== 3
+                    ? " overdue"
+                    : "")
+                }
+              >
                 {`${
                   new Date(selectedPage.deadline).getDate().toString()
                     .length === 1

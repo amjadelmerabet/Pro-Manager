@@ -755,7 +755,10 @@ export default function Project({
                     {projectObject.deadline ? (
                       <span
                         className={
-                          new Date() > projectDeadline ? "deadline overdue" : "deadline"
+                          new Date() > projectDeadline &&
+                          projectObject.state !== 3
+                            ? "deadline overdue"
+                            : "deadline"
                         }
                       >
                         {projectDeadline.getMonth() +

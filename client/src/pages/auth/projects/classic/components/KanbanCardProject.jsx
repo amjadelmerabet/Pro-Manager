@@ -176,7 +176,9 @@ export default function KanbanCardProject({
             <td
               className={
                 "value poppins-regular" +
-                (new Date() > projectDeadline ? " overdue" : "")
+                (new Date() > projectDeadline && project.state !== 3
+                  ? " overdue"
+                  : "")
               }
             >
               {project.deadline

@@ -40,9 +40,15 @@ export default function ProjectsTable({
       </thead>
       <tbody>
         {userProjects.map((userProject, index) => {
-          const deadline = new Date(userProject.deadline).toLocaleDateString("fr");
-          const updated = new Date(userProject.updated_on).toLocaleDateString("fr");
-          const created = new Date(userProject.created_on).toLocaleDateString("fr");
+          const deadline = new Date(userProject.deadline).toLocaleDateString(
+            "fr",
+          );
+          const updated = new Date(userProject.updated_on).toLocaleDateString(
+            "fr",
+          );
+          const created = new Date(userProject.created_on).toLocaleDateString(
+            "fr",
+          );
           return (
             <tr
               key={index}
@@ -66,8 +72,18 @@ export default function ProjectsTable({
                 </span>
               </td>
               <td>{userProject.owner === userId ? "Me" : ""}</td>
-              <td>{deadline}</td>
-              <td className="description">{truncateDescription(userProject.description)}</td>
+              <td
+                className={
+                  new Date() > new Date(userProject.deadline) && userProject.state !== 3
+                    ? "deadline overdue"
+                    : "deadline"
+                }
+              >
+                {deadline}
+              </td>
+              <td className="description">
+                {truncateDescription(userProject.description)}
+              </td>
               <td>{updated}</td>
               <td>{created}</td>
             </tr>

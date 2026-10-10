@@ -844,7 +844,8 @@ export default function ProjectsPageModern({
                         <td>{project.owner === userId ? "Me" : ""}</td>
                         <td
                           className={
-                            new Date() > new Date(project.deadline)
+                            new Date() > new Date(project.deadline) &&
+                            project.state !== 3
                               ? "overdue"
                               : ""
                           }

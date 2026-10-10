@@ -41,7 +41,7 @@ export default function DashboardReports({ reportsStats }) {
     tasks: [
       {
         name: "today",
-        diplay: "Today",
+        display: "Today",
         value: reportsStats.tasks.today,
         classes: " today",
       },
