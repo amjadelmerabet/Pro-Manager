@@ -11,6 +11,7 @@ import "./ListProjectItem.css";
 export default function ListProjectItem({
   project,
   user,
+  userId,
   openProjectClass,
   openProject,
   startProject,
@@ -177,7 +178,14 @@ export default function ListProjectItem({
           </div>
           <div className="deadline">
             <div className="property-name poppins-semibold">Deadline</div>
-            <div className="property-value poppins-regular">
+            <div
+              className={
+                "property-value poppins-regular" +
+                (new Date() > projectDeadline && project.state !== 3
+                  ? " overdue"
+                  : "")
+              }
+            >
               {project.deadline
                 ? projectDeadline.getMonth() +
                   "/" +
@@ -190,7 +198,7 @@ export default function ListProjectItem({
           <div className="created-by">
             <div className="property-name poppins-semibold">Created by</div>
             <div className="property-value poppins-regular">
-              {project.created_by === user ? "You" : project.created_bys}
+              {project.created_by === userId ? "You" : project.created_by}
             </div>
           </div>
         </div>

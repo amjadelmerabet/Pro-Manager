@@ -30,8 +30,23 @@ export default function ProjectPopup({
         <h3 className="project-name poppins-semibold">{popupProject.name}</h3>
       </div>
       <div className="project-info">
-        <div className="owner">
-          Owned by {popupProject.owner === userId ? "Me" : ""}
+        <div>
+          <div className="owner">
+            Owned by {popupProject.owner === userId ? "Me" : ""}
+          </div>
+          <div className="deadline">
+            Deadline{" "}
+            <span
+              className={
+                new Date() > new Date(popupProject.deadline) &&
+                popupProject.state !== 3
+                  ? "overdue"
+                  : ""
+              }
+            >
+              {new Date(popupProject.deadline).toLocaleDateString("fr")}
+            </span>
+          </div>
         </div>
         <div className="updated">
           Updated {updatedMessageUtil(new Date(popupProject.updated_on))}

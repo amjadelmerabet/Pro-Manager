@@ -264,6 +264,11 @@
   background-color: rgba(0, 0, 0, 0.1);
 }
 
+.dashboard-page-modern main > div > section .bottom-section table tr .overdue {
+  color: rgb(225, 0, 45);
+  font-weight: 500;
+}
+
 .dashboard-page-modern main > div > section .bottom-section table th {
   background-color: var(--default-light-theme-accent-color);
   color: white;
@@ -479,6 +484,16 @@ color: rgb(45, 145, 200);
   border-radius: 4px;
   /* border: 1px solid var(--default-light-theme-primary-color); */
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-page-modern main > div > .project-popup > .project-info > div:first-child {
+  display: flex;
+  gap: 20px;
+}
+
+.dashboard-page-modern main > div > .project-popup > .project-info > div .overdue {
+  color: rgb(225, 0, 45);
+  font-weight: 500;
 }
 
 .dashboard-page-modern

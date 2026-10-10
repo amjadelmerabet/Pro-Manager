@@ -137,6 +137,11 @@
   align-items: center;
 }
 
+.projects-page .project .project-body .overdue {
+  color: rgb(225, 0, 45);
+  font-weight: 500;
+}
+
 .projects-page .project > .project-body td:nth-child(2) {
   width: fit-content;
 }
@@ -158,6 +163,11 @@
   bottom: 2px;
   left: 50%;
   transform: translateX(-50%);
+}
+
+.projects-page .projects.list > .project .overdue {
+  color: rgb(225, 0, 45);
+  font-weight: 500;
 }
 
 .projects-page .project .project-actions {

@@ -21,3 +21,8 @@
 .dashboard-container .selected .selected-page-details tr > td:nth-child(2) {
   padding-left: 48px;
 }
+
+.dashboard-container .selected .selected-page-details tr > .overdue {
+  color: rgb(180, 0, 15);
+  font-weight: 500;
+}

@@ -179,7 +179,14 @@ export default function GridProjectItem({
           </tr>
           <tr>
             <td className="property poppins-bold">Deadline</td>
-            <td className="value poppins-regular">
+            <td
+              className={
+                "value poppins-regular" +
+                (new Date() > projectDeadline && project.state !== 3
+                  ? " overdue"
+                  : "")
+              }
+            >
               {project.deadline
                 ? `${projectDeadline.getMonth()}/${projectDeadline.getDate()}/${projectDeadline.getFullYear()}`
                 : "No deadline"}

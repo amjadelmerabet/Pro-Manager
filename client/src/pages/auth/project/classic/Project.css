@@ -123,7 +123,7 @@
   margin-left: 8px;
 }
 
-.project-page .project > .project-body span {
+.project-page .project > .project-body span:not(.deadline) {
   display: inline-block;
   margin-top: 16px;
 }
@@ -172,6 +172,11 @@
 .project-page .project .project-body > .project-info .left {
   display: flex;
   gap: 16px;
+}
+
+.project-page .project .project-body > .project-info .left .overdue {
+  color: rgb(225, 0, 45);
+  font-weight: 500;
 }
 
 .project-page .project .project-header .project-title {
