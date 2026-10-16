@@ -95,6 +95,7 @@ export default function SideMenu({
         newAccessToken,
         setNewAccessToken,
         setUserProjects,
+        userProjectsFetched,
         setUserProjectsFetched,
       );
     }

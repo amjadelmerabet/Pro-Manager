@@ -66,6 +66,7 @@ export default function ProjectsPageModern({
   const [filters, setFilters] = useState({});
   const [filtersApplied, setFiltersApplied] = useState(0);
   const [filteredProjectsList, setFilteredProjectsList] = useState([]);
+  const [filtersCleared, setFiltersCleared] = useState(0);
   const [showNewProjectForm, setShowNewProjectForm] = useState(false);
   const [newProjectFormVisible, setNewProjectFormVisible] = useState(false);
   const [createNewProject, setCreateNewProject] = useState(false);
@@ -83,14 +84,17 @@ export default function ProjectsPageModern({
   const [sortingPopupVisible, setSortingPopupVisible] = useState(false);
   const [sortingApplied, setSortingApplied] = useState(0);
   const [sortedList, setSortedList] = useState([]);
+  const [filteredAndSortedList, setFilteredAndSortedList] = useState([]);
 
   const { token, sessionId } = JSON.parse(sessionStorage.getItem("authUser"));
   const displayedProjects =
     filtersApplied > 0
       ? sortingApplied > 0
-        ? sortedList
+        ? filteredAndSortedList
         : filteredProjectsList
-      : userProjects;
+      : sortingApplied
+        ? sortedList
+        : userProjects;
   const hasSelectedProjects = selectedProjectIds.length > 0;
   const allDisplayedProjectsSelected =
     displayedProjects.length > 0 &&
@@ -111,9 +115,10 @@ export default function ProjectsPageModern({
       newAccessToken,
       setNewAccessToken,
       setUserProjects,
+      userProjectsFetched,
       setUserProjectsFetched,
     );
-  }, [fetchProjects, newProjectCreated]);
+  }, [fetchProjects, newProjectCreated, projectDeleted]);
 
   useEffect(() => {
     if (newAccessToken.counter > 0) {
@@ -197,76 +202,87 @@ export default function ProjectsPageModern({
     }
   }, [createNewProject]);
 
+  // BUG: When both filters and sorting are applied and you either create a new project or delete an existing project, the list of projects doesn't update.
+
   useEffect(() => {
     if (filtersApplied > 0) {
       const { state } = filters;
-      const filteredList = userProjects.filter(
-        (project) => project.state === state,
-      );
+      const filteredList =
+        sortingApplied > 0
+          ? sortedList.filter((project) => project.state === state)
+          : userProjects.filter((project) => project.state === state);
       setFilteredProjectsList(filteredList);
-    }
-  }, [filtersApplied]);
-
-  useEffect(() => {
-    if (sortingApplied > 0) {
-      const { by, type } = sortBy;
-      const sortedTempList =
-        filtersApplied > 0 ? filteredProjectsList : userProjects;
-      switch (by) {
-        case "state":
-          if (type === 1) {
-            sortedTempList.sort((a, b) => a.state - b.state);
-          } else {
-            sortedTempList.sort((a, b) => b.state - a.state);
-          }
-          break;
-        case "deadline":
-          if (type === 1) {
-            sortedTempList.sort(
-              (a, b) =>
-                new Date(a.deadline).getTime() - new Date(b.deadline).getTime(),
-            );
-          } else {
-            sortedTempList.sort(
-              (a, b) =>
-                new Date(b.deadline).getTime() - new Date(a.deadline).getTime(),
-            );
-          }
-          break;
-        case "created":
-          if (type === 1) {
-            sortedTempList.sort(
-              (a, b) =>
-                new Date(a.created_on).getTime() -
-                new Date(b.created_on).getTime(),
-            );
-          } else {
-            sortedTempList.sort(
-              (a, b) =>
-                new Date(b.created_on).getTime() -
-                new Date(a.created_on).getTime(),
-            );
-          }
-          break;
-        default:
-          if (type === 1) {
-            sortedTempList.sort(
-              (a, b) =>
-                new Date(a.updated_on).getTime() -
-                new Date(b.updated_on).getTime(),
-            );
-          } else {
-            sortedTempList.sort(
-              (a, b) =>
-                new Date(b.updated_on).getTime() -
-                new Date(a.updated_on).getTime(),
-            );
-          }
-          break;
+      if (sortingApplied > 0) {
+        setFilteredAndSortedList(filteredList);
       }
-      setSortedList(sortedTempList);
     }
-  }, [sortingApplied]);
+  }, [filtersApplied, userProjectsFetched]);
+
+  // FIXME: When applying a filter after being cleared and a sort is already applied the user gets an empty list
+  useEffect(() => {
+    if (sortingApplied > 0 || filtersCleared > 0) {
+      sortList(userProjects, setSortedList);
+      sortList(filteredProjectsList, setFilteredAndSortedList);
+    }
+  }, [sortingApplied, filtersCleared, userProjectsFetched]);
+
+  const sortList = (list, setSortedList) => {
+    const { by, type } = sortBy;
+    const sortedTempList = [...list];
+    switch (by) {
+      case "state":
+        if (type === 1) {
+          sortedTempList.sort((a, b) => a.state - b.state);
+        } else {
+          sortedTempList.sort((a, b) => b.state - a.state);
+        }
+        break;
+      case "deadline":
+        if (type === 1) {
+          sortedTempList.sort(
+            (a, b) =>
+              new Date(a.deadline).getTime() - new Date(b.deadline).getTime(),
+          );
+        } else {
+          sortedTempList.sort(
+            (a, b) =>
+              new Date(b.deadline).getTime() - new Date(a.deadline).getTime(),
+          );
+        }
+        break;
+      case "created":
+        if (type === 1) {
+          sortedTempList.sort(
+            (a, b) =>
+              new Date(a.created_on).getTime() -
+              new Date(b.created_on).getTime(),
+          );
+        } else {
+          sortedTempList.sort(
+            (a, b) =>
+              new Date(b.created_on).getTime() -
+              new Date(a.created_on).getTime(),
+          );
+        }
+        break;
+      default:
+        if (type === 1) {
+          sortedTempList.sort(
+            (a, b) =>
+              new Date(a.updated_on).getTime() -
+              new Date(b.updated_on).getTime(),
+          );
+        } else {
+          sortedTempList.sort(
+            (a, b) =>
+              new Date(b.updated_on).getTime() -
+              new Date(a.updated_on).getTime(),
+          );
+        }
+        break;
+    }
+    setSortedList(sortedTempList);
+  };
 
   const openFiltersPopup = () => {
     setShowFiltersPopup(true);
@@ -290,6 +306,9 @@ export default function ProjectsPageModern({
 
   const applyFilters = () => {
     setFiltersApplied(filtersApplied + 1);
+    setTimeout(() => {
+      setFiltersCleared(0);
+    }, 50);
     closeFiltersPopup();
   };
 
@@ -297,6 +316,7 @@ export default function ProjectsPageModern({
     setFiltersApplied(0);
     setFilters({});
     setFilteredProjectsList([]);
+    setFiltersCleared(filtersCleared + 1);
   };
 
   const openNewProjectForm = () => {
@@ -405,13 +425,19 @@ export default function ProjectsPageModern({
           <div className="projects-actions">
             <div className="project-actions-left">
               <button
-                className="filter-projects poppins-medium"
+                className={
+                  "filter-projects poppins-medium" +
+                  (filtersApplied > 0 ? " active-filters" : "")
+                }
                 onClick={() => openFiltersPopup()}
               >
                 Filter
               </button>
               <button
-                className="sort-projects poppins-medium"
+                className={
+                  "sort-projects poppins-medium" +
+                  (sortingApplied > 0 ? " active-sort" : "")
+                }
                 onClick={() => openSortingPopup()}
               >
                 Sort
@@ -749,13 +775,17 @@ export default function ProjectsPageModern({
                           ) : (
                             ""
                           )
-                        ) : (
+                        ) : sortingApplied > 0 ? (
                           <span>
                             {sortBy.type === 1 ? (
-                              <FaArrowDown />
-                            ) : (
                               <FaArrowUp />
+                            ) : (
+                              <FaArrowDown />
                             )}
+                          </span>
+                        ) : (
+                          <span>
+                            <FaArrowDown />
                           </span>
                         )}
                       </div>
