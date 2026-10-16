@@ -14,7 +14,7 @@ import { MdOutlineRadioButtonChecked } from "react-icons/md";
 
 import "./Tasks.css";
 import { RiAlarmWarningFill } from "react-icons/ri";
-import { FaFire, FaRegSnowflake } from "react-icons/fa";
+import { FaArrowDown, FaArrowUp, FaFire, FaRegSnowflake } from "react-icons/fa";
 
 const taskStates = {
   labels: {
@@ -71,7 +71,7 @@ export default function TasksPageModern({
   const [filters, setFilters] = useState({});
   const [filtersApplied, setFiltersApplied] = useState(0);
   const [filteredTasksList, setFilteredTasksList] = useState([]);
-
+  const [filtersCleared, setFiltersCleared] = useState(0);
   const [showNewTaskForm, setShowNewTaskForm] = useState(false);
   const [newTaskFormVisible, setNewTaskFormVisible] = useState(false);
   const [createNewTask, setCreateNewTask] = useState(false);
@@ -85,9 +85,22 @@ export default function TasksPageModern({
     delete: false,
   });
   const [taskDeleted, setTaskDeleted] = useState(0);
+  const [sortBy, setSortBy] = useState({ type: 1 });
+  const [showSortingPopup, setShowSortingPopup] = useState(false);
+  const [sortingPopupVisible, setSortingPopupVisible] = useState(false);
+  const [sortingApplied, setSortingApplied] = useState(0);
+  const [sortedList, setSortedList] = useState([]);
+  const [filteredAndSortedList, setFilteredAndSortedList] = useState([]);
 
   const { token, sessionId } = JSON.parse(sessionStorage.getItem("authUser"));
-  const displayedTasks = filtersApplied > 0 ? filteredTasksList : userTasks;
+  const displayedTasks =
+    filtersApplied > 0
+      ? sortingApplied > 0
+        ? filteredAndSortedList
+        : filteredTasksList
+      : sortingApplied > 0
+        ? sortedList
+        : userTasks;
   const hasSelectedTasks = selectedTaskIds.length > 0;
   const allDisplayedTasksSelected =
     displayedTasks.length > 0 &&
@@ -214,17 +227,32 @@ export default function TasksPageModern({
   useEffect(() => {
     if (filtersApplied > 0) {
       const { state, scope } = filters;
-      const filteredList = userTasks.filter((task) => {
-        const matchesState = state ? task.state === state : true;
-        const matchesScope =
-          scope === "standalone"
-            ? !task.project
-            : scope === "project"
-              ? Boolean(task.project)
-              : true;
-        return matchesState && matchesScope;
-      });
+      const filteredList =
+        sortingApplied > 0
+          ? sortedList.filter((task) => {
+              const matchesState = state ? task.state === state : true;
+              const matchesScope =
+                scope === "standalone"
+                  ? !task.project
+                  : scope === "project"
+                    ? Boolean(task.project)
+                    : true;
+              return matchesState && matchesScope;
+            })
+          : userTasks.filter((task) => {
+              const matchesState = state ? task.state === state : true;
+              const matchesScope =
+                scope === "standalone"
+                  ? !task.project
+                  : scope === "project"
+                    ? Boolean(task.project)
+                    : true;
+              return matchesState && matchesScope;
+            });
       setFilteredTasksList(filteredList);
+      if (sortingApplied > 0) {
+        setFilteredAndSortedList(filteredList);
+      }
     }
   }, [filtersApplied]);
 
@@ -233,6 +261,66 @@ export default function TasksPageModern({
       (project) => project.project_id === taskProjectId,
     );
     return match.length > 0 ? match[0].name : "";
+  };
+
+  // FIXME: When applying a filter after being cleared and a sort is already applied the user gets an empty list
+  useEffect(() => {
+    if (sortingApplied > 0 || filtersCleared > 0) {
+      sortList(userTasks, setSortedList);
+      sortList(filteredTasksList, setFilteredAndSortedList);
+    }
+  }, [sortingApplied, filtersCleared]);
+
+  const sortList = (list, setSortedList) => {
+    const { type, by } = sortBy;
+    const sortedTempList = [...list];
+    switch (by) {
+      case "state":
+        if (type === 1) {
+          sortedTempList.sort((a, b) => a.state - b.state);
+        } else {
+          sortedTempList.sort((a, b) => b.state - a.state);
+        }
+        break;
+      case "priority":
+        if (type === 1) {
+          sortedTempList.sort((a, b) => a.priority - b.priority);
+        } else {
+          sortedTempList.sort((a, b) => b.priority - a.priority);
+        }
+        break;
+      case "created":
+        if (type === 1) {
+          sortedTempList.sort(
+            (a, b) =>
+              new Date(a.created_on).getTime() -
+              new Date(b.created_on).getTime(),
+          );
+        } else {
+          sortedTempList.sort(
+            (a, b) =>
+              new Date(b.created_on).getTime() -
+              new Date(a.created_on).getTime(),
+          );
+        }
+        break;
+      default:
+        if (type === 1) {
+          sortedTempList.sort(
+            (a, b) =>
+              new Date(a.updated_on).getTime() -
+              new Date(b.updated_on).getTime(),
+          );
+        } else {
+          sortedTempList.sort(
+            (a, b) =>
+              new Date(b.updated_on).getTime() -
+              new Date(a.updated_on).getTime(),
+          );
+        }
+        break;
+    }
+    setSortedList(sortedTempList);
   };
 
   const openFiltersPopup = () => {
@@ -259,6 +347,9 @@ export default function TasksPageModern({
 
   const applyFilters = () => {
     setFiltersApplied(filtersApplied + 1);
+    setTimeout(() => {
+      setFiltersCleared(0);
+    }, 50);
     closeFiltersPopup();
   };
 
@@ -266,6 +357,7 @@ export default function TasksPageModern({
     setFiltersApplied(0);
     setFilters({});
     setFilteredTasksList([]);
+    setFiltersCleared(filtersCleared + 1);
   };
 
   const openNewTaskForm = () => {
@@ -346,6 +438,39 @@ export default function TasksPageModern({
     }
   };
 
+  const openSortingPopup = () => {
+    setShowSortingPopup(true);
+    setTimeout(() => {
+      setSortingPopupVisible(true);
+    }, 250);
+  };
+
+  const closeSortingPopup = () => {
+    setSortingPopupVisible(false);
+    setTimeout(() => {
+      setShowSortingPopup(false);
+    }, 250);
+  };
+
+  const updateSortBy = (sortByValue) => {
+    setSortBy({ ...sortBy, by: sortByValue });
+  };
+
+  const updateSortByType = (sortByType) => {
+    setSortBy({ ...sortBy, type: sortByType });
+  };
+
+  const applySort = () => {
+    setSortingApplied(sortingApplied + 1);
+    closeSortingPopup();
+  };
+
+  const clearSort = () => {
+    setSortingApplied(0);
+    setSortBy({ type: 1 });
+    setSortedList([]);
+  };
+
   return (
     <div className="tasks-page-modern">
       <div className="page-container">
@@ -356,16 +481,28 @@ export default function TasksPageModern({
           setAuthentication={setAuthentication}
         />
         <main
-          className={filtersPopupVisible || showNewTaskForm ? "popup-open" : ""}
+          className={
+            filtersPopupVisible || showNewTaskForm || sortingPopupVisible
+              ? "popup-open"
+              : ""
+          }
         >
           <h2 className="page-title poppins-bold">My Tasks</h2>
           <div className="tasks-actions">
-            <button
-              className="filter-tasks poppins-medium"
-              onClick={() => openFiltersPopup()}
-            >
-              Filter
-            </button>
+            <div className="tasks-actions-left">
+              <button
+                className="filter-tasks poppins-medium"
+                onClick={() => openFiltersPopup()}
+              >
+                Filter
+              </button>
+              <button
+                className="sort-tasks poppins-medium"
+                onClick={() => openSortingPopup()}
+              >
+                Sort
+              </button>
+            </div>
             <div className="tasks-actions-right">
               <button
                 className={
@@ -400,7 +537,7 @@ export default function TasksPageModern({
               <div>
                 <div className="state-section poppins-regular">
                   <label
-                    htmlFor="task-states"
+                    htmlFor="task-state-label"
                     className="task-states-label poppins-medium"
                   >
                     State
@@ -483,7 +620,9 @@ export default function TasksPageModern({
                         checked={
                           Object.keys(filters).indexOf("scope") === -1
                             ? true
-                            : false
+                            : filters.scope === "all"
+                              ? true
+                              : false
                         }
                         onChange={(e) => updateFilters("scope", e.target.value)}
                       />
@@ -546,6 +685,114 @@ export default function TasksPageModern({
           ) : (
             ""
           )}
+          {showSortingPopup ? (
+            <div
+              className={
+                "sorting-popup" + (sortingPopupVisible ? " visible" : "")
+              }
+            >
+              <button
+                className="close-popup poppins-semibold"
+                onClick={() => closeSortingPopup()}
+              >
+                Close
+              </button>
+              <div>
+                <div className="poppins-regular">
+                  <label
+                    htmlFor="sort-by-label"
+                    className="sort-by-label poppins-medium"
+                  >
+                    Sort by
+                  </label>
+                  <div className="sorting-choices">
+                    <select
+                      name="sort-by"
+                      className="sort-by poppins-regular"
+                      value={
+                        Object.keys(sortBy).indexOf("by") !== -1
+                          ? sortBy.by
+                          : "default"
+                      }
+                      onChange={(e) => updateSortBy(e.target.value)}
+                    >
+                      <option value="default" defaultChecked>
+                        Default
+                      </option>
+                      <option value="state">State</option>
+                      <option value="priority">Priority</option>
+                      <option value="updated">Updated</option>
+                      <option value="created">Created</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="poppins-regular">
+                  <label
+                    htmlFor="sort-by-type-label"
+                    className="sort-by-type-label poppins-medium"
+                  >
+                    Sort by type
+                  </label>
+                  <div>
+                    <div>
+                      <input
+                        type="radio"
+                        name="sort-by-type"
+                        value="1"
+                        id="a-to-z"
+                        onChange={(e) =>
+                          updateSortByType(Number(e.target.value))
+                        }
+                        checked={
+                          Object.keys(sortBy).indexOf("type") !== -1
+                            ? sortBy.type === 1
+                              ? true
+                              : false
+                            : true
+                        }
+                      />
+                      <label htmlFor="a-to-z">A to Z</label>
+                    </div>
+                    <div>
+                      <input
+                        type="radio"
+                        name="sort-by-type"
+                        value="2"
+                        id="z-to-a"
+                        onChange={(e) =>
+                          updateSortByType(Number(e.target.value))
+                        }
+                        checked={
+                          Object.keys(sortBy).indexOf("type") !== -1
+                            ? sortBy.type === 2
+                              ? true
+                              : false
+                            : false
+                        }
+                      />
+                      <label htmlFor="z-to-a">Z to A</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="actions">
+                <button
+                  className="apply-sort poppins-semibold"
+                  onClick={() => applySort()}
+                >
+                  Apply
+                </button>
+                <button
+                  className="clear-sort poppins-semibold"
+                  onClick={() => clearSort()}
+                >
+                  Clear
+                </button>
+              </div>
+            </div>
+          ) : (
+            ""
+          )}
           {showNewTaskForm ? (
             <NewTaskForm
               newTaskFormVisible={newTaskFormVisible}
@@ -574,14 +821,141 @@ export default function TasksPageModern({
                       </div>
                     </th>
                     <th className="poppins-semibold">Name</th>
-                    <th className="poppins-semibold">State</th>
-                    <th className="poppins-semibold">Priority</th>
+                    <th
+                      className={
+                        "poppins-semibold" +
+                        (sortingApplied > 0
+                          ? sortBy.by === "state"
+                            ? " sorted-by"
+                            : ""
+                          : "")
+                      }
+                    >
+                      <div>
+                        State
+                        {sortingApplied > 0 &&
+                        Object.keys(sortBy).indexOf("by") !== -1 ? (
+                          sortBy.by === "state" ? (
+                            <span>
+                              {sortBy.type === 1 ? (
+                                <FaArrowUp />
+                              ) : (
+                                <FaArrowDown />
+                              )}
+                            </span>
+                          ) : (
+                            ""
+                          )
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                    </th>
+                    <th
+                      className={
+                        "poppins-semibold" +
+                        (sortingApplied > 0
+                          ? sortBy.by === "priority"
+                            ? " sorted-by"
+                            : ""
+                          : "")
+                      }
+                    >
+                      <div>
+                        Priority
+                        {sortingApplied > 0 &&
+                        Object.keys(sortBy).indexOf("by") !== -1 ? (
+                          sortBy.by === "priority" ? (
+                            <span>
+                              {sortBy.type === 1 ? (
+                                <FaArrowUp />
+                              ) : (
+                                <FaArrowDown />
+                              )}
+                            </span>
+                          ) : (
+                            ""
+                          )
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                    </th>
                     <th className="poppins-semibold">Project</th>
                     <th className="poppins-semibold">Assigned to</th>
                     <th className="poppins-semibold">Description</th>
-                    <th className="poppins-semibold">Updated</th>
+                    <th
+                      className={
+                        "poppins-semibold" +
+                        (sortingApplied > 0 &&
+                        Object.keys(sortBy).indexOf("by") !== -1
+                          ? sortBy.by === "updated"
+                            ? " sorted-by"
+                            : ""
+                          : " sorted-by")
+                      }
+                    >
+                      <div>
+                        Updated
+                        {sortingApplied > 0 &&
+                        Object.keys(sortBy).indexOf("by") !== -1 ? (
+                          sortBy.by === "updated" ? (
+                            <span>
+                              {sortBy.type === 1 ? (
+                                <FaArrowUp />
+                              ) : (
+                                <FaArrowDown />
+                              )}
+                            </span>
+                          ) : (
+                            ""
+                          )
+                        ) : sortingApplied > 0 ? (
+                          <span>
+                            {sortBy.type === 1 ? (
+                              <FaArrowUp />
+                            ) : (
+                              <FaArrowDown />
+                            )}
+                          </span>
+                        ) : (
+                          <span>
+                            <FaArrowDown />
+                          </span>
+                        )}
+                      </div>
+                    </th>
                     <th className="poppins-semibold">Updated by</th>
-                    <th className="poppins-semibold">Created</th>
+                    <th
+                      className={
+                        "poppins-semibold" +
+                        (sortingApplied > 0
+                          ? sortBy.by === "created"
+                            ? " sorted-by"
+                            : ""
+                          : "")
+                      }
+                    >
+                      <div>
+                        Created
+                        {sortingApplied > 0 &&
+                        Object.keys(sortBy).indexOf("by") !== -1 ? (
+                          sortBy.by === "created" ? (
+                            <span>
+                              {sortBy.type === 1 ? (
+                                <FaArrowUp />
+                              ) : (
+                                <FaArrowDown />
+                              )}
+                            </span>
+                          ) : (
+                            ""
+                          )
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                    </th>
                     <th className="poppins-semibold">Created by</th>
                   </tr>
                 </thead>

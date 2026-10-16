@@ -51,6 +51,23 @@
   align-items: center;
 }
 
+.tasks-page-modern main .tasks-section > .tasks thead .sorted-by {
+  color: rgb(45, 255, 200);
+}
+
+.tasks-page-modern main .tasks-section > .tasks thead .sorted-by > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+}
+
+.tasks-page-modern main .tasks-section > .tasks thead .sorted-by > div > span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .tasks-page-modern main .tasks-section > .tasks > tbody {
   font-size: 13px;
 }
@@ -155,7 +172,7 @@
   padding: 4px 12px;
 }
 
-.tasks-page-modern main .tasks-actions .tasks-actions-right {
+.tasks-page-modern main .tasks-actions > div {
   display: flex;
   gap: 8px;
 }
@@ -182,7 +199,8 @@
   background-color: var(--default-light-theme-secondary-color-hover);
 }
 
-.tasks-page-modern main .filters-popup {
+.tasks-page-modern main .filters-popup, 
+.tasks-page-modern main .sorting-popup {
   position: absolute;
   width: 42%;
   top: 18%;
@@ -206,13 +224,15 @@
     z-index: 10;
 }
 
-.tasks-page-modern main .filters-popup.visible {
+.tasks-page-modern main .filters-popup.visible,
+.tasks-page-modern main .sorting-popup.visible {
   opacity: 1;
   visibility: visible;
   transform: scale(1);
 }
 
-.tasks-page-modern main .filters-popup .close-popup {
+.tasks-page-modern main .filters-popup .close-popup,
+.tasks-page-modern main .sorting-popup .close-popup {
   position: absolute;
   top: 4px;
   right: 8px;
@@ -222,35 +242,49 @@
   color: rgb(255, 45, 80);
 }
 
-.tasks-page-modern main .filters-popup > div {
+.tasks-page-modern main .filters-popup > div,
+.tasks-page-modern main .sorting-popup > div {
   display: grid;
   gap: 8px;
-  margin-block: 24px;
 }
 
-.tasks-page-modern main .filters-popup label {
+.tasks-page-modern main .filters-popup label,
+.tasks-page-modern main .sorting-popup label {
   font-size: 15px;
 }
 
 .tasks-page-modern main .filters-popup .task-states,
-.tasks-page-modern main .filters-popup .task-scope {
+.tasks-page-modern main .filters-popup .task-scope,
+.tasks-page-modern main .sorting-popup > div > div:last-child > div {
   display: flex;
   font-size: 14px;
   gap: 16px;
 }
 
+.tasks-page-modern
+  main
+  .sorting-popup
+  > div
+  > div {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
 .tasks-page-modern main .filters-popup .task-states > div,
-.tasks-page-modern main .filters-popup .task-scope > div {
+.tasks-page-modern main .filters-popup .task-scope > div,
+.tasks-page-modern main .sorting-popup > div > div > div > div {
   display: flex;
   gap: 4px;
 }
 
-.tasks-page-modern main .filters-popup .actions {
+.tasks-page-modern main .filters-popup .actions,
+.tasks-page-modern main .sorting-popup .actions {
   display: flex;
   gap: 8px;
 }
 
-.tasks-page-modern main .filters-popup .actions > button {
+.tasks-page-modern main .filters-popup .actions > button, 
+.tasks-page-modern main .sorting-popup .actions > button {
   padding: 2px 16px;
   border: none;
   border-radius: 4px;
@@ -259,16 +293,19 @@
   box-shadow: 2px 2px 4px rgba(0, 0, 0, .25);
 }
 
-.tasks-page-modern main .filters-popup .actions > button:hover {
+.tasks-page-modern main .filters-popup .actions > button:hover, 
+.tasks-page-modern main .sorting-popup .actions > button:hover {
   transform: scale(0.98);
   box-shadow: 1px 1px 2px rgba(0, 0, 0, .25);
 }
 
-.tasks-page-modern main .filters-popup .actions > .clear-filters {
+.tasks-page-modern main .filters-popup .actions > .clear-filters,
+.tasks-page-modern main .sorting-popup .actions > .clear-sort {
   background-color: var(--default-light-theme-secondary-color);
 }
 
-.tasks-page-modern main .filters-popup .actions > .apply-filters {
+.tasks-page-modern main .filters-popup .actions > .apply-filters, 
+.tasks-page-modern main .sorting-popup .actions > .apply-sort {
   background-color: var(--default-light-theme-primary-color);
   color: white;
 }
