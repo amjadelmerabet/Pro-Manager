@@ -17,6 +17,7 @@ async function fetchUserTasksAction(
   newAccessToken,
   setNewAccessToken,
   setUserTasks,
+  userTasksFetched,
   setUserTasksFetched,
 ) {
   const fetch = await getTasksByAssignedToAPI(userId, token);
@@ -24,7 +25,7 @@ async function fetchUserTasksAction(
     tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
   } else {
     setUserTasks(fetch.result);
-    setUserTasksFetched(true);
+    setUserTasksFetched(userTasksFetched + 1);
   }
 }
 
@@ -40,6 +41,7 @@ export default async function fetchUserTasksUtil(
   newAccessToken,
   setNewAccessToken,
   setUserTasks,
+  userTasksFetched,
   setUserTasksFetched,
 ) {
   if (!tokenValidated) {
@@ -61,6 +63,7 @@ export default async function fetchUserTasksUtil(
           newAccessToken,
           setNewAccessToken,
           setUserTasks,
+          userTasksFetched,
           setUserTasksFetched,
         );
       }
@@ -79,6 +82,7 @@ export default async function fetchUserTasksUtil(
       newAccessToken,
       setNewAccessToken,
       setUserTasks,
+      userTasksFetched,
       setUserTasksFetched,
     );
   }
