@@ -119,9 +119,10 @@ export default function TasksPageModern({
       newAccessToken,
       setNewAccessToken,
       setUserTasks,
+      userTasksFetched,
       setUserTasksFetched,
     );
-  }, [fetchTasks, newTaskCreated]);
+  }, [fetchTasks, newTaskCreated, taskDeleted]);
 
   // One-off fetch to populate the project picker. Reuses the same
   // fetchUserProjectsUtil the Projects page already relies on.
@@ -224,6 +225,8 @@ export default function TasksPageModern({
     }
   }, [createNewTask]);
 
+  // BUG: When both filters and sorting are applied and you either create a new task or delete an existing task, the list of tasks doesn't update.
+
   useEffect(() => {
     if (filtersApplied > 0) {
       const { state, scope } = filters;
@@ -254,7 +257,7 @@ export default function TasksPageModern({
         setFilteredAndSortedList(filteredList);
       }
     }
-  }, [filtersApplied]);
+  }, [filtersApplied, userTasksFetched]);
 
   const getProjectName = (taskProjectId) => {
     const match = userProjects.filter(
@@ -263,13 +266,12 @@ export default function TasksPageModern({
     return match.length > 0 ? match[0].name : "";
   };
 
-  // FIXME: When applying a filter after being cleared and a sort is already applied the user gets an empty list
   useEffect(() => {
     if (sortingApplied > 0 || filtersCleared > 0) {
       sortList(userTasks, setSortedList);
       sortList(filteredTasksList, setFilteredAndSortedList);
     }
-  }, [sortingApplied, filtersCleared]);
+  }, [sortingApplied, filtersCleared, userTasksFetched]);
 
   const sortList = (list, setSortedList) => {
     const { type, by } = sortBy;
@@ -491,13 +493,19 @@ export default function TasksPageModern({
           <div className="tasks-actions">
             <div className="tasks-actions-left">
               <button
-                className="filter-tasks poppins-medium"
+                className={
+                  "filter-tasks poppins-medium" +
+                  (filtersApplied > 0 ? " active-filters" : "")
+                }
                 onClick={() => openFiltersPopup()}
               >
                 Filter
               </button>
               <button
-                className="sort-tasks poppins-medium"
+                className={
+                  "sort-tasks poppins-medium" +
+                  (sortingApplied > 0 ? " active-sort" : "")
+                }
                 onClick={() => openSortingPopup()}
               >
                 Sort

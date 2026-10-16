@@ -187,11 +187,24 @@
   transition:
   transform 250ms ease-in-out,
   background-color 250ms ease-in-out;
+  position: relative;
 }
 
 .tasks-page-modern main .tasks-actions .delete-tasks {
   background-color: rgb(255, 45, 80);
   color: white;
+}
+
+.tasks-page-modern main .tasks-actions button.active-filters::before, 
+.tasks-page-modern main .tasks-actions button.active-sort::before {
+  content: "";
+  position: absolute;
+  width: 8px;
+  aspect-ratio: 1 / 1;
+  background-color: var(--default-light-theme-accent-color);
+  top: -4px;
+  right: -4px;
+  border-radius: 4px;
 }
 
 .tasks-page-modern main .tasks-actions > button:hover {

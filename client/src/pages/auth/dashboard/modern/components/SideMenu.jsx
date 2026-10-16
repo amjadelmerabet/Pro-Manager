@@ -114,6 +114,7 @@ export default function SideMenu({
         newAccessToken,
         setNewAccessToken,
         setUserTasks,
+        userTasksFetched,
         setUserTasksFetched,
       );
     }
