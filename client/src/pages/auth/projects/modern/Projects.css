@@ -157,11 +157,24 @@
   transition:
     transform 250ms ease-in-out,
     background-color 250ms ease-in-out;
+  position: relative;
 }
 
 .projects-page-modern main .projects-actions .delete-projects {
   background-color: rgb(255, 45, 80);
   color: white;
+}
+
+.projects-page-modern main .projects-actions button.active-filters::before, 
+.projects-page-modern main .projects-actions button.active-sort::before {
+  content: "";
+  position: absolute;
+  width: 8px;
+  aspect-ratio: 1 / 1;
+  background-color: var(--default-light-theme-accent-color);
+  top: -4px;
+  right: -4px;
+  border-radius: 4px;
 }
 
 .projects-page-modern main .projects-actions > button:hover {

@@ -17,6 +17,7 @@ async function fetchUserProjectsAction(
   newAccessToken,
   setNewAccessToken,
   setUserProjects,
+  userProjectsFetched,
   setUserProjectsFetched,
 ) {
   const fetch = await getProjectsByOwnerAPI(userId, token);
@@ -24,7 +25,7 @@ async function fetchUserProjectsAction(
     tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
   } else {
     setUserProjects(fetch.result);
-    setUserProjectsFetched(true);
+    setUserProjectsFetched(userProjectsFetched + 1);
   }
 }
 
@@ -40,6 +41,7 @@ export default async function fetchUserProjectsUtil(
   newAccessToken,
   setNewAccessToken,
   setUserProjects,
+  userProjectsFetched,
   setUserProjectsFetched,
 ) {
   if (!tokenValidated) {
@@ -61,6 +63,7 @@ export default async function fetchUserProjectsUtil(
           newAccessToken,
           setNewAccessToken,
           setUserProjects,
+          userProjectsFetched,
           setUserProjectsFetched,
         );
       }
@@ -79,6 +82,7 @@ export default async function fetchUserProjectsUtil(
       newAccessToken,
       setNewAccessToken,
       setUserProjects,
+      userProjectsFetched,
       setUserProjectsFetched,
     );
   }
