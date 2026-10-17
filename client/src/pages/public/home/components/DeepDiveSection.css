@@ -105,8 +105,16 @@
 }
 
 .feature-explained .link a {
-  color: blue;
-  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  color: #0077b6;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 180ms ease;
+}
+
+.feature-explained .link a:hover {
+  color: #034d75;
 }
 
 .see-more-features {
@@ -117,7 +125,17 @@
 }
 
 .see-more-features a {
-  color: blue;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  color: #0077b6;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  transition: color 180ms ease;
+}
+
+.see-more-features a:hover {
+  color: #034d75;
 }
 
 /* Shared mock chrome */
