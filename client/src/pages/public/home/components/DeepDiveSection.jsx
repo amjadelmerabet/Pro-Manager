@@ -332,7 +332,7 @@ export default function DeepDiveSection() {
                     Read more ...
                   </Link>
                   <IconContext.Provider
-                    value={{ style: { color: "blue", fontSize: "120%" } }}
+                    value={{ style: { color: "#0077b6", fontSize: "120%" } }}
                   >
                     <LuExternalLink />
                   </IconContext.Provider>

@@ -25,9 +25,22 @@
 
 .newsletter-section form > button {
   margin-inline: 10px;
-  background-color: #0077b6;
+  background-color: var(--primary-color);
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  transition:
+    background-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.newsletter-section form > button:hover {
+  background-color: var(--primary-color-hover);
+  box-shadow: 0 5px 12px rgba(0, 119, 182, 0.2);
+}
+
+.newsletter-section form > button:focus-visible {
+  outline: 3px solid rgba(0, 119, 182, 0.35);
+  outline-offset: 3px;
 }

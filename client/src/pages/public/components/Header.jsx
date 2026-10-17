@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, NavLink } from "react-router";
 import "./Header.css";
 
 export default function Header() {
@@ -12,22 +12,24 @@ export default function Header() {
       </h1>
       <ul className="menu">
         <li className="poppins-semibold">
-          <Link to="/">Home</Link>
+          <NavLink to="/" end>
+            Home
+          </NavLink>
         </li>
         <li className="poppins-semibold">
-          <Link to="/features">Features</Link>
+          <NavLink to="/features">Features</NavLink>
         </li>
         <li className="poppins-semibold">
-          <Link to="/blog">Blog</Link>
+          <NavLink to="/blog">Blog</NavLink>
         </li>
         <li className="poppins-semibold">
-          <Link to="/pricing">Pricing</Link>
+          <NavLink to="/pricing">Pricing</NavLink>
         </li>
         <li className="poppins-semibold">
-          <Link to="/about">About us</Link>
+          <NavLink to="/about">About us</NavLink>
         </li>
         <li className="poppins-semibold">
-          <Link to="/contact">Contact</Link>
+          <NavLink to="/contact">Contact</NavLink>
         </li>
       </ul>
       <div className="auth-section">

@@ -18,11 +18,28 @@
 .overview button {
   width: fit-content;
   border: none;
-  background-color: #0077b6;
+  background-color: var(--primary-color);
   padding: 10px 45px;
   border-radius: 8px;
   color: white;
   cursor: pointer;
+  box-shadow: 0 8px 18px rgba(0, 119, 182, 0.18);
+  transition:
+    transform 180ms ease,
+    background-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.overview button:hover {
+  transform: translateY(-1px);
+  background-color: var(--primary-color-hover);
+  box-shadow: 0 11px 22px rgba(0, 119, 182, 0.24);
+}
+
+.overview button:focus-visible,
+.video-play-button:focus-visible {
+  outline: 3px solid rgba(0, 119, 182, 0.35);
+  outline-offset: 3px;
 }
 
 .video-container {
