@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 
 // Components
-import { Route, Routes } from "react-router";
+import { Route, Routes, useLocation } from "react-router";
 
 // Routes
 import {
@@ -34,6 +34,7 @@ import "./App.css";
 function App() {
   const [userAuthenticated, setUserAuthenticated] = useState(false);
   const [previewModernUI, setPreviewModernUI] = useState(false);
+  const location = useLocation();
 
   const useModernUI = sessionStorage.getItem("modern-ui");
   
@@ -44,6 +45,10 @@ function App() {
       setPreviewModernUI(useModernUI === "true" ? true : false);
     }
   }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   return (
     <>
