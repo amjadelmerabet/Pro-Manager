@@ -12,6 +12,7 @@ import {
   TbSquareArrowRight,
   TbSquareCheck,
 } from "react-icons/tb";
+import { useEffect, useState } from "react";
 
 export default function RecentPage({
   type,
@@ -23,7 +24,16 @@ export default function RecentPage({
   userId,
   updatedStatus,
   createdStatus,
+  load,
 }) {
+  const [loadReport, setLoadReport] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoadReport(true);
+    }, load);
+  });
+
   if (type === "project") {
     return (
       <div
@@ -32,7 +42,8 @@ export default function RecentPage({
           "recent-page" +
           (selectedPage.project_id === recentPage.project_id
             ? " selected-recent-page"
-            : "")
+            : "") +
+          (loadReport ? " visible" : "")
         }
         onClick={() => setSelectedPage({ ...recentPage, type: "project" })}
       >
@@ -100,7 +111,8 @@ export default function RecentPage({
           "recent-page" +
           (selectedPage.task_id === recentPage.task_id
             ? " selected-recent-page"
-            : "")
+            : "") +
+          (loadReport ? " visible" : "")
         }
         onClick={() => {
           setSelectedPage({ ...recentPage, type: "task" });

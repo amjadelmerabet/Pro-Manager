@@ -6,7 +6,7 @@ import { useLocation, useNavigate, useSearchParams } from "react-router";
 import { IconContext } from "react-icons/lib";
 import { BiReset } from "react-icons/bi";
 import { GrFormClock } from "react-icons/gr";
-import { IoCheckmark, IoClose } from "react-icons/io5";
+import { IoArrowBack, IoCheckmark, IoClose } from "react-icons/io5";
 import {
   FaArrowLeft,
   FaFire,
@@ -1142,7 +1142,7 @@ export default function Project({
                 No activities
               </div>
             )}
-            <div className="links poppins-semibold">
+            <div className="links poppins-regular">
               <Link
                 to={
                   view
@@ -1164,8 +1164,9 @@ export default function Project({
                     },
                   }}
                 >
-                  <FaArrowLeft />
+                  <IoArrowBack />
                 </IconContext.Provider>
+                {/* TODO: Make the animation of this link similar to the one in the Sign in page */}
                 <span>Go back</span>
               </Link>
             </div>
