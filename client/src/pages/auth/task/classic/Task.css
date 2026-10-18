@@ -269,6 +269,7 @@
 .task-page .task .links a {
   display: flex;
   align-items: center;
+  font-size: 14px;
   text-decoration: none;
   width: fit-content;
   color: var(--primary-color);

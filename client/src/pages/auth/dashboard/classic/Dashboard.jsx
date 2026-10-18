@@ -37,7 +37,12 @@ import { IoClose } from "react-icons/io5";
 import GlobalSearch from "../../components/GlobalSearch";
 import countMatchingRecords from "../../utils/countMatchingRecords";
 
-export default function DashboardPage({ user, userId, setAuthentication, setPreviewModernUI }) {
+export default function DashboardPage({
+  user,
+  userId,
+  setAuthentication,
+  setPreviewModernUI,
+}) {
   const [recentPages, setRecentPages] = useState([]);
   const [tries, setTries] = useState(0);
   const [tokenValidated, setTokenValidated] = useState(false);
@@ -370,7 +375,7 @@ export default function DashboardPage({ user, userId, setAuthentication, setPrev
                 </div>
               ) : (
                 <div className="pages poppins-regular">
-                  {recentPages.map((recentPage) => {
+                  {recentPages.map((recentPage, index) => {
                     const updatedStatus = updatedMessageUtil(
                       new Date(recentPage.updated_on),
                     );
@@ -390,6 +395,7 @@ export default function DashboardPage({ user, userId, setAuthentication, setPrev
                           userId={userId}
                           updatedStatus={updatedStatus}
                           createdStatus={createdStatus}
+                          load={50 * (index + 1)}
                         />
                       );
                     } else if (
@@ -407,6 +413,7 @@ export default function DashboardPage({ user, userId, setAuthentication, setPrev
                           userId={userId}
                           updatedStatus={updatedStatus}
                           createdStatus={createdStatus}
+                          load={50 * (index + 1)}
                         />
                       );
                     } else {
