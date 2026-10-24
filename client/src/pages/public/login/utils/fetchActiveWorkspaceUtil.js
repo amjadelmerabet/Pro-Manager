@@ -24,9 +24,11 @@ async function fetchActiveWorkspaceAction(
     setRetrieveActiveWorkspace(false);
     tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
   } else {
-    let authUser = JSON.parse(sessionStorage.getItem("authUser"));
-    authUser.workspaceId = activeWorkspace.result[0].workspace_id;
-    sessionStorage.setItem("authUser", JSON.stringify(authUser));
+    if (activeWorkspace.result.length === 1) {
+      let authUser = JSON.parse(sessionStorage.getItem("authUser"));
+      authUser.workspaceId = activeWorkspace.result[0].workspace_id;
+      sessionStorage.setItem("authUser", JSON.stringify(authUser));
+    }
     setActiveWorkspaceRetrieved(true);
   }
 }

@@ -80,7 +80,6 @@ function App() {
         setTokenValidated,
         setNewUser,
         setCheckNewUser,
-        setUserAuthenticated,
         setCheckingNewUserDone,
       );
     };

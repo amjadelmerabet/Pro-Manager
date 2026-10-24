@@ -16,22 +16,22 @@ async function checkNewUserAction(
   setTries,
   newAccessToken,
   setNewAccessToken,
-  setUserAuthenticated,
   setCheckNewUser,
   setNewUser,
   setCheckingNewUserDone
 ) {
   const workspaces = await getWorkspacesByOwnerAPI(userId, token);
   if (workspaces.error === "Invalid access token" && tries < 3) {
-    setUserAuthenticated(false);
     setCheckNewUser(false);
     tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
   } else {
     if (workspaces.result.length === 0) {
       setNewUser(true);
     } else {
+      console.log("Not a new user");
       setNewUser(false);
     }
+    console.log("New user check is done");
     setCheckingNewUserDone(true);
   }
 }
@@ -49,7 +49,6 @@ export default async function checkNewUserUtil(
   setTokenValidated,
   setNewUser,
   setCheckNewUser,
-  setUserAuthenticated,
   setCheckingNewUserDone
 ) {
   if (!tokenValidated) {
@@ -70,7 +69,6 @@ export default async function checkNewUserUtil(
           setTries,
           newAccessToken,
           setNewAccessToken,
-          setUserAuthenticated,
           setCheckNewUser,
           setNewUser,
           setCheckingNewUserDone
@@ -90,7 +88,6 @@ export default async function checkNewUserUtil(
       setTries,
       newAccessToken,
       setNewAccessToken,
-      setUserAuthenticated,
       setCheckNewUser,
       setNewUser,
       setCheckingNewUserDone

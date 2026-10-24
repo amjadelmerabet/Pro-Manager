@@ -27,7 +27,7 @@ export default async function loginRedirectUtil(
       // } else {
       // }
       navigate(
-        `/auth/${user}/${modernUI && modernUI === "true" ? "modern" : "classic"}/workspace/${workspaceId}/dashboard`,
+        `/auth/${user}/${modernUI && modernUI === "true" ? "modern" : "classic"}/workspace/${workspaceId ? workspaceId : "new"}/dashboard`,
       );
     } else if (username) {
       // if (newUser) {
@@ -37,7 +37,7 @@ export default async function loginRedirectUtil(
       // } else {
       // }
       navigate(
-        `/auth/${username}/${modernUI && modernUI === "true" ? "modern" : "classic"}/workspace/${workspaceId}/dashboard`,
+        `/auth/${username}/${modernUI && modernUI === "true" ? "modern" : "classic"}/workspace/${workspaceId ? workspaceId : "new"}/dashboard`,
       );
     } else {
       // if (newUser) {
@@ -47,7 +47,7 @@ export default async function loginRedirectUtil(
       // } else {
       // }
       navigate(
-        `/auth/user/${modernUI && modernUI === "true" ? "modern" : "classic"}/workspace/${workspaceId}/dashboard`,
+        `/auth/user/${modernUI && modernUI === "true" ? "modern" : "classic"}/workspace/${workspaceId ? workspaceId : "new"}/dashboard`,
       );
     }
   }
