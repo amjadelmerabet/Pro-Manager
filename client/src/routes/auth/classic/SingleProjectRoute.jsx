@@ -9,6 +9,8 @@ export default function SingleProjectRoute({
   isAuthenticated,
   setAuthentication,
   setPreviewModernUI,
+  newUser,
+  checkingNewUserDone,
 }) {
   const [session, setSession] = useState("");
 
@@ -29,7 +31,16 @@ export default function SingleProjectRoute({
     navigate("/signin");
   };
 
+  const redirectToGetStartedPage = () => {
+    navigate(`/auth/${userAuthenticated.user}/classic/get-started`);
+  };
+
   const username = slicedPathname.slice(0, index);
+
+  const projectId = slicedPathname
+    .replace(`${userAuthenticated.user}/classic/workspace/`, "")
+    .replace("/project/", ":")
+    .split(":")[1];
 
   useEffect(() => {
     const getUserSession = async () => {
@@ -79,17 +90,30 @@ export default function SingleProjectRoute({
   }, []);
 
   if (isAuthenticated || userAuthenticated) {
-    if (username === userAuthenticated.user) {
-      return (
-        <Project
-          user={userAuthenticated.user}
-          userId={userAuthenticated.userId}
-          setAuthentication={setAuthentication}
-          setPreviewModernUI={setPreviewModernUI}
-        />
-      );
+    if (!checkingNewUserDone) {
+      return <p>Checking ...</p>;
     } else {
-      <WrongRoute />;
+      if (!newUser) {
+        if (username === userAuthenticated.user && projectId.length === 36) {
+          return (
+            <Project
+              user={userAuthenticated.user}
+              userId={userAuthenticated.userId}
+              setAuthentication={setAuthentication}
+              setPreviewModernUI={setPreviewModernUI}
+              project={projectId}
+            />
+          );
+        } else {
+          <WrongRoute />;
+        }
+      } else {
+        setTimeout(() => {
+          redirectToGetStartedPage();
+        }, 250);
+      }
     }
+  } else {
+    return <WrongRoute />;
   }
 }
