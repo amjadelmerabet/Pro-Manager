@@ -10,7 +10,7 @@ export default function GetStartedPage({
   setPreviewModernUI,
   setCheckingNewUserDone,
   setCheckNewUser,
-  setWorkspaceId
+  setWorkspaceId,
 }) {
   const [getStartedFormVisible, setGetStartedFormVisible] = useState(false);
   const [workspace, setWorkspace] = useState({ owner: userId });
@@ -22,6 +22,7 @@ export default function GetStartedPage({
     action: "",
   });
   const [tries, setTries] = useState(0);
+  const [missingData, setMissingData] = useState(false);
 
   const { token, sessionId } = JSON.parse(sessionStorage.getItem("authUser"));
 
@@ -46,7 +47,7 @@ export default function GetStartedPage({
         setNewAccessToken,
         setCreateWorkspace,
         setWorkspaceCreated,
-        setWorkspaceId
+        setWorkspaceId,
       );
     }
   }, [createWorkspace]);
@@ -88,7 +89,11 @@ export default function GetStartedPage({
 
   const createWorkspaceFn = () => {
     setWorkspace({ ...workspace, updated_by: userId, created_by: userId });
-    setCreateWorkspace(true);
+    if (workspace.name && workspace.description) {
+      setCreateWorkspace(true);
+    } else {
+      setMissingData(true);
+    }
   };
 
   return (
@@ -97,20 +102,36 @@ export default function GetStartedPage({
       <form className="get-started-form poppins-regular">
         <p className="poppins-medium">Setting up your Workspace</p>
         <div className="workspace-name-section">
+          {missingData ? (
+            <p className="missing-data-error-message">
+              Please fill in all the required fields
+            </p>
+          ) : (
+            ""
+          )}
           <label htmlFor="workspace-name" className="poppins-medium">
             Select a name for your workspace
+            <span className="required">
+              {!workspace.name || workspace.name === "" ? " *" : ""}
+            </span>
           </label>
           <input
             type="text"
             name="workspace-name"
             id="workspace-name"
             className="poppins-regular"
+            required
             onChange={(e) => updateWorkspaceName(e.target.value)}
           />
         </div>
         <div className="workspace-description-section">
           <label htmlFor="workspace-description" className="poppins-medium">
             How would you describe your workspace?
+            <span className="required">
+              {!workspace.description || workspace.description === ""
+                ? " *"
+                : ""}
+            </span>
           </label>
           <textarea
             name="workspace-description"
@@ -118,13 +139,23 @@ export default function GetStartedPage({
             cols="30"
             rows="8"
             className="poppins-regular"
+            required
             onChange={(e) => updateWorkspaceDescription(e.target.value)}
           ></textarea>
         </div>
         <input
           type="button"
           value="Create"
-          className="create-workspace-button poppins-semibold"
+          className={
+            "create-workspace-button poppins-semibold" +
+            (missingData &&
+            (!workspace.name ||
+              workspace.name === "" ||
+              !workspace.description ||
+              workspace.description === "")
+              ? " error"
+              : "")
+          }
           onClick={() => createWorkspaceFn()}
         />
       </form>

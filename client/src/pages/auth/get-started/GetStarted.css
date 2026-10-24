@@ -83,6 +83,12 @@
   box-shadow: 0 24px 70px rgba(3, 77, 117, 0.12);
 }
 
+.get-started .get-started-form .missing-data-error-message {
+  color: rgb(245, 25, 45);
+  font-size: 14px;
+  margin: 0 auto 16px auto;
+}
+
 .get-started .get-started-form > p {
   font-size: 20px;
 }
@@ -95,6 +101,10 @@
 
 .get-started .get-started-form > div label {
   font-size: 15px;
+}
+
+.get-started .get-started-form > div label > span.required {
+  color: red;
 }
 
 .get-started .get-started-form > div input:not(input[type="button"]),
@@ -123,4 +133,8 @@
   transform: translateY(-2px);
   background-color: var(--primary-color-hover);
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.35);
+}
+
+.get-started .get-started-form > .create-workspace-button.error {
+  background-color: rgb(200, 25, 45);
 }
