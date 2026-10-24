@@ -4,13 +4,17 @@ import WrongRoute from "../../public/WrongRoute";
 import { useLocation, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import bcrypt from "bcryptjs";
+// import checkNewUserUtil from "../../../utils/checkNewUserUtil";
 
 export default function ClassicDashboardRoute({
   isAuthenticated,
   setAuthentication,
   setPreviewModernUI,
+  newUser,
+  checkingNewUserDone,
 }) {
   const [session, setSession] = useState("");
+  // const [newUser, setNewUser] = useState(false);
 
   let navigate = useNavigate();
   let userAuthenticated = JSON.parse(sessionStorage.getItem("authUser"));
@@ -29,6 +33,10 @@ export default function ClassicDashboardRoute({
     sessionStorage.removeItem("authUser");
     setAuthentication(false);
     navigate("/signin");
+  };
+
+  const redirectToGetStartedPage = () => {
+    navigate(`/auth/${userAuthenticated.user}/classic/get-started`);
   };
 
   useEffect(() => {
@@ -80,14 +88,24 @@ export default function ClassicDashboardRoute({
 
   if ((isAuthenticated || userAuthenticated) && !userLoggedOut) {
     if (username === userAuthenticated.user) {
-      return (
-        <DashboardPage
-          user={userAuthenticated.user}
-          userId={userAuthenticated.userId}
-          setAuthentication={setAuthentication}
-          setPreviewModernUI={setPreviewModernUI}
-        />
-      );
+      if (!checkingNewUserDone) {
+        return <p>Checking ...</p>;
+      } else {
+        if (!newUser) {
+          return (
+            <DashboardPage
+              user={userAuthenticated.user}
+              userId={userAuthenticated.userId}
+              setAuthentication={setAuthentication}
+              setPreviewModernUI={setPreviewModernUI}
+            />
+          );
+        } else {
+          setTimeout(() => {
+            redirectToGetStartedPage();
+          }, 250);
+        }
+      }
     } else {
       return <WrongRoute />;
     }
