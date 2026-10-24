@@ -10,6 +10,7 @@ import dotenv from "dotenv";
 import { userRolesRoute } from "./routes/userRoles.js";
 import { activitiesRoute } from "./routes/activities.js";
 import { commentsRoute } from "./routes/comments.js";
+import { workspacesRoute } from "./routes/workspaces.js";
 
 dotenv.config();
 
@@ -85,6 +86,8 @@ const server = createServer(async (req, res) => {
           await activitiesRoute(req, res);
         } else if (url.startsWith("/api/comments")) {
           await commentsRoute(req, res);
+        } else if (url.startsWith("/api/workspaces")) {
+          await workspacesRoute(req, res);
         } else {
           res.writeHead(404, { "Content-Type": "application/json" });
           res.end(
