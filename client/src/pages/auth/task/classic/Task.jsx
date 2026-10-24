@@ -37,6 +37,7 @@ import "./Task.css";
 import fetchTaskProjectsHistoryUtil from "./utils/fetchTaskProjectsHistory";
 import postNewCommentUtil from "../utils/postNewCommentUtil";
 import fetchUserCommentsUtil from "../../utils/fetchUserCommentsUtil";
+import fetchTaskWorkspaceUtil from "./utils/fetchTaskWorkspaceUtil";
 
 const fieldDiplayValues = {
   name: {
@@ -59,6 +60,9 @@ const fieldDiplayValues = {
   },
   project: {
     display: "Project",
+  },
+  workspace: {
+    display: "Workspace",
   },
 };
 
@@ -91,6 +95,7 @@ export default function Task({
   userId,
   setAuthentication,
   setPreviewModernUI,
+  task,
 }) {
   const [taskObject, setTaskObject] = useState({});
   const [taskUpdates, setTaskUpdates] = useState({});
@@ -136,21 +141,15 @@ export default function Task({
   const [fetchUserComments, setFetchUserComments] = useState(false);
   const [userCommentsFetched, setUserCommentsFetched] = useState(false);
   const [activitiesAndComments, setActivitiesAndComments] = useState([]);
-
-  const location = useLocation();
-  const pathname = location.pathname;
-  const array = pathname
-    .replace("/auth/", "")
-    .replace("/classic/task", "")
-    .split("/");
-
-  const taskId = array[1];
+  const [taskWorkspace, setTaskWorkspace] = useState({});
 
   const [searchParams] = useSearchParams();
   const view = searchParams.get("view");
   const projectId = searchParams.get("project");
 
-  const { token, sessionId } = JSON.parse(sessionStorage.getItem("authUser"));
+  const { token, sessionId, workspaceId } = JSON.parse(
+    sessionStorage.getItem("authUser"),
+  );
 
   useEffect(() => {
     const getUserTheme = async () => {
@@ -186,7 +185,7 @@ export default function Task({
         user,
         sessionId,
         token,
-        taskId,
+        task,
         tries,
         setTries,
         newAccessToken,
@@ -229,9 +228,22 @@ export default function Task({
       );
     }
     if (taskFetched) {
+      fetchTaskWorkspaceUtil(
+        user,
+        sessionId,
+        token,
+        workspaceId,
+        tries,
+        setTries,
+        newAccessToken,
+        setNewAccessToken,
+        tokenValidated,
+        setTokenValidated,
+        setTaskWorkspace,
+      );
       fetchUserCommentsUtil(
         "task",
-        taskId,
+        task,
         user,
         sessionId,
         token,
@@ -246,7 +258,7 @@ export default function Task({
       );
       fetchUserActivitiesUtil(
         "task",
-        taskId,
+        task,
         user,
         sessionId,
         token,
@@ -271,7 +283,7 @@ export default function Task({
         user,
         sessionId,
         token,
-        taskId,
+        task,
         taskUpdates,
         tries,
         setTries,
@@ -292,7 +304,7 @@ export default function Task({
       }, 250);
       fetchUserCommentsUtil(
         "task",
-        taskId,
+        task,
         user,
         sessionId,
         token,
@@ -307,7 +319,7 @@ export default function Task({
       );
       fetchUserActivitiesUtil(
         "task",
-        taskId,
+        task,
         user,
         sessionId,
         token,
@@ -375,7 +387,7 @@ export default function Task({
         user,
         sessionId,
         token,
-        taskId,
+        task,
         tries,
         setTries,
         newAccessToken,
@@ -423,7 +435,7 @@ export default function Task({
     if (fetchUserComments) {
       fetchUserCommentsUtil(
         "task",
-        taskId,
+        task,
         user,
         sessionId,
         token,
@@ -573,7 +585,7 @@ export default function Task({
       return {
         ...comment,
         record: "task",
-        recordId: taskId,
+        recordId: task,
         type: "0",
         assigned_to: userId,
       };
@@ -1151,21 +1163,25 @@ export default function Task({
                                   </div>
                                 ) : (
                                   <div className="insert">
-                                    {audit.field !== "assigned_to"
-                                      ? audit.field !== "state"
-                                        ? audit.field !== "priority"
-                                          ? audit.field !== "project"
-                                            ? audit.new_value
-                                            : project.project_id ===
-                                                audit.new_value
-                                              ? project.name
-                                              : projectsHistory[audit.new_value]
-                                          : TaskPriorities[audit.new_value]
-                                              .value
-                                        : TaskStates[audit.new_value].value
-                                      : audit.new_value === userId
-                                        ? "Me"
-                                        : "Other user"}
+                                    {audit.field !== "workspace"
+                                      ? audit.field !== "assigned_to"
+                                        ? audit.field !== "state"
+                                          ? audit.field !== "priority"
+                                            ? audit.field !== "project"
+                                              ? audit.new_value
+                                              : project.project_id ===
+                                                  audit.new_value
+                                                ? project.name
+                                                : projectsHistory[
+                                                    audit.new_value
+                                                  ]
+                                            : TaskPriorities[audit.new_value]
+                                                .value
+                                          : TaskStates[audit.new_value].value
+                                        : audit.new_value === userId
+                                          ? "Me"
+                                          : "Other user"
+                                      : taskWorkspace.name}
                                   </div>
                                 )}
                               </div>
@@ -1206,11 +1222,11 @@ export default function Task({
                 to={
                   view
                     ? view === "dashboard"
-                      ? `/auth/${user}/classic/dashboard`
-                      : `/auth/${user}/classic/tasks?view=${view}`
+                      ? `/auth/${user}/classic/workspace/${workspaceId}/dashboard`
+                      : `/auth/${user}/classic/workspace/${workspaceId}/tasks?view=${view}`
                     : projectId
-                      ? `/auth/${user}/classic/project/${projectId}`
-                      : `/auth/${user}/classic/dashboard`
+                      ? `/auth/${user}/classic/workspace/${workspaceId}/project/${projectId}`
+                      : `/auth/${user}/classic/workspace/${workspaceId}/dashboard`
                 }
               >
                 <IconContext.Provider

@@ -21,6 +21,7 @@ import ModernProjectsRoute from "./auth/modern/ProjectsRoute";
 import ModernTasksRoute from "./auth/modern/TasksRoute";
 import ModernSingleTaskRoute from "./auth/modern/SingleTaskRoute";
 import ModernSingleProjectRoute from "./auth/modern/SingleProjectRoute";
+import GetStartedRoute from "./auth/classic/GetStartedRoute";
 
 export {
   HomeRoute,
@@ -43,4 +44,5 @@ export {
   ModernSingleTaskRoute,
   ModernSingleProjectRoute,
   WrongRoute,
+  GetStartedRoute
 };

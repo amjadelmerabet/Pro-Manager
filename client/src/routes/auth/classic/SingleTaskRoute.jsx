@@ -8,6 +8,8 @@ export default function SingleTaskRoute({
   isAuthenticated,
   setAuthentication,
   setPreviewModernUI,
+  newUser,
+  checkingNewUserDone,
 }) {
   const [session, setSession] = useState("");
 
@@ -23,11 +25,20 @@ export default function SingleTaskRoute({
 
   const username = slicedPathname.slice(0, index);
 
+  var taskId = slicedPathname
+    .replace(`${userAuthenticated.user}/classic/workspace/`, "")
+    .replace("/task/", ":")
+    .split(":")[1];
+
   const logoutUser = () => {
     sessionStorage.setItem("userLoggedOut", true);
     sessionStorage.removeItem("authUser");
     setAuthentication(false);
     navigate("/signin");
+  };
+
+  const redirectToGetStartedPage = () => {
+    navigate(`/auth/${userAuthenticated.user}/classic/get-started`);
   };
 
   useEffect(() => {
@@ -78,17 +89,30 @@ export default function SingleTaskRoute({
   }, []);
 
   if (isAuthenticated || userAuthenticated) {
-    if (username === userAuthenticated.user) {
-      return (
-        <Task
-          user={userAuthenticated.user}
-          userId={userAuthenticated.userId}
-          setAuthentication={setAuthentication}
-          setPreviewModernUI={setPreviewModernUI}
-        />
-      );
+    if (!checkingNewUserDone) {
+      return <p>Checking ...</p>;
     } else {
-      return <WrongRoute />;
+      if (!newUser) {
+        if (username === userAuthenticated.user && taskId.length === 36) {
+          return (
+            <Task
+              user={userAuthenticated.user}
+              userId={userAuthenticated.userId}
+              setAuthentication={setAuthentication}
+              setPreviewModernUI={setPreviewModernUI}
+              task={taskId}
+            />
+          );
+        } else {
+          return <WrongRoute />;
+        }
+      } else {
+        setTimeout(() => {
+          redirectToGetStartedPage();
+        }, 250);
+      }
     }
+  } else {
+    return <WrongRoute />;
   }
 }

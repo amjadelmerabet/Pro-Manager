@@ -26,7 +26,12 @@ import GlobalSearch from "../../components/GlobalSearch";
 import countMatchingRecords from "../../utils/countMatchingRecords";
 import KanbanCardTask from "./components/KanbanCardTask";
 
-export default function TasksPage({ user, userId, setAuthentication, setPreviewModernUI }) {
+export default function TasksPage({
+  user,
+  userId,
+  setAuthentication,
+  setPreviewModernUI,
+}) {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState({});
   const [create, setCreate] = useState(0);
@@ -71,7 +76,9 @@ export default function TasksPage({ user, userId, setAuthentication, setPreviewM
   const view = searchParams.get("view");
   const filterInURL = searchParams.get("filter");
 
-  const { token, sessionId } = JSON.parse(sessionStorage.getItem("authUser"));
+  const { token, sessionId, workspaceId } = JSON.parse(
+    sessionStorage.getItem("authUser"),
+  );
 
   useEffect(() => {
     const getUserTheme = async () => {
@@ -219,6 +226,7 @@ export default function TasksPage({ user, userId, setAuthentication, setPreviewM
         current = {
           ...current,
           assigned_to: userId,
+          workspace: workspaceId,
           created_by: userId,
           updated_by: userId,
         };
@@ -228,6 +236,7 @@ export default function TasksPage({ user, userId, setAuthentication, setPreviewM
       setNewTask({
         ...newTask,
         assigned_to: userId,
+        workspace: workspaceId,
         created_by: userId,
         updated_by: userId,
       });
@@ -314,7 +323,9 @@ export default function TasksPage({ user, userId, setAuthentication, setPreviewM
   let navigate = useNavigate();
 
   const openTask = (id) => {
-    navigate("/auth/" + user + "/classic/task/" + id + "?view=" + selectedView);
+    navigate(
+      `/auth/${user}/classic/workspace/${workspaceId}/task/${id}?view=${selectedView}`,
+    );
   };
 
   let myTasks = 0;
