@@ -10,6 +10,7 @@ export default async function createTask(fields) {
       "description",
       "assigned_to",
       "project",
+      "workspace",
       "updated_on",
       "updated_by",
       "created_on",
