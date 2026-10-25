@@ -142,6 +142,7 @@ export default function Task({
   const [userCommentsFetched, setUserCommentsFetched] = useState(false);
   const [activitiesAndComments, setActivitiesAndComments] = useState([]);
   const [taskWorkspace, setTaskWorkspace] = useState({});
+  const [fetchTaskWorkspace, setFetchTaskWorkspace] = useState(false);
 
   const [searchParams] = useSearchParams();
   const view = searchParams.get("view");
@@ -240,6 +241,7 @@ export default function Task({
         tokenValidated,
         setTokenValidated,
         setTaskWorkspace,
+        setFetchTaskWorkspace,
       );
       fetchUserCommentsUtil(
         "task",
@@ -274,6 +276,25 @@ export default function Task({
       );
     }
   }, [taskFetched, loadProject, taskUpdated]);
+
+  useEffect(() => {
+    if (fetchTaskWorkspace) {
+      fetchTaskWorkspaceUtil(
+        user,
+        sessionId,
+        token,
+        workspaceId,
+        tries,
+        setTries,
+        newAccessToken,
+        setNewAccessToken,
+        tokenValidated,
+        setTokenValidated,
+        setTaskWorkspace,
+        setFetchTaskWorkspace,
+      );
+    }
+  }, [fetchTaskWorkspace]);
 
   useEffect(() => {
     if (taskUpdated.update) {

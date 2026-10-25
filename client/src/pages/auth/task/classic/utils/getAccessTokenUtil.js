@@ -19,7 +19,8 @@ function nextAction(
   setFetchUserActivities,
   setFetchProjectsHistory,
   setPostComment,
-  setFetchUserComments
+  setFetchUserComments,
+  setFetchTaskWorkspace
 ) {
   if (newAccessToken.type === "load") {
     setLoadTask(loadTask + 1);
@@ -49,6 +50,8 @@ function nextAction(
     setTimeout(() => {
       setFetchUserComments(false);
     }, 250);
+  } else if (newAccessToken.type === "fetch-task-workspace") {
+    setFetchTaskWorkspace(true);
   }
 }
 
@@ -69,7 +72,8 @@ export default async function getAccessTokenUtil(
   setFetchUserActivities,
   setFetchProjectsHistory,
   setPostComment,
-  setFetchUserComments
+  setFetchUserComments,
+  setFetchTaskWorkspace
 ) {
   try {
     const refreshToken = await cookieStore.get(user);
@@ -95,7 +99,8 @@ export default async function getAccessTokenUtil(
           setFetchUserActivities,
           setFetchProjectsHistory,
           setPostComment,
-          setFetchUserComments
+          setFetchUserComments,
+          setFetchTaskWorkspace
         );
       }
     } else {
