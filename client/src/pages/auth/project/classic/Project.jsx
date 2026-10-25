@@ -136,6 +136,7 @@ export default function Project({
   const [userCommentsFetched, setUserCommentsFetched] = useState(false);
   const [activitiesAndComments, setActivitiesAndComments] = useState([]);
   const [projectWorkspace, setProjectWorkspace] = useState({});
+  const [fetchProjectWorkspace, setFetchProjectWorkspace] = useState(false);
 
   // const location = useLocation();
   // const pathname = location.pathname;
@@ -217,6 +218,7 @@ export default function Project({
         tokenValidated,
         setTokenValidated,
         setProjectWorkspace,
+        setFetchProjectWorkspace
       );
       fetchUserCommentsUtil(
         "project",
@@ -253,6 +255,25 @@ export default function Project({
   }, [loadTasks, projectFetched, tasksLinkedToProject]);
 
   useEffect(() => {
+    if (fetchProjectWorkspace) {
+      fetchProjectWorkspaceUtil(
+        user,
+        sessionId,
+        token,
+        workspaceId,
+        tries,
+        setTries,
+        newAccessToken,
+        setNewAccessToken,
+        tokenValidated,
+        setTokenValidated,
+        setProjectWorkspace,
+        setFetchProjectWorkspace
+      );
+    }
+  }, [fetchProjectWorkspace]);
+
+  useEffect(() => {
     if (newAccessToken.counter > 0) {
       // getAccessTokenAPI();
       getAccessTokenUtil(
@@ -271,6 +292,7 @@ export default function Project({
         newTaskToCreate,
         setNewTaskToCreate,
         setFetchUserTasksWithNoProject,
+        setFetchProjectWorkspace
       );
     }
   }, [newAccessToken]);

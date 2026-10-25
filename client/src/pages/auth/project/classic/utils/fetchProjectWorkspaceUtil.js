@@ -5,7 +5,7 @@ function tryAgain(tries, setTries, newAccessToken, setNewAccessToken) {
   setTries(tries + 1);
   setNewAccessToken({
     counter: newAccessToken.counter + 1,
-    action: "fetch-project-workspace",
+    type: "fetch-project-workspace",
   });
 }
 
@@ -17,9 +17,11 @@ async function fetchProjectWorkspaceAction(
   newAccessToken,
   setNewAccessToken,
   setProjectWorkspace,
+  setFetchProjectWorkspace
 ) {
   const workspace = await getWorkspaceByIdAPI(workspaceId, token);
   if (workspace.error === "Invalid access token" && tries < 3) {
+    setFetchProjectWorkspace(false);
     tryAgain(tries, setTries, newAccessToken, setNewAccessToken);
   } else {
     setProjectWorkspace(workspace.result[0]);
@@ -38,6 +40,7 @@ export default async function fetchProjectWorkspaceUtil(
   tokenValidated,
   setTokenValidated,
   setProjectWorkspace,
+  setFetchProjectWorkspace
 ) {
   if (!tokenValidated) {
     const refreshToken = await cookieStore.get(user);
@@ -58,6 +61,7 @@ export default async function fetchProjectWorkspaceUtil(
           newAccessToken,
           setNewAccessToken,
           setProjectWorkspace,
+          setFetchProjectWorkspace
         );
       }
     } else {
@@ -75,6 +79,7 @@ export default async function fetchProjectWorkspaceUtil(
       newAccessToken,
       setNewAccessToken,
       setProjectWorkspace,
+      setFetchProjectWorkspace
     );
   }
 }
