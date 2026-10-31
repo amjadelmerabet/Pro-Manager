@@ -26,7 +26,12 @@ import countMatchingRecords from "../../utils/countMatchingRecords";
 // Styles
 import "./Projects.css";
 
-export default function ProjectsPage({ user, userId, setAuthentication, setPreviewModernUI }) {
+export default function ProjectsPage({
+  user,
+  userId,
+  setAuthentication,
+  setPreviewModernUI,
+}) {
   const [projects, setProjects] = useState([]);
   const [newProject, setNewProject] = useState({});
   const [createProject, setCreateProject] = useState(0);
@@ -72,7 +77,9 @@ export default function ProjectsPage({ user, userId, setAuthentication, setPrevi
   const view = searchParams.get("view");
   const filterInURL = searchParams.get("filter");
 
-  const { token, sessionId } = JSON.parse(sessionStorage.getItem("authUser"));
+  const { token, sessionId, workspaceId } = JSON.parse(
+    sessionStorage.getItem("authUser"),
+  );
 
   useEffect(() => {
     const getUserTheme = async () => {
@@ -215,6 +222,7 @@ export default function ProjectsPage({ user, userId, setAuthentication, setPrevi
     setNewProject({
       ...newProject,
       owner: userId,
+      workspace: workspaceId,
       created_by: userId,
       updated_by: userId,
     });
@@ -285,7 +293,9 @@ export default function ProjectsPage({ user, userId, setAuthentication, setPrevi
   let navigate = useNavigate();
 
   const openProject = (id) => {
-    navigate("/auth/" + user + "/classic/project/" + id + "?view=" + selectedView);
+    navigate(
+      `/auth/${user}/classic/workspace/${workspaceId}/project/${id}?view=${selectedView}`,
+    );
   };
 
   const hoverOverProject = (id) => {

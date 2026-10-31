@@ -33,6 +33,7 @@ describe("Projects APIs", async () => {
       state: 1,
       deadline: new Date(),
       owner: import.meta.env.VITE_TEST_USER_ID,
+      workspace: import.meta.env.VITE_WORKSPACE_SYS_ID,
     };
     const project = await createProjectAPI(payload, accessToken);
     projectId = project?.project_id;

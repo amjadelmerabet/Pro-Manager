@@ -1,0 +1,140 @@
+.get-started {
+  --auth-primary: #0077b6;
+  --auth-primary-hover: #03679d;
+  --auth-text: #1a2b3c;
+  --auth-muted: #5a6b7c;
+  --auth-border: #d7eef5;
+
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  padding: 28px 24px 84px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 12% 14%, rgba(144, 224, 239, 0.44), transparent 33%),
+    radial-gradient(ellipse at 90% 86%, rgba(202, 240, 248, 0.8), transparent 35%),
+    linear-gradient(135deg, #f7fcfd 0%, #ffffff 52%, #f0faff 100%);
+  visibility: hidden;
+  opacity: 0;
+  transform: scale(0.98);
+  transition:
+    visibility 250ms ease-in-out,
+    opacity 250ms ease-in-out,
+    transform 250ms ease-in-out;
+}
+
+.get-started::before,
+.get-started::after {
+  position: absolute;
+  z-index: -1;
+  border: 1px solid rgba(0, 119, 182, 0.1);
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+}
+
+.get-started::before {
+  width: 440px;
+  height: 440px;
+  top: -250px;
+  right: -110px;
+}
+
+.get-started::after {
+  width: 340px;
+  height: 340px;
+  bottom: -220px;
+  left: -100px;
+}
+
+.get-started.visible {
+  visibility: visible;
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* .get-started {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+} */
+
+.get-started > h1 {
+  color: var(--primary-color);
+  margin: 24px 48px;
+}
+
+.get-started .get-started-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+  padding-block: 48px;
+  width: 35%;
+  margin-bottom: 48px;
+  border: 1px solid var(--accent-color);
+  border-radius: 20px;
+  box-shadow: 0 24px 70px rgba(3, 77, 117, 0.12);
+}
+
+.get-started .get-started-form .missing-data-error-message {
+  color: rgb(245, 25, 45);
+  font-size: 14px;
+  margin: 0 auto 16px auto;
+}
+
+.get-started .get-started-form > p {
+  font-size: 20px;
+}
+
+.get-started .get-started-form > div {
+  display: grid;
+  width: 80%;
+  margin-block: 20px;
+}
+
+.get-started .get-started-form > div label {
+  font-size: 15px;
+}
+
+.get-started .get-started-form > div label > span.required {
+  color: red;
+}
+
+.get-started .get-started-form > div input:not(input[type="button"]),
+.get-started .get-started-form > div textarea {
+  padding: 4px 8px;
+  border: 1px solid var(--primary-color);
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.get-started .get-started-form > .create-workspace-button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 24px;
+  cursor: pointer;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+  transition:
+    background 250ms ease-in-out,
+    transform 250ms ease-in-out,
+    box-shadow 250ms ease-in-out;
+}
+
+.get-started .get-started-form > .create-workspace-button:hover {
+  transform: translateY(-2px);
+  background-color: var(--primary-color-hover);
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.35);
+}
+
+.get-started .get-started-form > .create-workspace-button.error {
+  background-color: rgb(200, 25, 45);
+}

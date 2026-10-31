@@ -86,7 +86,9 @@ export default function DashboardPage({
   const [globalSearchClosed, setGlobalSearchClosed] = useState(false);
   const [theme, setTheme] = useState("");
 
-  const { token, sessionId } = JSON.parse(sessionStorage.getItem("authUser"));
+  const { token, sessionId, workspaceId } = JSON.parse(
+    sessionStorage.getItem("authUser"),
+  );
 
   const openNewProjectPopup = () => {
     setPopupVisible({ visible: true, type: "project" });
@@ -128,6 +130,7 @@ export default function DashboardPage({
     setNewProject({
       ...newProject,
       owner: userId,
+      workspace: workspaceId,
       created_by: userId,
       updated_by: userId,
     });
@@ -253,6 +256,7 @@ export default function DashboardPage({
     setNewTask({
       ...newTask,
       assigned_to: userId,
+      workspace: workspaceId,
       created_by: userId,
       updated_by: userId,
     });
@@ -360,7 +364,12 @@ export default function DashboardPage({
         ) : (
           ""
         )}
-        <AllMenu user={user} setPopupDisplay={setPopupVisible} theme={theme} />
+        <AllMenu
+          user={user}
+          setPopupDisplay={setPopupVisible}
+          theme={theme}
+          workspace={workspaceId}
+        />
         <main className={theme === "light" || theme === "" ? "light" : "dark"}>
           <div className="column-1">
             <div className="recent-pages">
@@ -396,6 +405,7 @@ export default function DashboardPage({
                           updatedStatus={updatedStatus}
                           createdStatus={createdStatus}
                           load={50 * (index + 1)}
+                          workspace={workspaceId}
                         />
                       );
                     } else if (
@@ -414,6 +424,7 @@ export default function DashboardPage({
                           updatedStatus={updatedStatus}
                           createdStatus={createdStatus}
                           load={50 * (index + 1)}
+                          workspace={workspaceId}
                         />
                       );
                     } else {
@@ -434,6 +445,7 @@ export default function DashboardPage({
                     value={report.value}
                     state={report.state}
                     theme={theme}
+                    workspace={workspaceId}
                   />
                 );
               })}
@@ -447,6 +459,7 @@ export default function DashboardPage({
                     value={report.value}
                     state={report.state}
                     theme={theme}
+                    workspace={workspaceId}
                   />
                 );
               })}

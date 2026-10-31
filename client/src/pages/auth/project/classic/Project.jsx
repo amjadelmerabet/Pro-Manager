@@ -38,8 +38,9 @@ import fetchUserActivitiesUtil from "../../utils/fetchUserActivitiesUtil";
 import "./Project.css";
 import postNewCommentUtil from "../utils/postNewCommentUtil";
 import fetchUserCommentsUtil from "../../utils/fetchUserCommentsUtil";
+import fetchProjectWorkspaceUtil from "./utils/fetchProjectWorkspaceUtil";
 
-const fieldDiplayValues = {
+const fieldDisplayValues = {
   name: {
     display: "Name",
   },
@@ -54,6 +55,9 @@ const fieldDiplayValues = {
   },
   deadline: {
     display: "Deadline",
+  },
+  workspace: {
+    display: "Workspace",
   },
 };
 
@@ -74,6 +78,7 @@ export default function Project({
   userId,
   setAuthentication,
   setPreviewModernUI,
+  project,
 }) {
   const [projectObject, setProjectObject] = useState({});
   const [projectUpdates, setProjectUpdates] = useState({});
@@ -130,21 +135,25 @@ export default function Project({
   const [fetchUserComments, setFetchUserComments] = useState(false);
   const [userCommentsFetched, setUserCommentsFetched] = useState(false);
   const [activitiesAndComments, setActivitiesAndComments] = useState([]);
+  const [projectWorkspace, setProjectWorkspace] = useState({});
+  const [fetchProjectWorkspace, setFetchProjectWorkspace] = useState(false);
 
-  const location = useLocation();
-  const pathname = location.pathname;
-  const array = pathname
-    .replace("/auth/", "")
-    .replace("/classic/project", "")
-    .split("/");
-  // const userId = array[0];
-  const projectId = array[1];
+  // const location = useLocation();
+  // const pathname = location.pathname;
+  // const array = pathname
+  //   .replace("/auth/", "")
+  //   .replace("/classic/project", "")
+  //   .split("/");
+  // // const userId = array[0];
+  // const projectId = array[1];
 
   const [searchParams] = useSearchParams();
   const taskId = searchParams.get("task");
   const view = searchParams.get("view");
 
-  const { token, sessionId } = JSON.parse(sessionStorage.getItem("authUser"));
+  const { token, sessionId, workspaceId } = JSON.parse(
+    sessionStorage.getItem("authUser"),
+  );
 
   useEffect(() => {
     const getUserTheme = async () => {
@@ -167,7 +176,7 @@ export default function Project({
         user,
         sessionId,
         token,
-        projectId,
+        project,
         tries,
         setTries,
         newAccessToken,
@@ -183,7 +192,7 @@ export default function Project({
   useEffect(() => {
     if (loadTasks || projectFetched || tasksLinkedToProject > 0) {
       fetchProjectTasksUtil(
-        projectId,
+        project,
         sessionId,
         token,
         setTasks,
@@ -197,9 +206,23 @@ export default function Project({
       );
     }
     if (projectFetched) {
+      fetchProjectWorkspaceUtil(
+        user,
+        sessionId,
+        token,
+        workspaceId,
+        tries,
+        setTries,
+        newAccessToken,
+        setNewAccessToken,
+        tokenValidated,
+        setTokenValidated,
+        setProjectWorkspace,
+        setFetchProjectWorkspace
+      );
       fetchUserCommentsUtil(
         "project",
-        projectId,
+        project,
         user,
         sessionId,
         token,
@@ -214,7 +237,7 @@ export default function Project({
       );
       fetchUserActivitiesUtil(
         "project",
-        projectId,
+        project,
         user,
         sessionId,
         token,
@@ -230,6 +253,25 @@ export default function Project({
       );
     }
   }, [loadTasks, projectFetched, tasksLinkedToProject]);
+
+  useEffect(() => {
+    if (fetchProjectWorkspace) {
+      fetchProjectWorkspaceUtil(
+        user,
+        sessionId,
+        token,
+        workspaceId,
+        tries,
+        setTries,
+        newAccessToken,
+        setNewAccessToken,
+        tokenValidated,
+        setTokenValidated,
+        setProjectWorkspace,
+        setFetchProjectWorkspace
+      );
+    }
+  }, [fetchProjectWorkspace]);
 
   useEffect(() => {
     if (newAccessToken.counter > 0) {
@@ -250,6 +292,7 @@ export default function Project({
         newTaskToCreate,
         setNewTaskToCreate,
         setFetchUserTasksWithNoProject,
+        setFetchProjectWorkspace
       );
     }
   }, [newAccessToken]);
@@ -262,7 +305,7 @@ export default function Project({
         user,
         sessionId,
         token,
-        projectId,
+        project,
         projectUpdates,
         tries,
         setTries,
@@ -284,7 +327,7 @@ export default function Project({
         user,
         sessionId,
         token,
-        projectId,
+        project,
         tries,
         setTries,
         newAccessToken,
@@ -304,7 +347,7 @@ export default function Project({
       }, 250);
       fetchUserCommentsUtil(
         "project",
-        projectId,
+        project,
         user,
         sessionId,
         token,
@@ -319,7 +362,7 @@ export default function Project({
       );
       fetchUserActivitiesUtil(
         "project",
-        projectId,
+        project,
         user,
         sessionId,
         token,
@@ -435,7 +478,7 @@ export default function Project({
     if (fetchUserComments) {
       fetchUserCommentsUtil(
         "project",
-        projectId,
+        project,
         user,
         sessionId,
         token,
@@ -569,7 +612,7 @@ export default function Project({
       return {
         ...comment,
         record: "project",
-        recordId: projectId,
+        recordId: project,
         type: "0",
         owner: userId,
       };
@@ -914,8 +957,8 @@ export default function Project({
                           <Link
                             to={
                               view
-                                ? `/auth/${user}/classic/task/${task.task_id}?project=${projectId}?view=${view}`
-                                : `/auth/${user}/classic/task/${task.task_id}?project=${projectId}`
+                                ? `/auth/${user}/classic/workspace/${workspaceId}/task/${task.task_id}?project=${project}?view=${view}`
+                                : `/auth/${user}/classic/workspace/${workspaceId}/task/${task.task_id}?project=${project}`
                             }
                             className="open-button"
                           >
@@ -1060,7 +1103,7 @@ export default function Project({
                             return (
                               <div key={index} className="update">
                                 <div className="field">
-                                  {fieldDiplayValues[audit.field].display}
+                                  {fieldDisplayValues[audit.field].display}
                                 </div>
                                 {audit.type === "update" &&
                                 audit.old_value !== "[No audit]" ? (
@@ -1100,13 +1143,15 @@ export default function Project({
                                   </div>
                                 ) : (
                                   <div className="insert">
-                                    {audit.field !== "owner"
-                                      ? audit.field !== "state"
-                                        ? audit.new_value
-                                        : ProjectStates[audit.new_value].value
-                                      : audit.new_value === userId
-                                        ? "Me"
-                                        : ""}
+                                    {audit.field !== "workspace"
+                                      ? audit.field !== "owner"
+                                        ? audit.field !== "state"
+                                          ? audit.new_value
+                                          : ProjectStates[audit.new_value].value
+                                        : audit.new_value === userId
+                                          ? "Me"
+                                          : ""
+                                      : projectWorkspace.name}
                                   </div>
                                 )}
                               </div>
@@ -1147,11 +1192,11 @@ export default function Project({
                 to={
                   view
                     ? view === "dashboard"
-                      ? `/auth/${user}/classic/dashboard`
-                      : `/auth/${user}/classic/projects?view=${view}`
+                      ? `/auth/${user}/classic/workspace/${workspaceId}/dashboard`
+                      : `/auth/${user}/classic/workspace/${workspaceId}/projects?view=${view}`
                     : taskId
-                      ? `/auth/${user}/classic/task/${taskId}`
-                      : `/auth/${user}/classic/dashboard`
+                      ? `/auth/${user}/classic/workspace/${workspaceId}/task/${taskId}`
+                      : `/auth/${user}/classic/workspace/${workspaceId}/dashboard`
                 }
               >
                 <IconContext.Provider

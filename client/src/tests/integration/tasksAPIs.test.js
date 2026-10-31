@@ -31,6 +31,7 @@ describe("Tasks APIs", async () => {
       assigned_to: import.meta.env.VITE_TEST_USER_ID,
       state: 1,
       priority: 2,
+      workspace: import.meta.env.VITE_WORKSPACE_SYS_ID,
     };
     const task = await createTaskAPI(payload, accessToken);
     taskId = task.task_id;

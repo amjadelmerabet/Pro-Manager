@@ -8,6 +8,8 @@ export default function TasksRoute({
   isAuthenticated,
   setAuthentication,
   setPreviewModernUI,
+  newUser,
+  checkingNewUserDone
 }) {
   const [session, setSession] = useState("");
 
@@ -28,6 +30,10 @@ export default function TasksRoute({
     sessionStorage.removeItem("authUser");
     setAuthentication(false);
     navigate("/signin");
+  };
+
+  const redirectToGetStartedPage = () => {
+    navigate(`/auth/${userAuthenticated.user}/classic/get-started`);
   };
 
   useEffect(() => {
@@ -79,14 +85,24 @@ export default function TasksRoute({
 
   if (isAuthenticated || userAuthenticated) {
     if (username === userAuthenticated.user) {
-      return (
-        <TasksPage
-          user={userAuthenticated.user}
-          userId={userAuthenticated.userId}
-          setAuthentication={setAuthentication}
-          setPreviewModernUI={setPreviewModernUI}
-        />
-      );
+      if (!checkingNewUserDone) {
+        return <p>Checking ...</p>
+      } else {
+        if (!newUser) {
+          return (
+            <TasksPage
+              user={userAuthenticated.user}
+              userId={userAuthenticated.userId}
+              setAuthentication={setAuthentication}
+              setPreviewModernUI={setPreviewModernUI}
+            />
+          );
+        } else {
+          setTimeout(() => {
+            redirectToGetStartedPage();
+          }, 250);
+        }
+      }
     } else {
       return <WrongRoute />;
     }

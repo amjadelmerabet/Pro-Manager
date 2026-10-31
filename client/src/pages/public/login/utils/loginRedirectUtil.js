@@ -1,4 +1,6 @@
-export default function loginRedirectUtil(
+import checkNewUserUtil from "../../../../utils/checkNewUserUtil";
+
+export default async function loginRedirectUtil(
   redirectURL,
   userAuthenticated,
   navigate,
@@ -15,18 +17,37 @@ export default function loginRedirectUtil(
       navigate("/signin");
     }
   } else {
+    const { user, userId, token, workspaceId } = JSON.parse(userAuthenticated);
+    // const newUser = await checkNewUserUtil(userId, token);
     if (userAuthenticated && !logout) {
-      const authUser = JSON.parse(userAuthenticated).user;
+      // if (newUser) {
+      //   navigate(
+      //     `/auth/${user}/${modernUI && modernUI === "true" ? "modern" : "classic"}/get-started`,
+      //   );
+      // } else {
+      // }
       navigate(
-        `/auth/${authUser}/${modernUI && modernUI === "true" ? "modern" : "classic"}/dashboard`,
+        `/auth/${user}/${modernUI && modernUI === "true" ? "modern" : "classic"}/workspace/${workspaceId ? workspaceId : "new"}/dashboard`,
       );
     } else if (username) {
+      // if (newUser) {
+      //   navigate(
+      //     `/auth/${username}/${modernUI && modernUI === "true" ? "modern" : "classic"}/get-started`,
+      //   );
+      // } else {
+      // }
       navigate(
-        `/auth/${username}/${modernUI && modernUI === "true" ? "modern" : "classic"}/dashboard`,
+        `/auth/${username}/${modernUI && modernUI === "true" ? "modern" : "classic"}/workspace/${workspaceId ? workspaceId : "new"}/dashboard`,
       );
     } else {
+      // if (newUser) {
+      //   navigate(
+      //     `/auth/user/${modernUI && modernUI === "true" ? "modern" : "classic"}/get-started`,
+      //   );
+      // } else {
+      // }
       navigate(
-        `/auth/user/${modernUI && modernUI === "true" ? "modern" : "classic"}/dashboard`,
+        `/auth/user/${modernUI && modernUI === "true" ? "modern" : "classic"}/workspace/${workspaceId ? workspaceId : "new"}/dashboard`,
       );
     }
   }

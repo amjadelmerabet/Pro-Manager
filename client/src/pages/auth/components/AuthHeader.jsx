@@ -45,7 +45,7 @@ export default function AuthHeader({
 
   let navigate = useNavigate();
 
-  const { userId, sessionId, token, sessionNumber } = JSON.parse(
+  const { userId, sessionId, token, sessionNumber, workspaceId } = JSON.parse(
     sessionStorage.getItem("authUser"),
   );
 
@@ -118,16 +118,24 @@ export default function AuthHeader({
       </h1>
       <ul className="auth-menu">
         <li className="auth-menu-item poppins-semibold">
-          <Link to={"/auth/" + user + "/classic/dashboard"}>Dashboard</Link>
+          <Link to={`/auth/${user}/classic/workspace/${workspaceId}/dashboard`}>
+            Dashboard
+          </Link>
         </li>
         <li className="auth-menu-item poppins-semibold">
-          <Link to={"/auth/" + user + "/classic/projects"}>Projects</Link>
+          <Link to={`/auth/${user}/classic/workspace/${workspaceId}/projects`}>
+            Projects
+          </Link>
         </li>
         <li className="auth-menu-item poppins-semibold">
-          <Link to={"/auth/" + user + "/classic/tasks"}>Tasks</Link>
+          <Link to={`/auth/${user}/classic/workspace/${workspaceId}/tasks`}>
+            Tasks
+          </Link>
         </li>
         <li className="auth-menu-item poppins-semibold feature-disabled">
-          <Link to={"/auth/" + user + "/classic/insights"}>Insights</Link>
+          <Link to={`/auth/${user}/classic/workspace/${workspaceId}/insights`}>
+            Insights
+          </Link>
         </li>
       </ul>
       <div className="search">
@@ -180,7 +188,9 @@ export default function AuthHeader({
             </IconContext.Provider>
             <ul className="settings-list poppins-regular">
               <li className="setting-item">
-                <Link to={"/auth/" + user + "/classic/profile"}>
+                <Link
+                  to={`/auth/${user}/classic/workspace/${workspaceId}/profile`}
+                >
                   <CgProfile />
                   <span>Profile</span>
                 </Link>

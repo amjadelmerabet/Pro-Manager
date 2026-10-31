@@ -14,8 +14,14 @@ import loginRedirectUtil from "./utils/loginRedirectUtil";
 
 // Styles
 import "./Login.css";
+import fetchActiveWorkspaceUtil from "./utils/fetchActiveWorkspaceUtil";
 
-export default function LoginPage({ isAuthenticated, setAuthentication }) {
+export default function LoginPage({
+  isAuthenticated,
+  setAuthentication,
+  checkingNewUserDone,
+  newUser,
+}) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [login, setLogin] = useState("");
@@ -23,6 +29,15 @@ export default function LoginPage({ isAuthenticated, setAuthentication }) {
   const [loginStart, setLoginStart] = useState(false);
   const [goBackLink, setGoBackLink] = useState(false);
   const [redirect, setRedirect] = useState(false);
+  const [retrieveActiveWorkspace, setRetrieveActiveWorkspace] = useState(false);
+  const [activeWorkspaceRetrieved, setActiveWorkspaceRetrieved] =
+    useState(false);
+  const [tries, setTries] = useState(0);
+  const [newAccessToken, setNewAccessToken] = useState({
+    counter: 0,
+    action: "",
+  });
+  const [tokenValidated, setTokenValidated] = useState(false);
 
   const [searchParams] = useSearchParams();
   const redirectURL = searchParams.get("redirect");
@@ -35,10 +50,20 @@ export default function LoginPage({ isAuthenticated, setAuthentication }) {
   const previewModernUI = sessionStorage.getItem("modern-ui");
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && checkingNewUserDone) {
+      if (!newUser) {
+        setRetrieveActiveWorkspace(true);
+      } else {
+        setRedirect(true);
+      }
+    }
+  }, [checkingNewUserDone]);
+
+  useEffect(() => {
+    if (activeWorkspaceRetrieved) {
       setRedirect(true);
     }
-  }, [isAuthenticated]);
+  }, [activeWorkspaceRetrieved]);
 
   useEffect(() => {
     if (redirect) {
@@ -48,7 +73,7 @@ export default function LoginPage({ isAuthenticated, setAuthentication }) {
         navigate,
         logout,
         username,
-        previewModernUI
+        previewModernUI,
       );
     }
   }, [redirect]);
@@ -64,6 +89,28 @@ export default function LoginPage({ isAuthenticated, setAuthentication }) {
       );
     }
   }, [login]);
+
+  useEffect(() => {
+    if (retrieveActiveWorkspace) {
+      const { user, userId, token, sessionId } = JSON.parse(
+        sessionStorage.getItem("authUser"),
+      );
+      fetchActiveWorkspaceUtil(
+        user,
+        userId,
+        sessionId,
+        token,
+        tries,
+        setTries,
+        newAccessToken,
+        setNewAccessToken,
+        tokenValidated,
+        setTokenValidated,
+        setRetrieveActiveWorkspace,
+        setActiveWorkspaceRetrieved,
+      );
+    }
+  }, [retrieveActiveWorkspace]);
 
   useEffect(() => {
     setTimeout(() => {
