@@ -16,7 +16,12 @@ import loginRedirectUtil from "./utils/loginRedirectUtil";
 import "./Login.css";
 import fetchActiveWorkspaceUtil from "./utils/fetchActiveWorkspaceUtil";
 
-export default function LoginPage({ isAuthenticated, setAuthentication }) {
+export default function LoginPage({
+  isAuthenticated,
+  setAuthentication,
+  checkingNewUserDone,
+  newUser,
+}) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [login, setLogin] = useState("");
@@ -45,16 +50,20 @@ export default function LoginPage({ isAuthenticated, setAuthentication }) {
   const previewModernUI = sessionStorage.getItem("modern-ui");
 
   useEffect(() => {
-    if (isAuthenticated) {
-      setRetrieveActiveWorkspace(true);
+    if (isAuthenticated && checkingNewUserDone) {
+      if (!newUser) {
+        setRetrieveActiveWorkspace(true);
+      } else {
+        setRedirect(true);
+      }
     }
-  }, [isAuthenticated]);
-  
+  }, [checkingNewUserDone]);
+
   useEffect(() => {
     if (activeWorkspaceRetrieved) {
       setRedirect(true);
     }
-  }, [activeWorkspaceRetrieved])
+  }, [activeWorkspaceRetrieved]);
 
   useEffect(() => {
     if (redirect) {

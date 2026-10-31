@@ -132,6 +132,8 @@ function App() {
             <LoginRoute
               isAuthenticated={userAuthenticated}
               setAuthentication={setUserAuthenticated}
+              checkingNewUserDone={checkingNewUserDone}
+              newUser={newUser}
             />
           }
         />
